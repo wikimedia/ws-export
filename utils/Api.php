@@ -15,8 +15,12 @@ class Api {
         /**
         * @var $lang the lang of Wikisource like 'en' or 'fr'
         */
-        public function __construct() {
-                $this->lang = $this->getLang();
+        public function __construct($lang = '') {
+                if($lang == '') {
+                        $this->lang = $this->getHttpLang();
+                } else {
+                        $this->lang = $lang;
+                }
         }
 
         /**
@@ -63,7 +67,7 @@ class Api {
         /**
         * @return the lang of the Wikisource used
         */
-        public function getLang() {
+        public function getHttpLang() {
                 $lang = '';
                 if(isset($_GET['lang'])) {
                         $lang = $_GET['lang'];

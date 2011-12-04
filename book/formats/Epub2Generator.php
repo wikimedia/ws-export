@@ -12,6 +12,14 @@
 class Epub2Generator implements Generator {
 
         /**
+        * return the extension of the generated file
+        * @return string
+        */
+        public function getExtension() {
+                return 'epub';
+        }
+
+        /**
         * create the file
         * @var $data Book the title of the main page of the book in Wikisource
         * @return 

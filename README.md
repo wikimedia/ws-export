@@ -13,9 +13,13 @@ Composition
 ===========
 
 This tool is split into indeptendant parts :
-- utils : api to interact with Wikisource and others thinks
-- book : export tool in many formats like epub.
-- opds : an OPDS generator witch link to the book generator
+* utils : api to interact with Wikisource and others thinks
+* book : export tool in many formats like epub.
+* opds : an OPDS generator witch link to the book generator
+
+The tools can be used form two way :
+* http in the http folder
+* command line in the cli folder
 
 Licence
 =======

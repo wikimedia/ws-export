@@ -1,11 +1,6 @@
 <?php
 
-include('../utils/HttpException.php');
-include('../utils/Api.php');
-include('../book/Generator.php');
-include('../book/Page.php');
-include('../book/Book.php');
-include('../book/BookProvider.php');
+include('../book/init.php');
 
 try {
         if(!isset($_GET['page'])) throw new HttpException('Not Found', 404);
@@ -21,7 +16,7 @@ try {
                 throw new HttpException('Bad Request', 400);
         }
         $file = $generator->create($data);
-        $generator->send($file);
+        $generator->send($file, $title);
 } catch(HttpException $exception) {
         $exception->show();
 }

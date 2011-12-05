@@ -26,6 +26,7 @@ interface Generator {
         /**
         * send the file previously created with good headers
         * @var $file The file
+        * @var $fileName The name of the file to return (without extension)
         */
-        public function send($file);
+        public function send($file, $fileName);
 }

@@ -25,17 +25,31 @@ class Epub2Generator implements Generator {
         * @return 
         * @todo
         */
-        public function create(Book $data) {
-                return null;
+        public function create(Book $book) {
+                $zip = new ZipCreator();
+                $zip->addContentFile('mimetype', 'application/epub+zip');
+                if($book->summary != null) {
+                        foreach($data->chapters as $chapter) {
+                                $zip->addContentFile($chapter->title . '.html', $chapter->content->saveHTML());
+                        }
+                } else {
+                        $zip->addContentFile($book->title . '.html', $book->content->saveHTML());
+                }
+                return $zip->getContent();
         }
 
         /**
         * send the file previously created with good headers
         * @var $file The file
-        * @return 
-        * @todo
+        * @var $fileName The name of the file to return (without extension)
         */
-        public function send($file) {
+        public function send($file, $fileName) {
+                header('Content-Type: application/epub+zip');
+                header('Content-Disposition: attachment;filename="' . $fileName . '.epub"');
+                header('Content-Description: File Transfert');
+                header('Content-Transfer-Encoding: binary');
+                header('Content-length: ' . strlen($file));
                 echo $file;
+                flush();
         }
 }

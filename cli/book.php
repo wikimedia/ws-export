@@ -1,12 +1,7 @@
 #!/usr/bin/php
 <?php
 
-include('../utils/HttpException.php');
-include('../utils/Api.php');
-include('../book/Generator.php');
-include('../book/Page.php');
-include('../book/Book.php');
-include('../book/BookProvider.php');
+include('../book/init.php');
 
 
 if($_SERVER['argc'] < 3 || $_SERVER['argc'] > 4) {

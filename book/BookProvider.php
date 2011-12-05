@@ -29,6 +29,7 @@ class BookProvider {
                 $parser = new PageParser($doc);
                 $book = new Book();
                 $book->title = $title;
+                $book->lang = $this->api->lang;
                 $book->type = $parser->getMetadata('ws-type');
                 $book->name = $parser->getMetadata('ws-title');
                 $book->author = $parser->getMetadata('ws-author');

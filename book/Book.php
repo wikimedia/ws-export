@@ -11,6 +11,11 @@
 class Book extends Page {
 
         /**
+        * language of the book like 'en' or 'fr'
+        */
+        public $lang = '';
+
+        /**
         * meatadata on the book
         * @see https://wikisource.org/wiki/Wikisource:Microformat
         */

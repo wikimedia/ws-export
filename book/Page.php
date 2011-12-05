@@ -22,7 +22,7 @@ class Page {
 
         /**
         * content of the page
-        * @type DOMNode
+        * @type DOMDocument
         */
         public $content = null;
 }

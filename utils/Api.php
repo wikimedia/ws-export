@@ -51,7 +51,7 @@ class Api {
         * @return the content of a page
         */
         public function getPage($title) {
-                $ch = curl_init($this->lang . '.wikisource.org/wiki/' . urlencode($title));
+                $ch = curl_init($this->lang . '.wikisource.org/w/index.php?action=render&title=' . urlencode($title));
                 curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 $response = curl_exec($ch);
@@ -61,7 +61,7 @@ class Api {
                         throw new HttpException('Not Found', curl_getinfo($ch, CURLINFO_HTTP_CODE));
                 }
                 curl_close($ch);
-                return $response;
+                return '<?xml encoding="UTF-8"><!DOCTYPE html><html lang="' . $this->lang . '"><body>' . $response . '</body></html>';
         }
 
         /**

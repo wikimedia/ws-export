@@ -39,9 +39,9 @@ class BookProvider {
                 $book->place = $parser->getMetadata('ws-place');
                 $book->key = $parser->getMetadata('ws-key');
                 $book->progress = $parser->getMetadata('ws-progress');
-                $book->valume = $parser->getMetadata('ws-volume');
-                $book->categories = $parser->getCategories();
-                $book->content = $parser->getContent();
+                $book->volume = $parser->getMetadata('ws-volume');
+                $book->categories = $this->getCategories($title);
+                $book->content = $doc;
                 $book->summary = $parser->getSummary();
                 if($book->summary != null) {
                         $chapters = $parser->getChaptersList();
@@ -57,7 +57,7 @@ class BookProvider {
         */
         protected function getDocument($title) {
                 $content = $this->api->getPage($title);
-                $document = new DOMDocument('1.0', 'utf-8');
+                $document = new DOMDocument('1.0', 'UTF-8');
                 $document->loadHTML($content);
                 return $document;
         }
@@ -70,12 +70,29 @@ class BookProvider {
         protected function getChaptersData($chapters) {
                 $chapters2 = array();
                 foreach($chapters as $chapter) {
-                        $doc = $this->getDocument(str_replace(' ', '_', $chapter->title));
-                        $parser = new PageParser($doc);
-                        $chapter->content = $parser->getContent();
+                        $chapter->content = $this->getDocument(str_replace(' ', '_', $chapter->title));
                         $chapters2[] = $chapter;
                 }
                 return $chapters2;
+        }
+
+        /**
+        * return the categories in the pages
+        * @var $title the title of the page in Wikisource
+        * @return array The categories
+        */
+        public function getCategories($title) {
+                $categories = array();
+                $response = $this->api->query(array('titles' => $title, 'prop' => 'categories', '!hidden' => 'true'));
+                foreach($response['query']['pages'] as $list) {
+                        if(isset($list['categories'])) {
+                                foreach($list['categories'] as $categorie) {
+                                        $cat = explode(':', $categorie['title'], 2);
+                                        $categories[] = $cat[1];
+                                }
+                        }
+                }
+                return $categories;
         }
 }
 
@@ -95,7 +112,7 @@ class PageParser {
 
         /**
         * return a metadata in the page
-        * @var $id l'identifiant de la métadonnée
+        * @var $id the metadata id like ws-author
         * @return string
         */
         public function getMetadata($id) {
@@ -105,20 +122,6 @@ class PageParser {
                 } else {
                         return '';
                 }
-        }
-
-        /**
-        * return the categories in the pages
-        * @return array The categories
-        */
-        public function getCategories() {
-                $list = $this->xPath->query('//div[@id="mw-normal-catlinks"]/ul/li/a');
-                $categories = array();
-                foreach($list as $link) {
-                        $cat = explode(':', $link->getAttribute("title"), 2);
-                        $categories[] = $cat[1];
-                }
-                return $categories;
         }
 
         /**
@@ -148,19 +151,5 @@ class PageParser {
                         $chapters[] = $chapter;
                 }
                 return $chapters;
-        }
-
-        /**
-        * return the summary of the page if he exist, null if not
-        * @return DOMElement The cotent of the page
-        * @todo Remove all unused templates
-        */
-        public function getContent() {
-                $list = $this->xPath->query('//div[@id="bodyContent"]/div[@class="mw-content-ltr"] | //div[@id="bodyContent"]/div[@class="mw-content-rtl"]');
-                if($list->length != 0) {
-                        return $list->item(0);
-                } else {
-                        throw new HttpException('Not Found', 404);
-                }
         }
 }

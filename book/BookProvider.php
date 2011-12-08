@@ -22,7 +22,7 @@ class BookProvider {
         * return all the data on a book needed to export it
         * @var $title the title of the main page of the book in Wikisource
         * @return Book
-        * @todo
+        * @todo nettoyer les modèles inutiles et inserer les images
         */
         public function get($title) {
                 $doc = $this->getDocument($title);
@@ -59,7 +59,7 @@ class BookProvider {
         protected function getDocument($title) {
                 $content = $this->api->getPage($title);
                 $document = new DOMDocument('1.0', 'UTF-8');
-                $document->loadHTML($content);
+                $document->loadXML($content);
                 return $document;
         }
 

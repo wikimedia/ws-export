@@ -61,7 +61,7 @@ class Api {
                         throw new HttpException('Not Found', curl_getinfo($ch, CURLINFO_HTTP_CODE));
                 }
                 curl_close($ch);
-                return '<?xml encoding="UTF-8"><!DOCTYPE html><html lang="' . $this->lang . '"><body>' . $response . '</body></html>';
+                return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="' . $this->lang . '" xml:lang="' . $this->lang . '"><body>' . $response . '</body></html>';
         }
 
         /**

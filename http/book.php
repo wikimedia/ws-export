@@ -16,7 +16,13 @@ try {
                 throw new HttpException('Bad Request', 400);
         }
         $file = $generator->create($data);
-        $generator->send($file, $title);
+        header('Content-Type: ' . $generator->getMimeType());
+        header('Content-Disposition: attachment;filename="' . $title . '.' . $generator->getExtension() . '"');
+        header('Content-Description: File Transfert');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-length: ' . strlen($file));
+        echo $file;
+        flush();
 } catch(HttpException $exception) {
         $exception->show();
 }

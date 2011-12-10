@@ -26,6 +26,7 @@ class Book extends Page {
         public $type = '';
         public $author = '';
         public $translator = '';
+        public $illustrator = '';
         public $school = '';
         public $publisher = '';
         public $year = '';

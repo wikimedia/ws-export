@@ -34,6 +34,7 @@ class Epub2Generator implements Generator {
         * @todo images, cover, about...
         */
         public function create(Book $book) {
+                $book = $this->encodeTitle($book);
                 $zip = new ZipCreator();
                 $zip->addContentFile('mimetype', 'application/epub+zip');
                 $zip->addContentFile('META-INF/container.xml', $this->getXmlContainer());
@@ -79,6 +80,12 @@ class Epub2Generator implements Generator {
                                 if($book->author != '') {
                                         $content.= '<dc:creator opf:role="aut">' . $book->author . '</dc:creator>';
                                 }
+                                if($book->translator != '') {
+                                        $content.= '<dc:contributor opf:role="trl">' . $book->translator . '</dc:contributor>';
+                                }
+                                if($book->illustrator != '') {
+                                        $content.= '<dc:contributor opf:role="ill">' . $book->illustrator . '</dc:contributor>';
+                                }
                                 if($book->year != '') {
                                         $content.= '<dc:date opf:event="original-publication">' . $book->year . '</dc:date>';
                                 }
@@ -110,10 +117,8 @@ class Epub2Generator implements Generator {
                                 <guide>
                                         <reference type="cover" title="Cover" href="cover.xhtml" />
                                         <reference type="title-page" title="Title Page" href="title.xhtml" />';
-                                        if($book->summary != null) {
-                                                foreach($book->chapters as $chapter) {
-                                                         $content.= '<reference type="text" title="' . $chapter->name . '" href="' . $chapter->title . '.xhtml" />';
-                                                }
+                                        if(isset($book->chapters[0])) {
+                                                $content.= '<reference type="text" title="' . $book->chapters[0]->name . '" href="' . $book->chapters[0]->title . '.xhtml" />';
                                         } else {
                                                  $content.= '<reference type="text" title="' . $book->name . '" href="' . $book->title . '.xhtml" />';
                                         }
@@ -199,6 +204,19 @@ class Epub2Generator implements Generator {
                                 </body>
                         </html>';
                 return $content;
+        }
+
+        /**
+        * encode file title in order to delete all special chars
+        */
+        protected function encodeTitle(Book $book) {
+	        $search = array('@[éèêëÊË]@i','@[àâäÂÄ]@i','@[îïÎÏ]@i','@[ûùüÛÜ]@i','@[ôöÔÖ]@i','@[ç]@i','@[ ]@i','@[^a-zA-Z0-9_]@');
+	        $replace = array('e','a','i','u','o','c','_','');
+                $book->title = preg_replace($search, $replace, $book->title);
+                foreach($book->chapters as $id => $chapter) {
+                        $book->chapters[$id]->title = preg_replace($search, $replace, $chapter->title);
+                }
+                return $book;
         }
 }
 

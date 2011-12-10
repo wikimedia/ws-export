@@ -25,7 +25,7 @@ class BookProvider {
         * @todo inserer les images
         */
         public function get($title) {
-                $doc = $this->getDocument($title);
+                $doc = $this->getDocument(str_replace(' ', '_', $title));
                 $parser = new PageParser($doc);
                 $book = new Book();
                 $book->uuid = uuid();
@@ -35,6 +35,7 @@ class BookProvider {
                 $book->name = $parser->getMetadata('ws-title');
                 $book->author = $parser->getMetadata('ws-author');
                 $book->translator = $parser->getMetadata('ws-translator');
+                $book->illustrator = $parser->getMetadata('ws-illustrator');
                 $book->school = $parser->getMetadata('ws-school');
                 $book->publisher = $parser->getMetadata('ws-publisher');
                 $book->year = $parser->getMetadata('ws-year');
@@ -70,14 +71,12 @@ class BookProvider {
         * @return array
         */
         protected function getChaptersData($chapters) {
-                $chapters2 = array();
-                foreach($chapters as $chapter) {
-                        $doc = $this->getDocument(str_replace(' ', '_', $chapter->title));
+                foreach($chapters as $id => $chapter) {
+                        $doc = $this->getDocument($chapter->title);
                         $parser = new PageParser($doc);
-                        $chapter->content = $parser->getContent();
-                        $chapters2[] = $chapter;
+                        $chapters[$id]->content = $parser->getContent();
                 }
-                return $chapters2;
+                return $chapters;
         }
 
         /**
@@ -151,7 +150,7 @@ class PageParser {
                 $chapters = array();
                 foreach($list as $link) {
                         $chapter = new Page();
-                        $chapter->title = $link->getAttribute("title");
+                        $chapter->title = str_replace(' ', '_', $link->getAttribute("title"));
                         $chapter->name = $link->nodeValue;
                         $chapters[] = $chapter;
                 }

@@ -5,6 +5,7 @@
 * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
 */
 
+include('../utils/utils.php');
 include('../utils/HttpException.php');
 include('../utils/Api.php');
 include('../utils/ZipCreator.php');

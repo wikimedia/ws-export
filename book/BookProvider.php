@@ -28,6 +28,7 @@ class BookProvider {
                 $doc = $this->getDocument($title);
                 $parser = new PageParser($doc);
                 $book = new Book();
+                $book->uuid = uuid();
                 $book->title = $title;
                 $book->lang = $this->api->lang;
                 $book->type = $parser->getMetadata('ws-type');
@@ -143,7 +144,7 @@ class PageParser {
         * @return DOMElement The summary
         */
         public function getChaptersList() {
-                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::a[not(contains(@title,":"))][not(contains(@href,"action=edit"))]');
+                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::*[@href][not(contains(@title,":"))][not(contains(@href,"action=edit"))]'); //it doesn't work if I put 'a' rather than *[@href]. Strange !
                 $chapters = array();
                 foreach($list as $link) {
                         $chapter = new Page();

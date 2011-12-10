@@ -5,11 +5,7 @@ include('../book/init.php');
 
 
 if($_SERVER['argc'] < 3 || $_SERVER['argc'] > 4) {
-        if ($fp = fopen('help/book.txt', 'r')) {
-                while(!feof($fp)) {
-                        echo '   ' . fgets($fp, 4096);
-                }
-        }
+        echo getFile('help/book.txt');
 } else {
         $lang = $_SERVER['argv'][1];
         $title = $_SERVER['argv'][2];

@@ -22,7 +22,7 @@ class BookProvider {
         * return all the data on a book needed to export it
         * @var $title the title of the main page of the book in Wikisource
         * @return Book
-        * @todo nettoyer les modèles inutiles et inserer les images
+        * @todo inserer les images
         */
         public function get($title) {
                 $doc = $this->getDocument($title);
@@ -43,8 +43,8 @@ class BookProvider {
                 $book->progress = $parser->getMetadata('ws-progress');
                 $book->volume = $parser->getMetadata('ws-volume');
                 $book->categories = $this->getCategories($title);
-                $book->content = $doc;
                 $book->summary = $parser->getSummary();
+                $book->content = $parser->getContent();
                 if($book->summary != null) {
                         $chapters = $parser->getChaptersList();
                         $book->chapters = $this->getChaptersData($chapters);
@@ -72,7 +72,9 @@ class BookProvider {
         protected function getChaptersData($chapters) {
                 $chapters2 = array();
                 foreach($chapters as $chapter) {
-                        $chapter->content = $this->getDocument(str_replace(' ', '_', $chapter->title));
+                        $doc = $this->getDocument(str_replace(' ', '_', $chapter->title));
+                        $parser = new PageParser($doc);
+                        $chapter->content = $parser->getContent();
                         $chapters2[] = $chapter;
                 }
                 return $chapters2;
@@ -110,6 +112,7 @@ class PageParser {
         */
         public function __construct(DOMNode $doc) {
                 $this->xPath = new DOMXPath($doc);
+                $this->xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
         }
 
         /**
@@ -144,7 +147,7 @@ class PageParser {
         * @return DOMElement The summary
         */
         public function getChaptersList() {
-                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::*[@href][not(contains(@title,":"))][not(contains(@href,"action=edit"))]'); //it doesn't work if I put 'a' rather than *[@href]. Strange !
+                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::html:a[not(contains(@title,":"))][not(contains(@href,"action=edit"))]');
                 $chapters = array();
                 foreach($list as $link) {
                         $chapter = new Page();
@@ -153,5 +156,24 @@ class PageParser {
                         $chapters[] = $chapter;
                 }
                 return $chapters;
+        }
+
+
+        /**
+        * return the content cleaned : This action must be done after getting metadata that can be in deleted nodes
+        * @return DOMDocument The page
+        */
+        public function getContent() {
+                $this->removeNodesWithXpath('//*[contains(@class,"ws-noexport")]');
+                $this->removeNodesWithXpath('//html:table[@id="toc"]');
+                $this->removeNodesWithXpath('//html:span[@class="editsection"]');
+                return $this->xPath->document;
+        }
+
+        protected function removeNodesWithXpath($query) {
+                $nodes = $this->xPath->query($query);
+                foreach($nodes as $node) {
+                        $node->parentNode->removeChild($node);
+                }
         }
 }

@@ -44,3 +44,12 @@ function getFile($file) {
         }
         return $content;
 }
+
+/**
+* a mimetype from a file
+* @var $file the file
+*/
+function getMimeType($file) {
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        return $finfo->buffer($file);
+}

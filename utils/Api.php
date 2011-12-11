@@ -34,24 +34,27 @@ class Api {
                 foreach($params as $param_name => $param_value) {
                         $data .= '&' . $param_name . '=' . urlencode($param_value);
                 }
-                $ch = curl_init($this->lang . '.wikisource.org/w/api.php?' . $data);
-                curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                $response = curl_exec($ch);
-                if (curl_errno($ch)) {
-                        throw new HttpException(curl_error($ch), curl_errno($ch));
-                }
-                curl_close($ch);
+                $url = $this->lang . '.wikisource.org/w/api.php?' . $data;
+                $response = $this->get($url);
                 return unserialize($response);
         }
-
 
         /**
         * @var $title the title of the page
         * @return the content of a page
         */
         public function getPage($title) {
-                $ch = curl_init($this->lang . '.wikisource.org/w/index.php?action=render&title=' . urlencode($title));
+                $url = $this->lang . '.wikisource.org/w/index.php?action=render&title=' . urlencode($title);
+                $response = $this->get($url);
+                return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="' . $this->lang . '" xml:lang="' . $this->lang . '"><body>' . $response . '</body></html>';
+        }
+
+        /**
+        * @var $url the url to the file
+        * @return the file content
+        */
+        public function get($url) {
+                $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 $response = curl_exec($ch);
@@ -61,7 +64,7 @@ class Api {
                         throw new HttpException('Not Found', curl_getinfo($ch, CURLINFO_HTTP_CODE));
                 }
                 curl_close($ch);
-                return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="' . $this->lang . '" xml:lang="' . $this->lang . '"><body>' . $response . '</body></html>';
+                return $response;
         }
 
         /**

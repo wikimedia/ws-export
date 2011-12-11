@@ -3,11 +3,12 @@
 include('../book/init.php');
 
 try {
-        if(!isset($_GET['page'])) throw new HttpException('Not Found', 404);
+        if(!isset($_GET['page']) || $_GET['page'] == '') throw new HttpException('Not Found', 404);
         $title = htmlspecialchars(urldecode($_GET['page']));
         $format = isset($_GET['format']) ? htmlspecialchars(urldecode($_GET['format'])) : 'epub';
+        $withPictures = isset($_GET['pictures']) ? (bool) $_GET['pictures'] : true;
         $api = new Api();
-        $provider = new BookProvider($api);
+        $provider = new BookProvider($api, $withPictures);
         $data = $provider->get($title);
         if($format == 'epub-2' | $format == 'epub') {
                 include('../book/formats/Epub2Generator.php');
@@ -17,9 +18,6 @@ try {
         }
         $file = $generator->create($data);
         header('Content-Type: ' . $generator->getMimeType());
-        header('Content-Disposition: attachment;filename="' . $title . '.' . $generator->getExtension() . '"');
-        header('Content-Description: File Transfert');
-        header('Content-Transfer-Encoding: binary');
         header('Content-length: ' . strlen($file));
         echo $file;
         flush();

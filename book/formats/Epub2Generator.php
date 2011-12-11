@@ -34,7 +34,7 @@ class Epub2Generator implements Generator {
         * @todo images, cover, about...
         */
         public function create(Book $book) {
-                $book = $this->encodeTitle($book);
+                $book = $this->clean($book);
                 $zip = new ZipCreator();
                 $zip->addContentFile('mimetype', 'application/epub+zip');
                 $zip->addContentFile('META-INF/container.xml', $this->getXmlContainer());
@@ -42,12 +42,15 @@ class Epub2Generator implements Generator {
                 $zip->addContentFile('OPS/toc.ncx', $this->getNcxToc($book));
                 $zip->addContentFile('OPS/cover.xhtml', $this->getXhtmlCover($book));
                 $zip->addContentFile('OPS/title.xhtml', $this->getXhtmlTitle($book));
-                if($book->summary != null) {
+                if(!empty($book->chapters)) {
                         foreach($book->chapters as $chapter) {
                                 $zip->addContentFile('OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML());
                         }
                 } else {
                         $zip->addContentFile('OPS/' . $book->title . '.xhtml', $book->content->saveXML());
+                }
+                foreach($book->pictures as $picture) {
+                        $zip->addContentFile('OPS/' . $picture->title, $picture->content);
                 }
                 return $zip->getContent();
         }
@@ -76,7 +79,8 @@ class Epub2Generator implements Generator {
                                         <dc:coverage></dc:coverage>
                                         <dc:source>' . wikisourceUrl($book->lang, $book->title) . '</dc:source>
                                         <dc:date opf:event="ops-publication">' . date(DATE_ISO8601) . '</dc:date>
-                                        <dc:rights></dc:rights>'; //TODO: rights, check event
+                                        <dc:rights>http://creativecommons.org/licenses/by-sa/3.0/</dc:rights>
+                                        <dc:rights>http://www.gnu.org/copyleft/fdl.html</dc:rights>';
                                 if($book->author != '') {
                                         $content.= '<dc:creator opf:role="aut">' . $book->author . '</dc:creator>';
                                 }
@@ -94,18 +98,21 @@ class Epub2Generator implements Generator {
                                         <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
                                         <item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />
                                         <item id="title" href="title.xhtml" media-type="application/xhtml+xml" />';
-                                        if($book->summary != null) {
+                                        if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
                                                         $content.= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />';
                                                 }
                                         } else {
                                                 $content.= '<item id="' . $book->title . '" href="' . $book->title . '.xhtml" media-type="application/xhtml+xml" />';
-                                        } //TODO: Pictures, about...
+                                        }
+                                        foreach($book->pictures as $picture) {
+                                                $content.= '<item id="' . $picture->title . '" href="' . $picture->title . '.xhtml" media-type="' . $picture->mimetype . '" />';
+                                        } //TODO: about...
                                         //$content.= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
                                 $content.= '</manifest>
                                 <spine toc="ncx">
                                         <itemref idref="title" linear="yes" />';
-                                        if($book->summary != null) {
+                                        if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
                                                         $content.= '<itemref idref="' . $chapter->title . '" linear="yes" />';
                                                 }
@@ -148,7 +155,7 @@ class Epub2Generator implements Generator {
                                                 <content src="title.xhtml"/>
                                         </navPoint>';
                                         $order = 2;
-                                        if($book->summary != null) {
+                                        if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
                                                          $content.= '<navPoint id="' . $chapter->title . '" playOrder="' . $order . '">
                                                                         <navLabel><text>' . $chapter->name . '</text></navLabel>
@@ -207,16 +214,46 @@ class Epub2Generator implements Generator {
         }
 
         /**
-        * encode file title in order to delete all special chars
+        * clean the files
         */
-        protected function encodeTitle(Book $book) {
-	        $search = array('@[éèêëÊË]@i','@[àâäÂÄ]@i','@[îïÎÏ]@i','@[ûùüÛÜ]@i','@[ôöÔÖ]@i','@[ç]@i','@[ ]@i','@[^a-zA-Z0-9_]@');
-	        $replace = array('e','a','i','u','o','c','_','');
-                $book->title = preg_replace($search, $replace, $book->title);
+        protected function clean(Book $book) {
+                $book->title = $this->encode($book->title);
+                $book->content = $this->cleanHtml($book->content);
                 foreach($book->chapters as $id => $chapter) {
-                        $book->chapters[$id]->title = preg_replace($search, $replace, $chapter->title);
+                        $book->chapters[$id]->title = $this->encode($chapter->title);
+                        $book->chapters[$id]->content = $this->cleanHtml($chapter->content);
+                }
+                foreach($book->pictures as $id => $picture) {
+                        $book->pictures[$id]->title = $this->encode($picture->title);
                 }
                 return $book;
+        }
+
+        protected function encode($string) {
+                $search = array('@[éèêëÊË]@i','@[àâäÂÄ]@i','@[îïÎÏ]@i','@[ûùüÛÜ]@i','@[ôöÔÖ]@i','@[ç]@i','@[ ]@i','@[^a-zA-Z0-9_\.]@');
+	        $replace = array('e','a','i','u','o','c','_','');
+                return preg_replace($search, $replace, $string);
+        }
+
+        /**
+        * modified the HTML
+        */
+        protected function cleanHtml(DOMDocument $file) {
+                $xPath = new DOMXPath($file);
+                $xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+	        $xPath = $this->setPictureLinks($xPath);
+                return $xPath->document;
+        }
+
+        /**
+        * change the picture links
+        */
+        protected function setPictureLinks(DOMXPath $xPath) {
+                $list = $xPath->query('//html:img');
+                foreach($list as $node) {
+                        $node->setAttribute('src', $this->encode($node->getAttribute('alt')));
+                }
+                return $xPath;
         }
 }
 

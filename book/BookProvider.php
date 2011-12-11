@@ -9,20 +9,21 @@
 * provide all the data needed to create a book file
 */
 class BookProvider {
-        protected $api = '';
+        protected $api = null;
+        protected $withPictures = true;
 
         /**
         * @var $api Api
         */
-        public function __construct(Api $api) {
+        public function __construct(Api $api, $withPictures = true) {
                 $this->api = $api;
+                $tihs->withPictures = $withPictures;
         }
 
         /**
         * return all the data on a book needed to export it
         * @var $title the title of the main page of the book in Wikisource
         * @return Book
-        * @todo inserer les images
         */
         public function get($title) {
                 $doc = $this->getDocument(str_replace(' ', '_', $title));
@@ -44,12 +45,21 @@ class BookProvider {
                 $book->progress = $parser->getMetadata('ws-progress');
                 $book->volume = $parser->getMetadata('ws-volume');
                 $book->categories = $this->getCategories($title);
-                $book->summary = $parser->getSummary();
                 $book->content = $parser->getContent();
-                if($book->summary != null) {
-                        $chapters = $parser->getChaptersList();
-                        $book->chapters = $this->getChaptersData($chapters);
+                if($this->withPictures) {
+                        $pictures = $parser->getPicturesList();
                 }
+                $chapters = $parser->getChaptersList($title);
+                foreach($chapters as $id => $chapter) {
+                        $doc = $this->getDocument($chapter->title);
+                        $parser = new PageParser($doc);
+                        $chapters[$id]->content = $parser->getContent();
+                        if($this->withPictures) {
+                                $pictures = array_merge($pictures, $parser->getPicturesList());
+                        }
+                }
+                $book->chapters = $chapters;
+                $book->pictures = $this->getPicturesData($pictures);
                 return $book;
         }
 
@@ -66,17 +76,16 @@ class BookProvider {
         }
 
         /**
-        * return the content of the chapters
-        * @var $chapters the list of the chapters
-        * @return array
+        * return the content of the pictures
+        * @var $pictures the list of the pictures
+        * @return array|Picture
         */
-        protected function getChaptersData($chapters) {
-                foreach($chapters as $id => $chapter) {
-                        $doc = $this->getDocument($chapter->title);
-                        $parser = new PageParser($doc);
-                        $chapters[$id]->content = $parser->getContent();
+        protected function getPicturesData($pictures) {
+                foreach($pictures as $id => $picture) {
+                        $pictures[$id]->content =  $this->api->get('http:' . $picture->url);
+                        $pictures[$id]->mimetype = getMimeType($pictures[$id]->content);
                 }
-                return $chapters;
+                return $pictures;
         }
 
         /**
@@ -129,34 +138,49 @@ class PageParser {
         }
 
         /**
-        * return the summary of the page if he exist, null if not
-        * @return DOMElement The summary
+        * return the list of the chapters with the summary if he exist, if not
+        * @return array|Page
         */
-        public function getSummary() {
-                $list = $this->xPath->query('//*[@id="ws-summary"]');
-                if($list->length != 0) {
-                        return $list->item(0);
-                } else {
-                        return null;
-                }
-        }
-
-        /**
-        * return the summary of the page if he exist, null if not
-        * @return DOMElement The summary
-        */
-        public function getChaptersList() {
+        public function getChaptersList($title) {
                 $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::html:a[not(contains(@title,":"))][not(contains(@href,"action=edit"))]');
                 $chapters = array();
-                foreach($list as $link) {
-                        $chapter = new Page();
-                        $chapter->title = str_replace(' ', '_', $link->getAttribute("title"));
-                        $chapter->name = $link->nodeValue;
-                        $chapters[] = $chapter;
+                if($list->length != 0) {
+                        foreach($list as $link) {
+                                $chapter = new Page();
+                                $chapter->title = str_replace(' ', '_', $link->getAttribute('title'));
+                                $chapter->name = $link->nodeValue;
+                                $chapters[] = $chapter;
+                        }
+                } else {
+                        $list = $this->xPath->query('//html:a[contains(@href,"' . urlencode($title) . '")][not(contains(@href,":"))][not(contains(@href,"action=edit"))]');
+                        foreach($list as $link) {
+                                $chapter = new Page();
+                                $chapter->title = str_replace(' ', '_', $link->getAttribute('title'));
+                                $chapter->name = $link->nodeValue;
+                                $chapters[] = $chapter;
+                        }
                 }
                 return $chapters;
         }
 
+
+        /**
+        * return the pictures of the file
+        * @return array
+        */
+        public function getPicturesList() {
+                $list = $this->xPath->query('//html:a[@class="image"]');
+                $pictures = array();
+                foreach($list as $node) {
+                        $a = $node->getElementsByTagName('img')->item(0);
+                        $picture = new Picture();
+                        $picture->title = $a->getAttribute('alt');
+                        $picture->url = $a->getAttribute('src');
+                        $pictures[$picture->title] = $picture;
+                        $node->parentNode->replaceChild($a, $node);
+                }
+                return $pictures;
+        }
 
         /**
         * return the content cleaned : This action must be done after getting metadata that can be in deleted nodes

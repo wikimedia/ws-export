@@ -34,7 +34,6 @@ class Book extends Page {
         public $key = '';
         public $progress = '';
         public $volume = '';
-        public $summary = null;
 
         /**
         * list of the categories as string object like array('1859', 'France')
@@ -45,4 +44,10 @@ class Book extends Page {
         * list of the chapters as Page object
         */
         public $chapters = array();
+
+        /**
+        * pictures included in the page
+        * @type array
+        */
+        public $pictures = array();
 }

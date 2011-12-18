@@ -49,22 +49,63 @@ class Api {
                 return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="' . $this->lang . '" xml:lang="' . $this->lang . '"><body>' . $response . '</body></html>';
         }
 
+
         /**
-        * @var $url the url to the file
+        * @var $title array|string the title of the pages
+        * @return array|string the content of the pages
+        */
+        public function getPages($titles) {
+                $urls = array();
+                foreach($titles as $id => $title) {
+                        $urls[$id] = $this->lang . '.wikisource.org/w/index.php?action=render&title=' . urlencode($title);
+                }
+                $responses = $this->getMulti($urls);
+                foreach($responses as $id => $response) {
+                        $responses[$id] = '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="' . $this->lang . '" xml:lang="' . $this->lang . '"><body>' . $response . '</body></html>';
+                }
+                return $responses;
+        }
+
+        /**
+        * @var $url the url
         * @return the file content
         */
         public function get($url) {
-                $ch = curl_init($url);
-                curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $ch = $this->getCurl($url);
                 $response = curl_exec($ch);
-                if (curl_errno($ch)) {
+                if(curl_errno($ch)) {
                         throw new HttpException(curl_error($ch), curl_errno($ch));
                 } else if(curl_getinfo($ch, CURLINFO_HTTP_CODE) >= 400) {
                         throw new HttpException('Not Found', curl_getinfo($ch, CURLINFO_HTTP_CODE));
                 }
                 curl_close($ch);
                 return $response;
+        }
+
+        /**
+        * multi requests
+        * @var $title array|string the urls
+        * @return array|string the content of a pages
+        */
+        public function getMulti($urls) {
+                $mh = curl_multi_init();
+                $curl_array = array();
+                foreach($urls as $id => $url) {
+                        $curl_array[$id] = $this->getCurl($url);
+                        curl_multi_add_handle($mh, $curl_array[$id]);
+                }
+                $running = null;
+                do {
+                        curl_multi_exec($mh, $running);
+                } while($running > 0);
+
+                $res = array();
+                foreach($urls as $id => $url) {
+                        $res[$id] = curl_multi_getcontent($curl_array[$id]);
+                        curl_multi_remove_handle($mh, $curl_array[$id]);
+                }
+                curl_multi_close($mh);
+                return $res;
         }
 
         /**
@@ -81,5 +122,16 @@ class Api {
                         }
                 }
                 return strtolower(substr($lang, 0, 2));
+        }
+
+        /**
+        * @var $url the url
+        * @return curl
+        */
+        protected function getCurl($url) {
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                return $ch;
         }
 }

@@ -44,15 +44,15 @@ class BookProvider {
                 $book->key = $parser->getMetadata('ws-key');
                 $book->progress = $parser->getMetadata('ws-progress');
                 $book->volume = $parser->getMetadata('ws-volume');
-                $book->categories = $this->getCategories($title);
+                //$book->categories = $this->getCategories($title); Need one more request. Useful ?
                 $book->content = $parser->getContent();
                 if($this->withPictures) {
                         $pictures = $parser->getPicturesList();
                 }
                 $chapters = $parser->getChaptersList($title);
+                $chapters = $this->getPages($chapters);
                 foreach($chapters as $id => $chapter) {
-                        $doc = $this->getDocument($chapter->title);
-                        $parser = new PageParser($doc);
+                        $parser = new PageParser($chapter->content);
                         $chapters[$id]->content = $parser->getContent();
                         if($this->withPictures) {
                                 $pictures = array_merge($pictures, $parser->getPicturesList());
@@ -65,7 +65,7 @@ class BookProvider {
 
         /**
         * return the content of the page
-        * @var $title the title of the page in Wikisource
+        * @var $title string the title of the page in Wikisource
         * @return DOMDocument
         */
         protected function getDocument($title) {
@@ -76,13 +76,37 @@ class BookProvider {
         }
 
         /**
+        * return the content of the page
+        * @var $title array|Page the pages
+        * @return array|Page
+        */
+        protected function getPages($pages) {
+                $titles = array();
+                foreach($pages as $id => $page) {
+                        $titles[$id] = $page->title;
+                }
+                $data = $this->api->getPages($titles);
+                foreach($pages as $id => $page) {
+                        $document = new DOMDocument('1.0', 'UTF-8');
+                        $document->loadXML($data[$id]);
+                        $page->content = $document;
+                }
+                return $pages;
+        }
+
+        /**
         * return the content of the pictures
-        * @var $pictures the list of the pictures
+        * @var $pictures array|Picture the list of the pictures
         * @return array|Picture
         */
         protected function getPicturesData($pictures) {
+                $urls = array();
                 foreach($pictures as $id => $picture) {
-                        $pictures[$id]->content =  $this->api->get('http:' . $picture->url);
+                        $urls[$id] = 'http:' . $picture->url;
+                }
+                $data = $this->api->getMulti($urls);
+                foreach($pictures as $id => $picture) {
+                        $pictures[$id]->content = $data[$id];
                         $pictures[$id]->mimetype = getMimeType($pictures[$id]->content);
                 }
                 return $pictures;
@@ -90,8 +114,8 @@ class BookProvider {
 
         /**
         * return the categories in the pages
-        * @var $title the title of the page in Wikisource
-        * @return array The categories
+        * @var $title string the title of the page in Wikisource
+        * @return array|string The categories
         */
         public function getCategories($title) {
                 $categories = array();
@@ -118,7 +142,7 @@ class PageParser {
         /**
         * @var $doc DOMDocument The page to parse
         */
-        public function __construct(DOMNode $doc) {
+        public function __construct(DOMDocument $doc) {
                 $this->xPath = new DOMXPath($doc);
                 $this->xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
         }

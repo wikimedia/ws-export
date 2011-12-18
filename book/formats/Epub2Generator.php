@@ -65,7 +65,7 @@ class Epub2Generator implements Generator {
                 return $content;
         }
 
-        protected function getOpfContent($book) {
+        protected function getOpfContent(Book $book) {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="id" version="2.0">
                                 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcterms="http://purl.org/dc/terms/">
@@ -135,7 +135,7 @@ class Epub2Generator implements Generator {
                 return $content;
         }
 
-        protected function getNcxToc($book) {
+        protected function getNcxToc(Book $book) {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
                         <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
@@ -181,7 +181,7 @@ class Epub2Generator implements Generator {
                 return $content;
         }
 
-        protected function getXhtmlCover($book) {
+        protected function getXhtmlCover(Book $book) {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <!DOCTYPE html>
                         <html xmlns="http://www.w3.org/1999/xhtml" lang="' . $book->lang . '" xml:lang="' . $book->lang . '">
@@ -197,7 +197,7 @@ class Epub2Generator implements Generator {
                 return $content;
         }
 
-        protected function getXhtmlTitle($book) {
+        protected function getXhtmlTitle(Book $book) {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <!DOCTYPE html>
                         <html xmlns="http://www.w3.org/1999/xhtml" lang="' . $book->lang . '" xml:lang="' . $book->lang . '">

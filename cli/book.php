@@ -18,6 +18,12 @@ if($_SERVER['argc'] < 3 || $_SERVER['argc'] > 4) {
                 if($format == 'epub-2' | $format == 'epub') {
                         include('../book/formats/Epub2Generator.php');
                         $generator = new Epub2Generator();
+                } else if($format == 'odt') {
+                        include('../book/formats/OdtGenerator.php');
+                        $generator = new OdtGenerator();
+                } else if($format == 'xhtml') {
+                        include('../book/formats/XhtmlGenerator.php');
+                        $generator = new XhtmlGenerator();
                 } else {
                         throw new Exception('The file format is unknown');
                 }

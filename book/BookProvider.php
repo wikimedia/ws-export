@@ -26,7 +26,8 @@ class BookProvider {
         * @return Book
         */
         public function get($title) {
-                $doc = $this->getDocument(str_replace(' ', '_', $title));
+                $title = str_replace(' ', '_', $title);
+                $doc = $this->getDocument($title);
                 $parser = new PageParser($doc);
                 $book = new Book();
                 $book->uuid = uuid();
@@ -176,7 +177,7 @@ class PageParser {
                                 $chapters[] = $chapter;
                         }
                 } else {
-                        $list = $this->xPath->query('//html:a[contains(@href,"' . urlencode($title) . '")][not(contains(@href,":"))][not(contains(@href,"action=edit"))]');
+                        $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][not(contains(@href,":"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
                         foreach($list as $link) {
                                 $chapter = new Page();
                                 $chapter->title = str_replace(' ', '_', $link->getAttribute('title'));

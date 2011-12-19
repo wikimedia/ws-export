@@ -17,7 +17,7 @@ class Api {
         */
         public function __construct($lang = '') {
                 if($lang == '') {
-                        $this->lang = $this->getHttpLang();
+                        $this->lang = Api::getHttpLang();
                 } else {
                         $this->lang = $lang;
                 }
@@ -96,8 +96,8 @@ class Api {
                 }
                 $running = null;
                 do {
-                        curl_multi_exec($mh, $running);
-                } while($running > 0);
+                        $status = curl_multi_exec($mh, $running);
+                } while ($status === CURLM_CALL_MULTI_PERFORM || $running > 0);
 
                 $res = array();
                 foreach($urls as $id => $url) {
@@ -109,9 +109,20 @@ class Api {
         }
 
         /**
+        * @var $url the url
+        * @return curl
+        */
+        protected function getCurl($url) {
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                return $ch;
+        }
+
+        /**
         * @return the lang of the Wikisource used
         */
-        public function getHttpLang() {
+        public static function getHttpLang() {
                 $lang = '';
                 if(isset($_GET['lang'])) {
                         $lang = $_GET['lang'];
@@ -125,13 +136,11 @@ class Api {
         }
 
         /**
-        * @var $url the url
-        * @return curl
+        * @return the url encoded like mediawiki does.
         */
-        protected function getCurl($url) {
-                $ch = curl_init($url);
-                curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                return $ch;
+        public static function mediawikiUrlEncode($url) {
+                $search = array('%21', '%24', '%28', '%29', '%2A', '%2C', '%2D', '%2E', '%2F', '%3A', '%3B', '%40');
+                $replace = array('!', '$', '(', ')', '*', ',', '-', '.', '/', ':', ';', '@');
+                return str_replace($search, $replace, urlencode($url));
         }
 }

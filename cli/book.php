@@ -1,6 +1,7 @@
 #!/usr/bin/php
 <?php
 
+$basePath = '..';
 include('../book/init.php');
 
 

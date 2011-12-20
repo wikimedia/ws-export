@@ -45,7 +45,7 @@ class BookProvider {
                 $book->key = $parser->getMetadata('ws-key');
                 $book->progress = $parser->getMetadata('ws-progress');
                 $book->volume = $parser->getMetadata('ws-volume');
-                //$book->categories = $this->getCategories($title); Need one more request. Useful ?
+                $book->categories = $this->getCategories($title);
                 $book->content = $parser->getContent();
                 if($this->withPictures) {
                         $pictures = $parser->getPicturesList();

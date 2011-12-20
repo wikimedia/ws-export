@@ -1,5 +1,5 @@
 <?php
-
+$basePath = '..';
 include('../book/init.php');
 
 try {

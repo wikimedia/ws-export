@@ -75,7 +75,6 @@ class Epub2Generator implements Generator {
                                         <dc:language xsi:type="dcterms:RFC4646">' . $book->lang . '</dc:language>
                                         <dc:title>' . $book->name . '</dc:title>
                                         <dc:publisher>Wikisource</dc:publisher>
-                                        <dc:identifier id="bookid">urn:uuid:0cc33cbd-94e2-49c1-909a-72ae16bc2658</dc:identifier>
                                         <dc:coverage></dc:coverage>
                                         <dc:source>' . wikisourceUrl($book->lang, $book->title) . '</dc:source>
                                         <dc:date opf:event="ops-publication">' . date(DATE_ISO8601) . '</dc:date>

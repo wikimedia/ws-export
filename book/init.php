@@ -4,13 +4,12 @@
 * @copyright 2011 Thomas Pellissier Tanon
 * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
 */
-
-include('../utils/utils.php');
-include('../utils/HttpException.php');
-include('../utils/Api.php');
-include('../utils/ZipCreator.php');
-include('../book/Generator.php');
-include('../book/Picture.php');
-include('../book/Page.php');
-include('../book/Book.php');
-include('../book/BookProvider.php');
+include($basePath . '/utils/utils.php');
+include($basePath . '/utils/HttpException.php');
+include($basePath . '/utils/Api.php');
+include($basePath . '/utils/ZipCreator.php');
+include($basePath . '/book/Generator.php');
+include($basePath . '/book/Picture.php');
+include($basePath . '/book/Page.php');
+include($basePath . '/book/Book.php');
+include($basePath . '/book/BookProvider.php');

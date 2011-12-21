@@ -22,10 +22,11 @@ class BookProvider {
 
         /**
         * return all the data on a book needed to export it
-        * @var $title the title of the main page of the book in Wikisource
+        * @var $title string the title of the main page of the book in Wikisource
+        * @var $isMetadata bool only retrive metadata on the book
         * @return Book
         */
-        public function get($title) {
+        public function get($title, $isMetadata = false) {
                 $title = str_replace(' ', '_', $title);
                 $doc = $this->getDocument($title);
                 $parser = new PageParser($doc);
@@ -46,21 +47,23 @@ class BookProvider {
                 $book->progress = $parser->getMetadata('ws-progress');
                 $book->volume = $parser->getMetadata('ws-volume');
                 $book->categories = $this->getCategories($title);
-                $book->content = $parser->getContent();
-                if($this->withPictures) {
-                        $pictures = $parser->getPicturesList();
-                }
-                $chapters = $parser->getChaptersList($title);
-                $chapters = $this->getPages($chapters);
-                foreach($chapters as $id => $chapter) {
-                        $parser = new PageParser($chapter->content);
-                        $chapters[$id]->content = $parser->getContent();
+                if(!$isMetadata) {
+                        $book->content = $parser->getContent();
                         if($this->withPictures) {
-                                $pictures = array_merge($pictures, $parser->getPicturesList());
+                                $pictures = $parser->getPicturesList();
                         }
+                        $chapters = $parser->getChaptersList($title);
+                        $chapters = $this->getPages($chapters);
+                        foreach($chapters as $id => $chapter) {
+                                $parser = new PageParser($chapter->content);
+                                $chapters[$id]->content = $parser->getContent();
+                                if($this->withPictures) {
+                                        $pictures = array_merge($pictures, $parser->getPicturesList());
+                                }
+                        }
+                        $book->chapters = $chapters;
+                        $book->pictures = $this->getPicturesData($pictures);
                 }
-                $book->chapters = $chapters;
-                $book->pictures = $this->getPicturesData($pictures);
                 return $book;
         }
 

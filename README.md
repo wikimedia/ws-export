@@ -2,12 +2,11 @@ What is Wikisource Export?
 ==========================
 
 Wikisource export is a tool for exporting Wikisource page in many format like opds.
-He provide also an OPDS catalog generator.
 
 Installation
 ============
 
-You have only to donload the files and use it in a web server with PHP 5.3 or more with XPath.
+You have only to download the files and use it in a web server with PHP 5.3 or more with XPath.
 
 Composition
 ===========

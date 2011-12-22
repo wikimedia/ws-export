@@ -70,16 +70,16 @@ class Epub2Generator implements Generator {
                         <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="id" version="2.0">
                                 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcterms="http://purl.org/dc/terms/">
                                         <meta name="cover" content="cover" />
+                                        <meta property="dcterms:modified">' . date(DATE_ISO8601) . '</meta>
                                         <dc:identifier id="id" opf:scheme="URN">urn:uuid:' . $book->uuid . '</dc:identifier>
                                         <dc:identifier opf:scheme="URI">' . wikisourceUrl($book->lang, $book->title) . '</dc:identifier>
                                         <dc:language xsi:type="dcterms:RFC4646">' . $book->lang . '</dc:language>
                                         <dc:title>' . $book->name . '</dc:title>
-                                        <dc:publisher>Wikisource</dc:publisher>
-                                        <dc:coverage></dc:coverage>
                                         <dc:source>' . wikisourceUrl($book->lang, $book->title) . '</dc:source>
                                         <dc:date opf:event="ops-publication">' . date(DATE_ISO8601) . '</dc:date>
                                         <dc:rights>http://creativecommons.org/licenses/by-sa/3.0/</dc:rights>
-                                        <dc:rights>http://www.gnu.org/copyleft/fdl.html</dc:rights>';
+                                        <dc:rights>http://www.gnu.org/copyleft/fdl.html</dc:rights>
+                                        <dc:contributor opf:role="bkp">Wikisource</dc:contributor>';
                                 if($book->author != '') {
                                         $content.= '<dc:creator opf:role="aut">' . $book->author . '</dc:creator>';
                                 }
@@ -88,6 +88,9 @@ class Epub2Generator implements Generator {
                                 }
                                 if($book->illustrator != '') {
                                         $content.= '<dc:contributor opf:role="ill">' . $book->illustrator . '</dc:contributor>';
+                                }
+                                if($book->publisher != '') {
+                                        $content.= '<dc:publisher>' . $book->publisher . '</dc:publisher>';
                                 }
                                 if($book->year != '') {
                                         $content.= '<dc:date opf:event="original-publication">' . $book->year . '</dc:date>';

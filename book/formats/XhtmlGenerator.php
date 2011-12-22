@@ -51,11 +51,11 @@ class XhtmlGenerator implements Generator {
                                 <meta name="DC.identifier" scheme="DCTERMS.URI" content="' . wikisourceUrl($book->lang, $book->title) . '" />
                                 <meta name="DC.language" content="' . $book->lang . '" />
                                 <meta name="DC.title" content="' . $book->name . '" />
-                                <meta name="DC.publisher" content="Wikisource" />
+                                <meta name="DC.publisher" content="' . $book->publisher . '" />
+                                <meta name="DC.creator" content="' . $book->author . '" />
                                 <meta name="DC.source" content="' . wikisourceUrl($book->lang, $book->title) . '" />
                                 <meta name="DC.rights" rel="licence" content="CC-BY-SA 3.0" href="http://creativecommons.org/licenses/by-sa/3.0/" />
                                 <meta name="DC.rights" rel="licence" content="GNU FDL" href="http://www.gnu.org/copyleft/fdl.html" />
-                                <meta name="DC.creator" content="' . $book->author . '" />
                                 <meta name="DC.format" scheme="DCTERMS.IMT" content="application/xhtml+xml" />
                                 <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
                         </head>';

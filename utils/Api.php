@@ -40,6 +40,28 @@ class Api {
         }
 
         /**
+        * api query. Give all pages of response
+        * @var $params an associative array for params send to the api
+        * @return an array with whe relsult of the api query
+        * @throws HttpException
+        */
+        public function completeQuery($params) {
+                $data = array();
+                do {
+                        $temp = $this->query($params);
+                        if(array_key_exists('query-continue', $temp)) {
+                                $keys = array_keys($temp['query-continue']);
+                                $keys2 = array_keys($temp['query-continue'][$keys[0]]);
+                                $params[$keys2[0]] = $continue = $temp['query-continue'][$keys[0]][$keys2[0]];
+                        } else {
+                              $continue = '';
+                        }
+                        $data = array_merge_recursive($data, $temp);
+                } while($continue);
+                return $data;
+        }
+
+        /**
         * @var $title the title of the page
         * @return the content of a page
         */

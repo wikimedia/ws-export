@@ -46,11 +46,20 @@ class BookProvider {
                 $book->key = $parser->getMetadata('ws-key');
                 $book->progress = $parser->getMetadata('ws-progress');
                 $book->volume = $parser->getMetadata('ws-volume');
+                $book->scan = str_replace(' ', '_', $parser->getMetadata('ws-scan'));
+                $pictures = array();
+                if($this->withPictures) {
+                        $book->cover = $parser->getMetadata('ws-cover');
+                        if($book->cover != '')
+                                $pictures[$book->cover] = $this->getCover($book->cover);
+                                if($pictures[$book->cover]->url == '')
+                                        $book->cover = '';
+                }
                 $book->categories = $this->getCategories($title);
                 if(!$isMetadata) {
                         $book->content = $parser->getContent();
                         if($this->withPictures) {
-                                $pictures = $parser->getPicturesList();
+                                $pictures = array_merge($pictures, $parser->getPicturesList());
                         }
                         $chapters = $parser->getChaptersList($title);
                         $chapters = $this->getPages($chapters);
@@ -62,8 +71,9 @@ class BookProvider {
                                 }
                         }
                         $book->chapters = $chapters;
-                        $book->pictures = $this->getPicturesData($pictures);
+                        $pictures = $this->getPicturesData($pictures);
                 }
+                $book->pictures = $pictures;
                 return $book;
         }
 
@@ -106,7 +116,7 @@ class BookProvider {
         protected function getPicturesData($pictures) {
                 $urls = array();
                 foreach($pictures as $id => $picture) {
-                        $urls[$id] = 'http:' . $picture->url;
+                        $urls[$id] = $picture->url;
                 }
                 $data = $this->api->getMulti($urls);
                 foreach($pictures as $id => $picture) {
@@ -133,6 +143,35 @@ class BookProvider {
                         }
                 }
                 return $categories;
+        }
+
+        /**
+        * return the cover of the book
+        * @var $cover string the name of the cover
+        * @return Picture The cover
+        */
+        public function getCover($cover) {
+                $id = explode('/', $cover);
+                $title = $id[0];
+                $picture = new Picture();
+                $picture->title = $cover;
+                $response = $this->api->query(array('titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'mime|url'));
+                foreach($response['query']['pages'] as $page) {
+                        $picture->url = $page['imageinfo'][0]['url'];
+                        $picture->mimetype = $page['imageinfo'][0]['mime'];
+                }
+                if(in_array($picture->mimetype, array('image/vnd.djvu', 'application/pdf'))) {
+                        if(!isset($id[1]))
+                                return new Picture();
+                        $temps = explode('/', $picture->url);
+                        foreach($temps as $temp) {
+                                $title = $temp;
+                        }
+                        $picture->url = str_replace('commons/', 'commons/thumb/', $picture->url) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
+                        $picture->mimetype = 'image/jpeg';
+                        $picture->title .= '.jpg';
+                }
+                return $picture;
         }
 }
 
@@ -203,7 +242,7 @@ class PageParser {
                         $a = $node->getElementsByTagName('img')->item(0);
                         $picture = new Picture();
                         $picture->title = $a->getAttribute('alt');
-                        $picture->url = $a->getAttribute('src');
+                        $picture->url = 'http:' . $a->getAttribute('src');
                         $pictures[$picture->title] = $picture;
                         $node->parentNode->replaceChild($a, $node);
                 }

@@ -34,6 +34,8 @@ class Book extends Page {
         public $key = '';
         public $progress = '';
         public $volume = '';
+        public $scan = '';
+        public $cover = '';
 
         /**
         * list of the categories as string object like array('1859', 'France')

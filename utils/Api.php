@@ -9,7 +9,7 @@
 * a base class for communications with Wikisource
 */
 class Api {
-        const USER_AGENT = 'Wikisource Export 0.1';
+        const USER_AGENT = 'Wikisource Export/0.1';
         public $lang = '';
 
         /**

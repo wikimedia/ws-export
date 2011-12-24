@@ -108,11 +108,12 @@ class Epub2Generator implements Generator {
                                                 $content.= '<item id="' . $book->title . '" href="' . $book->title . '.xhtml" media-type="application/xhtml+xml" />';
                                         }
                                         foreach($book->pictures as $picture) {
-                                                $content.= '<item id="' . $picture->title . '" href="' . $picture->title . '.xhtml" media-type="' . $picture->mimetype . '" />';
+                                                $content.= '<item id="' . $picture->title . '" href="' . $picture->title . '" media-type="' . $picture->mimetype . '" />';
                                         } //TODO: about...
                                         //$content.= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
                                 $content.= '</manifest>
                                 <spine toc="ncx">
+                                        <itemref idref="cover" linear="yes" />
                                         <itemref idref="title" linear="yes" />';
                                         if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
@@ -144,13 +145,11 @@ class Epub2Generator implements Generator {
                                 <head>
                                         <meta name="dtb:uid" content="urn:uuid:' . $book->uuid . '" />
                                         <meta name="dtb:depth" content="1" />
-                                        <meta name="dtb:totalPageCount" content="0"/>
-                                        <meta name="dtb:maxPageNumber" content="0"/>
+                                        <meta name="dtb:totalPageCount" content="0" />
+                                        <meta name="dtb:maxPageNumber" content="0" />
                                 </head>
                                 <docTitle><text>' . $book->name . '</text></docTitle>
-                                <docAuthor>
-                                        <text>' . $book->author . '</text>
-                                </docAuthor>
+                                <docAuthor><text>' . $book->author . '</text></docAuthor>
                                 <navMap>
                                         <navPoint id="title" playOrder="1">
                                                 <navLabel><text>Title</text></navLabel>
@@ -191,10 +190,16 @@ class Epub2Generator implements Generator {
                                         <title>' . $book->name . '</title>
                                         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
                                 </head>
-                                <body>
-                                        <h1>' . $book->name . '</h1>
-                                        <h2>' . $book->author . '</h2>
-                                </body>
+                                <body>';
+                                        if($book->cover != '') {
+                                                $content .= '<div style="text-align: center; page-break-after: always;">
+                                                        <img src="' . $book->pictures[$book->cover]->title . '" alt="Cover" style="height: 100%; max-width: 100%;" />
+                                                </div>';
+                                        } else {
+                                                $content .= '<h1>' . $book->name . '</h1>
+                                                <h2>' . $book->author . '</h2>';
+                                        }
+                                $content .= '</body>
                         </html>';
                 return $content;
         }

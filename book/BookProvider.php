@@ -47,14 +47,14 @@ class BookProvider {
                 $book->progress = $parser->getMetadata('ws-progress');
                 $book->volume = $parser->getMetadata('ws-volume');
                 $book->scan = str_replace(' ', '_', $parser->getMetadata('ws-scan'));
-                $book->content = $parser->getContent();
                 $pictures = array();
                 if($this->withPictures) {
                         $book->cover = $parser->getMetadata('ws-cover');
-                        if($book->cover != '')
+                        if($book->cover != '') {
                                 $pictures[$book->cover] = $this->getCover($book->cover);
                                 if($pictures[$book->cover]->url == '')
                                         $book->cover = '';
+                        }
                 }
                 $book->categories = $this->getCategories($title);
                 if(!$isMetadata) {
@@ -157,10 +157,9 @@ class BookProvider {
                 $picture = new Picture();
                 $picture->title = $cover;
                 $response = $this->api->query(array('titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'mime|url'));
-                foreach($response['query']['pages'] as $page) {
-                        $picture->url = $page['imageinfo'][0]['url'];
-                        $picture->mimetype = $page['imageinfo'][0]['mime'];
-                }
+                $page = end($response['query']['pages']);
+                $picture->url = $page['imageinfo'][0]['url'];
+                $picture->mimetype = $page['imageinfo'][0]['mime'];
                 if(in_array($picture->mimetype, array('image/vnd.djvu', 'application/pdf'))) {
                         if(!isset($id[1]))
                                 return new Picture();

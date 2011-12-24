@@ -47,6 +47,7 @@ class BookProvider {
                 $book->progress = $parser->getMetadata('ws-progress');
                 $book->volume = $parser->getMetadata('ws-volume');
                 $book->scan = str_replace(' ', '_', $parser->getMetadata('ws-scan'));
+                $book->content = $parser->getContent();
                 $pictures = array();
                 if($this->withPictures) {
                         $book->cover = $parser->getMetadata('ws-cover');

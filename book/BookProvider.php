@@ -31,7 +31,6 @@ class BookProvider {
                 $doc = $this->getDocument($title);
                 $parser = new PageParser($doc);
                 $book = new Book();
-                $book->uuid = uuid();
                 $book->title = $title;
                 $book->lang = $this->api->lang;
                 $book->type = $parser->getMetadata('ws-type');

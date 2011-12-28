@@ -47,7 +47,6 @@ class XhtmlGenerator implements Generator {
                                 <title>' . $book->title . '</title>
                                 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
                                 <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
-                                <meta name="DC.identifier" content="urn:uuid:' . $book->uuid . '" />
                                 <meta name="DC.identifier" scheme="DCTERMS.URI" content="' . wikisourceUrl($book->lang, $book->title) . '" />
                                 <meta name="DC.language" content="' . $book->lang . '" />
                                 <meta name="DC.title" content="' . $book->name . '" />

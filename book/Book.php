@@ -16,10 +16,6 @@ class Book extends Page {
         public $lang = '';
 
         /**
-        * generated uuid for the book
-        */
-        public $uuid;
-        /**
         * meatadata on the book
         * @see https://wikisource.org/wiki/Wikisource:Microformat
         */

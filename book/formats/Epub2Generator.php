@@ -66,12 +66,11 @@ class Epub2Generator implements Generator {
 
         protected function getOpfContent(Book $book) {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
-                        <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="id" version="2.0">
+                        <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uid" version="2.0">
                                 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcterms="http://purl.org/dc/terms/">
                                         <meta name="cover" content="cover" />
                                         <meta property="dcterms:modified">' . date(DATE_ISO8601) . '</meta>
-                                        <dc:identifier id="id" opf:scheme="URN">urn:uuid:' . $book->uuid . '</dc:identifier>
-                                        <dc:identifier opf:scheme="URI">' . wikisourceUrl($book->lang, $book->title) . '</dc:identifier>
+                                        <dc:identifier id="uid" opf:scheme="URI">' . wikisourceUrl($book->lang, $book->title) . '</dc:identifier>
                                         <dc:language xsi:type="dcterms:RFC4646">' . $book->lang . '</dc:language>
                                         <dc:title>' . $book->name . '</dc:title>
                                         <dc:source>' . wikisourceUrl($book->lang, $book->title) . '</dc:source>
@@ -139,7 +138,7 @@ class Epub2Generator implements Generator {
                         <!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
                         <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
                                 <head>
-                                        <meta name="dtb:uid" content="urn:uuid:' . $book->uuid . '" />
+                                        <meta name="dtb:uid" content="' . wikisourceUrl($book->lang, $book->title) . '" />
                                         <meta name="dtb:depth" content="1" />
                                         <meta name="dtb:totalPageCount" content="0" />
                                         <meta name="dtb:maxPageNumber" content="0" />

@@ -11,6 +11,7 @@
 */
 class Epub2Generator implements Generator {
 
+        protected $withCss = false;
         /**
         * return the extension of the generated file
         * @return string
@@ -34,6 +35,9 @@ class Epub2Generator implements Generator {
         * @todo images, cover, about...
         */
         public function create(Book $book) {
+                $css = $this->getCssWikisource($book->lang);
+                if($css != '')
+                        $this->withCss = true;
                 $book = $this->clean($book);
                 $zip = new ZipCreator();
                 $zip->addContentFile('mimetype', 'application/epub+zip');
@@ -51,6 +55,8 @@ class Epub2Generator implements Generator {
                 foreach($book->pictures as $picture) {
                         $zip->addContentFile('OPS/' . $picture->title, $picture->content);
                 }
+                if($this->withCss)
+                        $zip->addContentFile('OPS/main.css', $css);
                 return $zip->getContent();
         }
 
@@ -106,8 +112,10 @@ class Epub2Generator implements Generator {
                                         }
                                         foreach($book->pictures as $picture) {
                                                 $content.= '<item id="' . $picture->title . '" href="' . $picture->title . '" media-type="' . $picture->mimetype . '" />';
-                                        } //TODO: about...
-                                        //$content.= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
+                                        }
+                                        if($this->withCss)
+                                                $content.= '<item id="mainCss" href="main.css" media-type="text/css" />';
+                                        //$content.= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" /> //TODO: about...
                                 $content.= '</manifest>
                                 <spine toc="ncx">
                                         <itemref idref="cover" linear="yes" />
@@ -243,7 +251,10 @@ class Epub2Generator implements Generator {
                 $xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
 	        $xPath = $this->setPictureLinks($xPath);
                 $xPath = $this->setInternalLinks($xPath, $book);
-                return $xPath->document;
+                $dom = $xPath->document;
+                if($this->withCss)
+                        $dom = $this->setCssLink($dom);
+                return $dom;
         }
 
         /**
@@ -266,6 +277,28 @@ class Epub2Generator implements Generator {
                         $node->setAttribute('href', $this->encode($node->getAttribute('title')) . '.xhtml');
                 }
                 return $xPath;
+        }
+
+        /**
+        * set css link to main.css
+        */
+        protected function setCssLink(DOMDocument $dom) {
+                $node = $dom->getElementsByTagName('head')->item(0);
+                $link = $dom->createElement('link');
+                $link->setAttribute('type', 'text/css');
+                $link->setAttribute('rel', 'stylesheet');
+                $link->setAttribute('href', 'main.css');
+                $node->appendChild($link);
+                return $dom;
+        }
+
+        protected function getCssWikisource($lang) {
+                try {
+                        $api = new Api($lang);
+                        return $api->get('http://' . $lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css');
+                } catch(Exception $e) {
+                        return '';
+                }
         }
 }
 

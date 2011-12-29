@@ -1,2 +1,4 @@
+Epub: Bug: internal links when the book page has special characters aren't well modified.
 Export ODT.
+Export MOBI.
 ...

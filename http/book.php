@@ -3,7 +3,8 @@ $basePath = '..';
 include('../book/init.php');
 
 try {
-        if(!isset($_GET['page']) || $_GET['page'] == '') throw new HttpException('Not Found', 404);
+        if(!isset($_GET['page']) || $_GET['page'] == '')
+                include 'help/book.php';
         $title = htmlspecialchars(urldecode($_GET['page']));
         $format = isset($_GET['format']) ? htmlspecialchars(urldecode($_GET['format'])) : 'epub';
         $withPictures = isset($_GET['pictures']) ? (bool) $_GET['pictures'] : true;
@@ -11,16 +12,16 @@ try {
         $provider = new BookProvider($api, $withPictures);
         $data = $provider->get($title);
         if($format == 'epub-2' | $format == 'epub') {
-                include('../book/formats/Epub2Generator.php');
+                include($basePath . '/book/formats/Epub2Generator.php');
                 $generator = new Epub2Generator();
         } else if($format == 'odt') {
-                include('../book/formats/OdtGenerator.php');
+                include($basePath . '/book/formats/OdtGenerator.php');
                 $generator = new OdtGenerator();
         } else if($format == 'xhtml') {
-                include('../book/formats/XhtmlGenerator.php');
+                include($basePath . '/book/formats/XhtmlGenerator.php');
                 $generator = new XhtmlGenerator();
         } else {
-                throw new HttpException('Bad Request', 400);
+                include 'help/book.php';
         }
         $file = $generator->create($data);
         header('Content-Type: ' . $generator->getMimeType());

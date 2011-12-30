@@ -44,8 +44,10 @@ class Epub2Generator implements Generator {
                 $zip->addContentFile('META-INF/container.xml', $this->getXmlContainer());
                 $zip->addContentFile('OPS/content.opf', $this->getOpfContent($book));
                 $zip->addContentFile('OPS/toc.ncx', $this->getNcxToc($book));
-                $zip->addContentFile('OPS/cover.xhtml', $this->getXhtmlCover($book));
+                if($book->cover != '')
+                        $zip->addContentFile('OPS/cover.xhtml', $this->getXhtmlCover($book));
                 $zip->addContentFile('OPS/title.xhtml', $this->getXhtmlTitle($book));
+                $zip->addFile(dirname(__FILE__).'/images/Accueil_scribe.png', 'OPS/Accueil_scribe.png');
                 $zip->addContentFile('OPS/' . $book->title . '.xhtml', $book->content->saveXML());
                 if(!empty($book->chapters)) {
                         foreach($book->chapters as $chapter) {
@@ -74,7 +76,6 @@ class Epub2Generator implements Generator {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uid" version="2.0">
                                 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcterms="http://purl.org/dc/terms/">
-                                        <meta name="cover" content="cover" />
                                         <meta property="dcterms:modified">' . date(DATE_ISO8601) . '</meta>
                                         <dc:identifier id="uid" opf:scheme="URI">' . wikisourceUrl($book->lang, $book->title) . '</dc:identifier>
                                         <dc:language xsi:type="dcterms:RFC4646">' . $book->lang . '</dc:language>
@@ -99,11 +100,17 @@ class Epub2Generator implements Generator {
                                 if($book->year != '') {
                                         $content.= '<dc:date opf:event="original-publication">' . $book->year . '</dc:date>';
                                 }
+                                if($book->cover != '')
+                                        $content.= '<meta name="cover" content="cover" />';
+                                else
+                                        $content.= '<meta name="cover" content="title" />';
                                 $content.= '</metadata>
                                 <manifest>
-                                        <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
-                                        <item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />
-                                        <item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
+                                        <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>';
+                                        if($book->cover != '')
+                                                $content.= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />';
+                                        $content.= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
+                                        <item id="Accueil_scribe.png" href="Accueil_scribe.png" media-type="image/png" />
                                         <item id="' . $book->title . '" href="' . $book->title . '.xhtml" media-type="application/xhtml+xml" />';
                                         if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
@@ -117,9 +124,10 @@ class Epub2Generator implements Generator {
                                                 $content.= '<item id="mainCss" href="main.css" media-type="text/css" />';
                                         //$content.= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" /> //TODO: about...
                                 $content.= '</manifest>
-                                <spine toc="ncx">
-                                        <itemref idref="cover" linear="yes" />
-                                        <itemref idref="title" linear="yes" />
+                                <spine toc="ncx">';
+                                        if($book->cover != '')
+                                                $content.= '<itemref idref="cover" linear="yes" />';
+                                        $content.= '<itemref idref="title" linear="yes" />
                                         <itemref idref="' . $book->title . '" linear="yes" />';
                                         if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
@@ -128,9 +136,12 @@ class Epub2Generator implements Generator {
                                         }
                                         //$content.= '<itemref idref="about" linear="no" />
                                 $content.= '</spine>
-                                <guide>
-                                        <reference type="cover" title="Cover" href="cover.xhtml" />
-                                        <reference type="title-page" title="Title Page" href="title.xhtml" />
+                                <guide>';
+                                        if($book->cover != '')
+                                                $content.= '<reference type="cover" title="Cover" href="cover.xhtml" />';
+                                        else
+                                                $content.= '<reference type="cover" title="Cover" href="title.xhtml" />';
+                                        $content.= '<reference type="title-page" title="Title Page" href="title.xhtml" />
                                         <reference type="text" title="' . $book->name . '" href="' . $book->title . '.xhtml" />';
                                         if(isset($book->chapters[0])) {
                                                 $content.= '<reference type="text" title="' . $book->chapters[0]->name . '" href="' . $book->chapters[0]->title . '.xhtml" />';
@@ -191,16 +202,11 @@ class Epub2Generator implements Generator {
                                         <title>' . $book->name . '</title>
                                         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
                                 </head>
-                                <body>';
-                                        if($book->cover != '') {
-                                                $content .= '<div style="text-align: center; page-break-after: always;">
-                                                        <img src="' . $book->pictures[$book->cover]->title . '" alt="Cover" style="height: 100%; max-width: 100%;" />
-                                                </div>';
-                                        } else {
-                                                $content .= '<h1>' . $book->name . '</h1>
-                                                <h2>' . $book->author . '</h2>';
-                                        }
-                                $content .= '</body>
+                                <body>
+                                        <div style="text-align: center; page-break-after: always;">
+                                                <img src="' . $book->pictures[$book->cover]->title . '" alt="Cover" style="height: 100%; max-width: 100%;" />
+                                        </div>
+                                </body>
                         </html>';
                 return $content;
         }
@@ -213,10 +219,20 @@ class Epub2Generator implements Generator {
                                         <title>' . $book->name . '</title>
                                         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
                                 </head>
-                                <body>
-                                        <h1>' . $book->name . '</h1>
+                                <body style="background-color:ghostwhite;"><div style="text-align:center; position:absolute;">
+                                        <h1 id="heading_id_2">' . $book->name . '</h1>
                                         <h2>' . $book->author . '</h2>
-                                </body>
+                                        <br />
+                                        <br />
+                                        <img alt="" src="Accueil_scribe.png" />
+                                        <br />';
+                                        if($book->publisher != '' && $book->year != '' )
+                                                $content .= '<h4>' . $book->publisher . ' - ' . $book->year . '</h4>';
+                                        else
+                                              $content .= '<h4>' . $book->publisher . $book->year . '</h4>';  
+                                        $content .='<br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
+                                        <h5>Wikisource - ' . date('Y') . '</h5>
+                                </div></body>
                         </html>';
                 return $content;
         }
@@ -250,8 +266,8 @@ class Epub2Generator implements Generator {
                 $xPath = new DOMXPath($file);
                 $xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
 	        $xPath = $this->setPictureLinks($xPath);
-                $xPath = $this->setInternalLinks($xPath, $book);
                 $dom = $xPath->document;
+                $dom = $this->setLinks($dom, $book);
                 if($this->withCss)
                         $dom = $this->setCssLink($dom);
                 return $dom;
@@ -271,12 +287,17 @@ class Epub2Generator implements Generator {
         /**
         * change the internal links
         */
-        protected function setInternalLinks(DOMXPath $xPath, Book $book) {
-                $list = $xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($book->title) . '")]');
+        protected function setLinks(DOMDocument $dom, Book $book) {
+                $list = $dom->getElementsByTagName('a');
+                $title = Api::mediawikiUrlEncode($book->title);
                 foreach($list as $node) {
-                        $node->setAttribute('href', $this->encode($node->getAttribute('title')) . '.xhtml');
+                        $href = $node->getAttribute('href');
+                        if(stristr($href, $title) === false || strpos($href, 'wikisource.org') === false)
+                                $node->setAttribute('href', 'http:' . $href);
+                        else
+                                $node->setAttribute('href', $this->encode($node->getAttribute('title')) . '.xhtml');
                 }
-                return $xPath;
+                return $dom;
         }
 
         /**

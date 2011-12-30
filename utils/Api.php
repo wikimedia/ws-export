@@ -68,7 +68,7 @@ class Api {
         public function getPage($title) {
                 $url = $this->lang . '.wikisource.org/w/index.php?action=render&title=' . urlencode($title);
                 $response = $this->get($url);
-                return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="' . $this->lang . '" xml:lang="' . $this->lang . '"><body>' . $response . '</body></html>';
+                return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="' . $this->lang . '" xml:lang="' . $this->lang . '"><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type"/></head><body>' . $response . '</body></html>';
         }
 
 
@@ -83,7 +83,7 @@ class Api {
                 }
                 $responses = $this->getMulti($urls);
                 foreach($responses as $id => $response) {
-                        $responses[$id] = '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="' . $this->lang . '" xml:lang="' . $this->lang . '"><body>' . $response . '</body></html>';
+                        $responses[$id] = '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="' . $this->lang . '" xml:lang="' . $this->lang . '"><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type"/></head><body>' . $response . '</body></html>';
                 }
                 return $responses;
         }

@@ -49,7 +49,7 @@
                                                 <label for="page">Title of the page: </label>
                                                 <div class="input">
                                                         <input name="page" id="lang" type="text" size="30" required="required">
-                                                        <span class="help-inline">Naime of the mainpage of the book in Wikisource</span>
+                                                        <span class="help-inline">Name of the mainpage of the book in Wikisource</span>
                                                 </div>
                                         </div>
                                         <div class="clearfix">

@@ -256,6 +256,10 @@ class PageParser {
                 $this->removeNodesWithXpath('//*[contains(@class,"ws-noexport")]');
                 $this->removeNodesWithXpath('//html:table[@id="toc"]');
                 $this->removeNodesWithXpath('//html:span[@class="editsection"]');
+                $this->styleNodes('center', 'text-align:center;');
+                $this->styleNodes('strike', 'text-decoration:line-through;');
+                $this->styleNodes('s', 'text-decoration:line-through;');
+                $this->styleNodes('u', 'text-decoration:underline;');
                 return $this->xPath->document;
         }
 
@@ -263,6 +267,13 @@ class PageParser {
                 $nodes = $this->xPath->query($query);
                 foreach($nodes as $node) {
                         $node->parentNode->removeChild($node);
+                }
+        }
+
+        protected function styleNodes($nodeName, $style) {
+                $nodes = $this->xPath->document->getElementsByTagName($nodeName);
+                foreach($nodes as $node) {
+                        $node->setAttribute('style', $style . ' ' . $node->getAttribute('style'));
                 }
         }
 }

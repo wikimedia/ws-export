@@ -292,7 +292,9 @@ class Epub2Generator implements Generator {
                 $title = Api::mediawikiUrlEncode($book->title);
                 foreach($list as $node) {
                         $href = $node->getAttribute('href');
-                        if(stristr($href, $title) === false || strpos($href, 'wikisource.org') === false)
+                        if($href[0] == '#')
+                                continue;
+                        elseif(stristr($href, $title) === false || strpos($href, 'wikisource.org') === false)
                                 $node->setAttribute('href', 'http:' . $href);
                         else
                                 $node->setAttribute('href', $this->encode($node->getAttribute('title')) . '.xhtml');

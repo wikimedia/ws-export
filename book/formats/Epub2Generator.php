@@ -226,9 +226,12 @@ class Epub2Generator implements Generator {
                                         <br />
                                         <img alt="" src="Accueil_scribe.png" />
                                         <br />';
-                                        if($book->publisher != '' && $book->year != '' )
-                                                $content .= '<h4>' . $book->publisher . ' - ' . $book->year . '</h4>';
-                                        else
+                                        if($book->publisher != '' && $book->year != '' ) {
+                                                $content .= '<h4>' . $book->publisher . ' - ' . $book->year;
+                                                if($book->place != '')
+                                                        $content .= ' - ' . $book->place;
+                                                $content .= '</h4>';
+                                        } else
                                               $content .= '<h4>' . $book->publisher . $book->year . '</h4>';  
                                         $content .='<br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
                                         <h5>Wikisource - ' . date('Y') . '</h5>
@@ -241,12 +244,12 @@ class Epub2Generator implements Generator {
         * clean the files
         */
         protected function clean(Book $book) {
-                $book->title = $this->encode($book->title);
                 $book->content = $this->cleanHtml($book->content, $book);
                 foreach($book->chapters as $id => $chapter) {
-                        $book->chapters[$id]->title = $this->encode($chapter->title);
                         $book->chapters[$id]->content = $this->cleanHtml($chapter->content, $book);
+                        $book->chapters[$id]->title = $this->encode($chapter->title);
                 }
+                $book->title = $this->encode($book->title);
                 foreach($book->pictures as $id => $picture) {
                         $book->pictures[$id]->title = $this->encode($picture->title);
                 }
@@ -294,7 +297,7 @@ class Epub2Generator implements Generator {
                         $href = $node->getAttribute('href');
                         if($href[0] == '#')
                                 continue;
-                        elseif(stristr($href, $title) === false || strpos($href, 'wikisource.org') === false)
+                        elseif(strpos($href, $title) === false || strpos($href, 'wikisource.org') === false)
                                 $node->setAttribute('href', 'http:' . $href);
                         else
                                 $node->setAttribute('href', $this->encode($node->getAttribute('title')) . '.xhtml');

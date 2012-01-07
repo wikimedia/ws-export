@@ -76,12 +76,11 @@ class Epub2Generator implements Generator {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uid" version="2.0">
                                 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcterms="http://purl.org/dc/terms/">
-                                        <meta property="dcterms:modified">' . date(DATE_ISO8601) . '</meta>
                                         <dc:identifier id="uid" opf:scheme="URI">' . wikisourceUrl($book->lang, $book->title) . '</dc:identifier>
                                         <dc:language xsi:type="dcterms:RFC4646">' . $book->lang . '</dc:language>
                                         <dc:title>' . $book->name . '</dc:title>
                                         <dc:source>' . wikisourceUrl($book->lang, $book->title) . '</dc:source>
-                                        <dc:date opf:event="ops-publication">' . date(DATE_ISO8601) . '</dc:date>
+                                        <dc:date opf:event="ops-publication">' . date(DATE_W3C) . '</dc:date>
                                         <dc:rights>http://creativecommons.org/licenses/by-sa/3.0/</dc:rights>
                                         <dc:rights>http://www.gnu.org/copyleft/fdl.html</dc:rights>
                                         <dc:contributor opf:role="bkp">Wikisource</dc:contributor>';
@@ -197,7 +196,7 @@ class Epub2Generator implements Generator {
         protected function getXhtmlCover(Book $book) {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <!DOCTYPE html>
-                        <html xmlns="http://www.w3.org/1999/xhtml" lang="' . $book->lang . '" xml:lang="' . $book->lang . '">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">
                                 <head>
                                         <title>' . $book->name . '</title>
                                         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
@@ -214,7 +213,7 @@ class Epub2Generator implements Generator {
         protected function getXhtmlTitle(Book $book) {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <!DOCTYPE html>
-                        <html xmlns="http://www.w3.org/1999/xhtml" lang="' . $book->lang . '" xml:lang="' . $book->lang . '">
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">
                                 <head>
                                         <title>' . $book->name . '</title>
                                         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
@@ -225,16 +224,16 @@ class Epub2Generator implements Generator {
                                         <br />
                                         <br />
                                         <img alt="" src="Accueil_scribe.png" />
-                                        <br />';
-                                        if($book->publisher != '' && $book->year != '' ) {
-                                                $content .= '<h4>' . $book->publisher . ' - ' . $book->year;
-                                                if($book->place != '')
-                                                        $content .= ' - ' . $book->place;
-                                                $content .= '</h4>';
-                                        } else
-                                              $content .= '<h4>' . $book->publisher . $book->year . '</h4>';  
-                                        $content .='<br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
-                                        <h5>Wikisource - ' . date('Y') . '</h5>
+                                        <br />
+                                        <h4>' . $book->publisher;
+                                        if($book->publisher != '' && ($book->year != '' || $book->place != ''))
+                                                $content .= ', ';
+                                        $content .= $book->place;
+                                        if($book->year != '' && $book->place != '')
+                                                $content .= ', ';
+                                        $content .= $book->year . '</h4>
+                                        <br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
+                                        <h5>Exported from Wikisource the ' . date('F j Y') . '</h5>
                                 </div></body>
                         </html>';
                 return $content;
@@ -244,9 +243,13 @@ class Epub2Generator implements Generator {
         * clean the files
         */
         protected function clean(Book $book) {
-                $book->content = $this->cleanHtml($book->content, $book);
+                $xPath = $this->getXPath($book->content);
+                $xPath = $this->setHtmlTitle($xPath, $book->name);
+                $book->content = $this->cleanHtml($xPath, $book);
                 foreach($book->chapters as $id => $chapter) {
-                        $book->chapters[$id]->content = $this->cleanHtml($chapter->content, $book);
+                        $xPath = $this->getXPath($chapter->content);
+                        $xPath = $this->setHtmlTitle($xPath, $chapter->name);
+                        $book->chapters[$id]->content = $this->cleanHtml($xPath, $book);
                         $book->chapters[$id]->title = $this->encode($chapter->title);
                 }
                 $book->title = $this->encode($book->title);
@@ -256,24 +259,38 @@ class Epub2Generator implements Generator {
                 return $book;
         }
 
+
+        protected function getXPath($file) {
+                $xPath = new DOMXPath($file);
+                $xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+                return $xPath;
+        }
+
         protected function encode($string) {
                 $search = array('@[éèêëÊË]@i','@[àâäÂÄ]@i','@[îïÎÏ]@i','@[ûùüÛÜ]@i','@[ôöÔÖ]@i','@[ç]@i','@[ ]@i','@[^a-zA-Z0-9_\.]@');
-	        $replace = array('e','a','i','u','o','c','_','');
+	        $replace = array('e','a','i','u','o','c','_','_');
                 return preg_replace($search, $replace, $string);
         }
 
         /**
-        * modified the HTML
+        * modified the XHTML
         */
-        protected function cleanHtml(DOMDocument $file, $book) {
-                $xPath = new DOMXPath($file);
-                $xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+        protected function cleanHtml(DOMXPath $xPath, $book) {
 	        $xPath = $this->setPictureLinks($xPath);
                 $dom = $xPath->document;
                 $dom = $this->setLinks($dom, $book);
                 if($this->withCss)
                         $dom = $this->setCssLink($dom);
                 return $dom;
+        }
+
+        /**
+        * change the picture links
+        */
+        protected function setHtmlTitle(DOMXPath $xPath, $name) {
+                $title = $xPath->query('/html:html/html:head/html:title')->item(0);
+                $title->nodeValue = $name;
+                return $xPath;
         }
 
         /**

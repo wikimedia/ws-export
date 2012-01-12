@@ -137,7 +137,9 @@ class Api {
         protected function getCurl($url) {
                 $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_MAXREDIRS, 4);
                 return $ch;
         }
 
@@ -151,10 +153,11 @@ class Api {
                 } else if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
                         $langs = explode(',',$_SERVER['HTTP_ACCEPT_LANGUAGE']);
                         if(isset($langs[0])) {
+                                $langs = explode('-', $langs[0]);
                                 $lang = $langs[0];
                         }
                 }
-                return strtolower(substr($lang, 0, 2));
+                return strtolower($lang);
         }
 
         /**

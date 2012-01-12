@@ -41,7 +41,7 @@
                                         <div class="clearfix">
                                                 <label for="lang">Lang: </label>
                                                 <div class="input">
-                                                        <input name="lang" id="lang" type="text" size="2" maxlength="2" required="required" value="<?php echo Api::getHttpLang(); ?>" />
+                                                        <input name="lang" id="lang" type="text" size="3" maxlength="20" required="required" value="<?php echo Api::getHttpLang(); ?>" />
                                                         <span class="help-inline">The code lang of the Wikisource like en or fr</span>
                                                </div>
                                         </div>

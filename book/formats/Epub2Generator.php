@@ -12,6 +12,12 @@
 class Epub2Generator implements Generator {
 
         protected $withCss = false;
+
+        /**
+        * array key/value that contain translated strings
+        */
+        protected $i18n = array();
+
         /**
         * return the extension of the generated file
         * @return string
@@ -36,6 +42,8 @@ class Epub2Generator implements Generator {
         */
         public function create(Book $book) {
                 $css = $this->getCssWikisource($book->lang);
+                $this->i18n = $this->getI18n($book->lang);
+                setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
                 if($css != '')
                         $this->withCss = true;
                 $book = $this->clean($book);
@@ -137,15 +145,15 @@ class Epub2Generator implements Generator {
                                 $content.= '</spine>
                                 <guide>';
                                         if($book->cover != '')
-                                                $content.= '<reference type="cover" title="Cover" href="cover.xhtml" />';
+                                                $content.= '<reference type="cover" title="' . $this->i18n['cover'] . '" href="cover.xhtml" />';
                                         else
-                                                $content.= '<reference type="cover" title="Cover" href="title.xhtml" />';
-                                        $content.= '<reference type="title-page" title="Title Page" href="title.xhtml" />
+                                                $content.= '<reference type="cover" title="' . $this->i18n['cover'] . '" href="title.xhtml" />';
+                                        $content.= '<reference type="title-page" title="' . $this->i18n['title_page'] . '" href="title.xhtml" />
                                         <reference type="text" title="' . $book->name . '" href="' . $book->title . '.xhtml" />';
                                         if(isset($book->chapters[0])) {
                                                 $content.= '<reference type="text" title="' . $book->chapters[0]->name . '" href="' . $book->chapters[0]->title . '.xhtml" />';
                                         }
-                                        //$content.= '<reference type="copyright-page" title="About" href="about.xml"/>
+                                        //$content.= '<reference type="copyright-page" title="' . $this->i18n['about'] . '" href="about.xml"/>
                                 $content.= '</guide>
                         </package>';
                 return $content;
@@ -165,7 +173,7 @@ class Epub2Generator implements Generator {
                                 <docAuthor><text>' . $book->author . '</text></docAuthor>
                                 <navMap>
                                         <navPoint id="title" playOrder="1">
-                                                <navLabel><text>Title</text></navLabel>
+                                                <navLabel><text>' . $this->i18n['title_page'] . '</text></navLabel>
                                                 <content src="title.xhtml"/>
                                         </navPoint>
                                         <navPoint id="' . $book->title . '" playOrder="2">
@@ -182,11 +190,11 @@ class Epub2Generator implements Generator {
                                                          $order++;
                                                 }
                                         }
-                                        /* $content.= '<navPoint id="title" playOrder="' . $order . '">
+                                        /* $content.= '<navPoint id="about" playOrder="' . $order . '">
                                                 <navLabel>
-                                                        <text>Title</text>
+                                                        <text>' . $this->i18n['about'] . '</text>
                                                 </navLabel>
-                                                <content src="title.xhtml"/>
+                                                <content src="about.xhtml"/>
                                         </navPoint> */
                                 $content.= '</navMap>
                         </ncx>';
@@ -233,7 +241,7 @@ class Epub2Generator implements Generator {
                                                 $content .= ', ';
                                         $content .= $book->year . '</h4>
                                         <br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
-                                        <h5>Exported from Wikisource the ' . date('F j Y') . '</h5>
+                                        <h5>' . str_replace('%d', strftime('%x'), $this->i18n['exported_from_wikisource_the']) . '</h5>
                                 </div></body>
                         </html>';
                 return $content;
@@ -342,6 +350,19 @@ class Epub2Generator implements Generator {
                 } catch(Exception $e) {
                         return '';
                 }
+        }
+
+        protected function getI18n($lang) {
+                $ini = parse_ini_file(dirname(__FILE__) . '/i18n.ini');
+                try {
+                        $api = new Api($lang);
+                        $response = $api->get('http://' . $lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain');
+                        $temp = parse_ini_string($response);
+                        if($ini != false)
+                                $ini = array_merge($ini, $temp);
+                } catch(Exception $e) {
+                }
+                return $ini;
         }
 }
 

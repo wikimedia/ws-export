@@ -17,7 +17,7 @@ class BookProvider {
         */
         public function __construct(Api $api, $withPictures = true) {
                 $this->api = $api;
-                $tihs->withPictures = $withPictures;
+                $this->withPictures = $withPictures;
         }
 
         /**

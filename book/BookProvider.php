@@ -75,8 +75,7 @@ class BookProvider {
                                 }
                         }
 
-                        while ($this->curl_async->asyncResult()) {
-                        }
+                        $this->curl_async->waitForKey($key_credit);
 
                         $book->chapters = $chapters;
                         $pictures = $this->getPicturesData($pictures);
@@ -107,7 +106,7 @@ class BookProvider {
                 foreach($pages as $id => $page) {
                         $titles[$id] = $page->title;
                 }
-                $data = $this->api->getPages($titles);
+                $data = $this->api->getPagesAsync($this->curl_async, $titles);
                 foreach($pages as $id => $page) {
                         $document = new DOMDocument('1.0', 'UTF-8');
                         $document->loadXML($data[$id]);
@@ -196,8 +195,8 @@ class BookProvider {
                                  'format' => 'php',
                                  'book' => $book->scan,
                                  'page' => $pages);
-                $this->curl_async->addRequest($url, $params,
-                                              array($this, 'finishCredit'));
+                return $this->curl_async->addRequest($url, $params,
+                               array($this, 'finishCredit'));
         }
 
         public function finishCredit($data) {

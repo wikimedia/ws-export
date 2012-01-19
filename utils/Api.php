@@ -153,6 +153,7 @@ class Api {
                 } else if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
                         $langs = explode(',',$_SERVER['HTTP_ACCEPT_LANGUAGE']);
                         if(isset($langs[0])) {
+                                $langs = explode('-', $langs[0]);
                                 $lang = $langs[0];
                         }
                 }

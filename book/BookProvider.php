@@ -10,6 +10,7 @@
 */
 class BookProvider {
         protected $api = null;
+        protected $curl_async = null;
         protected $withPictures = true;
 
         /**
@@ -17,6 +18,7 @@ class BookProvider {
         */
         public function __construct(Api $api, $withPictures = true) {
                 $this->api = $api;
+                $this->curl_async = new CurlAsync();
                 $this->withPictures = $withPictures;
         }
 
@@ -31,6 +33,7 @@ class BookProvider {
                 $doc = $this->getDocument($title);
                 $parser = new PageParser($doc);
                 $book = new Book();
+                $book->credits_html = '';
                 $book->title = $title;
                 $book->lang = $this->api->lang;
                 $book->type = $parser->getMetadata('ws-type');
@@ -62,6 +65,7 @@ class BookProvider {
                                 $pictures = array_merge($pictures, $parser->getPicturesList());
                         }
                         $chapters = $parser->getChaptersList($title);
+                        $key_credit = $this->startCredit($book, $chapters);
                         $chapters = $this->getPages($chapters);
                         foreach($chapters as $id => $chapter) {
                                 $parser = new PageParser($chapter->content);
@@ -70,6 +74,10 @@ class BookProvider {
                                         $pictures = array_merge($pictures, $parser->getPicturesList());
                                 }
                         }
+
+                        while ($this->curl_async->asyncResult()) {
+                        }
+
                         $book->chapters = $chapters;
                         $pictures = $this->getPicturesData($pictures);
                 }
@@ -172,8 +180,55 @@ class BookProvider {
                 }
                 return $picture;
         }
+
+        /**
+         * @var $book the Book object
+         * @var $chapters an array of Page
+         * @return a key id for the credit request
+         */
+        protected function startCredit($book, $chapters) {
+                $url = 'http://toolserver.org/~phe/cgi-bin/credits';
+                $pages = array( );
+                foreach ($chapters as $id => $chapter)
+                        $pages[] = $chapter->title;
+                $pages = join('|', $pages);
+                $params = array( 'lang' => $book->lang,
+                                 'format' => 'php',
+                                 'book' => $book->scan,
+                                 'page' => $pages);
+                $this->curl_async->addRequest($url, $params,
+                                              array($this, 'finishCredit'));
+        }
+
+        public function finishCredit($data) {
+                if ($data['http_code'] != 200) {
+                        $html = 'Unable to get contributor credits';
+                        error_log('getCredit() fail:' .
+                                  'http code: ' . $data['http_code'] .
+                                  ', curl errno: ' . $data['curl_erno'] .
+                                  ', curl_result:' . $data['curl_result']);
+                } else {
+                        $credit = unserialize($data['content']);
+                        uasort($credit, "cmp_credit");
+                        $html = "<ul>\n";
+                        foreach ($credit as $name => $value)
+                                $html .= "\t<li>" . $name . "</li>\n";
+                }
+                $this->book->credits_html = $html;
+        }
 }
 
+/*
+ * cmp_credit: compare les crédits de deux utilisateurs
+ *
+ */
+function cmp_credit($a, $b) {
+        $f1 = in_array('bot', $a['flags']);
+        $f2 = in_array('bot', $b['flags']);
+        if ($f1 != $f2)
+                return $f1 - $f2;
+        return $b['count'] - $a['count'];
+}
 
 /**
 * page parser

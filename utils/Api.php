@@ -93,7 +93,7 @@ class Api {
         * @return the file content
         */
         public function get($url) {
-                $ch = $this->getCurl($url);
+                $ch = Api::getCurl($url);
                 $response = curl_exec($ch);
                 if(curl_errno($ch)) {
                         throw new HttpException(curl_error($ch), curl_errno($ch));
@@ -113,7 +113,7 @@ class Api {
                 $mh = curl_multi_init();
                 $curl_array = array();
                 foreach($urls as $id => $url) {
-                        $curl_array[$id] = $this->getCurl($url);
+                        $curl_array[$id] = Api::getCurl($url);
                         curl_multi_add_handle($mh, $curl_array[$id]);
                 }
                 $running = null;
@@ -134,7 +134,7 @@ class Api {
         * @var $url the url
         * @return curl
         */
-        protected function getCurl($url) {
+        static function getCurl($url) {
                 $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -153,7 +153,6 @@ class Api {
                 } else if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
                         $langs = explode(',',$_SERVER['HTTP_ACCEPT_LANGUAGE']);
                         if(isset($langs[0])) {
-                                $langs = explode('-', $langs[0]);
                                 $lang = $langs[0];
                         }
                 }

@@ -12,6 +12,7 @@
 class Epub2Generator implements Generator {
 
         protected $withCss = false;
+        protected $linksList = array();
 
         /**
         * array key/value that contain translated strings
@@ -46,9 +47,10 @@ class Epub2Generator implements Generator {
                 setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
                 if($css != '')
                         $this->withCss = true;
-                $book = $this->clean($book);
+                $this->encodeTitles($book);
+                $this->clean($book);
                 $zip = new ZipCreator();
-                $zip->addContentFile('mimetype', 'application/epub+zip');
+                $zip->addContentFile('mimetype', 'application/epub+zip', null, false); //the mimetype must be first and uncompressed
                 $zip->addContentFile('META-INF/container.xml', $this->getXmlContainer());
                 $zip->addContentFile('OPS/content.opf', $this->getOpfContent($book));
                 $zip->addContentFile('OPS/toc.ncx', $this->getNcxToc($book));
@@ -247,24 +249,32 @@ class Epub2Generator implements Generator {
                 return $content;
         }
 
+        protected function encodeTitles(Book $book) {
+                $this->linksList[] = $book->title . '.xhtml';
+                foreach($book->chapters as $chapter) {
+                        $chapter->title = $this->encode($chapter->title);
+                        $this->linksList[] = $chapter->title . '.xhtml';
+                }
+                $book->title = $this->encode($book->title);
+                foreach($book->pictures as $picture) {
+                        $picture->title = $this->encode($picture->title);
+                        $this->linksList[] = $picture->title;
+                }
+        }
+
         /**
         * clean the files
         */
         protected function clean(Book $book) {
                 $xPath = $this->getXPath($book->content);
-                $xPath = $this->setHtmlTitle($xPath, $book->name);
-                $book->content = $this->cleanHtml($xPath, $book);
-                foreach($book->chapters as $id => $chapter) {
+                $this->setHtmlTitle($xPath, $book->name);
+                $this->cleanHtml($xPath, $book);
+                foreach($book->chapters as $chapter) {
                         $xPath = $this->getXPath($chapter->content);
-                        $xPath = $this->setHtmlTitle($xPath, $chapter->name);
-                        $book->chapters[$id]->content = $this->cleanHtml($xPath, $book);
-                        $book->chapters[$id]->title = $this->encode($chapter->title);
+                        $this->setHtmlTitle($xPath, $chapter->name);
+                        $this->cleanHtml($xPath, $book);
                 }
                 $book->title = $this->encode($book->title);
-                foreach($book->pictures as $id => $picture) {
-                        $book->pictures[$id]->title = $this->encode($picture->title);
-                }
-                return $book;
         }
 
 
@@ -284,12 +294,11 @@ class Epub2Generator implements Generator {
         * modified the XHTML
         */
         protected function cleanHtml(DOMXPath $xPath, $book) {
-	        $xPath = $this->setPictureLinks($xPath);
+	        $this->setPictureLinks($xPath);
                 $dom = $xPath->document;
-                $dom = $this->setLinks($dom, $book);
+                $this->setLinks($dom, $book);
                 if($this->withCss)
-                        $dom = $this->setCssLink($dom);
-                return $dom;
+                        $this->setCssLink($dom);
         }
 
         /**
@@ -298,7 +307,6 @@ class Epub2Generator implements Generator {
         protected function setHtmlTitle(DOMXPath $xPath, $name) {
                 $title = $xPath->query('/html:html/html:head/html:title')->item(0);
                 $title->nodeValue = $name;
-                return $xPath;
         }
 
         /**
@@ -307,9 +315,12 @@ class Epub2Generator implements Generator {
         protected function setPictureLinks(DOMXPath $xPath) {
                 $list = $xPath->query('//html:img');
                 foreach($list as $node) {
-                        $node->setAttribute('src', $this->encode($node->getAttribute('alt')));
+                        $title = $this->encode($node->getAttribute('alt'));
+                        if(in_array($title, $this->linksList))
+                                $node->setAttribute('src', $title);
+                        else
+                                $node->parentNode->removeChild($node);
                 }
-                return $xPath;
         }
 
         /**
@@ -320,14 +331,15 @@ class Epub2Generator implements Generator {
                 $title = Api::mediawikiUrlEncode($book->title);
                 foreach($list as $node) {
                         $href = $node->getAttribute('href');
-                        if($href[0] == '#')
+                        $title = $this->encode($node->getAttribute('title')) . '.xhtml';
+                        if($href[0] == '#') {
                                 continue;
-                        elseif(strpos($href, $title) === false || strpos($href, 'wikisource.org') === false)
+                        } elseif(in_array($title, $this->linksList)) {
+                                $node->setAttribute('href', $title);
+                        } else {
                                 $node->setAttribute('href', 'http:' . $href);
-                        else
-                                $node->setAttribute('href', $this->encode($node->getAttribute('title')) . '.xhtml');
+                        }
                 }
-                return $dom;
         }
 
         /**
@@ -340,7 +352,6 @@ class Epub2Generator implements Generator {
                 $link->setAttribute('rel', 'stylesheet');
                 $link->setAttribute('href', 'main.css');
                 $node->appendChild($link);
-                return $dom;
         }
 
         protected function getCssWikisource($lang) {

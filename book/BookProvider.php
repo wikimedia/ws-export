@@ -63,9 +63,9 @@ class BookProvider {
                         }
                         $chapters = $parser->getChaptersList($title);
                         $chapters = $this->getPages($chapters);
-                        foreach($chapters as $id => $chapter) {
+                        foreach($chapters as $chapter) {
                                 $parser = new PageParser($chapter->content);
-                                $chapters[$id]->content = $parser->getContent();
+                                $chapter->content = $parser->getContent();
                                 if($this->withPictures) {
                                         $pictures = array_merge($pictures, $parser->getPicturesList());
                                 }
@@ -120,8 +120,8 @@ class BookProvider {
                 }
                 $data = $this->api->getMulti($urls);
                 foreach($pictures as $id => $picture) {
-                        $pictures[$id]->content = $data[$id];
-                        $pictures[$id]->mimetype = getMimeType($pictures[$id]->content);
+                        $picture->content = $data[$id];
+                        $picture->mimetype = getMimeType($picture->content);
                 }
                 return $pictures;
         }
@@ -256,10 +256,11 @@ class PageParser {
                 $this->removeNodesWithXpath('//*[contains(@class,"ws-noexport")]');
                 $this->removeNodesWithXpath('//html:table[@id="toc"]');
                 $this->removeNodesWithXpath('//html:span[@class="editsection"]');
-                $this->styleNodes('center', 'text-align:center;');
-                $this->styleNodes('strike', 'text-decoration:line-through;');
-                $this->styleNodes('s', 'text-decoration:line-through;');
-                $this->styleNodes('u', 'text-decoration:underline;');
+                $this->deprecatedNodes('center', 'div', 'text-align:center;');
+                $this->deprecatedNodes('strike', 'span', 'text-decoration:line-through;');
+                $this->deprecatedNodes('s', 'span', 'text-decoration:line-through;');
+                $this->deprecatedNodes('u', 'span', 'text-decoration:underline;');
+                $this->deprecatedNodes('font', 'span', '');
                 return $this->xPath->document;
         }
 
@@ -270,10 +271,18 @@ class PageParser {
                 }
         }
 
-        protected function styleNodes($nodeName, $style) {
-                $nodes = $this->xPath->document->getElementsByTagName($nodeName);
-                foreach($nodes as $node) {
-                        $node->setAttribute('style', $style . ' ' . $node->getAttribute('style'));
+        protected function deprecatedNodes($oldName, $newName, $style) {
+                $nodes = $this->xPath->query('//html:' . $oldName); //The getElementsByTagName doesn't find all tags
+                foreach($nodes as $oldNode) {
+                        $newNode = $this->xPath->document->createElement($newName);
+                        foreach($oldNode->childNodes as $child){
+                                $newNode->appendChild($child);
+                        }
+                        foreach($oldNode->attributes as $attrName => $attrNode) {
+                                $newNode->setAttribute($attrName, $attrNode);
+                        }
+                        $newNode->setAttribute('style', $style . ' ' . $newNode->getAttribute('style'));
+                        $oldNode->parentNode->replaceChild($newNode, $oldNode);
                 }
         }
 }

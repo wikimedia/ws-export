@@ -2,8 +2,10 @@
 /**
 * @author Laurent Jouanneau
 * @contributor Julien Issler
+* @contributor Thomas Pellissier Tanon
 * @copyright 2006 Laurent Jouanneau
 * @copyright 2008 Julien Issler
+* @copyright 2012 Thomas Pellissier Tanon
 * @link http://www.jelix.org
 * @licence GNU Lesser General Public Licence see LICENCE file or http://www.gnu.org/licenses/lgpl.html
 */
@@ -89,8 +91,9 @@ class ZipCreator {
 * @param string $zipFileName the path of the file into the zip archive
 * @param string $content the content of the file
 * @param integer $filetime the time modification of the file
+* @param bool $compress compress the file with gzcompress function
 */
-    public function addContentFile($zipFileName, $content, $filetime = 0){
+    public function addContentFile($zipFileName, $content, $filetime = 0, $compress = true){
 
         $filetime = $this->_getDOSTimeFormat($filetime);
 
@@ -101,7 +104,7 @@ file record:
 - local file header signature 4 bytes (0x04034b50)
 - version needed to extract 2 bytes 14
 - general purpose bit flag 2 bytes 0
-- compression method 2 bytes 0x8
+- compression method 2 bytes (0x8 for compressed files, 0x0 for uncompressed)
 - last mod file time 2 bytes (fileinfo)
 - last mod file date 2 bytes (fileinfo)
 - crc-32 4 bytes (fileinfo)
@@ -115,21 +118,29 @@ file record:
 */
         $zipFileName = str_replace('\\', '/', $zipFileName);
 
-        $zippedcontent = substr(gzcompress($content), 2, -4); // compress and fix crc bug
+        if($compress) {
+            $zippedcontent = substr(gzcompress($content), 2, -4);
 
-        $fileinfo = $filetime.pack('V', crc32($content));
-        $fileinfo .= pack('V', strlen($zippedcontent)). pack('V', strlen($content));
-        $fileinfo .= pack('v', strlen($zipFileName))."\x00\x00";
+            $fileinfo = "\x08\x00";
+            $fileinfo .= $filetime.pack('V', crc32($content));
+            $fileinfo .= pack('V', strlen($zippedcontent)). pack('V', strlen($content));
+            $fileinfo .= pack('v', strlen($zipFileName))."\x00\x00";
 
-        $filerecord = "\x50\x4b\x03\x04\x14\x00\x00\x00\x08\x00".$fileinfo.
-            $zipFileName.$zippedcontent;
+            $filerecord = "\x50\x4b\x03\x04\x14\x00\x00\x00".$fileinfo.$zipFileName.$zippedcontent;
+        } else {
+            $fileinfo = "\x00\x00";
+            $fileinfo .= $filetime.pack('V', crc32($content));
+            $fileinfo .= pack('V', strlen($content)). pack('V', strlen($content));
+            $fileinfo .= pack('v', strlen($zipFileName))."\x00\x00";
+
+            $filerecord = "\x50\x4b\x03\x04\x14\x00\x00\x00".$fileinfo.$zipFileName.$content;
+        }
 
         $this->fileRecords[] = $filerecord;
 
         $this->_addCentralDirEntry($zipFileName, $fileinfo);
 
         $this->centralDirOffset += strlen($filerecord);
-
     }
 
     /**
@@ -231,7 +242,7 @@ it contains an header for each file
 - file comment (variable size)
 */
 
-        $cdrecord = "\x50\x4b\x01\x02\x00\x00\x14\x00\x00\x00\x08\x00".$info;
+        $cdrecord = "\x50\x4b\x01\x02\x00\x00\x14\x00\x00\x00".$info;
         $cdrecord .= "\x00\x00\x00\x00\x00\x00";
         if($isDir)
             $cdrecord .= pack('V', 16);

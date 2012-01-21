@@ -104,7 +104,7 @@ class Api {
         }
 
         /*
-         * Callback called when a request started by getPageAsync() finish
+         * Callback called when a request started by getImageAsync() finish
          */
         public function endImage($data, $id, &$responses) {
                 if ($data['http_code'] != 200) {

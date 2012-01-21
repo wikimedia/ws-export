@@ -12,6 +12,8 @@ class BookProvider {
         protected $api = null;
         protected $curl_async = null;
         protected $withPictures = true;
+        protected $creditPages = null;
+        protected $creditImages = null;
 
         /**
         * @var $api Api
@@ -20,6 +22,8 @@ class BookProvider {
                 $this->api = $api;
                 $this->curl_async = new CurlAsync();
                 $this->withPictures = $withPictures;
+                $this->creditPages = array();
+                $this->creditImages = array();
         }
 
         /**
@@ -75,10 +79,20 @@ class BookProvider {
                                 }
                         }
 
+                        if ($this->withPictures && count($pictures)) {
+                                $keyCreditImage = $this->startCreditImage($book, $pictures);
+                        }
+
                         $this->curl_async->waitForKey($key_credit);
 
                         $book->chapters = $chapters;
                         $pictures = $this->getPicturesData($pictures);
+                        if ($this->withPictures && count($pictures)) {
+                                $this->curl_async->waitForKey($keyCreditImage);
+                        }
+
+                        $credit_html = $this->mergeCredit();
+
                 }
                 $book->pictures = $pictures;
                 return $book;
@@ -201,18 +215,63 @@ class BookProvider {
 
         public function finishCredit($data) {
                 if ($data['http_code'] != 200) {
-                        $html = 'Unable to get contributor credits';
+                        //$html = 'Unable to get contributor credits';
                         error_log('getCredit() fail:' .
                                   'http code: ' . $data['http_code'] .
                                   ', curl errno: ' . $data['curl_erno'] .
                                   ', curl_result:' . $data['curl_result']);
                 } else {
-                        $credit = unserialize($data['content']);
-                        uasort($credit, "cmp_credit");
-                        $html = "<ul>\n";
-                        foreach ($credit as $name => $value)
-                                $html .= "\t<li>" . $name . "</li>\n";
+                        $this->creditPages = unserialize($data['content']);
                 }
+        }
+
+        /**
+         * @var $book the Book object
+         * @var $pictures an array of Picture
+         * @return a key id for the credit request
+         */
+        protected function startCreditImage($book, $pictures) {
+                $url = 'http://toolserver.org/~phe/cgi-bin/credits';
+                $images = array( );
+                foreach ($pictures as $id => $picture)
+                        $images[] = $picture->title;
+                $images = join('|', $images);
+                $params = array( 'lang' => $book->lang,
+                                 'format' => 'php',
+                                 'image' => $images);
+                return $this->curl_async->addRequest($url, $params,
+                               array($this, 'finishCreditImage'));
+        }
+
+        public function finishCreditImage($data) {
+                if ($data['http_code'] != 200) {
+                        //$html = 'Unable to get contributor credits';
+                        error_log('getCreditImage() fail:' .
+                                  'http code: ' . $data['http_code'] .
+                                  ', curl errno: ' . $data['curl_erno'] .
+                                  ', curl_result:' . $data['curl_result']);
+                } else {
+                        $this->creditImages = unserialize($data['content']);
+                }
+        }
+
+        /*
+         * merge the credit collected for images and pages and create
+         * an html code fragment for these credits
+         */
+        protected function mergeCredit() {
+                $credit = $this->creditPages;
+                foreach ($this->creditImages as $name => $values) {
+                        $credit[$name]['count'] += $values['count'];
+                        foreach ($values['flags'] as $id => $flag) {
+                                if (!inarray($flags, $credit[$name]['flags']))
+                                        $credit[$name]['flags'][] = $flag;
+                        }
+                }
+                uasort($credit, "cmp_credit");
+                $html = "<ul>\n";
+                foreach ($credit as $name => $value)
+                        $html .= "\t<li>" . $name . "</li>\n";
                 $this->book->credits_html = $html;
         }
 }

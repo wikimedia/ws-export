@@ -125,7 +125,7 @@ class BookProvider {
                 foreach($pictures as $id => $picture) {
                         $urls[$id] = $picture->url;
                 }
-                $data = $this->api->getMulti($urls);
+                $data = $this->api->getImagesAsync($this->curl_async, $urls);
                 foreach($pictures as $id => $picture) {
                         $pictures[$id]->content = $data[$id];
                         $pictures[$id]->mimetype = getMimeType($pictures[$id]->content);

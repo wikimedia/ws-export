@@ -127,6 +127,8 @@ class CurlAsync {
                 if (count($this->pending_request)) {
                         $ch = array_shift($this->pending_request);
                         curl_multi_add_handle($this->mc, $ch);
+                } else {
+                        $this->pending_request_nr--;
                 }
         }
 }

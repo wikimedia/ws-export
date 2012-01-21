@@ -67,28 +67,64 @@ class Api {
         * @var $callback the callback to call on each request termination
         * @return the content of a page
         */
-        private $multi_page_responses;
-        public function getPageAsync($curl_async, $title, $id) {
+        public function getPageAsync($curl_async, $title, $id, &$responses) {
                 $url = $this->lang . '.wikisource.org/w/index.php?action=render&title=' . urlencode($title);
-                return $curl_async->addRequest($url, null, array($this, 'wrapPage'), array($id));
+                return $curl_async->addRequest($url, null, array($this, 'wrapPage'), array($id, &$responses));
         }
 
-        public function wrapPage($data, $id) {
+        /*
+         * Callback called when a request started by getPageAsync() finish
+         */
+        public function wrapPage($data, $id, &$responses) {
                 if ($data['http_code'] != 200) {
                         throw new HttpException("HTTP error", $data['http_code']);
                 }
                 $content = '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $this->lang . '"><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type"/><title></title></head><body>' . $data['content'] . '</body></html>';
-                $this->multi_page_responses[$id] = $content;
+                $responses[$id] = $content;
         }
 
         public function getPagesAsync($curl_async, $titles) {
-                $this->multi_pages_responses = array();
+                $responses = array();
                 $keys = array();
                 foreach($titles as $id => $title)
-                        $keys[] = $this->getPageAsync($curl_async, $title, $id);
+                        $keys[] = $this->getPageAsync($curl_async, $title, $id, $responses);
                 foreach ($keys as $key => $id)
                         $curl_async->waitForKey($id);
-                return $this->multi_page_responses;
+                return $responses;
+        }
+
+       /**
+        * @var $curl_async multi curl async object doing the request
+        * @var $title the title of the page
+        * @var $callback the callback to call on each request termination
+        * @return the content of a page
+        */
+        public function getImageAsync($curl_async, $url, $id, &$responses) {
+                return $curl_async->addRequest($url, null, array($this, 'endImage'), array($id, &$responses));
+        }
+
+        /*
+         * Callback called when a request started by getPageAsync() finish
+         */
+        public function endImage($data, $id, &$responses) {
+                if ($data['http_code'] != 200) {
+                        throw new HttpException("HTTP error", $data['http_code']);
+                }
+                $content = $data['content'];
+                $responses[$id] = $content;
+        }
+
+        /*
+         * 
+         */
+        function getImagesAsync($curl_async, $urls) {
+                $responses = array();
+                $keys = array();
+                foreach($urls as $id => $url)
+                        $keys[] = $this->getImageAsync($curl_async, $url, $id, $responses);
+                foreach ($keys as $key => $id)
+                        $curl_async->waitForKey($id);
+                return $responses;
         }
 
         /**

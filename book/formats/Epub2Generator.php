@@ -45,6 +45,7 @@ class Epub2Generator implements Generator {
                 $css = $this->getCssWikisource($book->lang);
                 $this->i18n = $this->getI18n($book->lang);
                 setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
+                $wsUrl = wikisourceUrl($book->lang, $book->title);
                 if($css != '')
                         $this->withCss = true;
                 $this->encodeTitles($book);
@@ -52,7 +53,7 @@ class Epub2Generator implements Generator {
                 $zip = new ZipCreator();
                 $zip->addContentFile('mimetype', 'application/epub+zip', null, false); //the mimetype must be first and uncompressed
                 $zip->addContentFile('META-INF/container.xml', $this->getXmlContainer());
-                $zip->addContentFile('OPS/content.opf', $this->getOpfContent($book));
+                $zip->addContentFile('OPS/content.opf', $this->getOpfContent($book, $wsUrl));
                 $zip->addContentFile('OPS/toc.ncx', $this->getNcxToc($book));
                 if($book->cover != '')
                         $zip->addContentFile('OPS/cover.xhtml', $this->getXhtmlCover($book));
@@ -82,14 +83,14 @@ class Epub2Generator implements Generator {
                 return $content;
         }
 
-        protected function getOpfContent(Book $book) {
+        protected function getOpfContent(Book $book, $wsUrl) {
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uid" version="2.0">
                                 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcterms="http://purl.org/dc/terms/">
-                                        <dc:identifier id="uid" opf:scheme="URI">' . wikisourceUrl($book->lang, $book->title) . '</dc:identifier>
+                                        <dc:identifier id="uid" opf:scheme="URI">' . $wsUrl . '</dc:identifier>
                                         <dc:language xsi:type="dcterms:RFC4646">' . $book->lang . '</dc:language>
                                         <dc:title>' . $book->name . '</dc:title>
-                                        <dc:source>' . wikisourceUrl($book->lang, $book->title) . '</dc:source>
+                                        <dc:source>' . $wsUrl . '</dc:source>
                                         <dc:date opf:event="ops-publication">' . date(DATE_W3C) . '</dc:date>
                                         <dc:rights>http://creativecommons.org/licenses/by-sa/3.0/</dc:rights>
                                         <dc:rights>http://www.gnu.org/copyleft/fdl.html</dc:rights>

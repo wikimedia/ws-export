@@ -7,6 +7,7 @@
 include($basePath . '/utils/utils.php');
 include($basePath . '/utils/HttpException.php');
 include($basePath . '/utils/Api.php');
+include($basePath . '/utils/CurlAsync.php');
 include($basePath . '/utils/ZipCreator.php');
 include($basePath . '/book/Generator.php');
 include($basePath . '/book/Picture.php');

@@ -62,6 +62,72 @@ class Api {
         }
 
         /**
+        * @var $curl_async multi curl async object doing the request
+        * @var $title the title of the page
+        * @var $callback the callback to call on each request termination
+        * @return the content of a page
+        */
+        public function getPageAsync($curl_async, $title, $id, &$responses) {
+                $url = $this->lang . '.wikisource.org/w/index.php?action=render&title=' . urlencode($title);
+                return $curl_async->addRequest($url, null, array($this, 'wrapPage'), array($id, &$responses));
+        }
+
+        /*
+         * Callback called when a request started by getPageAsync() finish
+         */
+        public function wrapPage($data, $id, &$responses) {
+                if ($data['http_code'] != 200) {
+                        throw new HttpException("HTTP error", $data['http_code']);
+                }
+                $content = '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $this->lang . '"><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type"/><title></title></head><body>' . $data['content'] . '</body></html>';
+                $responses[$id] = $content;
+        }
+
+        public function getPagesAsync($curl_async, $titles) {
+                $responses = array();
+                $keys = array();
+                foreach($titles as $id => $title)
+                        $keys[] = $this->getPageAsync($curl_async, $title, $id, $responses);
+                foreach ($keys as $key => $id)
+                        $curl_async->waitForKey($id);
+                return $responses;
+        }
+
+       /**
+        * @var $curl_async multi curl async object doing the request
+        * @var $title the title of the page
+        * @var $callback the callback to call on each request termination
+        * @return the content of a page
+        */
+        public function getImageAsync($curl_async, $url, $id, &$responses) {
+                return $curl_async->addRequest($url, null, array($this, 'endImage'), array($id, &$responses));
+        }
+
+        /*
+         * Callback called when a request started by getImageAsync() finish
+         */
+        public function endImage($data, $id, &$responses) {
+                if ($data['http_code'] != 200) {
+                        throw new HttpException("HTTP error", $data['http_code']);
+                }
+                $content = $data['content'];
+                $responses[$id] = $content;
+        }
+
+        /*
+         * 
+         */
+        function getImagesAsync($curl_async, $urls) {
+                $responses = array();
+                $keys = array();
+                foreach($urls as $id => $url)
+                        $keys[] = $this->getImageAsync($curl_async, $url, $id, $responses);
+                foreach ($keys as $key => $id)
+                        $curl_async->waitForKey($id);
+                return $responses;
+        }
+
+        /**
         * @var $title the title of the page
         * @return the content of a page
         */
@@ -93,7 +159,7 @@ class Api {
         * @return the file content
         */
         public function get($url) {
-                $ch = $this->getCurl($url);
+                $ch = Api::getCurl($url);
                 $response = curl_exec($ch);
                 if(curl_errno($ch)) {
                         throw new HttpException(curl_error($ch), curl_errno($ch));
@@ -113,7 +179,7 @@ class Api {
                 $mh = curl_multi_init();
                 $curl_array = array();
                 foreach($urls as $id => $url) {
-                        $curl_array[$id] = $this->getCurl($url);
+                        $curl_array[$id] = Api::getCurl($url);
                         curl_multi_add_handle($mh, $curl_array[$id]);
                 }
                 $running = null;
@@ -134,7 +200,7 @@ class Api {
         * @var $url the url
         * @return curl
         */
-        protected function getCurl($url) {
+        static function getCurl($url) {
                 $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_USERAGENT, Api::USER_AGENT);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

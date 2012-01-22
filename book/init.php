@@ -4,6 +4,9 @@
 * @copyright 2011 Thomas Pellissier Tanon
 * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
 */
+global $wsexportConfig;
+$basePath = $wsexportConfig['basePath'];
+
 include($basePath . '/utils/utils.php');
 include($basePath . '/utils/HttpException.php');
 include($basePath . '/utils/Api.php');

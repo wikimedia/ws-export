@@ -42,7 +42,7 @@ class Epub2Generator implements Generator {
         * @todo images, cover, about...
         */
         public function create(Book $book) {
-                $css = $this->getCssWikisource($book->lang);
+                $css = $this->getTempFile($book->lang, 'epub.css');
                 $this->i18n = $this->getI18n($book->lang);
                 setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
                 $wsUrl = wikisourceUrl($book->lang, $book->title);
@@ -58,6 +58,7 @@ class Epub2Generator implements Generator {
                 if($book->cover != '')
                         $zip->addContentFile('OPS/cover.xhtml', $this->getXhtmlCover($book));
                 $zip->addContentFile('OPS/title.xhtml', $this->getXhtmlTitle($book));
+                $zip->addContentFile('OPS/about.xhtml', $this->getXhtmlAbout($book));
                 $zip->addFile(dirname(__FILE__).'/images/Accueil_scribe.png', 'OPS/Accueil_scribe.png');
                 $zip->addContentFile('OPS/' . $book->title . '.xhtml', $book->content->saveXML());
                 if(!empty($book->chapters)) {
@@ -132,8 +133,8 @@ class Epub2Generator implements Generator {
                                         }
                                         if($this->withCss)
                                                 $content.= '<item id="mainCss" href="main.css" media-type="text/css" />';
-                                        //$content.= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" /> //TODO: about...
-                                $content.= '</manifest>
+                                        $content.= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
+                                </manifest>
                                 <spine toc="ncx">';
                                         if($book->cover != '')
                                                 $content.= '<itemref idref="cover" linear="yes" />';
@@ -144,8 +145,8 @@ class Epub2Generator implements Generator {
                                                         $content.= '<itemref idref="' . $chapter->title . '" linear="yes" />';
                                                 }
                                         }
-                                        //$content.= '<itemref idref="about" linear="no" />
-                                $content.= '</spine>
+                                        $content.= '<itemref idref="about" linear="yes" />
+                                </spine>
                                 <guide>';
                                         if($book->cover != '')
                                                 $content.= '<reference type="cover" title="' . $this->i18n['cover'] . '" href="cover.xhtml" />';
@@ -156,8 +157,8 @@ class Epub2Generator implements Generator {
                                         if(isset($book->chapters[0])) {
                                                 $content.= '<reference type="text" title="' . $book->chapters[0]->name . '" href="' . $book->chapters[0]->title . '.xhtml" />';
                                         }
-                                        //$content.= '<reference type="copyright-page" title="' . $this->i18n['about'] . '" href="about.xml"/>
-                                $content.= '</guide>
+                                        $content.= '<reference type="copyright-page" title="' . $this->i18n['about'] . '" href="about.xhtml"/>
+                                </guide>
                         </package>';
                 return $content;
         }
@@ -193,13 +194,13 @@ class Epub2Generator implements Generator {
                                                          $order++;
                                                 }
                                         }
-                                        /* $content.= '<navPoint id="about" playOrder="' . $order . '">
+                                        $content.= '<navPoint id="about" playOrder="' . $order . '">
                                                 <navLabel>
                                                         <text>' . $this->i18n['about'] . '</text>
                                                 </navLabel>
                                                 <content src="about.xhtml"/>
-                                        </navPoint> */
-                                $content.= '</navMap>
+                                        </navPoint>
+                               </navMap>
                         </ncx>';
                 return $content;
         }
@@ -246,6 +247,27 @@ class Epub2Generator implements Generator {
                                         <br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
                                         <h5>' . str_replace('%d', strftime('%x'), $this->i18n['exported_from_wikisource_the']) . '</h5>
                                 </div></body>
+                        </html>';
+                return $content;
+        }
+
+        protected function getXhtmlAbout(Book $book) {
+                $list = '';
+                foreach($book->credits as $name => $value)
+                        $list .= '<li>' . $name . "</li>\n";
+                $about = $this->getTempFile($book->lang, 'about.xhtml');
+                if($about == '')
+                        $about = $list;
+                else
+                        $about = str_replace('{CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
+                $content = '<?xml version="1.0" encoding="UTF-8" ?>
+                        <!DOCTYPE html>
+                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">
+                                <head>
+                                        <title>' . $this->i18n['about'] . '</title>
+                                        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+                                </head>
+                                <body>' . $about . '</body>
                         </html>';
                 return $content;
         }
@@ -355,26 +377,26 @@ class Epub2Generator implements Generator {
                 $node->appendChild($link);
         }
 
-        protected function getCssWikisource($lang) {
-                try {
-                        $api = new Api($lang);
-                        return $api->get('http://' . $lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css');
-                } catch(Exception $e) {
+        protected function getTempFile($lang, $name) {
+                global $wsexportConfig;
+                $path = $wsexportConfig['tempPath'].'/'.$lang.'/'.$name;
+                if(file_exists($path))
+                        return file_get_contents($path);
+                else
                         return '';
-                }
         }
 
         protected function getI18n($lang) {
-                $ini = parse_ini_file(dirname(__FILE__) . '/i18n.ini');
-                try {
-                        $api = new Api($lang);
-                        $response = $api->get('http://' . $lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain');
-                        $temp = parse_ini_string($response);
-                        if($ini != false)
-                                $ini = array_merge($ini, $temp);
-                } catch(Exception $e) {
+                $content = $this->getTempFile($lang, 'i18n');
+                if($content == '') {
+                        global $wsexportConfig;
+                        include $wsexportConfig['basePath'].'/book/Refresh.php';
+                        $refresh = new Refresh();
+                        $refresh->refresh();
+                        return unserialize($this->getTempFile($lang, 'i18n'));
+                } else {
+                        return unserialize($content);
                 }
-                return $ini;
         }
 }
 

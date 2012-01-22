@@ -48,4 +48,9 @@ class Book extends Page {
         * @type array
         */
         public $pictures = array();
+
+        /**
+        * list of contributors of the book array('PSEUDO' => array('flags' => array(), 'count' => integer))
+        */
+        public $credits = array();
 }

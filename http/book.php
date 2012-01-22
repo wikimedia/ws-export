@@ -1,8 +1,18 @@
 <?php
-$basePath = '..';
+$wsexportConfig = array(
+        'basePath' => '..',
+        'tempPath' => '../temp'
+);
+
 include('../book/init.php');
 
 try {
+        if(isset($_GET['refresh'])) {
+                include $wsexportConfig['basePath'].'/book/Refresh.php';
+                $refresh = new Refresh();
+                $refresh->refresh();
+                exit();
+        }
         if(!isset($_GET['page']) || $_GET['page'] == '')
                 include 'help/book.php';
         $title = htmlspecialchars(urldecode($_GET['page']));

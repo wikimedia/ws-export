@@ -91,7 +91,7 @@ class BookProvider {
                                 $this->curl_async->waitForKey($keyCreditImage);
                         }
 
-                        $credit_html = $this->mergeCredit();
+                        $book->credits = $this->mergeCredit();
 
                 }
                 $book->pictures = $pictures;
@@ -271,10 +271,7 @@ class BookProvider {
                         }
                 }
                 uasort($credit, "cmp_credit");
-                $html = "<ul>\n";
-                foreach ($credit as $name => $value)
-                        $html .= "\t<li>" . $name . "</li>\n";
-                $this->book->credits_html = $html;
+                return $credit;
         }
 }
 
@@ -390,11 +387,14 @@ class PageParser {
                 $nodes = $this->xPath->query('//html:' . $oldName); //The getElementsByTagName doesn't find all tags
                 foreach($nodes as $oldNode) {
                         $newNode = $this->xPath->document->createElement($newName);
-                        foreach($oldNode->childNodes as $child){
+                        foreach($oldNode->childNodes as $child) {
                                 $newNode->appendChild($child);
                         }
-                        foreach($oldNode->attributes as $attrName => $attrNode) {
-                                $newNode->setAttribute($attrName, $attrNode);
+                        foreach($oldNode->attributes as $attribute) {
+                                if($attribute->name == 'value')
+                                        $newNode->nodeValue = $attribute->value;
+                                else
+                                        $newNode->setAttribute($attribute->name, $attribute->value);
                         }
                         $newNode->setAttribute('style', $style . ' ' . $newNode->getAttribute('style'));
                         $oldNode->parentNode->replaceChild($newNode, $oldNode);

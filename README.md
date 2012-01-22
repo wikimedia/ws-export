@@ -6,7 +6,8 @@ Wikisource export is a tool for exporting Wikisource page in many format like ep
 Installation
 ============
 
-You have only to download the files and use it with PHP 5.3 or more and for ODT export with XLS.
+You have to download the files and use it with PHP 5.3 or more and for ODT export with XLS.
+You have to create a temp folder in the root of directories.
 
 Composition
 ===========

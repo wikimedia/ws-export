@@ -12,7 +12,6 @@
 class Epub2Generator implements Generator {
 
         protected $withCss = false;
-        protected $linksList = array();
 
         /**
         * array key/value that contain translated strings
@@ -46,10 +45,8 @@ class Epub2Generator implements Generator {
                 $this->i18n = $this->getI18n($book->lang);
                 setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
                 $wsUrl = wikisourceUrl($book->lang, $book->title);
-                if($css != '')
-                        $this->withCss = true;
-                $this->encodeTitles($book);
-                $this->clean($book);
+                $cleaner = new BookCleanerEpub();
+                $cleaner->clean($book);
                 $zip = new ZipCreator();
                 $zip->addContentFile('mimetype', 'application/epub+zip', null, false); //the mimetype must be first and uncompressed
                 $zip->addContentFile('META-INF/container.xml', $this->getXmlContainer());
@@ -121,12 +118,9 @@ class Epub2Generator implements Generator {
                                         if($book->cover != '')
                                                 $content.= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />';
                                         $content.= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
-                                        <item id="Accueil_scribe.png" href="Accueil_scribe.png" media-type="image/png" />
-                                        <item id="' . $book->title . '" href="' . $book->title . '.xhtml" media-type="application/xhtml+xml" />';
-                                        if(!empty($book->chapters)) {
-                                                foreach($book->chapters as $chapter) {
-                                                        $content.= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />';
-                                                }
+                                        <item id="Accueil_scribe.png" href="Accueil_scribe.png" media-type="image/png" />';
+                                        foreach($book->chapters as $chapter) {
+                                                $content.= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />';
                                         }
                                         foreach($book->pictures as $picture) {
                                                 $content.= '<item id="' . $picture->title . '" href="' . $picture->title . '" media-type="' . $picture->mimetype . '" />';
@@ -138,8 +132,7 @@ class Epub2Generator implements Generator {
                                 <spine toc="ncx">';
                                         if($book->cover != '')
                                                 $content.= '<itemref idref="cover" linear="yes" />';
-                                        $content.= '<itemref idref="title" linear="yes" />
-                                        <itemref idref="' . $book->title . '" linear="yes" />';
+                                        $content.= '<itemref idref="title" linear="yes" />';
                                         if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
                                                         $content.= '<itemref idref="' . $chapter->title . '" linear="yes" />';
@@ -153,11 +146,8 @@ class Epub2Generator implements Generator {
                                         else
                                                 $content.= '<reference type="cover" title="' . $this->i18n['cover'] . '" href="title.xhtml" />';
                                         $content.= '<reference type="title-page" title="' . $this->i18n['title_page'] . '" href="title.xhtml" />
-                                        <reference type="text" title="' . $book->name . '" href="' . $book->title . '.xhtml" />';
-                                        if(isset($book->chapters[0])) {
-                                                $content.= '<reference type="text" title="' . $book->chapters[0]->name . '" href="' . $book->chapters[0]->title . '.xhtml" />';
-                                        }
-                                        $content.= '<reference type="copyright-page" title="' . $this->i18n['about'] . '" href="about.xhtml"/>
+                                        <reference type="text" title="' . $book->chapters[0]->name . '" href="' . $book->chapters[0]->title . '.xhtml" />
+                                        <reference type="copyright-page" title="' . $this->i18n['about'] . '" href="about.xhtml" />
                                 </guide>
                         </package>';
                 return $content;
@@ -179,12 +169,8 @@ class Epub2Generator implements Generator {
                                         <navPoint id="title" playOrder="1">
                                                 <navLabel><text>' . $this->i18n['title_page'] . '</text></navLabel>
                                                 <content src="title.xhtml"/>
-                                        </navPoint>
-                                        <navPoint id="' . $book->title . '" playOrder="2">
-                                                <navLabel><text>' . $book->name . '</text></navLabel>
-                                                <content src="' . $book->title . '.xhtml"/>
                                         </navPoint>';
-                                        $order = 3;
+                                        $order = 2;
                                         if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
                                                          $content.= '<navPoint id="' . $chapter->title . '" playOrder="' . $order . '">
@@ -272,99 +258,6 @@ class Epub2Generator implements Generator {
                 return $content;
         }
 
-        protected function encodeTitles(Book $book) {
-                $this->linksList[] = $book->title . '.xhtml';
-                foreach($book->chapters as $chapter) {
-                        $chapter->title = $this->encode($chapter->title);
-                        $this->linksList[] = $chapter->title . '.xhtml';
-                }
-                $book->title = $this->encode($book->title);
-                foreach($book->pictures as $picture) {
-                        $picture->title = $this->encode($picture->title);
-                        $this->linksList[] = $picture->title;
-                }
-        }
-
-        /**
-        * clean the files
-        */
-        protected function clean(Book $book) {
-                $xPath = $this->getXPath($book->content);
-                $this->setHtmlTitle($xPath, $book->name);
-                $this->cleanHtml($xPath, $book);
-                foreach($book->chapters as $chapter) {
-                        $xPath = $this->getXPath($chapter->content);
-                        $this->setHtmlTitle($xPath, $chapter->name);
-                        $this->cleanHtml($xPath, $book);
-                }
-                $book->title = $this->encode($book->title);
-        }
-
-
-        protected function getXPath($file) {
-                $xPath = new DOMXPath($file);
-                $xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
-                return $xPath;
-        }
-
-        protected function encode($string) {
-                $search = array('@[éèêëÊË]@i','@[àâäÂÄ]@i','@[îïÎÏ]@i','@[ûùüÛÜ]@i','@[ôöÔÖ]@i','@[ç]@i','@[ ]@i','@[^a-zA-Z0-9_\.]@');
-	        $replace = array('e','a','i','u','o','c','_','_');
-                return preg_replace($search, $replace, $string);
-        }
-
-        /**
-        * modified the XHTML
-        */
-        protected function cleanHtml(DOMXPath $xPath, $book) {
-	        $this->setPictureLinks($xPath);
-                $dom = $xPath->document;
-                $this->setLinks($dom, $book);
-                if($this->withCss)
-                        $this->setCssLink($dom);
-        }
-
-        /**
-        * change the picture links
-        */
-        protected function setHtmlTitle(DOMXPath $xPath, $name) {
-                $title = $xPath->query('/html:html/html:head/html:title')->item(0);
-                $title->nodeValue = $name;
-        }
-
-        /**
-        * change the picture links
-        */
-        protected function setPictureLinks(DOMXPath $xPath) {
-                $list = $xPath->query('//html:img');
-                foreach($list as $node) {
-                        $title = $this->encode($node->getAttribute('alt'));
-                        if(in_array($title, $this->linksList))
-                                $node->setAttribute('src', $title);
-                        else
-                                $node->parentNode->removeChild($node);
-                }
-        }
-
-        /**
-        * change the internal links
-        */
-        protected function setLinks(DOMDocument $dom, Book $book) {
-                $list = $dom->getElementsByTagName('a');
-                $title = Api::mediawikiUrlEncode($book->title);
-                foreach($list as $node) {
-                        $href = $node->getAttribute('href');
-                        $title = $this->encode($node->getAttribute('title')) . '.xhtml';
-                        if($href[0] == '#') {
-                                continue;
-                        } elseif(in_array($title, $this->linksList)) {
-                                $node->setAttribute('href', $title);
-                        } else {
-                                $node->setAttribute('href', 'http:' . $href);
-                        }
-                }
-        }
-
         /**
         * set css link to main.css
         */
@@ -400,3 +293,152 @@ class Epub2Generator implements Generator {
         }
 }
 
+/**
+* Clean and modify book content in order to epub generation
+*/
+class BookCleanerEpub {
+        protected $book = null;
+        protected $withCss = false;
+        protected $linksList = array();
+
+        public function clean(Book $book, $withCss = false) {
+                $this->book = $book;
+                $this->withCss = $withCss;
+
+                $this->encodeTitles();
+                $this->splitChapters();
+
+                $xPath = $this->getXPath($this->book->content);
+                $this->setHtmlTitle($xPath, $this->book->name);
+                $this->cleanHtml($xPath);
+                foreach($this->book->chapters as $chapter) {
+                        $xPath = $this->getXPath($chapter->content);
+                        $this->setHtmlTitle($xPath, $chapter->name);
+                        $this->cleanHtml($xPath, $this->book);
+                }
+                $this->book->title = $this->encode($this->book->title);
+        }
+
+        protected function splitChapters() {
+                $chapters = $this->splitChapter($this->book);
+                foreach($this->book->chapters as $chapter) {
+                        $chapters = array_merge($chapters, $this->splitChapter($chapter));
+                }
+                $this->book->chapters = $chapters;
+        }
+
+        protected function splitChapter($chapter) {
+                $lenght = strlen($chapter->content->saveXML());
+                if($lenght <= 300000)
+                        return array($chapter);
+                $xPath = $this->getXPath($chapter->content);
+                $nodeList = $xPath->query('/html:html/html:body/*');
+                if($nodeList->length == 1)
+                        $nodeList = $nodeList->item(0)->childNodes;
+                $pageNum = min(ceil($lenght/300000), $nodeList->length);
+                $nodeNumByPage = floor($nodeList->length / $pageNum);
+                $currentNode = 0;
+                $pages = array();
+                for($i = 1; $i <= $pageNum && $currentNode <= $nodeList->length; $i++) {
+                        $page = new Page();
+                        $page->title = $chapter->title . '_' . $i;
+                        $page->name = $chapter->name . ' ' . $i;
+                        $page->content = $this->getEmptyDom();
+                        if($i == $pageNum)
+                                $maxNode = $nodeList->length;
+                        else
+                                $maxNode = $currentNode + $nodeNumByPage;
+                        $body = $page->content->getElementsByTagName('body')->item(0);
+                        while($currentNode < $maxNode) {
+                                $node = $page->content->importNode($nodeList->item($currentNode), true);
+                                $body->appendChild($node);
+                                $currentNode++;
+                        }
+                        $pages[] = $page;
+                }
+                return $pages;
+        }
+
+        protected function encodeTitles() {
+                $this->linksList[] = $this->book->title . '.xhtml';
+                foreach($this->book->chapters as $chapter) {
+                        $chapter->title = $this->encode($chapter->title);
+                        $this->linksList[] = $chapter->title . '.xhtml';
+                }
+                $this->book->title = $this->encode($this->book->title);
+                foreach($this->book->pictures as $picture) {
+                        $picture->title = $this->encode($picture->title);
+                        $this->linksList[] = $picture->title;
+                }
+        }
+
+        protected function getXPath($file) {
+                $xPath = new DOMXPath($file);
+                $xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+                return $xPath;
+        }
+
+        protected function getEmptyDom() {
+                $dom = new DOMDocument('1.0', 'UTF-8');
+                $dom->loadXML(getXhtmlFromContent($this->book->lang, ''));
+                return $dom;
+        }
+
+        protected function encode($string) {
+                $search = array('@[éèêëÊË]@i','@[àâäÂÄ]@i','@[îïÎÏ]@i','@[ûùüÛÜ]@i','@[ôöÔÖ]@i','@[ç]@i','@[ ]@i','@[^a-zA-Z0-9_\.]@');
+	        $replace = array('e','a','i','u','o','c','_','_');
+                return preg_replace($search, $replace, $string);
+        }
+
+        /**
+        * modified the XHTML
+        */
+        protected function cleanHtml(DOMXPath $xPath) {
+	        $this->setPictureLinks($xPath);
+                $dom = $xPath->document;
+                $this->setLinks($dom);
+                if($this->withCss)
+                        $this->setCssLink($dom);
+        }
+
+        /**
+        * change the picture links
+        */
+        protected function setHtmlTitle(DOMXPath $xPath, $name) {
+                $title = $xPath->query('/html:html/html:head/html:title')->item(0);
+                $title->nodeValue = $name;
+        }
+
+        /**
+        * change the picture links
+        */
+        protected function setPictureLinks(DOMXPath $xPath) {
+                $list = $xPath->query('//html:img');
+                foreach($list as $node) {
+                        $title = $this->encode($node->getAttribute('alt'));
+                        if(in_array($title, $this->linksList))
+                                $node->setAttribute('src', $title);
+                        else
+                                $node->parentNode->removeChild($node);
+                }
+        }
+
+        /**
+        * change the internal links
+        */
+        protected function setLinks(DOMDocument $dom) {
+                $list = $dom->getElementsByTagName('a');
+                $title = Api::mediawikiUrlEncode($this->book->title);
+                foreach($list as $node) {
+                        $href = $node->getAttribute('href');
+                        $title = $this->encode($node->getAttribute('title')) . '.xhtml';
+                        if($href[0] == '#') {
+                                continue;
+                        } elseif(in_array($title, $this->linksList)) {
+                                $node->setAttribute('href', $title);
+                        } else {
+                                $node->setAttribute('href', 'http:' . $href);
+                        }
+                }
+        }
+}

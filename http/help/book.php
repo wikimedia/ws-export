@@ -48,7 +48,7 @@
                                         <div class="clearfix">
                                                 <label for="page">Title of the page: </label>
                                                 <div class="input">
-                                                        <input name="page" id="lang" type="text" size="30" required="required">
+                                                        <input name="page" id="page" type="text" size="30" required="required" />
                                                         <span class="help-inline">Name of the mainpage of the book in Wikisource</span>
                                                 </div>
                                         </div>

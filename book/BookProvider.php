@@ -201,7 +201,7 @@ class BookProvider {
          */
         protected function startCredit($book, $chapters) {
                 $url = 'http://toolserver.org/~phe/cgi-bin/credits';
-                $pages = array( );
+                $pages = array( $book->title );
                 foreach ($chapters as $id => $chapter)
                         $pages[] = $chapter->title;
                 $pages = join('|', $pages);

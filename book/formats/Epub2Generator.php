@@ -57,7 +57,6 @@ class Epub2Generator implements Generator {
                 $zip->addContentFile('OPS/title.xhtml', $this->getXhtmlTitle($book));
                 $zip->addContentFile('OPS/about.xhtml', $this->getXhtmlAbout($book));
                 $zip->addFile(dirname(__FILE__).'/images/Accueil_scribe.png', 'OPS/Accueil_scribe.png');
-                $zip->addContentFile('OPS/' . $book->title . '.xhtml', $book->content->saveXML());
                 if(!empty($book->chapters)) {
                         foreach($book->chapters as $chapter) {
                                 $zip->addContentFile('OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML());
@@ -239,13 +238,20 @@ class Epub2Generator implements Generator {
 
         protected function getXhtmlAbout(Book $book) {
                 $list = '';
-                foreach($book->credits as $name => $value)
-                        $list .= '<li>' . $name . "</li>\n";
+                $listBot = '';
+                foreach($book->credits as $name => $value) {
+                        if(in_array('bot', $value['flags']))
+                                $listBot .= '<li>' . $name . "</li>\n";
+                        else
+                                $list .= '<li>' . $name . "</li>\n";
+                }
                 $about = $this->getTempFile($book->lang, 'about.xhtml');
-                if($about == '')
+                if($about == '') {
                         $about = $list;
-                else
+                } else {
                         $about = str_replace('{CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
+                        $about = str_replace('{BOT-CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
+                }
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <!DOCTYPE html>
                         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">

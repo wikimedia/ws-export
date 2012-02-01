@@ -53,3 +53,12 @@ function getMimeType($file) {
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         return $finfo->buffer($file);
 }
+
+/**
+* get an xhtml page from a text content
+* @var $lang the code lang of the content
+* @var $content
+*/
+function getXhtmlFromContent($lang, $content) {
+        return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $lang . '"><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type"/><title></title></head><body>' . $content . '</body></html>';
+}

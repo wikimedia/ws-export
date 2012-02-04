@@ -352,8 +352,10 @@ class PageParser {
                 foreach($list as $node) {
                         $a = $node->getElementsByTagName('img')->item(0);
                         $picture = new Picture();
-                        $picture->title = $a->getAttribute('alt');
-                        $picture->url = 'http:' . $a->getAttribute('src');
+                        $url = $a->getAttribute('src');
+                        $segments = explode('/', $url);
+                        $picture->title = urldecode($segments[count($segments) - 2]);
+                        $picture->url = 'http:' . $url;
                         $pictures[$picture->title] = $picture;
                         $node->parentNode->replaceChild($a, $node);
                 }

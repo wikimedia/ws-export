@@ -357,6 +357,10 @@ class PageParser {
                         $picture->title = urldecode($segments[count($segments) - 2]);
                         $picture->url = 'http:' . $url;
                         $pictures[$picture->title] = $picture;
+                        // not all image has a valid alt="" and the code
+                        // generator use the alt attrib to generate the
+                        // right link so we always setup a valid alt=
+                        $a->setAttribute('alt', $picture->title);
                         $node->parentNode->replaceChild($a, $node);
                 }
                 return $pictures;

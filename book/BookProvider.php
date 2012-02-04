@@ -343,7 +343,9 @@ class PageParser {
 
 
         /**
-        * return the pictures of the file
+        * return the pictures of the file, for all handled <img, the alt
+        * attribute is set to the title of the image so the backend can
+        * use it to retrieve the src name without relying on the src= attrib.
         * @return array
         */
         public function getPicturesList() {
@@ -357,11 +359,18 @@ class PageParser {
                         $picture->title = urldecode($segments[count($segments) - 2]);
                         $picture->url = 'http:' . $url;
                         $pictures[$picture->title] = $picture;
-                        // not all image has a valid alt="" and the code
-                        // generator use the alt attrib to generate the
-                        // right link so we always setup a valid alt=
                         $a->setAttribute('alt', $picture->title);
                         $node->parentNode->replaceChild($a, $node);
+                }
+                $list = $this->xPath->query('//html:img[@class="tex"]');
+                foreach($list as $img) {
+                        $picture = new Picture();
+                        $url = $img->getAttribute('src');
+                        $segments = explode('/', $url);
+                        $picture->title = urldecode($segments[count($segments) - 1]);
+                        $picture->url = 'http:' . $url;
+                        $pictures[$picture->title] = $picture;
+                        $img->setAttribute('alt', $picture->title);
                 }
                 return $pictures;
         }

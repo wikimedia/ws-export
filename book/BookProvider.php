@@ -388,7 +388,19 @@ class PageParser {
                 $this->deprecatedNodes('s', 'span', 'text-decoration:line-through;');
                 $this->deprecatedNodes('u', 'span', 'text-decoration:underline;');
                 $this->deprecatedNodes('font', 'span', '');
+
+                $this->fixPagenumId();
+
                 return $this->xPath->document;
+        }
+
+        protected function fixPagenumId() {
+                $list = $this->xPath->query('//html:span[@class="pagenum"]');
+                foreach($list as $node) {
+                        $id = $node->getAttribute('id');
+                        if ((int)$id)
+                                $node->setAttribute('id', '_' . $id);
+                }
         }
 
         protected function removeNodesWithXpath($query) {

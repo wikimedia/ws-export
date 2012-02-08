@@ -333,33 +333,83 @@ class BookCleanerEpub {
                 $this->book->chapters = $chapters;
         }
 
+        /*
+         * Credit for the tricky part of this code: Asbjorn Grandt
+         * https://github.com/Grandt/PHPePub/blob/master/EPubChapterSplitter.php
+         */
         protected function splitChapter($chapter) {
-                $lenght = strlen($chapter->content->saveXML());
-                if($lenght <= 300000)
+                $partSize = 295000;
+                $length = strlen($chapter->content->saveXML());
+                if($length <= $partSize)
                         return array($chapter);
                 $xPath = $this->getXPath($chapter->content);
-                $nodeList = $xPath->query('/html:html/html:body/*');
-                if($nodeList->length == 1)
-                        $nodeList = $nodeList->item(0)->childNodes;
-                $pageNum = min(ceil($lenght/300000), $nodeList->length);
-                $nodeNumByPage = floor($nodeList->length / $pageNum);
-                $currentNode = 0;
+
                 $pages = array();
-                for($i = 1; $i <= $pageNum && $currentNode <= $nodeList->length; $i++) {
-                        $page = new Page();
-                        $page->title = $chapter->title . '_' . $i;
-                        $page->name = $chapter->name . ' ' . $i;
-                        $page->content = $this->getEmptyDom();
-                        if($i == $pageNum)
-                                $maxNode = $nodeList->length;
-                        else
-                                $maxNode = $currentNode + $nodeNumByPage;
-                        $body = $page->content->getElementsByTagName('body')->item(0);
-                        while($currentNode < $maxNode) {
-                                $node = $page->content->importNode($nodeList->item($currentNode), true);
-                                $body->appendChild($node);
-                                $currentNode++;
+
+                $files = array();
+                $domDepth = 0;
+                $domPath = array();
+                $domClonedPath = array();
+
+                $curFile = $chapter->content->createDocumentFragment();
+                $files[] = $curFile;
+                $curParent = $curFile;
+                $curSize = 0;
+
+                $body = $xPath->query('/html:html/html:body/*');
+                $node = $body->item(0)->firstChild;
+                do {
+                        $nodeData = $chapter->content->saveXML($node);
+                        $nodeLen = strlen($nodeData);
+
+                        if ($nodeLen > $partSize && $node->hasChildNodes()) {
+                                $domPath[] = $node;
+                                $domClonedPath[] = $node->cloneNode(false);
+                                $domDepth++;
+
+                                $node = $node->firstChild;
                         }
+
+                        $next_node = $node->nextSibling;
+
+                        if ($node != null && $node->nodeName != "#text") {
+                                if ($curSize > 0 && $curSize + $nodeLen > $partSize) {
+                                        $curFile = $chapter->content->createDocumentFragment();
+                                        $files[] = $curFile;
+                                        $curParent = $curFile;
+                                        if ($domDepth > 0) {
+                                                reset($domPath);
+                                                reset($domClonedPath);
+                                                while (list($k, $v) = each($domClonedPath)) {
+                                                        $newParent = $v->cloneNode(false);
+                                                        $curParent->appendChild($newParent);
+                                                        $curParent = $newParent;
+                                                }
+                                        }
+                                        $curSize = strlen($chapter->content->saveXML($curFile));
+                                }
+                                $curParent->appendChild($node->cloneNode(true));
+                                $curSize += $nodeLen;
+                        }
+
+                        $node = $next_node;
+                        while ($node == null && $domDepth > 0) {
+                                $domDepth--;
+                                $node = end($domPath)->nextSibling;
+                                array_pop($domPath);
+                                array_pop($domClonedPath);
+                                $curParent = $curParent->parentNode;
+                        }
+                } while ($node != null);
+
+                for ($idx = 0; $idx < count($files); $idx++) {
+                        $xml = $this->getEmptyDom();
+                        $body = $xml->getElementsByTagName("body")->item(0);
+                        $body->appendChild($xml->importNode($files[$idx], true));
+                        $page = new Page();
+                        $page->title = $chapter->title . '_' . ($idx + 1);
+                        $page->name = $chapter->name . ' ' . ($idx + 1);
+                        $page->content = $xml;
                         $pages[] = $page;
                 }
                 return $pages;

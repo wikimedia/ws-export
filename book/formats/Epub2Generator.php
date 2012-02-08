@@ -441,6 +441,12 @@ class BookCleanerEpub {
                         if($href[0] == '#') {
                                 continue;
                         } elseif(in_array($title, $this->linksList)) {
+                                $pos = strpos($href, '#');
+                                if ($pos !== false) {
+                                        $id = substr($href, $pos + 1);
+                                        if (is_numeric($id))
+                                                $title .= '#_' . $id;
+                                }
                                 $node->setAttribute('href', $title);
                         } else {
                                 $node->setAttribute('href', 'http:' . $href);

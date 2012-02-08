@@ -77,9 +77,9 @@ class Api {
          */
         public function wrapPage($data, $id, &$responses) {
                 if ($data['http_code'] != 200) {
-                        throw new HttpException("HTTP error", $data['http_code']);
+                        throw new HttpException('HTTP error: ' . $id, $data['http_code']);
                 }
-                $content = '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $this->lang . '"><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type"/><title></title></head><body>' . $data['content'] . '</body></html>';
+                $content = getXhtmlFromContent($this->lang, $data['content']);
                 $responses[$id] = $content;
         }
 
@@ -108,7 +108,7 @@ class Api {
          */
         public function endImage($data, $id, &$responses) {
                 if ($data['http_code'] != 200) {
-                        throw new HttpException("HTTP error", $data['http_code']);
+                        throw new HttpException('HTTP error: ' . $id, $data['http_code']);
                 }
                 $content = $data['content'];
                 $responses[$id] = $content;
@@ -164,7 +164,7 @@ class Api {
                 if(curl_errno($ch)) {
                         throw new HttpException(curl_error($ch), curl_errno($ch));
                 } else if(curl_getinfo($ch, CURLINFO_HTTP_CODE) >= 400) {
-                        throw new HttpException('Not Found', curl_getinfo($ch, CURLINFO_HTTP_CODE));
+                        throw new HttpException('HTTP error: ' . $url, curl_getinfo($ch, CURLINFO_HTTP_CODE));
                 }
                 curl_close($ch);
                 return $response;

@@ -57,7 +57,7 @@ class BookProvider {
                 if($this->withPictures) {
                         $book->cover = $parser->getMetadata('ws-cover');
                         if($book->cover != '') {
-                                $pictures[$book->cover] = $this->getCover($book->cover);
+                                $pictures[$book->cover] = $this->getCover($book->cover, $book->lang);
                                 if($pictures[$book->cover]->url == '')
                                         $book->cover = '';
                         }
@@ -171,7 +171,7 @@ class BookProvider {
         * @var $cover string the name of the cover
         * @return Picture The cover
         */
-        public function getCover($cover) {
+        public function getCover($cover, $lang) {
                 $id = explode('/', $cover);
                 $title = $id[0];
                 $picture = new Picture();
@@ -187,7 +187,12 @@ class BookProvider {
                         foreach($temps as $temp) {
                                 $title = $temp;
                         }
-                        $picture->url = str_replace('commons/', 'commons/thumb/', $picture->url) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
+                        if(strstr($picture->url, '/commons/'))
+                                $picture->url = str_replace('commons/', 'commons/thumb/', $picture->url) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
+                        elseif(strstr($picture->url, '/wikisource/'.$lang))
+                                $picture->url = str_replace('wikisource/'.$lang, 'wikisource/'.$lang.'/thumb/', $picture->url) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
+                        else
+                                return new Picture();
                         $picture->mimetype = 'image/jpeg';
                         $picture->title .= '.jpg';
                 }
@@ -340,7 +345,6 @@ class PageParser {
                 }
                 return $chapters;
         }
-
 
         /**
         * return the pictures of the file, for all handled <img, the alt

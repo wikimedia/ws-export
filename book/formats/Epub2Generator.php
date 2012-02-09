@@ -342,7 +342,6 @@ class BookCleanerEpub {
                 $length = strlen($chapter->content->saveXML());
                 if($length <= $partSize)
                         return array($chapter);
-                $xPath = $this->getXPath($chapter->content);
 
                 $pages = array();
 
@@ -356,7 +355,7 @@ class BookCleanerEpub {
                 $curParent = $curFile;
                 $curSize = 0;
 
-                $body = $xPath->query('/html:html/html:body/*');
+                $body = $chapter->content->getElementsbytagname("body");
                 $node = $body->item(0)->firstChild;
                 do {
                         $nodeData = $chapter->content->saveXML($node);

@@ -335,7 +335,7 @@ class PageParser {
                                 $chapters[] = $chapter;
                         }
                 } else {
-                        $list = $this->xPath->query('//html:a[contains(@href,"wikisource.org")][contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][not(contains(@href,"#"))][not(contains(@href,":"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
+                        $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][contains(@href,"wikisource.org")][not(contains(@href,"#"))][not(contains(@href,":"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
                         foreach($list as $link) {
                                 $chapter = new Page();
                                 $chapter->title = str_replace(' ', '_', $link->getAttribute('title'));
@@ -415,17 +415,14 @@ class PageParser {
         }
 
         protected function deprecatedNodes($oldName, $newName, $style) {
-                $nodes = $this->xPath->query('//html:' . $oldName); //The getElementsByTagName doesn't find all tags
+                $nodes = $this->xPath->document->getElementsByTagName($oldName);
                 foreach($nodes as $oldNode) {
                         $newNode = $this->xPath->document->createElement($newName);
-                        foreach($oldNode->childNodes as $child) {
-                                $newNode->appendChild($child);
+                        while($oldNode->firstChild) {
+                                $newNode->appendChild($oldNode->firstChild);
                         }
                         foreach($oldNode->attributes as $attribute) {
-                                if($attribute->name == 'value')
-                                        $newNode->nodeValue = $attribute->value;
-                                else
-                                        $newNode->setAttribute($attribute->name, $attribute->value);
+                                $newNode->setAttribute($attribute->name, $attribute->value);
                         }
                         $newNode->setAttribute('style', $style . ' ' . $newNode->getAttribute('style'));
                         $oldNode->parentNode->replaceChild($newNode, $oldNode);

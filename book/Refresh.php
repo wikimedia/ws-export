@@ -47,10 +47,15 @@ class Refresh {
         protected function getAboutXhtmlWikisource() {
                 try {
                         $content = $this->api->get('http://' . $this->lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_about&action=render');
-                        if($content != '')
-                                $this->setTempFileContent('about.xhtml', str_replace('href="//', 'href="http://', $content));
                 } catch(Exception $e) {
+                        try {
+                                $content = $this->api->get('http://wikisource.org/w/index.php?title=MediaWiki:Wsexport_about&action=render');
+                        } catch(Exception $e) {
+                                $content = '';
+                        }
                 }
+                if($content != '')
+                    $this->setTempFileContent('about.xhtml', str_replace('href="//', 'href="http://', $content));
         }
 
         protected function setTempFileContent($name, $content) {

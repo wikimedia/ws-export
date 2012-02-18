@@ -59,6 +59,9 @@ function getMimeType($file) {
 * @var $lang the code lang of the content
 * @var $content
 */
-function getXhtmlFromContent($lang, $content) {
-        return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $lang . '"><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type"/><title></title></head><body>' . $content . '</body></html>';
+function getXhtmlFromContent($lang, $content, $title = ' ') {
+        if($content != '') {
+                $content = preg_replace('#<\!--(.+)-->#isU', '', $content);
+        }
+        return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $lang . '"><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type"/><title>' . $title . '</title></head><body>' . $content . '</body></html>';
 }

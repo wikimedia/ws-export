@@ -393,13 +393,18 @@ class PageParser {
                 $this->deprecatedNodes('u', 'span', 'text-decoration:underline;');
                 $this->deprecatedNodes('font', 'span', '');
 
-                $this->fixPagenumId();
+                $this->cleanIds();
 
                 return $this->xPath->document;
         }
 
-        protected function fixPagenumId() {
-                $list = $this->xPath->query('//html:span[@class="pagenum"]');
+        protected function cleanIds() {
+                $list = $this->xPath->query('//*[contains(@id,":")]');
+                foreach($list as $node) {
+                        $node->setAttribute('id', str_replace(':', '_', $node->getAttribute('id')));
+                }
+
+                $list = $this->xPath->query('//span[@class="pagenum" or @class="mw-headline"]');
                 foreach($list as $node) {
                         $id = $node->getAttribute('id');
                         if (is_numeric($id))
@@ -415,7 +420,7 @@ class PageParser {
         }
 
         protected function deprecatedNodes($oldName, $newName, $style) {
-                $nodes = $this->xPath->document->getElementsByTagName($oldName);
+                $nodes = $this->xPath->query('//html:' . $oldName); //hack: the getElementsByTagName method doesn't catch all the tags.
                 foreach($nodes as $oldNode) {
                         $newNode = $this->xPath->document->createElement($newName);
                         while($oldNode->firstChild) {

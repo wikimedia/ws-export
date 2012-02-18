@@ -88,7 +88,7 @@ class Epub2Generator implements Generator {
                                         <dc:language xsi:type="dcterms:RFC4646">' . $book->lang . '</dc:language>
                                         <dc:title>' . $book->name . '</dc:title>
                                         <dc:source>' . $wsUrl . '</dc:source>
-                                        <dc:date opf:event="ops-publication">' . date(DATE_W3C) . '</dc:date>
+                                        <dc:date opf:event="ops-publication" xsi:type="dcterms:W3CDTF">' . date(DATE_W3C) . '</dc:date>
                                         <dc:rights>http://creativecommons.org/licenses/by-sa/3.0/</dc:rights>
                                         <dc:rights>http://www.gnu.org/copyleft/fdl.html</dc:rights>
                                         <dc:contributor opf:role="bkp">Wikisource</dc:contributor>';
@@ -191,20 +191,10 @@ class Epub2Generator implements Generator {
         }
 
         protected function getXhtmlCover(Book $book) {
-                $content = '<?xml version="1.0" encoding="UTF-8" ?>
-                        <!DOCTYPE html>
-                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">
-                                <head>
-                                        <title>' . $book->name . '</title>
-                                        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
-                                </head>
-                                <body>
-                                        <div style="text-align: center; page-break-after: always;">
-                                                <img src="' . $book->pictures[$book->cover]->title . '" alt="Cover" style="height: 100%; max-width: 100%;" />
-                                        </div>
-                                </body>
-                        </html>';
-                return $content;
+                $content = '<div style="text-align: center; page-break-after: always;">
+                                    <img src="' . $book->pictures[$book->cover]->title . '" alt="Cover" style="height: 100%; max-width: 100%;" />
+                            </div>';
+                return getXhtmlFromContent($book->lang, $content, $book->name);
         }
 
         protected function getXhtmlTitle(Book $book) {
@@ -252,16 +242,7 @@ class Epub2Generator implements Generator {
                         $about = str_replace('{CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
                         $about = str_replace('{BOT-CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
                 }
-                $content = '<?xml version="1.0" encoding="UTF-8" ?>
-                        <!DOCTYPE html>
-                        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">
-                                <head>
-                                        <title>' . $this->i18n['about'] . '</title>
-                                        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
-                                </head>
-                                <body>' . $about . '</body>
-                        </html>';
-                return $content;
+                return getXhtmlFromContent($book->lang, $about, $this->i18n['about']);
         }
 
         /**
@@ -314,13 +295,10 @@ class BookCleanerEpub {
                 $this->encodeTitles();
                 $this->splitChapters();
 
-                $xPath = $this->getXPath($this->book->content);
-                $this->setHtmlTitle($xPath, $this->book->name);
-                $this->cleanHtml($xPath);
                 foreach($this->book->chapters as $chapter) {
                         $xPath = $this->getXPath($chapter->content);
                         $this->setHtmlTitle($xPath, $chapter->name);
-                        $this->cleanHtml($xPath, $this->book);
+                        $this->cleanHtml($xPath);
                 }
                 $this->book->title = $this->encode($this->book->title);
         }
@@ -338,7 +316,7 @@ class BookCleanerEpub {
          * https://github.com/Grandt/PHPePub/blob/master/EPubChapterSplitter.php
          */
         protected function splitChapter($chapter) {
-                $partSize = 295000;
+                $partSize = 250000;
                 $length = strlen($chapter->content->saveXML());
                 if($length <= $partSize)
                         return array($chapter);
@@ -498,7 +476,7 @@ class BookCleanerEpub {
                                 }
                                 $node->setAttribute('href', $title);
                         } else {
-                                $node->setAttribute('href', 'http:' . $href);
+                               $node->setAttribute('href', 'http:'.$href);
                         }
                 }
         }

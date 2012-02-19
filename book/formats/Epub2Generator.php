@@ -42,11 +42,13 @@ class Epub2Generator implements Generator {
         */
         public function create(Book $book) {
                 $css = $this->getTempFile($book->lang, 'epub.css');
+                if($css != '')
+                    $this->withCss = true;
                 $this->i18n = $this->getI18n($book->lang);
                 setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
                 $wsUrl = wikisourceUrl($book->lang, $book->title);
                 $cleaner = new BookCleanerEpub();
-                $cleaner->clean($book);
+                $cleaner->clean($book, $this->withCss);
                 $zip = new ZipCreator();
                 $zip->addContentFile('mimetype', 'application/epub+zip', null, false); //the mimetype must be first and uncompressed
                 $zip->addContentFile('META-INF/container.xml', $this->getXmlContainer());
@@ -243,18 +245,6 @@ class Epub2Generator implements Generator {
                         $about = str_replace('{BOT-CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
                 }
                 return getXhtmlFromContent($book->lang, $about, $this->i18n['about']);
-        }
-
-        /**
-        * set css link to main.css
-        */
-        protected function setCssLink(DOMDocument $dom) {
-                $node = $dom->getElementsByTagName('head')->item(0);
-                $link = $dom->createElement('link');
-                $link->setAttribute('type', 'text/css');
-                $link->setAttribute('rel', 'stylesheet');
-                $link->setAttribute('href', 'main.css');
-                $node->appendChild($link);
         }
 
         protected function getTempFile($lang, $name) {
@@ -454,6 +444,18 @@ class BookCleanerEpub {
                         else
                                 $node->parentNode->removeChild($node);
                 }
+        }
+
+        /**
+        * set css link to main.css
+        */
+        protected function setCssLink(DOMDocument $dom) {
+                $node = $dom->getElementsByTagName('head')->item(0);
+                $link = $dom->createElement('link');
+                $link->setAttribute('type', 'text/css');
+                $link->setAttribute('rel', 'stylesheet');
+                $link->setAttribute('href', 'main.css');
+                $node->appendChild($link);
         }
 
         /**

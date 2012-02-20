@@ -3,7 +3,7 @@
 <head>
         <meta content="text/html;charset=UTF-8" http-equiv="content-type"/>
         <title>WSexport</title>
-        <link type="text/css" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css" rel="stylesheet" />
+        <link type="text/css" href="bootstrap.min.css" rel="stylesheet" />
         <style type="text/css">
         html, body {
                 background-color: #eee;
@@ -35,26 +35,26 @@
                         <div class="page-header">
                                 <h1>Export tool of Wikisource books in many file formats.</h1>
                         </div>
-                        <form method="get" action="book.php">
+                        <form method="get" action="book.php" class="form-horizontal">
                                 <fieldset>
                                         <legend>Export a file</legend>
-                                        <div class="clearfix">
-                                                <label for="lang">Lang: </label>
-                                                <div class="input">
-                                                        <input name="lang" id="lang" type="text" size="3" maxlength="20" required="required" value="<?php echo Api::getHttpLang(); ?>" />
+                                        <div class="control-group">
+                                                <label for="lang" class="control-label">Lang: </label>
+                                                <div class="controls">
+                                                        <input name="lang" id="lang" type="text" size="3" maxlength="20" required="required" value="<?php echo Api::getHttpLang(); ?>" class="input-mini" />
                                                         <span class="help-inline">The code lang of the Wikisource like en or fr</span>
                                                </div>
                                         </div>
-                                        <div class="clearfix">
-                                                <label for="page">Title of the page: </label>
-                                                <div class="input">
+                                        <div class="control-group">
+                                                <label for="page" class="control-label">Title of the page: </label>
+                                                <div class="controls">
                                                         <input name="page" id="page" type="text" size="30" required="required" />
                                                         <span class="help-inline">Name of the mainpage of the book in Wikisource</span>
                                                 </div>
                                         </div>
-                                        <div class="clearfix">
-                                                <label for="format">File format: </label>
-                                                <div class="input">
+                                        <div class="control-group">
+                                                <label for="format" class="control-label">File format: </label>
+                                                <div class="controls">
                                                         <select id="format" name="format" required="required">
                                                                 <option>epub</option>
                                                                 <option>xhtml</option>
@@ -63,8 +63,8 @@
                                                         <span class="help-inline"></span>
                                                 </div>
                                         </div>
-                                        <div class="actions">
-                                                <input class="btn primary" type="submit" value="Export" />
+                                        <div class="form-actions">
+                                                <input class="btn btn-primary" type="submit" value="Export" />
                                         </div>
                                 </fieldset>
                         </form>

@@ -1,7 +1,8 @@
 <?php
 $wsexportConfig = array(
         'basePath' => '..',
-        'tempPath' => '../temp'
+        'tempPath' => '../temp',
+        'stat' => true
 );
 
 include('../book/init.php');
@@ -38,6 +39,8 @@ try {
         header('Content-Disposition: attachment; filename="'. $title . '.' . $generator->getExtension() . '"');
         header('Content-length: ' . strlen($file));
         echo $file;
+        if(isset($wsexportConfig['stat']))
+                Stat::add($format, $api->lang);
         flush();
 } catch(HttpException $exception) {
         $exception->show();

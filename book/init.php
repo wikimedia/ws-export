@@ -17,3 +17,4 @@ include($basePath . '/book/Picture.php');
 include($basePath . '/book/Page.php');
 include($basePath . '/book/Book.php');
 include($basePath . '/book/BookProvider.php');
+include($basePath . '/book/Stat.php');

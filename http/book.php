@@ -8,18 +8,19 @@ $wsexportConfig = array(
 include('../book/init.php');
 
 try {
+        $api = new Api();
         if(isset($_GET['refresh'])) {
                 include $wsexportConfig['basePath'].'/book/Refresh.php';
-                $refresh = new Refresh();
+                $refresh = new Refresh($api->lang);
                 $refresh->refresh();
-                exit();
+                $success = 'The cache is updated for ' . $api->lang . ' language.';
+                include 'templates/book.php';
         }
         if(!isset($_GET['page']) || $_GET['page'] == '')
-                include 'help/book.php';
+                include 'templates/book.php';
         $title = htmlspecialchars(urldecode($_GET['page']));
         $format = isset($_GET['format']) ? htmlspecialchars(urldecode($_GET['format'])) : 'epub';
         $withPictures = isset($_GET['pictures']) ? (bool) $_GET['pictures'] : true;
-        $api = new Api();
         $provider = new BookProvider($api, $withPictures);
         $data = $provider->get($title);
         if($format == 'epub-2' | $format == 'epub') {

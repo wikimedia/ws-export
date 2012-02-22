@@ -20,12 +20,13 @@ $total =  array(
         );
 foreach($stat as $format => $temp) {
         foreach($temp as $lang => $num) {
-                if(!in_array($lang, $val))
+                if(!array_key_exists($lang, $val)) {
                         $val[$lang] = array(
                                 'epub' => 0,
                                 'odt' => 0,
                                 'xhtml' => 0
                                 );
+                }
                 $val[$lang][$format] = $num;
                 $total[$format] += $num;
         }

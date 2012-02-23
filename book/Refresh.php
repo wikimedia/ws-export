@@ -36,12 +36,13 @@ class Refresh {
         }
 
         protected function getEpubCssWikisource() {
+                global $wsexportConfig;
+                $content = file_get_contents($wsexportConfig['basePath'] . '/book/mediawiki.css');
                 try {
-                        $content = $this->api->get('http://' . $this->lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css');
-                        if($content != '')
-                                $this->setTempFileContent('epub.css', $content);
+                        $content .= "\n" . $this->api->get('http://' . $this->lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css');
                 } catch(Exception $e) {
                 }
+                $this->setTempFileContent('epub.css', $content);
         }
 
         protected function getAboutXhtmlWikisource() {

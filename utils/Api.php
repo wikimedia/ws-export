@@ -27,8 +27,10 @@ class Api {
                         $this->domainName = $domainName;
                 } elseif($this->lang == 'www' || $this->lang == '') {
                         $this->domainName = 'wikisource.org';
+                        $this->lang = '';
                 } elseif($this->lang == 'wikilivres') {
                         $this->domainName = 'www.wikilivres.info';
+                        $this->lang = '';
                 } else {
                         $this->domainName = $this->lang . '.wikisource.org';
                 }
@@ -88,7 +90,7 @@ class Api {
          */
         public function wrapPage($data, $id, &$responses) {
                 if ($data['http_code'] != 200) {
-                        throw new HttpException('HTTP error: ' . $id, $data['http_code']);
+                        throw new HttpException('HTTP error ' . $data['http_code'] . ' with page ' . $id . ' that return: ' . htmlentities($data['content']), $data['http_code']);
                 }
                 $content = getXhtmlFromContent($this->lang, $data['content']);
                 $responses[$id] = $content;
@@ -119,7 +121,7 @@ class Api {
          */
         public function endImage($data, $id, &$responses) {
                 if ($data['http_code'] != 200) {
-                        throw new HttpException('HTTP error: ' . $id, $data['http_code']);
+                        throw new HttpException('HTTP error ' . $data['http_code'] . ' with image ' . $id . ' that return: ' . htmlentities($data['content']), $data['http_code']);
                 }
                 $content = $data['content'];
                 $responses[$id] = $content;

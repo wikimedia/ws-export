@@ -325,7 +325,7 @@ class PageParser {
         * @return array|Page
         */
         public function getChaptersList($title) {
-                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::html:a[not(contains(@title,":"))][not(contains(@href,"action=edit"))]');
+                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::html:a[not(contains(@title,":"))][not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
                 $chapters = array();
                 if($list->length != 0) {
                         foreach($list as $link) {
@@ -335,7 +335,7 @@ class PageParser {
                                 $chapters[] = $chapter;
                         }
                 } else {
-                        $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][contains(@href,"wikisource.org")][not(contains(@href,"#"))][not(contains(@href,":"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
+                        $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][not(contains(@class,"extiw"))][not(contains(@class,"external"))][not(contains(@href,"#"))][not(contains(@href,":"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
                         foreach($list as $link) {
                                 $chapter = new Page();
                                 $chapter->title = str_replace(' ', '_', $link->getAttribute('title'));

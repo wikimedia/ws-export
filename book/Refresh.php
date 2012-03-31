@@ -55,8 +55,15 @@ class Refresh {
                                 $content = '';
                         }
                 }
-                if($content != '')
-                    $this->setTempFileContent('about.xhtml', str_replace('href="//', 'href="http://', $content));
+                if($content != '') {
+                        $i18n = getI18n($this->lang);
+                        $content = getXhtmlFromContent($this->lang, $content, $i18n['about']);
+                        $document = new DOMDocument('1.0', 'UTF-8');
+                        $document->loadXML($content);
+                        $parser = new PageParser($document);
+                        $content = $parser->getContent();
+                        $this->setTempFileContent('about.xhtml', str_replace('href="//', 'href="http://', $document->saveXML()));
+                }
         }
 
         protected function setTempFileContent($name, $content) {

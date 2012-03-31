@@ -65,3 +65,26 @@ function getXhtmlFromContent($lang, $content, $title = ' ') {
         }
         return '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $lang . '"><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type"/><title>' . $title . '</title></head><body>' . $content . '</body></html>';
 }
+
+
+function getTempFile($lang, $name) {
+        global $wsexportConfig;
+        $path = $wsexportConfig['tempPath'].'/'.$lang.'/'.$name;
+        if(file_exists($path))
+                return file_get_contents($path);
+        else
+                return '';
+}
+
+function getI18n($lang) {
+        $content = getTempFile($lang, 'i18n');
+        if($content == '') {
+                global $wsexportConfig;
+                include $wsexportConfig['basePath'].'/book/Refresh.php';
+                $refresh = new Refresh();
+                $refresh->refresh();
+                return unserialize(getTempFile($lang, 'i18n'));
+        } else {
+                return unserialize($content);
+        }
+}

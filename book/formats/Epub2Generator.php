@@ -41,10 +41,10 @@ class Epub2Generator implements Generator {
         * @todo images, cover, about...
         */
         public function create(Book $book) {
-                $css = $this->getTempFile($book->lang, 'epub.css');
+                $css = getTempFile($book->lang, 'epub.css');
                 if($css != '')
                     $this->withCss = true;
-                $this->i18n = $this->getI18n($book->lang);
+                $this->i18n = getI18n($book->lang);
                 setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
                 $wsUrl = wikisourceUrl($book->lang, $book->title);
                 $cleaner = new BookCleanerEpub();
@@ -237,36 +237,14 @@ class Epub2Generator implements Generator {
                         else
                                 $list .= '<li>' . $name . "</li>\n";
                 }
-                $about = $this->getTempFile($book->lang, 'about.xhtml');
+                $about = getTempFile($book->lang, 'about.xhtml');
                 if($about == '') {
-                        $about = $list;
+                        $about = getXhtmlFromContent($book->lang, $list, $this->i18n['about']);
                 } else {
                         $about = str_replace('{CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
                         $about = str_replace('{BOT-CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
                 }
-                return getXhtmlFromContent($book->lang, $about, $this->i18n['about']);
-        }
-
-        protected function getTempFile($lang, $name) {
-                global $wsexportConfig;
-                $path = $wsexportConfig['tempPath'].'/'.$lang.'/'.$name;
-                if(file_exists($path))
-                        return file_get_contents($path);
-                else
-                        return '';
-        }
-
-        protected function getI18n($lang) {
-                $content = $this->getTempFile($lang, 'i18n');
-                if($content == '') {
-                        global $wsexportConfig;
-                        include $wsexportConfig['basePath'].'/book/Refresh.php';
-                        $refresh = new Refresh();
-                        $refresh->refresh();
-                        return unserialize($this->getTempFile($lang, 'i18n'));
-                } else {
-                        return unserialize($content);
-                }
+                return $about;
         }
 }
 
@@ -409,7 +387,7 @@ class BookCleanerEpub {
 
         protected function encode($string) {
                 $search = array('@[éèêëÊË]@i','@[àâäÂÄ]@i','@[îïÎÏ]@i','@[ûùüÛÜ]@i','@[ôöÔÖ]@i','@[ç]@i','@[ ]@i','@[^a-zA-Z0-9_\.]@');
-	        $replace = array('e','a','i','u','o','c','_','_');
+                $replace = array('e','a','i','u','o','c','_','_');
                 return preg_replace($search, $replace, $string);
         }
 
@@ -417,7 +395,7 @@ class BookCleanerEpub {
         * modified the XHTML
         */
         protected function cleanHtml(DOMXPath $xPath) {
-	        $this->setPictureLinks($xPath);
+            $this->setPictureLinks($xPath);
                 $dom = $xPath->document;
                 $this->setLinks($dom);
                 if($this->withCss)

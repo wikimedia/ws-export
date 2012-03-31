@@ -394,7 +394,6 @@ class PageParser {
                 $this->deprecatedNodes('font', 'span', '');
 
                 $this->cleanIds();
-
                 return $this->xPath->document;
         }
 
@@ -404,11 +403,12 @@ class PageParser {
                         $node->setAttribute('id', str_replace(':', '_', $node->getAttribute('id')));
                 }
 
-                $list = $this->xPath->query('//span[@class="pagenum" or @class="mw-headline"]');
+                $list = $this->xPath->query('//html:span[@class="pagenum" or @class="mw-headline"]');
                 foreach($list as $node) {
                         $id = $node->getAttribute('id');
-                        if (is_numeric($id))
+                        if (is_numeric($id)) {
                                 $node->setAttribute('id', '_' . $id);
+                        }
                 }
         }
 

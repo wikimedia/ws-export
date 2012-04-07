@@ -393,6 +393,16 @@ class PageParser {
                 $this->deprecatedNodes('u', 'span', 'text-decoration:underline;');
                 $this->deprecatedNodes('font', 'span', '');
 
+                //$this->deprecatedAttributes('align', 'float'); TODO: Problem with align=center
+                $this->deprecatedAttributes('background', 'background-color');
+                $this->deprecatedAttributes('bgcolor', 'background-color');
+                $this->deprecatedAttributes('border', 'border-width');
+                $this->deprecatedAttributes('clear', 'clear');
+                $this->deprecatedAttributes('height', 'height');
+                $this->deprecatedAttributes('hspace', 'padding');
+                $this->deprecatedAttributes('text', 'color');
+                $this->deprecatedAttributes('width', 'width');
+
                 $this->cleanIds();
                 return $this->xPath->document;
         }
@@ -431,6 +441,14 @@ class PageParser {
                         }
                         $newNode->setAttribute('style', $style . ' ' . $newNode->getAttribute('style'));
                         $oldNode->parentNode->replaceChild($newNode, $oldNode);
+                }
+        }
+
+        protected function deprecatedAttributes($name, $cssAttribute) {
+                $nodes = $this->xPath->query('//html:*[@' . $name . ']'); //hack: the getElementsByTagName method doesn't catch all the tags.
+                foreach($nodes as $node) {
+                        $node->setAttribute('style', $cssAttribute . ':' . $node->getAttribute($name) . '; ' . $node->getAttribute('style'));
+                        $node->removeAttribute($name);
                 }
         }
 }

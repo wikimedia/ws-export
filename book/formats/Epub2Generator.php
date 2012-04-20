@@ -58,14 +58,19 @@ class Epub2Generator implements Generator {
                         $zip->addContentFile('OPS/cover.xhtml', $this->getXhtmlCover($book));
                 $zip->addContentFile('OPS/title.xhtml', $this->getXhtmlTitle($book));
                 $zip->addContentFile('OPS/about.xhtml', $this->getXhtmlAbout($book));
-                $zip->addFile(dirname(__FILE__).'/images/Accueil_scribe.png', 'OPS/Accueil_scribe.png');
+				$dir = dirname(__FILE__);
+                $zip->addFile($dir.'/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png');
+                $zip->addFile($dir.'/fonts/LinLibertine_R.otf', 'OPS/fonts/LinLibertine_R.otf');
+				$zip->addFile($dir.'/fonts/LinLibertine_RB.otf', 'OPS/fonts/LinLibertine_RB.otf');
+				$zip->addFile($dir.'/fonts/LinLibertine_RI.otf', 'OPS/fonts/LinLibertine_RI.otf');
+				$zip->addFile($dir.'/fonts/LinLibertine_RBI.otf', 'OPS/fonts/LinLibertine_RBI.otf');
                 if(!empty($book->chapters)) {
                         foreach($book->chapters as $chapter) {
                                 $zip->addContentFile('OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML());
                         }
                 }
                 foreach($book->pictures as $picture) {
-                        $zip->addContentFile('OPS/' . $picture->title, $picture->content);
+                        $zip->addContentFile('OPS/images/' . $picture->title, $picture->content);
                 }
                 if($this->withCss)
                         $zip->addContentFile('OPS/main.css', $css);
@@ -119,12 +124,16 @@ class Epub2Generator implements Generator {
                                         if($book->cover != '')
                                                 $content.= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />';
                                         $content.= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
-                                        <item id="Accueil_scribe.png" href="Accueil_scribe.png" media-type="image/png" />';
+                                        <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />
+                                        <item id="LinLibertine_R" href="fonts/LinLibertine_R.otf" media-type="font/opentype" />
+                                        <item id="LinLibertine_RB" href="fonts/LinLibertine_RB.otf" media-type="font/opentype" />
+                                        <item id="LinLibertine_RI" href="fonts/LinLibertine_RI.otf" media-type="font/opentype" />
+                                        <item id="LinLibertine_RBI" href="fonts/LinLibertine_RBI.otf" media-type="font/opentype" />';
                                         foreach($book->chapters as $chapter) {
                                                 $content.= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />';
                                         }
                                         foreach($book->pictures as $picture) {
-                                                $content.= '<item id="' . $picture->title . '" href="' . $picture->title . '" media-type="' . $picture->mimetype . '" />';
+                                                $content.= '<item id="' . $picture->title . '" href="images/' . $picture->title . '" media-type="' . $picture->mimetype . '" />';
                                         }
                                         if($this->withCss)
                                                 $content.= '<item id="mainCss" href="main.css" media-type="text/css" />';
@@ -194,7 +203,7 @@ class Epub2Generator implements Generator {
 
         protected function getXhtmlCover(Book $book) {
                 $content = '<div style="text-align: center; page-break-after: always;">
-                                    <img src="' . $book->pictures[$book->cover]->title . '" alt="Cover" style="height: 100%; max-width: 100%;" />
+                                    <img src="images/' . $book->pictures[$book->cover]->title . '" alt="Cover" style="height: 100%; max-width: 100%;" />
                             </div>';
                 return getXhtmlFromContent($book->lang, $content, $book->name);
         }
@@ -212,7 +221,7 @@ class Epub2Generator implements Generator {
                                         <h2>' . $book->author . '</h2>
                                         <br />
                                         <br />
-                                        <img alt="" src="Accueil_scribe.png" />
+                                        <img alt="" src="images/Accueil_scribe.png" />
                                         <br />
                                         <h4>' . $book->publisher;
                                         if($book->publisher != '' && ($book->year != '' || $book->place != ''))
@@ -418,7 +427,7 @@ class BookCleanerEpub {
                 foreach($list as $node) {
                         $title = $this->encode($node->getAttribute('alt'));
                         if(in_array($title, $this->linksList))
-                                $node->setAttribute('src', $title);
+                                $node->setAttribute('src', 'images/' . $title);
                         else
                                 $node->parentNode->removeChild($node);
                 }

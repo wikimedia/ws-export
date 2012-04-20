@@ -1,8 +1,72 @@
 /* images */
-div.floatright { float: right; clear: right; position: relative; margin: 0.5em 0 0.8em 1.4em; }
-div.floatleft {	float: left; clear: left; position: relative; margin: 0.5em 1.4em 0.8em 0; }
-.center { width: 100%; text-align: center; }
-*.center * { margin-left: auto; margin-right: auto; }
-div.tright { float: right; clear: right; margin: 0.5em 0 0.8em 1.4em; }
-div.tleft { float: left; clear: left; margin: 0.5em 1.4em 0.8em 0; }
-.small { font-size: 94%; }
+div.floatright {
+	float: right;
+	clear: right;
+	position: relative;
+	margin: 0.5em 0 0.8em 1.4em;
+}
+
+div.floatleft {
+	float: left;
+	clear: left;
+	position: relative;
+	margin: 0.5em 1.4em 0.8em 0;
+}
+
+.center {
+	width: 100%;
+	text-align: center;
+}
+
+.center * {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.tright {
+	float: right;
+	clear: right;
+	margin: 0.5em 0 0.8em 1.4em;
+}
+
+div.tleft {
+	float: left;
+	clear: left;
+	margin: 0.5em 1.4em 0.8em 0;
+}
+
+.small {
+	font-size: 94%;
+}
+
+@font-face {
+	font-family : "Linux Libertine";
+	font-weight : normal;
+	font-style: normal;
+	src : url("fonts/LinLibertine_R.otf");
+}
+
+@font-face {
+	font-family : "Linux Libertine";
+	font-weight : bold;
+	font-style: normal;
+	src : url("fonts/LinLibertine_RB.otf");
+}
+ 
+@font-face {
+	font-family : "Linux Libertine";
+	font-weight : normal;
+	font-style: italic;
+	src : url("fonts/LinLibertine_RI.otf");
+}
+
+@font-face {
+	font-family : "Linux Libertine";
+	font-weight : bold;
+	font-style: italic;
+	src : url("fonts/LinLibertine_RBI.otf");
+}
+
+body {
+	font-family: "Linux Libertine", Arial, serif;
+}

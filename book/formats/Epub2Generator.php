@@ -58,12 +58,12 @@ class Epub2Generator implements Generator {
                         $zip->addContentFile('OPS/cover.xhtml', $this->getXhtmlCover($book));
                 $zip->addContentFile('OPS/title.xhtml', $this->getXhtmlTitle($book));
                 $zip->addContentFile('OPS/about.xhtml', $this->getXhtmlAbout($book));
-				$dir = dirname(__FILE__);
+                $dir = dirname(__FILE__);
                 $zip->addFile($dir.'/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png');
                 $zip->addFile($dir.'/fonts/LinLibertine_R.otf', 'OPS/fonts/LinLibertine_R.otf');
-				$zip->addFile($dir.'/fonts/LinLibertine_RB.otf', 'OPS/fonts/LinLibertine_RB.otf');
-				$zip->addFile($dir.'/fonts/LinLibertine_RI.otf', 'OPS/fonts/LinLibertine_RI.otf');
-				$zip->addFile($dir.'/fonts/LinLibertine_RBI.otf', 'OPS/fonts/LinLibertine_RBI.otf');
+                $zip->addFile($dir.'/fonts/LinLibertine_RB.otf', 'OPS/fonts/LinLibertine_RB.otf');
+                $zip->addFile($dir.'/fonts/LinLibertine_RI.otf', 'OPS/fonts/LinLibertine_RI.otf');
+                $zip->addFile($dir.'/fonts/LinLibertine_RBI.otf', 'OPS/fonts/LinLibertine_RBI.otf');
                 if(!empty($book->chapters)) {
                         foreach($book->chapters as $chapter) {
                                 $zip->addContentFile('OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML());
@@ -356,12 +356,15 @@ class BookCleanerEpub {
                         }
                 } while ($node != null);
 
-                for ($idx = 0; $idx < count($files); $idx++) {
+                foreach($files as $idx => $file) {
                         $xml = $this->getEmptyDom();
                         $body = $xml->getElementsByTagName("body")->item(0);
-                        $body->appendChild($xml->importNode($files[$idx], true));
+                        $body->appendChild($xml->importNode($file, true));
                         $page = new Page();
-                        $page->title = $chapter->title . '_' . ($idx + 1);
+                        if($idx == 0)
+                                $page->title = $chapter->title;
+                        else
+                                $page->title = $chapter->title . '_' . ($idx + 1);
                         $page->name = $chapter->name . ' ' . ($idx + 1);
                         $page->content = $xml;
                         $pages[] = $page;
@@ -395,9 +398,13 @@ class BookCleanerEpub {
         }
 
         protected function encode($string) {
-                $search = array('@[éèêëÊË]@i','@[àâäÂÄ]@i','@[îïÎÏ]@i','@[ûùüÛÜ]@i','@[ôöÔÖ]@i','@[ç]@i','@[ ]@i','@[^a-zA-Z0-9_\.]@');
-                $replace = array('e','a','i','u','o','c','_','_');
-                return preg_replace($search, $replace, $string);
+                $search = array('[αάàâäΑÂÄ]','[βΒ]','[ç]','[δΔ]','[εηéèêëΕÊË]','[φ]','[γΓ]','[θΘ]','[ιîïΙÎÏ]','[Κκ]','[λΛ]','[μ]','[ν]','[οωôöΩÔÖ]','[πΠ]','[ρΡ]','[σςΣ]','[τ]','[υûùüΥÛÜ]','[ξΞ]','[ζΖ]','[ ]','[^a-zA-Z0-9_\.]');
+                $replace = array('a','b','c','d','e','f','g','h','i','k','l','m','n','o','p','r','s','t','u','x','z','_','_');
+                mb_regex_encoding('UTF-8');
+                foreach($search as $i => $pat) {
+                       $string = mb_eregi_replace($pat, $replace[$i], $string);
+                }
+                return utf8_decode($string);
         }
 
         /**

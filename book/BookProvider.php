@@ -42,6 +42,8 @@ class BookProvider {
                 $book->lang = $this->api->lang;
                 $book->type = $parser->getMetadata('ws-type');
                 $book->name = htmlspecialchars($parser->getMetadata('ws-title'));
+                if($book->name == '')
+                        $book->name = str_replace('_', ' ', $title);
                 $book->author = htmlspecialchars($parser->getMetadata('ws-author'));
                 $book->translator = htmlspecialchars($parser->getMetadata('ws-translator'));
                 $book->illustrator = htmlspecialchars($parser->getMetadata('ws-illustrator'));

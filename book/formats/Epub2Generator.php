@@ -11,8 +11,6 @@
 */
 class Epub2Generator implements Generator {
 
-        protected $withCss = false;
-
         /**
         * array key/value that contain translated strings
         */
@@ -42,13 +40,11 @@ class Epub2Generator implements Generator {
         */
         public function create(Book $book) {
                 $css = getTempFile($book->lang, 'epub.css');
-                if($css != '')
-                    $this->withCss = true;
                 $this->i18n = getI18n($book->lang);
                 setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
                 $wsUrl = wikisourceUrl($book->lang, $book->title);
                 $cleaner = new BookCleanerEpub();
-                $cleaner->clean($book, $this->withCss);
+                $cleaner->clean($book);
                 $zip = new ZipCreator();
                 $zip->addContentFile('mimetype', 'application/epub+zip', null, false); //the mimetype must be first and uncompressed
                 $zip->addContentFile('META-INF/container.xml', $this->getXmlContainer());
@@ -72,8 +68,7 @@ class Epub2Generator implements Generator {
                 foreach($book->pictures as $picture) {
                         $zip->addContentFile('OPS/images/' . $picture->title, $picture->content);
                 }
-                if($this->withCss)
-                        $zip->addContentFile('OPS/main.css', $css);
+                $zip->addContentFile('OPS/main.css', $css);
                 return $zip->getContent();
         }
 
@@ -124,6 +119,7 @@ class Epub2Generator implements Generator {
                                         if($book->cover != '')
                                                 $content.= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />';
                                         $content.= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
+                                        <item id="mainCss" href="main.css" media-type="text/css" />
                                         <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />
                                         <item id="LinLibertine_R" href="fonts/LinLibertine_R.otf" media-type="font/opentype" />
                                         <item id="LinLibertine_RB" href="fonts/LinLibertine_RB.otf" media-type="font/opentype" />
@@ -135,8 +131,6 @@ class Epub2Generator implements Generator {
                                         foreach($book->pictures as $picture) {
                                                 $content.= '<item id="' . $picture->title . '" href="images/' . $picture->title . '" media-type="' . $picture->mimetype . '" />';
                                         }
-                                        if($this->withCss)
-                                                $content.= '<item id="mainCss" href="main.css" media-type="text/css" />';
                                         $content.= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
                                 </manifest>
                                 <spine toc="ncx">';
@@ -183,11 +177,13 @@ class Epub2Generator implements Generator {
                                         $order = 2;
                                         if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
-                                                         $content.= '<navPoint id="' . $chapter->title . '" playOrder="' . $order . '">
-                                                                        <navLabel><text>' . $chapter->name . '</text></navLabel>
-                                                                        <content src="' . $chapter->title . '.xhtml"/>
+                                                        if($chapter->name != '') {
+                                                                $content.= '<navPoint id="' . $chapter->title . '" playOrder="' . $order . '">
+                                                                            <navLabel><text>' . $chapter->name . '</text></navLabel>
+                                                                            <content src="' . $chapter->title . '.xhtml"/>
                                                                 </navPoint>';
-                                                         $order++;
+                                                                $order++;
+                                                        }
                                                 }
                                         }
                                         $content.= '<navPoint id="about" playOrder="' . $order . '">
@@ -215,6 +211,7 @@ class Epub2Generator implements Generator {
                                 <head>
                                         <title>' . $book->name . '</title>
                                         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+                                        <link type="text/css" rel="stylesheet" href="main.css" />
                                 </head>
                                 <body style="background-color:ghostwhite;"><div style="text-align:center; position:absolute;">
                                         <h1 id="heading_id_2">' . $book->name . '</h1>
@@ -262,12 +259,10 @@ class Epub2Generator implements Generator {
 */
 class BookCleanerEpub {
         protected $book = null;
-        protected $withCss = false;
         protected $linksList = array();
 
-        public function clean(Book $book, $withCss = false) {
+        public function clean(Book $book) {
                 $this->book = $book;
-                $this->withCss = $withCss;
 
                 $this->encodeTitles();
                 $this->splitChapters();
@@ -361,11 +356,12 @@ class BookCleanerEpub {
                         $body = $xml->getElementsByTagName("body")->item(0);
                         $body->appendChild($xml->importNode($file, true));
                         $page = new Page();
-                        if($idx == 0)
+                        if($idx == 0) {
                                 $page->title = $chapter->title;
-                        else
+                                $page->name = $chapter->name;
+                        } else {
                                 $page->title = $chapter->title . '_' . ($idx + 1);
-                        $page->name = $chapter->name . ' ' . ($idx + 1);
+                        }
                         $page->content = $xml;
                         $pages[] = $page;
                 }
@@ -414,8 +410,6 @@ class BookCleanerEpub {
             $this->setPictureLinks($xPath);
                 $dom = $xPath->document;
                 $this->setLinks($dom);
-                if($this->withCss)
-                        $this->setCssLink($dom);
         }
 
         /**
@@ -438,18 +432,6 @@ class BookCleanerEpub {
                         else
                                 $node->parentNode->removeChild($node);
                 }
-        }
-
-        /**
-        * set css link to main.css
-        */
-        protected function setCssLink(DOMDocument $dom) {
-                $node = $dom->getElementsByTagName('head')->item(0);
-                $link = $dom->createElement('link');
-                $link->setAttribute('type', 'text/css');
-                $link->setAttribute('rel', 'stylesheet');
-                $link->setAttribute('href', 'main.css');
-                $node->appendChild($link);
         }
 
         /**

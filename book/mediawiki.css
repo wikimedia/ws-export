@@ -40,33 +40,33 @@ div.tleft {
 }
 
 @font-face {
-	font-family : "Linux Libertine";
+	font-family : "FreeSerif";
 	font-weight : normal;
 	font-style: normal;
-	src : url("fonts/LinLibertine_R.otf");
+	src: url("fonts/FreeSerif.otf");
 }
 
 @font-face {
-	font-family : "Linux Libertine";
+	font-family : "FreeSerif";
 	font-weight : bold;
 	font-style: normal;
-	src : url("fonts/LinLibertine_RB.otf");
+	src: url("fonts/FreeSerifBold.otf");
 }
  
 @font-face {
-	font-family : "Linux Libertine";
+	font-family : "FreeSerif";
 	font-weight : normal;
 	font-style: italic;
-	src : url("fonts/LinLibertine_RI.otf");
+	src: url("fonts/FreeSerifItalic.otf");
 }
 
 @font-face {
-	font-family : "Linux Libertine";
+	font-family : "FreeSerif";
 	font-weight : bold;
 	font-style: italic;
-	src : url("fonts/LinLibertine_RBI.otf");
+	src: url("fonts/FreeSerifBoldItalic.otf");
 }
 
 body {
-	font-family: "Linux Libertine", Arial, serif;
+	font-family: FreeSerif, Arial, serif;
 }

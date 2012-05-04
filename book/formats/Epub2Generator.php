@@ -56,10 +56,10 @@ class Epub2Generator implements Generator {
                 $zip->addContentFile('OPS/about.xhtml', $this->getXhtmlAbout($book));
                 $dir = dirname(__FILE__);
                 $zip->addFile($dir.'/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png');
-                $zip->addFile($dir.'/fonts/LinLibertine_R.otf', 'OPS/fonts/LinLibertine_R.otf');
-                $zip->addFile($dir.'/fonts/LinLibertine_RB.otf', 'OPS/fonts/LinLibertine_RB.otf');
-                $zip->addFile($dir.'/fonts/LinLibertine_RI.otf', 'OPS/fonts/LinLibertine_RI.otf');
-                $zip->addFile($dir.'/fonts/LinLibertine_RBI.otf', 'OPS/fonts/LinLibertine_RBI.otf');
+                $zip->addFile($dir.'/fonts/FreeSerif.otf', 'OPS/fonts/FreeSerif.otf');
+                $zip->addFile($dir.'/fonts/FreeSerifBold.otf', 'OPS/fonts/FreeSerifBold.otf');
+                $zip->addFile($dir.'/fonts/FreeSerifBoldItalic.otf', 'OPS/fonts/FreeSerifBoldItalic.otf');
+                $zip->addFile($dir.'/fonts/FreeSerifItalic.otf', 'OPS/fonts/FreeSerifItalic.otf');
                 if(!empty($book->chapters)) {
                         foreach($book->chapters as $chapter) {
                                 $zip->addContentFile('OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML());
@@ -121,15 +121,15 @@ class Epub2Generator implements Generator {
                                         $content.= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
                                         <item id="mainCss" href="main.css" media-type="text/css" />
                                         <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />
-                                        <item id="LinLibertine_R" href="fonts/LinLibertine_R.otf" media-type="font/opentype" />
-                                        <item id="LinLibertine_RB" href="fonts/LinLibertine_RB.otf" media-type="font/opentype" />
-                                        <item id="LinLibertine_RI" href="fonts/LinLibertine_RI.otf" media-type="font/opentype" />
-                                        <item id="LinLibertine_RBI" href="fonts/LinLibertine_RBI.otf" media-type="font/opentype" />';
+                                        <item id="FreeSerif" href="fonts/FreeSerif.otf" media-type="font/opentype" />
+                                        <item id="FreeSerifBold" href="fonts/FreeSerifBold.otf" media-type="font/opentype" />
+                                        <item id="FreeSerifBoldItalic" href="fonts/FreeSerifBoldItalic.otf" media-type="font/opentype" />
+                                        <item id="FreeSerifItalic" href="fonts/FreeSerifItalic.otf" media-type="font/opentype" />';
                                         foreach($book->chapters as $chapter) {
-                                                $content.= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />';
+                                                $content.= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
                                         }
                                         foreach($book->pictures as $picture) {
-                                                $content.= '<item id="' . $picture->title . '" href="images/' . $picture->title . '" media-type="' . $picture->mimetype . '" />';
+                                                $content.= '<item id="' . $picture->title . '" href="images/' . $picture->title . '" media-type="' . $picture->mimetype . '" />' . "\n";
                                         }
                                         $content.= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
                                 </manifest>

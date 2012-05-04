@@ -33,7 +33,7 @@ class BookProvider {
         * @return Book
         */
         public function get($title, $isMetadata = false) {
-                $title = str_replace(' ', '_', $title);
+                $title = str_replace(' ', '_', trim($title));
                 $doc = $this->getDocument($title);
                 $parser = new PageParser($doc);
                 $book = new Book();
@@ -327,7 +327,7 @@ class PageParser {
         * @return array|Page
         */
         public function getChaptersList($title) {
-                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::html:a[not(contains(@title,":"))][not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
+                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::html:a[not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
                 $chapters = array();
                 if($list->length != 0) {
                         foreach($list as $link) {
@@ -362,8 +362,15 @@ class PageParser {
                         $picture = new Picture();
                         $url = $a->getAttribute('src');
                         $segments = explode('/', $url);
-                        $picture->title = urldecode($segments[count($segments) - 2]);
+
+                        // files from commons has an url like //upload.wikimedia.org/wikipedia/commons/thumb/6/62/PD-icon.svg/50px-PD-icon.svg.png and ones from wikisources has something like //upload.wikimedia.org/wikisource/es/2/20/Separador.jpg
+                        $title = urldecode($segments[count($segments) - 2]);
+                        if(is_numeric($title[0]) && !is_numeric($segments[count($segments) - 1]))
+                                $picture->title = urldecode($segments[count($segments) - 1]);
+                        else
+                                $picture->title = $title;
                         $picture->url = 'http:' . $url;
+
                         $pictures[$picture->title] = $picture;
                         $a->setAttribute('alt', $picture->title);
                         $node->parentNode->replaceChild($a, $node);
@@ -395,7 +402,7 @@ class PageParser {
                 $this->deprecatedNodes('u', 'span', 'text-decoration:underline;');
                 $this->deprecatedNodes('font', 'span', '');
 
-                //$this->deprecatedAttributes('align', 'float'); TODO: Problem with align=center
+                $this->deprecatedAttributes('align', 'text-align');
                 $this->deprecatedAttributes('background', 'background-color');
                 $this->deprecatedAttributes('bgcolor', 'background-color');
                 $this->deprecatedAttributes('border', 'border-width');
@@ -413,6 +420,11 @@ class PageParser {
                 $list = $this->xPath->query('//*[contains(@id,":")]');
                 foreach($list as $node) {
                         $node->setAttribute('id', str_replace(':', '_', $node->getAttribute('id')));
+                }
+
+                $list = $this->xPath->query('//*[ starts-with(@id,".")]');
+                foreach($list as $node) {
+                        $node->setAttribute('id', preg_replace('#^\.(.*)$#', '$1', $node->getAttribute('id')));
                 }
 
                 $list = $this->xPath->query('//html:span[@class="pagenum" or @class="mw-headline"]');

@@ -16,6 +16,11 @@ class Book extends Page {
         public $lang = '';
 
         /**
+        * output options
+        */
+        public $options = array();
+
+        /**
         * meatadata on the book
         * @see https://wikisource.org/wiki/Wikisource:Microformat
         */

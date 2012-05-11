@@ -27,8 +27,21 @@
                 <span class="help-inline"></span>
             </div>
         </div>
+        <div class="control-group">
+            <label class="control-label">Options: </label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" value="false" <?php if(!$options['fonts']) echo 'checked="checked"'; ?> name="fonts" />
+                    Do not include fonts
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" value="false" <?php if(!$options['images']) echo 'checked="checked"'; ?> name="images" />
+                    Do not include images
+                </label>
+            </div>
+        </div>
         <div class="form-actions">
-<input class="btn btn-primary" type="submit" value="Export" />
+            <input class="btn btn-primary" type="submit" value="Export" />
         </div>
     </fieldset>
 </form>

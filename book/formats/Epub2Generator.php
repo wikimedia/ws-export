@@ -39,7 +39,7 @@ class Epub2Generator implements Generator {
         * @todo images, cover, about...
         */
         public function create(Book $book) {
-                $css = getTempFile($book->lang, 'epub.css');
+                $css = $this->getCss($book);
                 $this->i18n = getI18n($book->lang);
                 setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
                 $wsUrl = wikisourceUrl($book->lang, $book->title);
@@ -53,13 +53,15 @@ class Epub2Generator implements Generator {
                 if($book->cover != '')
                         $zip->addContentFile('OPS/cover.xhtml', $this->getXhtmlCover($book));
                 $zip->addContentFile('OPS/title.xhtml', $this->getXhtmlTitle($book));
-                $zip->addContentFile('OPS/about.xhtml', $this->getXhtmlAbout($book));
+                $zip->addContentFile('OPS/about.xhtml', $this->getXhtmlAbout($book, $wsUrl));
                 $dir = dirname(__FILE__);
                 $zip->addFile($dir.'/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png');
-                $zip->addFile($dir.'/fonts/FreeSerif.otf', 'OPS/fonts/FreeSerif.otf');
-                $zip->addFile($dir.'/fonts/FreeSerifBold.otf', 'OPS/fonts/FreeSerifBold.otf');
-                $zip->addFile($dir.'/fonts/FreeSerifBoldItalic.otf', 'OPS/fonts/FreeSerifBoldItalic.otf');
-                $zip->addFile($dir.'/fonts/FreeSerifItalic.otf', 'OPS/fonts/FreeSerifItalic.otf');
+                if($book->options['fonts']) {
+                        $zip->addFile($dir.'/fonts/FreeSerif.otf', 'OPS/fonts/FreeSerif.otf');
+                        $zip->addFile($dir.'/fonts/FreeSerifBold.otf', 'OPS/fonts/FreeSerifBold.otf');
+                        $zip->addFile($dir.'/fonts/FreeSerifBoldItalic.otf', 'OPS/fonts/FreeSerifBoldItalic.otf');
+                        $zip->addFile($dir.'/fonts/FreeSerifItalic.otf', 'OPS/fonts/FreeSerifItalic.otf');
+                }
                 if(!empty($book->chapters)) {
                         foreach($book->chapters as $chapter) {
                                 $zip->addContentFile('OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML());
@@ -109,10 +111,11 @@ class Epub2Generator implements Generator {
                                 if($book->year != '') {
                                         $content.= '<dc:date opf:event="original-publication">' . $book->year . '</dc:date>';
                                 }
-                                if($book->cover != '')
+                                if($book->cover != '') {
                                         $content.= '<meta name="cover" content="cover" />';
-                                else
+                                } else {
                                         $content.= '<meta name="cover" content="title" />';
+                                }
                                 $content.= '</metadata>
                                 <manifest>
                                         <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>';
@@ -120,11 +123,13 @@ class Epub2Generator implements Generator {
                                                 $content.= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />';
                                         $content.= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
                                         <item id="mainCss" href="main.css" media-type="text/css" />
-                                        <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />
-                                        <item id="FreeSerif" href="fonts/FreeSerif.otf" media-type="font/opentype" />
-                                        <item id="FreeSerifBold" href="fonts/FreeSerifBold.otf" media-type="font/opentype" />
-                                        <item id="FreeSerifBoldItalic" href="fonts/FreeSerifBoldItalic.otf" media-type="font/opentype" />
-                                        <item id="FreeSerifItalic" href="fonts/FreeSerifItalic.otf" media-type="font/opentype" />';
+                                        <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
+                                        if($book->options['fonts']) {
+                                                $content.= '<item id="FreeSerif" href="fonts/FreeSerif.otf" media-type="font/opentype" />
+                                                        <item id="FreeSerifBold" href="fonts/FreeSerifBold.otf" media-type="font/opentype" />
+                                                        <item id="FreeSerifBoldItalic" href="fonts/FreeSerifBoldItalic.otf" media-type="font/opentype" />
+                                                        <item id="FreeSerifItalic" href="fonts/FreeSerifItalic.otf" media-type="font/opentype" />';
+                                        }
                                         foreach($book->chapters as $chapter) {
                                                 $content.= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
                                         }
@@ -234,7 +239,7 @@ class Epub2Generator implements Generator {
                 return $content;
         }
 
-        protected function getXhtmlAbout(Book $book) {
+        protected function getXhtmlAbout(Book $book, $wsUrl) {
                 $list = '';
                 $listBot = '';
                 foreach($book->credits as $name => $value) {
@@ -249,8 +254,22 @@ class Epub2Generator implements Generator {
                 } else {
                         $about = str_replace('{CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
                         $about = str_replace('{BOT-CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
+                        $about = str_replace('{URL}', $wsUrl, $about);
                 }
                 return $about;
+        }
+
+        protected function getCss(Book $book) {
+                $css = '';
+                if($book->options['fonts']) {
+                        $css .= '@font-face { font-family : "FreeSerif"; font-weight : normal; font-style: normal; src: url("fonts/FreeSerif.otf"); }
+                                @font-face { font-family : "FreeSerif"; font-weight : bold; font-style: normal; src: url("fonts/FreeSerifBold.otf"); }
+                                @font-face { font-family : "FreeSerif"; font-weight : normal; font-style: italic; src: url("fonts/FreeSerifItalic.otf"); }
+                                @font-face { font-family : "FreeSerif"; font-weight : bold; font-style: italic; src: url("fonts/FreeSerifBoldItalic.otf"); }
+                                body { font-family: FreeSerif, Arial, serif; }' ."\n\n";
+                }
+                $css .= getTempFile($book->lang, 'epub.css');
+                return $css;
         }
 }
 

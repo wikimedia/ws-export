@@ -9,6 +9,11 @@ include('../book/init.php');
 
 try {
         $api = new Api();
+
+        $options = array();
+        $options['images'] = isset($_GET['images']) ? filter_var($_GET['images'], FILTER_VALIDATE_BOOLEAN) : true;
+        $options['fonts'] = isset($_GET['fonts']) ? filter_var($_GET['fonts'], FILTER_VALIDATE_BOOLEAN) : true;
+
         if(isset($_GET['refresh'])) {
                 include $wsexportConfig['basePath'].'/book/Refresh.php';
                 $refresh = new Refresh($api->lang);
@@ -16,12 +21,13 @@ try {
                 $success = 'The cache is updated for ' . $api->lang . ' language.';
                 include 'templates/book.php';
         }
+
         if(!isset($_GET['page']) || $_GET['page'] == '')
                 include 'templates/book.php';
+
         $title = htmlspecialchars(urldecode($_GET['page']));
         $format = isset($_GET['format']) ? htmlspecialchars(urldecode($_GET['format'])) : 'epub';
-        $withPictures = isset($_GET['pictures']) ? (bool) $_GET['pictures'] : true;
-        $provider = new BookProvider($api, $withPictures);
+        $provider = new BookProvider($api, $options);
         $data = $provider->get($title);
         if($format == 'epub-2' | $format == 'epub') {
                 include($basePath . '/book/formats/Epub2Generator.php');

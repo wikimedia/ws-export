@@ -11,17 +11,20 @@
 class BookProvider {
         protected $api = null;
         protected $curl_async = null;
-        protected $withPictures = true;
+        protected $options = array(
+            'images' => true,
+            'fonts' => true
+        );
         protected $creditPages = null;
         protected $creditImages = null;
 
         /**
         * @var $api Api
         */
-        public function __construct(Api $api, $withPictures = true) {
+        public function __construct(Api $api, $options) {
                 $this->api = $api;
                 $this->curl_async = new CurlAsync();
-                $this->withPictures = $withPictures;
+                $this->options = array_merge($this->options, $options);
                 $this->creditPages = array();
                 $this->creditImages = array();
         }
@@ -38,6 +41,7 @@ class BookProvider {
                 $parser = new PageParser($doc);
                 $book = new Book();
                 $book->credits_html = '';
+                $book->options = $this->options;
                 $book->title = $title;
                 $book->lang = $this->api->lang;
                 $book->type = $parser->getMetadata('ws-type');
@@ -56,7 +60,7 @@ class BookProvider {
                 $book->volume = $parser->getMetadata('ws-volume');
                 $book->scan = str_replace(' ', '_', $parser->getMetadata('ws-scan'));
                 $pictures = array();
-                if($this->withPictures) {
+                if($this->options['images']) {
                         $book->cover = $parser->getMetadata('ws-cover');
                         if($book->cover != '') {
                                 $pictures[$book->cover] = $this->getCover($book->cover, $book->lang);
@@ -67,7 +71,7 @@ class BookProvider {
                 $book->categories = $this->getCategories($title);
                 if(!$isMetadata) {
                         $book->content = $parser->getContent();
-                        if($this->withPictures) {
+                        if($this->options['images']) {
                                 $pictures = array_merge($pictures, $parser->getPicturesList());
                         }
                         $chapters = $parser->getChaptersList($title);
@@ -76,12 +80,12 @@ class BookProvider {
                         foreach($chapters as $chapter) {
                                 $parser = new PageParser($chapter->content);
                                 $chapter->content = $parser->getContent();
-                                if($this->withPictures) {
+                                if($this->options['images']) {
                                         $pictures = array_merge($pictures, $parser->getPicturesList());
                                 }
                         }
 
-                        if ($this->withPictures && count($pictures)) {
+                        if ($this->options['images'] && count($pictures)) {
                                 $keyCreditImage = $this->startCreditImage($book, $pictures);
                         }
 
@@ -89,7 +93,7 @@ class BookProvider {
 
                         $book->chapters = $chapters;
                         $pictures = $this->getPicturesData($pictures);
-                        if ($this->withPictures && count($pictures)) {
+                        if ($this->options['images'] && count($pictures)) {
                                 $this->curl_async->waitForKey($keyCreditImage);
                         }
 

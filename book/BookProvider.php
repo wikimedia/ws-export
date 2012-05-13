@@ -331,7 +331,7 @@ class PageParser {
         * @return array|Page
         */
         public function getChaptersList($title) {
-                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::html:a[not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
+                $list = $this->xPath->query('//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::html:a[not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
                 $chapters = array();
                 if($list->length != 0) {
                         foreach($list as $link) {

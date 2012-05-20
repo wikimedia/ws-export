@@ -74,24 +74,37 @@ class BookProvider {
                         if($this->options['images']) {
                                 $pictures = array_merge($pictures, $parser->getPicturesList());
                         }
-                        $chapters = $parser->getChaptersList($title);
-                        $key_credit = $this->startCredit($book, $chapters);
-                        $chapters = $this->getPages($chapters);
+                        $chapterTitles = $parser->getFullChaptersList($title);
+                        $chapters = $this->getPages($chapterTitles);
                         foreach($chapters as $chapter) {
                                 $parser = new PageParser($chapter->content);
                                 $chapter->content = $parser->getContent();
                                 if($this->options['images']) {
                                         $pictures = array_merge($pictures, $parser->getPicturesList());
                                 }
+                                $subpagesTitles = $parser->getChaptersList($chapter);
+                                if(count($subpagesTitles)) {
+                                        $subpages = $this->getPages($subpagesTitles);
+                                        foreach($subpages as $subpage) {
+                                                $parser = new PageParser($subpage->content);
+                                                $subpage->content = $parser->getContent();
+                                                if($this->options['images']) {
+                                                        $pictures = array_merge($pictures, $parser->getPicturesList());
+                                                }
+                                        }
+                                        $chapterTitles = array_merge($chapterTitles, $subpagesTitles);
+                                        $chapter->chapters = $subpages;
+                                }
                         }
+                        $book->chapters = $chapters;
 
+                        $key_credit = $this->startCredit($book, $chapterTitles);
                         if ($this->options['images'] && count($pictures)) {
                                 $keyCreditImage = $this->startCreditImage($book, $pictures);
                         }
 
                         $this->curl_async->waitForKey($key_credit);
 
-                        $book->chapters = $chapters;
                         $pictures = $this->getPicturesData($pictures);
                         if ($this->options['images'] && count($pictures)) {
                                 $this->curl_async->waitForKey($keyCreditImage);
@@ -327,26 +340,39 @@ class PageParser {
         }
 
         /**
-        * return the list of the chapters with the summary if he exist, if not
+        * return the list of the chapters with the summary if it exist.
         * @return array|Page
         */
         public function getChaptersList($title) {
-                $list = $this->xPath->query('//*[@id="ws-summary"]/descendant::html:a[not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
+                $list = $this->xPath->query('//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::html:a[not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
                 $chapters = array();
-                if($list->length != 0) {
-                        foreach($list as $link) {
-                                $chapter = new Page();
-                                $chapter->title = str_replace(' ', '_', $link->getAttribute('title'));
-                                $chapter->name = $link->nodeValue;
-                                $chapters[] = $chapter;
-                        }
-                } else {
+                foreach($list as $link) {
+                        $chapter = new Page();
+                        $chapter->title = str_replace(' ', '_', $link->getAttribute('title'));
+                        $chapter->name = $link->nodeValue;
+                        $chapters[] = $chapter;
+                }
+                return $chapters;
+        }
+
+        /**
+        * return the list of the chapters with the summary if it exist, if not find links to subpages.
+        * @return array|Page
+        */
+        public function getFullChaptersList($title) {
+                $chapters = $this->getChaptersList($title);
+                if(!count($chapters)) {
+                        $titles = array();
                         $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][not(contains(@class,"extiw"))][not(contains(@class,"external"))][not(contains(@href,"#"))][not(contains(@href,":"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
                         foreach($list as $link) {
-                                $chapter = new Page();
-                                $chapter->title = str_replace(' ', '_', $link->getAttribute('title'));
-                                $chapter->name = $link->nodeValue;
-                                $chapters[] = $chapter;
+                                $title = str_replace(' ', '_', $link->getAttribute('title'));
+                                if(!in_array($title, $titles)) {
+                                        $chapter = new Page();
+                                        $chapter->title = $title;
+                                        $titles[] = $title;
+                                        $chapter->name = $link->nodeValue;
+                                        $chapters[] = $chapter;
+                                }
                         }
                 }
                 return $chapters;
@@ -448,7 +474,7 @@ class PageParser {
         }
 
         protected function deprecatedNodes($oldName, $newName, $style) {
-                $nodes = $this->xPath->query('//html:' . $oldName); //hack: the getElementsByTagName method doesn't catch all the tags.
+                $nodes = $this->xPath->query('//html:' . $oldName); //hack: the getElementsByTagName method doesn't catch all tags.
                 foreach($nodes as $oldNode) {
                         $newNode = $this->xPath->document->createElement($newName);
                         while($oldNode->firstChild) {
@@ -463,7 +489,7 @@ class PageParser {
         }
 
         protected function deprecatedAttributes($name, $cssAttribute) {
-                $nodes = $this->xPath->query('//html:*[@' . $name . ']'); //hack: the getElementsByTagName method doesn't catch all the tags.
+                $nodes = $this->xPath->query('//html:*[@' . $name . ']'); //hack: the getElementsByTagName method doesn't catch all tags.
                 foreach($nodes as $node) {
                         $node->setAttribute('style', $cssAttribute . ':' . $node->getAttribute($name) . '; ' . $node->getAttribute('style'));
                         $node->removeAttribute($name);

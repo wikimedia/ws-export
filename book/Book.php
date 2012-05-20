@@ -44,11 +44,6 @@ class Book extends Page {
         public $categories = array();
 
         /**
-        * list of the chapters as Page object
-        */
-        public $chapters = array();
-
-        /**
         * pictures included in the page
         * @type array
         */

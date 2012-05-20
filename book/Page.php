@@ -25,4 +25,9 @@ class Page {
         * @type DOMDocument
         */
         public $content = null;
+
+        /**
+        * list of the subpages as Page object
+        */
+        public $chapters = array();
 }

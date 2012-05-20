@@ -6,7 +6,7 @@
             <label for="lang" class="control-label">Lang: </label>
             <div class="controls">
                 <input name="lang" id="lang" type="text" size="3" maxlength="20" required="required" value="<?php echo Api::getHttpLang(); ?>" class="input-mini" />
-                <span class="help-inline">The code lang of the Wikisource like en or fr</span>
+                <span class="help-inline">Language code of Wikisource domain, like en or fr</span>
             </div>
         </div>
         <div class="control-group">

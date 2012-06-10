@@ -44,31 +44,41 @@ class BookProvider {
                 $book->options = $this->options;
                 $book->title = $title;
                 $book->lang = $this->api->lang;
-                $book->type = $parser->getMetadata('ws-type');
-                $book->name = htmlspecialchars($parser->getMetadata('ws-title'));
+
+                $book->metadata_src = $parser->getMetadata('ws-metadata');
+                if($book->metadata_src == ''){
+                        $book->metadata_src = $title;
+                        $metadata_parser = $parser;
+                } else {
+                        $doc = $this->getDocument($book->metadata_src);
+                        $metadata_parser = new PageParser($doc);
+                }
+
+                $book->type = $metadata_parser->getMetadata('ws-type');
+                $book->name = htmlspecialchars($metadata_parser->getMetadata('ws-title'));
                 if($book->name == '')
-                        $book->name = str_replace('_', ' ', $title);
-                $book->author = htmlspecialchars($parser->getMetadata('ws-author'));
-                $book->translator = htmlspecialchars($parser->getMetadata('ws-translator'));
-                $book->illustrator = htmlspecialchars($parser->getMetadata('ws-illustrator'));
-                $book->school = htmlspecialchars($parser->getMetadata('ws-school'));
-                $book->publisher = htmlspecialchars($parser->getMetadata('ws-publisher'));
-                $book->year = htmlspecialchars($parser->getMetadata('ws-year'));
-                $book->place = htmlspecialchars($parser->getMetadata('ws-place'));
-                $book->key = $parser->getMetadata('ws-key');
-                $book->progress = $parser->getMetadata('ws-progress');
-                $book->volume = $parser->getMetadata('ws-volume');
-                $book->scan = str_replace(' ', '_', $parser->getMetadata('ws-scan'));
+                        $book->name = str_replace('_', ' ', $book->metadata_src);
+                $book->author = htmlspecialchars($metadata_parser->getMetadata('ws-author'));
+                $book->translator = htmlspecialchars($metadata_parser->getMetadata('ws-translator'));
+                $book->illustrator = htmlspecialchars($metadata_parser->getMetadata('ws-illustrator'));
+                $book->school = htmlspecialchars($metadata_parser->getMetadata('ws-school'));
+                $book->publisher = htmlspecialchars($metadata_parser->getMetadata('ws-publisher'));
+                $book->year = htmlspecialchars($metadata_parser->getMetadata('ws-year'));
+                $book->place = htmlspecialchars($metadata_parser->getMetadata('ws-place'));
+                $book->key = $metadata_parser->getMetadata('ws-key');
+                $book->progress = $metadata_parser->getMetadata('ws-progress');
+                $book->volume = $metadata_parser->getMetadata('ws-volume');
+                $book->scan = str_replace(' ', '_', $metadata_parser->getMetadata('ws-scan'));
                 $pictures = array();
                 if($this->options['images']) {
-                        $book->cover = $parser->getMetadata('ws-cover');
+                        $book->cover = $metadata_parser->getMetadata('ws-cover');
                         if($book->cover != '') {
                                 $pictures[$book->cover] = $this->getCover($book->cover, $book->lang);
                                 if($pictures[$book->cover]->url == '')
                                         $book->cover = '';
                         }
                 }
-                $book->categories = $this->getCategories($title);
+                $book->categories = $this->getCategories($book->metadata_src);
                 if(!$isMetadata) {
                         $book->content = $parser->getContent();
                         if($this->options['images']) {

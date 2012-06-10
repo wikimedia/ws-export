@@ -29,7 +29,7 @@ class Api {
                         $this->domainName = 'wikisource.org';
                         $this->lang = '';
                 } elseif($this->lang == 'wikilivres') {
-                        $this->domainName = 'www.wikilivres.info';
+                        $this->domainName = 'wikilivres.ca';
                         $this->lang = '';
                 } else {
                         $this->domainName = $this->lang . '.wikisource.org';

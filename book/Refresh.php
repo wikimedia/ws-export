@@ -32,7 +32,7 @@ class Refresh {
                                 $ini = array_merge($ini, $temp);
                 } catch(Exception $e) {
                 }
-                $this->setTempFileContent('i18n', serialize($ini));
+                $this->setTempFileContent('i18n.sphp', serialize($ini));
         }
 
         protected function getEpubCssWikisource() {

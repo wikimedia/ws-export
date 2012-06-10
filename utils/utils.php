@@ -77,14 +77,13 @@ function getTempFile($lang, $name) {
 }
 
 function getI18n($lang) {
-        $content = getTempFile($lang, 'i18n');
+        $content = getTempFile($lang, 'i18n.sphp');
         if($content == '') {
                 global $wsexportConfig;
                 include $wsexportConfig['basePath'].'/book/Refresh.php';
                 $refresh = new Refresh();
                 $refresh->refresh();
-                return unserialize(getTempFile($lang, 'i18n'));
-        } else {
-                return unserialize($content);
+                $content = getTempFile($lang, 'i18n.sphp');
         }
+        return unserialize($content);
 }

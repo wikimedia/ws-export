@@ -37,6 +37,7 @@ class BookProvider {
         */
         public function get($title, $isMetadata = false) {
                 $title = str_replace(' ', '_', trim($title));
+                $page_list = array($title);
                 $doc = $this->getDocument($title);
                 $parser = new PageParser($doc);
                 $book = new Book();
@@ -84,7 +85,7 @@ class BookProvider {
                         if($this->options['images']) {
                                 $pictures = array_merge($pictures, $parser->getPicturesList());
                         }
-                        $chapterTitles = $parser->getFullChaptersList($title);
+                        $chapterTitles = $parser->getFullChaptersList($title, $page_list);
                         $chapters = $this->getPages($chapterTitles);
                         foreach($chapters as $chapter) {
                                 $parser = new PageParser($chapter->content);
@@ -92,7 +93,7 @@ class BookProvider {
                                 if($this->options['images']) {
                                         $pictures = array_merge($pictures, $parser->getPicturesList());
                                 }
-                                $subpagesTitles = $parser->getChaptersList($chapter);
+                                $subpagesTitles = $parser->getChaptersList($chapter, $page_list);
                                 if(count($subpagesTitles)) {
                                         $subpages = $this->getPages($subpagesTitles);
                                         foreach($subpages as $subpage) {
@@ -353,14 +354,18 @@ class PageParser {
         * return the list of the chapters with the summary if it exist.
         * @return array|Page
         */
-        public function getChaptersList($title) {
+        public function getChaptersList($title, $page_list) {
                 $list = $this->xPath->query('//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::html:a[not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
                 $chapters = array();
                 foreach($list as $link) {
-                        $chapter = new Page();
-                        $chapter->title = str_replace(' ', '_', $link->getAttribute('title'));
-                        $chapter->name = $link->nodeValue;
-                        $chapters[] = $chapter;
+                        $title = str_replace(' ', '_', $link->getAttribute('title'));
+                        if(!in_array($title, $page_list)) {
+                            $chapter = new Page();
+                            $chapter->title = $title;
+                            $chapter->name = $link->nodeValue;
+                            $chapters[] = $chapter;
+                            $page_list[] = $chapter->title;
+                        }
                 }
                 return $chapters;
         }
@@ -369,19 +374,18 @@ class PageParser {
         * return the list of the chapters with the summary if it exist, if not find links to subpages.
         * @return array|Page
         */
-        public function getFullChaptersList($title) {
-                $chapters = $this->getChaptersList($title);
+        public function getFullChaptersList($title, $page_list) {
+                $chapters = $this->getChaptersList($title, $page_list);
                 if(!count($chapters)) {
-                        $titles = array();
                         $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][not(contains(@class,"extiw"))][not(contains(@class,"external"))][not(contains(@href,"#"))][not(contains(@href,":"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
                         foreach($list as $link) {
                                 $title = str_replace(' ', '_', $link->getAttribute('title'));
-                                if(!in_array($title, $titles)) {
+                                if(!in_array($title, $page_list)) {
                                         $chapter = new Page();
                                         $chapter->title = $title;
-                                        $titles[] = $title;
                                         $chapter->name = $link->nodeValue;
                                         $chapters[] = $chapter;
+                                        $page_list[] = $chapter->title;
                                 }
                         }
                 }

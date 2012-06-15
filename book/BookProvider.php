@@ -81,23 +81,33 @@ class BookProvider {
                 }
                 $book->categories = $this->getCategories($book->metadata_src);
                 if(!$isMetadata) {
-                        $book->content = $parser->getContent();
-                        if($this->options['images']) {
-                                $pictures = array_merge($pictures, $parser->getPicturesList());
+                        if(!$parser->metadataIsSet('ws-noinclude')) {
+                                $book->content = $parser->getContent();
+                                if($this->options['images']) {
+                                        $pictures = array_merge($pictures, $parser->getPicturesList());
+                                }
                         }
                         $chapterTitles = $parser->getFullChaptersList($title, $page_list);
                         $chapters = $this->getPages($chapterTitles);
-                        foreach($chapters as $chapter) {
+                        foreach($chapters as $chapter_key => $chapter) {
                                 $parser = new PageParser($chapter->content);
+                                if($parser->metadataIsSet('ws-noinclude')) {
+                                        unset($chapters[$chapter_key]);
+                                        continue;
+                                }
                                 $chapter->content = $parser->getContent();
                                 if($this->options['images']) {
                                         $pictures = array_merge($pictures, $parser->getPicturesList());
                                 }
                                 $subpagesTitles = $parser->getChaptersList($chapter, $page_list);
-                                if(count($subpagesTitles)) {
+                                if(!empty($subpagesTitles)) {
                                         $subpages = $this->getPages($subpagesTitles);
-                                        foreach($subpages as $subpage) {
+                                        foreach($subpages as $subpage_key => $subpage) {
                                                 $parser = new PageParser($subpage->content);
+                                                if($parser->metadataIsSet('ws-noinclude')) {
+                                                        unset($chapters[$subpage_key]);
+                                                        continue;
+                                                }
                                                 $subpage->content = $parser->getContent();
                                                 if($this->options['images']) {
                                                         $pictures = array_merge($pictures, $parser->getPicturesList());
@@ -110,14 +120,14 @@ class BookProvider {
                         $book->chapters = $chapters;
 
                         $key_credit = $this->startCredit($book, $chapterTitles);
-                        if ($this->options['images'] && count($pictures)) {
+                        if ($this->options['images'] && !empty($pictures)) {
                                 $keyCreditImage = $this->startCreditImage($book, $pictures);
                         }
 
                         $this->curl_async->waitForKey($key_credit);
 
                         $pictures = $this->getPicturesData($pictures);
-                        if ($this->options['images'] && count($pictures)) {
+                        if ($this->options['images'] && !empty($pictures)) {
                                 $this->curl_async->waitForKey($keyCreditImage);
                         }
 
@@ -351,6 +361,16 @@ class PageParser {
         }
 
         /**
+        * return if a metadata exist in the page
+        * @var $id the metadata id like ws-author
+        * @return bool
+        */
+        public function metadataIsSet($id) {
+                $node = $this->xPath->query('//*[@id="' . $id .'" or contains(@class, "' . $id .'")]');
+                return $node->length != 0;
+        }
+
+        /**
         * return the list of the chapters with the summary if it exist.
         * @return array|Page
         */
@@ -376,7 +396,7 @@ class PageParser {
         */
         public function getFullChaptersList($title, $page_list) {
                 $chapters = $this->getChaptersList($title, $page_list);
-                if(!count($chapters)) {
+                if(empty($chapters)) {
                         $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][not(contains(@class,"extiw"))][not(contains(@class,"external"))][not(contains(@href,"#"))][not(contains(@href,":"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
                         foreach($list as $link) {
                                 $title = str_replace(' ', '_', $link->getAttribute('title'));

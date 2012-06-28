@@ -28,12 +28,18 @@
             </div>
         </div>
         <div class="control-group">
+            <label for="fonts" class="control-label">Include fonts:</label>
+            <div class="controls">
+                   <select id="fonts" name="fonts">
+                     <option value="freeserif">FreeSerif</option>
+                    <option value="linuxlibertine">Linux Libertine</option>
+                    <option value="false">none</option>
+                    </select>
+                </div>
+            </div>
+        <div class="control-group">
             <label class="control-label">Options: </label>
             <div class="controls">
-                <label class="checkbox">
-                    <input type="checkbox" value="false" <?php if(!$options['fonts']) echo 'checked="checked"'; ?> name="fonts" />
-                    Do not include fonts
-                </label>
                 <label class="checkbox">
                     <input type="checkbox" value="false" <?php if(!$options['images']) echo 'checked="checked"'; ?> name="images" />
                     Do not include images

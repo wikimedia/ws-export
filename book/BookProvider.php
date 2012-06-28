@@ -13,7 +13,7 @@ class BookProvider {
         protected $curl_async = null;
         protected $options = array(
             'images' => true,
-            'fonts' => true
+            'fonts' => false
         );
         protected $creditPages = null;
         protected $creditImages = null;

@@ -1,3 +1,7 @@
+body {
+	line-height: 120%;
+}
+
 /* images */
 div.floatright {
     float: right;
@@ -38,4 +42,3 @@ div.tleft {
 .small {
     font-size: 94%;
 }
-

@@ -352,7 +352,7 @@ class PageParser {
         * @return string
         */
         public function getMetadata($id) {
-                $node = $this->xPath->query('//*[@id="' . $id .'"]');
+                $node = $this->xPath->query('//*[@id="' . $id . '" or contains(@class, "' . $id . '")]');
                 if($node->length != 0) {
                         return $node->item(0)->nodeValue;
                 } else {

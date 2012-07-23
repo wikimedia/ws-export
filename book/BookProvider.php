@@ -80,6 +80,8 @@ class BookProvider {
                         }
                 }
                 $book->categories = $this->getCategories($book->metadata_src);
+                $pageTitles = $parser->getPagesList();
+
                 if(!$isMetadata) {
                         if(!$parser->metadataIsSet('ws-noinclude')) {
                                 $book->content = $parser->getContent();
@@ -95,6 +97,7 @@ class BookProvider {
                                         unset($chapters[$chapter_key]);
                                         continue;
                                 }
+                                $pageTitles = array_merge($pageTitles, $parser->getPagesList());
                                 $chapter->content = $parser->getContent();
                                 if($this->options['images']) {
                                         $pictures = array_merge($pictures, $parser->getPicturesList());
@@ -108,6 +111,7 @@ class BookProvider {
                                                         unset($chapters[$subpage_key]);
                                                         continue;
                                                 }
+                                                $pageTitles = array_merge($pageTitles, $parser->getPagesList());
                                                 $subpage->content = $parser->getContent();
                                                 if($this->options['images']) {
                                                         $pictures = array_merge($pictures, $parser->getPicturesList());
@@ -119,7 +123,7 @@ class BookProvider {
                         }
                         $book->chapters = $chapters;
 
-                        $key_credit = $this->startCredit($book, $chapterTitles);
+                        $key_credit = $this->startCredit($book, $chapterTitles, $pageTitles);
                         if ($this->options['images'] && !empty($pictures)) {
                                 $keyCreditImage = $this->startCreditImage($book, $pictures);
                         }
@@ -242,13 +246,15 @@ class BookProvider {
         /**
          * @var $book the Book object
          * @var $chapters an array of Page
+         * @var $otherPages an array of string
          * @return a key id for the credit request
          */
-        protected function startCredit($book, $chapters) {
+        protected function startCredit(Book $book, $chapters, $otherPages) {
                 $url = 'http://toolserver.org/~phe/cgi-bin/credits';
                 $pages = array( $book->title );
                 foreach ($chapters as $id => $chapter)
                         $pages[] = $chapter->title;
+                $pages = array_unique(array_merge($pages, $otherPages));
                 $pages = join('|', $pages);
                 $params = array( 'lang' => $book->lang,
                                  'format' => 'php',
@@ -275,7 +281,7 @@ class BookProvider {
          * @var $pictures an array of Picture
          * @return a key id for the credit request
          */
-        protected function startCreditImage($book, $pictures) {
+        protected function startCreditImage(Book $book, $pictures) {
                 $url = 'http://toolserver.org/~phe/cgi-bin/credits';
                 $images = array( );
                 foreach ($pictures as $id => $picture)
@@ -373,6 +379,7 @@ class PageParser {
         /**
         * return the list of the chapters with the summary if it exist.
         * @return array|Page
+        * TODO retrive only main namespace pages ?
         */
         public function getChaptersList($title, $page_list) {
                 $list = $this->xPath->query('//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::html:a[not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
@@ -450,6 +457,22 @@ class PageParser {
                         $img->setAttribute('alt', $picture->title);
                 }
                 return $pictures;
+        }
+
+        /**
+        * return the list of the pages of the page namespace included
+        * @return array|string
+        */
+        public function getPagesList() {
+                $pages = array();
+                $list = $this->xPath->query('//html:*[contains(@class,"ws-pagenum")]');
+                foreach($list as $link) {
+                        $title = str_replace(' ', '_', $link->getAttribute('title'));
+                        if($title) {
+                                $pages[] = $title;
+                        }
+                }
+                return $pages;
         }
 
         /**

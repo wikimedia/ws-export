@@ -81,7 +81,7 @@ class BookProvider {
                 }
                 $book->categories = $this->getCategories($book->metadata_src);
                 $pageTitles = $parser->getPagesList();
-
+                $namespaces = $this->getNamespaces();
                 if(!$isMetadata) {
                         if(!$parser->metadataIsSet('ws-noinclude')) {
                                 $book->content = $parser->getContent();
@@ -89,7 +89,7 @@ class BookProvider {
                                         $pictures = array_merge($pictures, $parser->getPicturesList());
                                 }
                         }
-                        $chapterTitles = $parser->getFullChaptersList($title, $page_list);
+                        $chapterTitles = $parser->getFullChaptersList($title, $page_list, $namespaces);
                         $chapters = $this->getPages($chapterTitles);
                         foreach($chapters as $chapter_key => $chapter) {
                                 $parser = new PageParser($chapter->content);
@@ -102,7 +102,7 @@ class BookProvider {
                                 if($this->options['images']) {
                                         $pictures = array_merge($pictures, $parser->getPicturesList());
                                 }
-                                $subpagesTitles = $parser->getChaptersList($chapter, $page_list);
+                                $subpagesTitles = $parser->getChaptersList($chapter, $page_list, $namespaces);
                                 if(!empty($subpagesTitles)) {
                                         $subpages = $this->getPages($subpagesTitles);
                                         foreach($subpages as $subpage_key => $subpage) {
@@ -324,6 +324,14 @@ class BookProvider {
                 uasort($credit, "cmp_credit");
                 return $credit;
         }
+
+        /**
+        * return the list of the namespaces for the current wiki.
+        * @return array|string
+        */
+        public function getNamespaces() {
+                return unserialize(getTempFile($this->api->lang, 'namespaces.sphp'));
+        }
 }
 
 /*
@@ -381,12 +389,13 @@ class PageParser {
         * @return array|Page
         * TODO retrive only main namespace pages ?
         */
-        public function getChaptersList($title, $page_list) {
+        public function getChaptersList($title, $page_list, $namespaces) {
                 $list = $this->xPath->query('//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::html:a[not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
                 $chapters = array();
                 foreach($list as $link) {
                         $title = str_replace(' ', '_', $link->getAttribute('title'));
-                        if(!in_array($title, $page_list)) {
+                        $parts = explode(':', $title);
+                        if(!in_array($title, $page_list) && !in_array($parts[0], $namespaces)) {
                             $chapter = new Page();
                             $chapter->title = $title;
                             $chapter->name = $link->nodeValue;
@@ -401,13 +410,14 @@ class PageParser {
         * return the list of the chapters with the summary if it exist, if not find links to subpages.
         * @return array|Page
         */
-        public function getFullChaptersList($title, $page_list) {
-                $chapters = $this->getChaptersList($title, $page_list);
+        public function getFullChaptersList($title, $page_list, $namespaces) {
+                $chapters = $this->getChaptersList($title, $page_list, $namespaces);
                 if(empty($chapters)) {
-                        $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][not(contains(@class,"extiw"))][not(contains(@class,"external"))][not(contains(@href,"#"))][not(contains(@href,":"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
+                        $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][not(contains(@class,"extiw"))][not(contains(@class,"external"))][not(contains(@href,"#"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
                         foreach($list as $link) {
                                 $title = str_replace(' ', '_', $link->getAttribute('title'));
-                                if(!in_array($title, $page_list)) {
+                                $parts = explode(':', $title);
+                                if(!in_array($title, $page_list) && !in_array($parts[0], $namespaces)) {
                                         $chapter = new Page();
                                         $chapter->title = $title;
                                         $chapter->name = $link->nodeValue;

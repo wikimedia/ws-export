@@ -20,6 +20,7 @@ class Refresh {
                 $this->getI18n();
                 $this->getEpubCssWikisource();
                 $this->getAboutXhtmlWikisource();
+                $this->getNamespacesList();
         }
 
         protected function getI18n() {
@@ -64,6 +65,20 @@ class Refresh {
                         $content = $parser->getContent();
                         $this->setTempFileContent('about.xhtml', str_replace('href="//', 'href="http://', $document->saveXML()));
                 }
+        }
+
+        protected function getNamespacesList() {
+                $namespaces = array();
+                $response = $this->api->query(array('meta' => 'siteinfo', 'siprop' => 'namespaces'));
+                foreach($response['query']['namespaces'] as $namespace) {
+                        if(isset($namespace['*']) && $namespace['*']) {
+                                $namespaces[] = $namespace['*'];
+                        }
+                        if(isset($namespace['canonical']) && $namespace['canonical']) {
+                                $namespaces[] = $namespace['canonical'];
+                        }
+                }
+                $this->setTempFileContent('namespaces.sphp', serialize($namespaces));
         }
 
         protected function setTempFileContent($name, $content) {

@@ -524,7 +524,7 @@ class PageParser {
                         $node->setAttribute('id', preg_replace('#^\.(.*)$#', '$1', $node->getAttribute('id')));
                 }
 
-                $list = $this->xPath->query('//html:span[@class="pagenum" or @class="mw-headline"]');
+                $list = $this->xPath->query('//html:span[contains(@class,"pagenum") or contains(@class,"mw-headline")]');
                 foreach($list as $node) {
                         $id = $node->getAttribute('id');
                         if (is_numeric($id)) {

@@ -22,7 +22,7 @@
                 <select id="format" name="format">
                     <option>epub</option>
                     <option>xhtml</option>
-                    <option>odt</option>
+ <!--                   <option>odt</option> -->
                 </select>
                 <span class="help-inline"></span>
             </div>

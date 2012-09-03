@@ -18,7 +18,9 @@ if($_SERVER['argc'] < 3 || $_SERVER['argc'] > 4) {
                 $path = isset($_SERVER['argv'][4]) ? $_SERVER['argv'][4] . '/' : '';
         try {
                 $api = new Api($lang);
-                $provider = new BookProvider($api);
+                $options = array();
+                $options['images'] = true;
+                $provider = new BookProvider($api, $options);
                 $data = $provider->get($title);
                 if($format == 'epub-2' | $format == 'epub') {
                         include('../book/formats/Epub2Generator.php');

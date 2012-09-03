@@ -1,7 +1,11 @@
 #!/usr/bin/php
 <?php
 
-$basePath = '..';
+$wsexportConfig = array(
+        'basePath' => '..',
+        'tempPath' => '../temp',
+        'stat' => true
+);
 include('../book/init.php');
 
 

@@ -3,7 +3,8 @@
 
 $wsexportConfig = array(
         'basePath' => '..',
-        'tempPath' => '../temp',
+        // Need to refer to the same directory as in the website module
+        'tempPath' => '../../website/temp/wsexport/www/wiki',
         'stat' => true
 );
 include('../book/init.php');

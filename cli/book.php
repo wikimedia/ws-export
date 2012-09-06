@@ -25,22 +25,27 @@ if(!isset($_SERVER['argc']) || $_SERVER['argc'] < 3) {
         $format = 'epub';
         $path = './';
 
-        $opts = getopt('l:t:f:p', $long_opts);
+        $opts = getopt('l:t:f:p:d', $long_opts);
         foreach ($opts as $opt => $value) {
                 switch ($opt) {
                 case 'lang':
+                case 'l':
                         $lang = $value;
                         break;
                 case 'title':
+                case 't':
                         $title = $value;
                         break;
                 case 'format':
+                case 'f':
                         $format = $value;
                         break;
                 case 'path':
+                case 'p':
                         $path = $value . '/';
                         break;
                 case 'debug':
+                case 'd':
                         error_reporting(E_STRICT|E_ALL);
                         break;
                 }

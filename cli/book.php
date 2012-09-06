@@ -9,14 +9,47 @@ $wsexportConfig = array(
 );
 include('../book/init.php');
 
-
-if($_SERVER['argc'] < 3 || $_SERVER['argc'] > 4) {
+if(!isset($_SERVER['argc']) || $_SERVER['argc'] < 3) {
         echo getFile('help/book.txt');
 } else {
-        $lang = $_SERVER['argv'][1];
-        $title = $_SERVER['argv'][2];
-        $format = isset($_SERVER['argv'][3]) ? $_SERVER['argv'][3] : 'epub';
-                $path = isset($_SERVER['argv'][4]) ? $_SERVER['argv'][4] . '/' : '';
+        $long_opts = array(
+                'lang:',
+                'title:',
+                'format:',
+                'path:',
+                'debug'
+                );
+
+        $lang = null;
+        $title = null;
+        $format = 'epub';
+        $path = './';
+
+        $opts = getopt('l:t:f:p', $long_opts);
+        foreach ($opts as $opt => $value) {
+                switch ($opt) {
+                case 'lang':
+                        $lang = $value;
+                        break;
+                case 'title':
+                        $title = $value;
+                        break;
+                case 'format':
+                        $format = $value;
+                        break;
+                case 'path':
+                        $path = $value . '/';
+                        break;
+                case 'debug':
+                        error_reporting(E_STRICT|E_ALL);
+                        break;
+                }
+        }
+        if (!$lang or !$title) {
+                echo getFile('help/book.txt');
+                exit(1);
+        }
+
         try {
                 $api = new Api($lang);
                 $options = array();
@@ -39,6 +72,9 @@ if($_SERVER['argc'] < 3 || $_SERVER['argc'] > 4) {
                 $path .= $title . '.' . $generator->getExtension();
                 if($fp = fopen($path, 'w')) {
                         fputs($fp, $file);
+                } else {
+                        error_log('Unable to create output file: ' . $path . "\n");
+                        exit(1);
                 }
                 echo "The ebook $path is created !\n";
         } catch(Exception $exception) {

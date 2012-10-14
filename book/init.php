@@ -18,3 +18,4 @@ include($basePath . '/book/Page.php');
 include($basePath . '/book/Book.php');
 include($basePath . '/book/BookProvider.php');
 include($basePath . '/book/Stat.php');
+include($basePath . '/book/FontProvider.php');

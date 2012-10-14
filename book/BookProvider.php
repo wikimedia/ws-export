@@ -330,7 +330,12 @@ class BookProvider {
         * @return array|string
         */
         public function getNamespaces() {
-                return unserialize(getTempFile($this->api->lang, 'namespaces.sphp'));
+                $namespaces = unserialize(getTempFile($this->api->lang, 'namespaces.sphp'));
+                if(is_array($namespaces)) {
+                        return $namespaces;
+                } else {
+                        return array();
+                }
         }
 }
 

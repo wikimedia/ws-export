@@ -61,9 +61,12 @@ if(!isset($_SERVER['argc']) || $_SERVER['argc'] < 3) {
                 $options['images'] = true;
                 $provider = new BookProvider($api, $options);
                 $data = $provider->get($title);
-                if($format == 'epub-2' | $format == 'epub') {
+                if($format == 'epub-2' || $format == 'epub') {
                         include('../book/formats/Epub2Generator.php');
                         $generator = new Epub2Generator();
+                } else if($format == 'epub-3') {
+                        include($basePath . '/book/formats/Epub3Generator.php');
+                        $generator = new Epub3Generator();
                 } else if($format == 'odt') {
                         include('../book/formats/OdtGenerator.php');
                         $generator = new OdtGenerator();

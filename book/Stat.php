@@ -18,11 +18,19 @@ class Stat {
         public static function getStat($month = 0, $year = 0) {
                 global $wsexportConfig;
                 $path = self::getStatPath($month, $year);
-                if(file_exists($path))
-                        return unserialize(file_get_contents($path));
-                else
+                if(file_exists($path)) {
+                        $data = unserialize(file_get_contents($path));
+                        if(isset($data['epub'])) {
+                            $data['epub-2'] = isset($data['epub-2']) ? $data['epub-2'] + $data['epub'] : $data['epub'];
+                        } elseif(!isset($data['epub-2'])) {
+                            $data['epub-2'] = 0;
+                        }
+                        unset($data['epub']);
+                        return $data;
+                } else
                         return array(
-                                'epub' => array(),
+                                'epub-2' => array(),
+                                'epub-3' => array(),
                                 'odt' => array(),
                                 'xhtml' => array()
                             );

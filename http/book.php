@@ -32,9 +32,15 @@ try {
         $format = isset($_GET['format']) ? htmlspecialchars(urldecode($_GET['format'])) : 'epub';
         $provider = new BookProvider($api, $options);
         $data = $provider->get($title);
-        if($format == 'epub-2' | $format == 'epub') {
+        if($format == 'epub') {
+                $format = 'epub-2';
+        }
+        if($format == 'epub-2') {
                 include($basePath . '/book/formats/Epub2Generator.php');
                 $generator = new Epub2Generator();
+        } else if($format == 'epub-3') {
+                include($basePath . '/book/formats/Epub3Generator.php');
+                $generator = new Epub3Generator();
         } else if($format == 'odt') {
                 include($basePath . '/book/formats/OdtGenerator.php');
                 $generator = new OdtGenerator();

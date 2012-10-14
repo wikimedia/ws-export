@@ -20,7 +20,8 @@
             <label for="format" class="control-label">File format: </label>
             <div class="controls">
                 <select id="format" name="format">
-                    <option>epub</option>
+                    <option value="epub-2">epub 2 (recommended)</option>
+                    <option value="epub-3">epub 3 (for new e-readers only, currently in beta)</option>
                     <option>xhtml</option>
  <!--                   <option>odt</option> -->
                 </select>

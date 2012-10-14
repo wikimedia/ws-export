@@ -6,11 +6,11 @@
     </thead>
     <tbody>
     <?php foreach($val as $lang => $temp) {
-        echo '<tr><th scope="row">' . $lang . '</th><td>' . $temp['epub'] . '</td><td>' . $temp['xhtml'] . '</td><td>' . $temp['odt'] . '</td></tr>' . "\n";
+        echo '<tr><th scope="row">' . $lang . '</th><td>' . ($temp['epub-2'] + $temp['epub-3']) . '</td><td>' . $temp['xhtml'] . '</td><td>' . $temp['odt'] . '</td></tr>' . "\n";
     } ?>
     </tbody>
     <tfoot>
-    <?php echo '<tr><th scope="row">Total</th><td>' . $total['epub'] . '</td><td>' . $total['xhtml'] . '</td><td>' . $total['odt'] . '</td></tr>'; ?>
+    <?php echo '<tr><th scope="row">Total</th><td>' . ($total['epub-2'] + $total['epub-3']) . '</td><td>' . $total['xhtml'] . '</td><td>' . $total['odt'] . '</td></tr>'; ?>
     </tfoot>
 </table>
 <form class="form-inline">

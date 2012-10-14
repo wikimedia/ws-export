@@ -389,6 +389,9 @@ class BookCleanerEpub {
                 if($length <= $partSize)
                         return array($chapter);
 
+                $parts = ceil($length / $partSize);
+                $partSize = ($length / $parts) + 2000;
+
                 $pages = array();
 
                 $files = array();
@@ -413,6 +416,9 @@ class BookCleanerEpub {
                                 $domDepth++;
 
                                 $node = $node->firstChild;
+
+                                $nodeData = $chapter->content->saveXML($node);
+                                $nodeLen = strlen($nodeData);
                         }
 
                         $next_node = $node->nextSibling;
@@ -433,9 +439,10 @@ class BookCleanerEpub {
                                         }
                                         $curSize = strlen($chapter->content->saveXML($curFile));
                                 }
-                                $curParent->appendChild($node->cloneNode(true));
-                                $curSize += $nodeLen;
                         }
+
+                        $curParent->appendChild($node->cloneNode(true));
+                        $curSize += $nodeLen;
 
                         $node = $next_node;
                         while ($node == null && $domDepth > 0) {
@@ -443,7 +450,8 @@ class BookCleanerEpub {
                                 $node = end($domPath)->nextSibling;
                                 array_pop($domPath);
                                 array_pop($domClonedPath);
-                                $curParent = $curParent->parentNode;
+                                if ($curParent->parentNode)
+                                        $curParent = $curParent->parentNode;
                         }
                 } while ($node != null);
 

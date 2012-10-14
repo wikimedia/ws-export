@@ -1,6 +1,9 @@
 This command tool provide Wikisource book in many formats.
-The two first parameters are required, and others are optional. You must provide them in this order :
-1 the lang of the Wikisource like en or fr
-2 the name of the book like Les_Choéphores With this '_' for spaces
-3 the format to return like epub. It is 'epub by default.
-4 the path to the place where the book will be save (by default the current folder)
+
+Allowed command line options are:
+
+--lang (the lang code, required param)
+--title (title of the book to generate with _ for space, required)
+--format (epub or odt etc., default to epub)
+--path (output_path, default ./)
+--debug (maintainer option)

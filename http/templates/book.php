@@ -30,13 +30,19 @@
         <div class="control-group">
             <label for="fonts" class="control-label">Include fonts:</label>
             <div class="controls">
-                   <select id="fonts" name="fonts">
-                     <option value="freeserif">FreeSerif</option>
-                    <option value="linuxlibertine">Linux Libertine</option>
-                    <option value="false">none</option>
-                    </select>
-                </div>
+                <select id="fonts" name="fonts">
+                    <option value="">None</option><?php
+                    $list = FontProvider::getList();
+                    foreach($list as $key => $label) {
+                        echo '<option value="' . $key .'"';
+                        if($options['fonts'] == $key) {
+                            echo ' selected="selected"';
+                        }
+                        echo '>'. $label . '</option>' . "\n";
+                    }
+                ?></select>
             </div>
+        </div>
         <div class="control-group">
             <label class="control-label">Options: </label>
             <div class="controls">

@@ -56,23 +56,17 @@ class Epub2Generator implements Generator {
                 $zip->addContentFile('OPS/about.xhtml', $this->getXhtmlAbout($book, $wsUrl));
                 $dir = dirname(__FILE__);
                 $zip->addFile($dir.'/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png');
-                switch($book->options['fonts']) {
-                    case 'linuxlibertine':
-                        $zip->addFile($dir.'/fonts/LinuxLibertine/LinLibertine_R.otf', 'OPS/fonts/LinuxLibertine.otf');
-                        $zip->addFile($dir.'/fonts/LinuxLibertine/LinLibertine_RB.otf', 'OPS/fonts/LinuxLibertineBold.otf');
-                        $zip->addFile($dir.'/fonts/LinuxLibertine/LinLibertine_RBI.otf', 'OPS/fonts/LinuxLibertineBoldItalic.otf');
-                        $zip->addFile($dir.'/fonts/LinuxLibertine/LinLibertine_RI.otf', 'OPS/fonts/LinuxLibertineItalic.otf');
-                        break;
-                    case 'freeserif':
-                    case filter_var($book->options['fonts'], FILTER_VALIDATE_BOOLEAN):
-                        $zip->addFile($dir.'/fonts/FreeSerif/FreeSerif.otf', 'OPS/fonts/FreeSerif.otf');
-                        $zip->addFile($dir.'/fonts/FreeSerif/FreeSerifBold.otf', 'OPS/fonts/FreeSerifBold.otf');
-                        $zip->addFile($dir.'/fonts/FreeSerif/FreeSerifBoldItalic.otf', 'OPS/fonts/FreeSerifBoldItalic.otf');
-                        $zip->addFile($dir.'/fonts/FreeSerif/FreeSerifItalic.otf', 'OPS/fonts/FreeSerifItalic.otf');
-                        break;
+
+                $font = FontProvider::getData($book->options['fonts']);
+                if($font !== null) {
+                    foreach($font['otf'] as $name => $path) {
+                          $zip->addFile($dir.'/fonts/' . $font['name'] . '/' . $path, 'OPS/fonts/' . $font['name'] . $name . '.otf');
+                    }
                 }
-                if($book->content)
+
+                if($book->content) {
                         $zip->addContentFile('OPS/' . $book->title . '.xhtml', $book->content->saveXML());
+                }
                 if(!empty($book->chapters)) {
                         foreach($book->chapters as $chapter) {
                                 $zip->addContentFile('OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML());
@@ -138,23 +132,15 @@ class Epub2Generator implements Generator {
                                         $content.= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
                                         <item id="mainCss" href="main.css" media-type="text/css" />
                                         <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
-                                        switch($book->options['fonts']) {
-                                            case 'linuxlibertine':
-                                                $content.= '<item id="LinuxLibertine" href="fonts/LinuxLibertine.otf" media-type="font/opentype" />
-                                                        <item id="LinuxLibertineBold" href="fonts/LinuxLibertineBold.otf" media-type="font/opentype" />
-                                                        <item id="LinuxLibertineBoldItalic" href="fonts/LinuxLibertineBoldItalic.otf" media-type="font/opentype" />
-                                                        <item id="LinuxLibertineItalic" href="fonts/LinuxLibertineItalic.otf" media-type="font/opentype" />';
-                                                break;
-                                            case 'freeserif':
-                                            case filter_var($book->options['fonts'], FILTER_VALIDATE_BOOLEAN):
-                                                $content.= '<item id="FreeSerif" href="fonts/FreeSerif.otf" media-type="font/opentype" />
-                                                        <item id="FreeSerifBold" href="fonts/FreeSerifBold.otf" media-type="font/opentype" />
-                                                        <item id="FreeSerifBoldItalic" href="fonts/FreeSerifBoldItalic.otf" media-type="font/opentype" />
-                                                        <item id="FreeSerifItalic" href="fonts/FreeSerifItalic.otf" media-type="font/opentype" />';
-                                                break;
+                                        $font = FontProvider::getData($book->options['fonts']);
+                                        if($font !== null) {
+                                            foreach($font['otf'] as $name => $path) {
+                                                 $content.= '<item id="' . $font['name'] . $name . '" href="fonts/' . $font['name'] . $name . '.otf" media-type="font/opentype" />' . "\n";
+                                            }
                                         }
-                                        if($book->content)
+                                        if($book->content) {
                                                 $content.= '<item id="' . $book->title . '" href="' . $book->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
+                                        }
                                         foreach($book->chapters as $chapter) {
                                                 $content.= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
                                                 foreach($chapter->chapters as $subpage) {
@@ -310,24 +296,7 @@ class Epub2Generator implements Generator {
         }
 
         protected function getCss(Book $book) {
-                $css = '';
-                switch($book->options['fonts']) {
-                    case 'linuxlibertine':
-                        $css .= '@font-face { font-family : "LinuxLibertine"; font-weight : normal; font-style: normal; src: url("fonts/LinuxLibertine.otf"); }
-                                @font-face { font-family : "LinuxLibertine"; font-weight : bold; font-style: normal; src: url("fonts/LinuxLibertineBold.otf"); }
-                                @font-face { font-family : "LinuxLibertine"; font-weight : normal; font-style: italic; src: url("fonts/LinuxLibertineItalic.otf"); }
-                                @font-face { font-family : "LinuxLibertine"; font-weight : bold; font-style: italic; src: url("fonts/LinuxLibertineBoldItalic.otf"); }
-                                body { font-family: FreeSerif, Arial, serif; }' ."\n\n";
-                        break;
-                    case 'freeserif':
-                    case filter_var($book->options['fonts'], FILTER_VALIDATE_BOOLEAN):
-                        $css .= '@font-face { font-family : "FreeSerif"; font-weight : normal; font-style: normal; src: url("fonts/FreeSerif.otf"); }
-                                @font-face { font-family : "FreeSerif"; font-weight : bold; font-style: normal; src: url("fonts/FreeSerifBold.otf"); }
-                                @font-face { font-family : "FreeSerif"; font-weight : normal; font-style: italic; src: url("fonts/FreeSerifItalic.otf"); }
-                                @font-face { font-family : "FreeSerif"; font-weight : bold; font-style: italic; src: url("fonts/FreeSerifBoldItalic.otf"); }
-                                body { font-family: FreeSerif, Arial, serif; }' ."\n\n";
-                        break;
-                }
+                $css = FontProvider::getCss($book->options['fonts'], 'fonts/');
                 $css .= getTempFile($book->lang, 'epub.css');
                 return $css;
         }
@@ -521,7 +490,7 @@ class BookCleanerEpub {
         }
 
         /**
-        * change the picture links
+         * change the picture links
         */
         protected function setHtmlTitle(DOMXPath $xPath, $name) {
                 $title = $xPath->query('/html:html/html:head/html:title')->item(0);
@@ -529,7 +498,7 @@ class BookCleanerEpub {
         }
 
         /**
-        * change the picture links
+         * change the picture links
         */
         protected function setPictureLinks(DOMXPath $xPath) {
                 $list = $xPath->query('//html:img');
@@ -543,8 +512,8 @@ class BookCleanerEpub {
         }
 
         /**
-        * change the internal links
-        */
+         * change the internal links
+         */
         protected function setLinks(DOMDocument $dom) {
                 $list = $dom->getElementsByTagName('a');
                 $title = Api::mediawikiUrlEncode($this->book->title);

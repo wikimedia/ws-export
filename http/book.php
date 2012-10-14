@@ -13,6 +13,9 @@ try {
         $options = array();
         $options['images'] = isset($_GET['images']) ? filter_var($_GET['images'], FILTER_VALIDATE_BOOLEAN) : true;
         $options['fonts'] = isset($_GET['fonts']) ? strtolower(htmlspecialchars(urldecode($_GET['fonts']))) : 'freeserif';
+        if(filter_var($options['fonts'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
+            $options['fonts'] = '';
+        }
 
         if(isset($_GET['refresh'])) {
                 include $wsexportConfig['basePath'].'/book/Refresh.php';
@@ -25,7 +28,7 @@ try {
         if(!isset($_GET['page']) || $_GET['page'] == '')
                 include 'templates/book.php';
 
-        $title = htmlspecialchars(urldecode($_GET['page']));
+        $title = trim(htmlspecialchars(urldecode($_GET['page'])));
         $format = isset($_GET['format']) ? htmlspecialchars(urldecode($_GET['format'])) : 'epub';
         $provider = new BookProvider($api, $options);
         $data = $provider->get($title);

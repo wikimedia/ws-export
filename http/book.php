@@ -12,10 +12,7 @@ try {
 
         $options = array();
         $options['images'] = isset($_GET['images']) ? filter_var($_GET['images'], FILTER_VALIDATE_BOOLEAN) : true;
-        $options['fonts'] = isset($_GET['fonts']) ? strtolower(htmlspecialchars(urldecode($_GET['fonts']))) : 'freeserif';
-        if(filter_var($options['fonts'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
-            $options['fonts'] = '';
-        }
+        $options['fonts'] = isset($_GET['fonts']) ? strtolower(htmlspecialchars(urldecode($_GET['fonts']))) : '';
 
         if(isset($_GET['refresh'])) {
                 include $wsexportConfig['basePath'].'/book/Refresh.php';

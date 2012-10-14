@@ -220,24 +220,7 @@ abstract class EpubGenerator implements Generator {
         }
 
         protected function getCss(Book $book) {
-                $css = '';
-                switch($book->options['fonts']) {
-                    case 'linuxlibertine':
-                        $css .= '@font-face { font-family : "LinuxLibertine"; font-weight : normal; font-style: normal; src: url("fonts/LinuxLibertine.otf"); }
-                                @font-face { font-family : "LinuxLibertine"; font-weight : bold; font-style: normal; src: url("fonts/LinuxLibertineBold.otf"); }
-                                @font-face { font-family : "LinuxLibertine"; font-weight : normal; font-style: italic; src: url("fonts/LinuxLibertineItalic.otf"); }
-                                @font-face { font-family : "LinuxLibertine"; font-weight : bold; font-style: italic; src: url("fonts/LinuxLibertineBoldItalic.otf"); }
-                                body { font-family: FreeSerif, Arial, serif; }' ."\n\n";
-                        break;
-                    case 'freeserif':
-                    case filter_var($book->options['fonts'], FILTER_VALIDATE_BOOLEAN):
-                        $css .= '@font-face { font-family : "FreeSerif"; font-weight : normal; font-style: normal; src: url("fonts/FreeSerif.otf"); }
-                                @font-face { font-family : "FreeSerif"; font-weight : bold; font-style: normal; src: url("fonts/FreeSerifBold.otf"); }
-                                @font-face { font-family : "FreeSerif"; font-weight : normal; font-style: italic; src: url("fonts/FreeSerifItalic.otf"); }
-                                @font-face { font-family : "FreeSerif"; font-weight : bold; font-style: italic; src: url("fonts/FreeSerifBoldItalic.otf"); }
-                                body { font-family: FreeSerif, Arial, serif; }' ."\n\n";
-                        break;
-                }
+                $css = FontProvider::getCss($book->options['fonts'], 'fonts/');
                 $css .= getTempFile($book->lang, 'epub.css');
                 return $css;
         }

@@ -55,7 +55,7 @@ class OdtGenerator implements Generator {
         }
 
         protected function setXmlContent(Book $book) {
-                include(dirname(__FILE__) . '/XhtmlGenerator.php');
+                include(__DIR__ . '/XhtmlGenerator.php');
                 $xhtmlGenerator = new XhtmlGenerator();
                 $xmlContent = $xhtmlGenerator->create($book);
                 $xmldoc = new DOMDocument();
@@ -133,16 +133,16 @@ class OdtGenerator implements Generator {
         protected function xhtml2odt(DOMDocument $xmldoc) {
                 //$xhtml = self::cleanupInput($xhtml);
                 //$xhtml = $this->handleImages($xhtml);
-                $xsl = dirname(__FILE__) . '/xhtml2odt/xsl';
+                $xsl = __DIR__ . '/xhtml2odt/xsl';
                 $xsldoc = new DOMDocument();
-                $xsldoc->load($xsl."/xhtml2odt.xsl");
+                $xsldoc->load($xsl . '/xhtml2odt.xsl');
                 $proc = new XSLTProcessor();
                 $proc->importStylesheet($xsldoc);
                 return $proc->transformToXML($xmldoc);
         }
 
         protected function addStyles() {
-                $xsl = dirname(__FILE__) . '/xhtml2odt/xsl';
+                $xsl = __DIR__ . '/xhtml2odt/xsl';
                 $xmlContent = new DOMDocument();
                 $xmlContent->loadXML($this->xmlContent);
                 $xmlStyles = new DOMDocument();

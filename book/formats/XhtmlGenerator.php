@@ -34,31 +34,47 @@ class XhtmlGenerator implements Generator {
         */
         public function create(Book $book) {
                 $content = $this->compile($book);
-                return $this->getXhtmlContent($book, $content->saveXML());
+                return $this->getXhtmlContent($book, $content)->saveXML();
         }
 
         /**
         * add metadata to xhml page
-        * @return string
+        * @return DOMDocument
         */
-        protected function getXhtmlContent($book, $content) {
-                $head = '<head profile="http://dublincore.org/documents/dcq-html/">
-                                <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />  
-                                <title>' . $book->title . '</title>
-                                <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
-                                <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
-                                <meta name="DC.identifier" scheme="DCTERMS.URI" content="' . wikisourceUrl($book->lang, $book->title) . '" />
-                                <meta name="DC.language" content="' . $book->lang . '" />
-                                <meta name="DC.title" content="' . $book->name . '" />
-                                <meta name="DC.publisher" content="' . $book->publisher . '" />
-                                <meta name="DC.creator" content="' . $book->author . '" />
-                                <link rel="DC.source" href="' . wikisourceUrl($book->lang, $book->title) . '" />
-                                <link rel="DC.rights" href="http://creativecommons.org/licenses/by-sa/3.0/" />
-                                <link rel="DC.rights" href="http://www.gnu.org/copyleft/fdl.html" />
-                                <meta name="DC.format" scheme="DCTERMS.IMT" content="application/xhtml+xml" />
-                                <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
-                        </head>';
-                return str_replace('<body>', $head . '<body>', $content);
+        protected function getXhtmlContent(Book $book, DOMDocument $content) {
+                $title = $content->getElementsByTagName('title')->item(0);
+                $title->nodeValue = $book->title;
+                $head = $content->getElementsByTagName('head')->item(0);
+                $head->setAttribute('profile', 'http://dublincore.org/documents/dcq-html/');
+                $this->addDublinCoreLinkData($content, $head, 'schema.DCTERMS', 'http://purl.org/dc/terms/');
+                $this->addDublinCoreMetaData($content, $head, 'DC.identifier', wikisourceUrl($book->lang, $book->title), 'DCTERMS.URI');
+                $this->addDublinCoreMetaData($content, $head, 'DC.language', $book->lang);
+                $this->addDublinCoreMetaData($content, $head, 'DC.title', $book->name);
+                $this->addDublinCoreMetaData($content, $head, 'DC.publisher', $book->publisher);
+                $this->addDublinCoreMetaData($content, $head, 'DC.creator', $book->author);
+                $this->addDublinCoreLinkData($content, $head, 'DC.source', wikisourceUrl($book->lang, $book->title));
+                $this->addDublinCoreLinkData($content, $head, 'DC.rights', 'http://creativecommons.org/licenses/by-sa/3.0/');
+                $this->addDublinCoreLinkData($content, $head, 'DC.rights', 'http://www.gnu.org/copyleft/fdl.html');
+                $this->addDublinCoreMetaData($content, $head, 'DC.format', 'application/xhtml+xml', 'DCTERMS.IMT');
+                $this->addDublinCoreMetaData($content, $head, 'DC.type', 'Text', 'DCTERMS.DCMIType');
+                return $content;
+        }
+
+        protected function addDublinCoreMetaData(DOMDocument $dom, DOMElement $head, $name, $content, $scheme = '') {
+                $node = $dom->createElement('meta');
+                $node->setAttribute('name', $name);
+                $node->setAttribute('content', $content);
+                if($scheme !== '') {
+                        $node->setAttribute('scheme', $scheme);
+                }
+                $head->appendChild($node);
+        }
+
+        protected function addDublinCoreLinkData(DOMDocument $dom, DOMElement $head, $rel, $href) {
+                $node = $dom->createElement('link');
+                $node->setAttribute('rel', $rel);
+                $node->setAttribute('href', $href);
+                $head->appendChild($node);
         }
 
         /**
@@ -66,23 +82,35 @@ class XhtmlGenerator implements Generator {
         * @return DOMDocument
         */
         protected function compile(Book $book) {
-                if(!empty($book->chapters)) {
+                if($book->content) {
+                        $content = $book->content;
+                        $contentBody = $content->getElementsByTagName('body')->item(0);
+                        $firstChapter = 0;
+                } elseif(!empty($book->chapters)) {
                         $content = $book->chapters[0]->content;
                         $contentBody = $content->getElementsByTagName('body')->item(0);
-                        foreach($book->chapters as $chapter) {
-                                $body = $chapter->content->getElementsByTagName('body')->item(0);
-                                foreach($body->childNodes as $node) {
-                                        $node = $content->importNode($node, true);
-                                        $contentBody->appendChild($node);
-                                }
-                                $pageBreak = $content->createElement('div');
-                                $pageBreak->setAttribute('style', 'page-break-before:always;');
-                                $contentBody->appendChild($pageBreak);
-                        }
+                        $firstChapter = 1;
                 } else {
-                        $content = $book->content;
+                        return getXhtmlFromContent('en', '');
+                }
+                for($i = $firstChapter; $i < count($book->chapters); $i++) {
+                        $this->addChapterInXhtmlBook($book->chapters[$i]->content, $content, $contentBody);
+                        foreach($book->chapters[$i]->chapters as $subpage) {
+                                $this->addChapterInXhtmlBook($subpage->content, $content, $contentBody);
+                        }
                 }
                 return $content;
+        }
+
+        protected function addChapterInXhtmlBook(DOMDocument $chapter, DOMDocument $book, DOMElement $bookBody) {
+                $content = $chapter->getElementsByTagName('body')->item(0);
+                foreach($content->childNodes as $node) {
+                        $node = $book->importNode($node, true);
+                        $bookBody->appendChild($node);
+                }
+                $pageBreak = $book->createElement('div');
+                $pageBreak->setAttribute('style', 'page-break-before:always;');
+                $bookBody->appendChild($pageBreak);
         }
 }
 

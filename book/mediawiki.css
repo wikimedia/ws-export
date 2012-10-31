@@ -27,6 +27,11 @@ div.floatleft {
     margin-right: auto;
 }
 
+.thumbcaption {
+	text-align:left;
+	font-size: 95%;
+}
+
 div.tright {
     float: right;
     clear: right;

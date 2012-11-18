@@ -39,7 +39,7 @@ abstract class EpubGenerator implements Generator {
         public function create(Book $book) {
                 $css = $this->getCss($book);
                 $this->i18n = getI18n($book->lang);
-                setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang));
+                setLocale(LC_TIME, $book->lang . '_' . strtoupper($book->lang) . '.utf8');
                 $wsUrl = wikisourceUrl($book->lang, $book->title);
                 $cleaner = new BookCleanerEpub();
                 $cleaner->clean($book);
@@ -195,7 +195,7 @@ abstract class EpubGenerator implements Generator {
                                         <br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
                                         <h5>' . str_replace('%d', strftime('%x'), $this->i18n['exported_from_wikisource_the']) . '</h5>
                                 </div></body>
-                        </html>';
+                        </html>'; //TODO: Use somthing better than strftime
                 return $content;
         }
 
@@ -428,10 +428,11 @@ class BookCleanerEpub {
                 $list = $xPath->query('//html:img');
                 foreach($list as $node) {
                         $title = $this->encode($node->getAttribute('alt'));
-                        if(in_array($title, $this->linksList))
+                        if(in_array($title, $this->linksList)) {
                                 $node->setAttribute('src', 'images/' . $title);
-                        else
+                        } else {
                                 $node->parentNode->removeChild($node);
+                        }
                 }
         }
 
@@ -457,8 +458,8 @@ class BookCleanerEpub {
                                         }
                                 }
                                 $node->setAttribute('href', $title);
-                        } else {
-                               $node->setAttribute('href', 'http:'.$href);
+                        } elseif($href[0] == '/') {
+                               $node->setAttribute('href', 'http:' . $href);
                         }
                 }
         }

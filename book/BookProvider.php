@@ -513,6 +513,7 @@ class PageParser {
                 $this->deprecatedAttributes('hspace', 'padding');
                 $this->deprecatedAttributes('text', 'color');
                 $this->deprecatedAttributes('width', 'width');
+                $this->deprecatedAttributes('srcset', null);
 
                 $this->cleanIds();
                 return $this->xPath->document;
@@ -563,7 +564,9 @@ class PageParser {
         protected function deprecatedAttributes($name, $cssAttribute) {
                 $nodes = $this->xPath->query('//html:*[@' . $name . ']'); //hack: the getElementsByTagName method doesn't catch all tags.
                 foreach($nodes as $node) {
-                        $node->setAttribute('style', $cssAttribute . ':' . $node->getAttribute($name) . '; ' . $node->getAttribute('style'));
+                        if($cssAttribute != null) {
+                                $node->setAttribute('style', $cssAttribute . ':' . $node->getAttribute($name) . '; ' . $node->getAttribute('style'));
+                        }
                         $node->removeAttribute($name);
                 }
         }

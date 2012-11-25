@@ -395,13 +395,22 @@ class BookCleanerEpub {
         }
 
         protected function encode($string) {
+                static $map = array();
+                static $num = 0;
+                $string = str_replace(' ', '_', $string);
+                if(isset($map[$string])) {
+                    return $map[$string];
+                }
+                $map[$string] = $string;
                 $search = array('[αάàâäΑÂÄ]','[βΒ]','[Ψç]','[δΔ]','[εéèêëΕÊË]','[η]', '[φϕΦ]','[γΓ]','[θΘ]','[ιîïΙÎÏ]','[Κκ]','[λΛ]','[μ]','[ν]','[οôöÔÖ]','[Ωω]','[πΠ]','[Ψψ]','[ρΡ]','[σΣ]', '[τ]','[υûùüΥÛÜ]','[ξΞ]','[ζΖ]','[ ]','[^a-zA-Z0-9_\.]');
                 $replace = array('a','b','c','d','e','eh','f','g','h','i','k','l','m','n','o','oh','p','ps','r','s','t','u','x','z','_','_');
                 mb_regex_encoding('UTF-8');
                 foreach($search as $i => $pat) {
-                       $string = mb_eregi_replace($pat, $replace[$i], $string);
+                       $map[$string] = mb_eregi_replace($pat, $replace[$i], $map[$string]);
                 }
-                return utf8_decode($string);
+                $map[$string] = utf8_decode($map[$string]) . '_' . $num;
+                $num++;
+                return $map[$string];
         }
 
         /**

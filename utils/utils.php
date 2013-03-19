@@ -46,12 +46,25 @@ function getFile($file) {
 }
 
 /**
-* a mimetype from a file
-* @var $file the file
-*/
+ * Get mimetype of a file, using finfo if its available, or mime_magic.
+ *
+ * @param string $file file name and path
+ * @return string mime type on success
+ * @return false on failure
+ */
 function getMimeType($file) {
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        return $finfo->buffer($file);
+        if (class_exists('finfo', FALSE)) {
+                $finfoOpt = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
+                $info = new finfo($finfoOpt);
+                if ($info) {
+                        return $info->file($filename);
+                }
+        }
+        if (ini_get('mime_magic.magicfile') AND function_exists('mime_content_type')) {
+            // The mime_content_type function is only useful with a magic file
+            return mime_content_type($filename);
+        }
+        return false;
 }
 
 /**

@@ -1,9 +1,10 @@
-This command tool provide Wikisource book in many formats.
+This command tool exports Wikisource books to ePub, ODT, or XHTML.
 
-Allowed command line options are:
+Command line options are:
 
---lang (the lang code, required param)
---title (title of the book to generate with _ for space, required)
---format (epub or odt etc., default to epub)
---path (output_path, default ./)
---debug (maintainer option)
+-l  --lang    Language code.  Required.
+-t  --title   Wikisource page title, with spaces replaced by underscores.  Required.
+-f  --format  Valid formats: epub-2, epub-3, odt, xhtml  Default: epub-2
+-p  --path    Output path.  Optional.  Defaults to the current directory.
+-d  --debug   Verbose debugging output.  Optional.
+    --tmpdir  Directory in which to store temporary files.  Optional.

@@ -451,7 +451,7 @@ class PageParser {
 
                         // files from commons has an url like //upload.wikimedia.org/wikipedia/commons/thumb/6/62/PD-icon.svg/50px-PD-icon.svg.png and ones from wikisources has something like //upload.wikimedia.org/wikisource/es/2/20/Separador.jpg
                         $title = urldecode($segments[count($segments) - 2]);
-                        if(is_numeric($title[0]) && !is_numeric($segments[count($segments) - 1]))
+                        if(is_numeric("0x" . $title[0]) && !is_numeric("0x" . $segments[count($segments) - 1]))
                                 $picture->title = urldecode($segments[count($segments) - 1]);
                         else
                                 $picture->title = $title;

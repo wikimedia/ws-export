@@ -283,9 +283,12 @@ class BookProvider {
          */
         protected function startCreditImage(Book $book, $pictures) {
                 $url = 'http://toolserver.org/~phe/cgi-bin/credits';
-                $images = array( );
-                foreach ($pictures as $id => $picture)
-                        $images[] = $picture->title;
+                $images_set = array( );
+                foreach ($pictures as $id => $picture) {
+                        if ($picture->name)
+                                $images_set[$picture->name] = true;
+                }
+                $images = array_keys($images_set);
                 $images = join('|', $images);
                 $params = array( 'lang' => $book->lang,
                                  'format' => 'php',
@@ -449,12 +452,23 @@ class PageParser {
                         $url = $a->getAttribute('src');
                         $segments = explode('/', $url);
 
-                        // files from commons has an url like //upload.wikimedia.org/wikipedia/commons/thumb/6/62/PD-icon.svg/50px-PD-icon.svg.png and ones from wikisources has something like //upload.wikimedia.org/wikisource/es/2/20/Separador.jpg
-                        $title = urldecode($segments[count($segments) - 2]);
-                        if(is_numeric("0x" . $title[0]) && !is_numeric("0x" . $segments[count($segments) - 1]))
-                                $picture->title = urldecode($segments[count($segments) - 1]);
-                        else
-                                $picture->title = $title;
+                        // We need 1st) an unique key for each different image
+                        // to index the $pictures array. 2nd) the File: name to
+                        // get the credits for the image, this name can't be
+                        // used as key because it's not unique, two thumb with
+                        // different size of the same image will get the same
+                        // File: name. The url ends with 
+                        // es/thumb/6/62/PD-icon.svg/50px-PD-icon.svg.png or
+                        // es/2/20/Separador.jpg The url can be used as unique
+                        // key, so we need only to extract the File:name. This
+                        // is kludgy as we need to rely on the path format,
+                        // either the 6/62 part is at pos -4/-3 or -3/-2.
+                        if (count($segments) >=4 && is_numeric("0x" . $segments[count($segments) - 4]) && is_numeric("0x" . $segments[count($segments) - 3])) {
+                                $picture->name = $segments[count($segments) - 2];
+                        } else {
+                                $picture->name = $segments[count($segments) - 1];
+                        }
+                        $picture->title = urldecode($url);
                         $picture->url = 'http:' . $url;
 
                         $pictures[$picture->title] = $picture;

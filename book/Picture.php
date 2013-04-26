@@ -11,9 +11,17 @@
 class Picture {
 
         /**
-        * title of the picture
+        * title of the picture, this is a sort of uid, different picture
+        * get different title.
         */
         public $title = '';
+
+        /**
+        * name of the picture, this is identical to the File: name of the
+        * image. Different picture can get the same title (thumb
+        * of different size of the same image).
+        */
+        public $name = '';
 
         /**
         * url to the picture

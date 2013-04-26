@@ -28,7 +28,7 @@ class Api {
                 } elseif($this->lang == 'www' || $this->lang == '') {
                         $this->domainName = 'wikisource.org';
                         $this->lang = '';
-                } elseif($this->lang == 'wikilivres') {
+                } elseif($this->lang == 'wl' || $this->lang == 'wikilivres') {
                         $this->domainName = 'wikilivres.ca';
                         $this->lang = '';
                 } else {
@@ -43,10 +43,7 @@ class Api {
         * @throws HttpException
         */
         public function query($params) {
-                $data = 'action=query&format=php';
-                foreach($params as $param_name => $param_value) {
-                        $data .= '&' . $param_name . '=' . urlencode($param_value);
-                }
+                $data = 'action=query&format=php&' . http_build_query($params);
                 $url = $this->domainName . '/w/api.php?' . $data;
                 $response = $this->get($url);
                 return unserialize($response);
@@ -145,7 +142,7 @@ class Api {
         * @return the content of a page
         */
         public function getPage($title) {
-                $url = $this->domainName . '/w/index.php?action=render&title=' . urlencode($title);
+                $url = $this->domainName . '/w/index.php?action=render&title=' . str_replace('%26quot%3B', '"', rawurlencode($title));
                 $response = $this->get($url);
                 return getXhtmlFromContent($this->lang, $response);
         }
@@ -158,7 +155,7 @@ class Api {
         public function getPages($titles) {
                 $urls = array();
                 foreach($titles as $id => $title) {
-                        $urls[$id] = $this->domainName . '/w/index.php?action=render&title=' . urlencode($title);
+                        $urls[$id] = $this->domainName . '/w/index.php?action=render&title=' . str_replace('%26quot%3B', '"', rawurlencode($title));
                 }
                 $responses = $this->getMulti($urls);
                 foreach($responses as $id => $response) {

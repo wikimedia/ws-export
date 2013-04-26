@@ -57,8 +57,9 @@ class BookProvider {
 
                 $book->type = $metadata_parser->getMetadata('ws-type');
                 $book->name = htmlspecialchars($metadata_parser->getMetadata('ws-title'));
-                if($book->name == '')
+                if($book->name == '') {
                         $book->name = str_replace('_', ' ', $book->metadata_src);
+                }
                 $book->author = htmlspecialchars($metadata_parser->getMetadata('ws-author'));
                 $book->translator = htmlspecialchars($metadata_parser->getMetadata('ws-translator'));
                 $book->illustrator = htmlspecialchars($metadata_parser->getMetadata('ws-illustrator'));
@@ -139,6 +140,7 @@ class BookProvider {
 
                 }
                 $book->pictures = $pictures;
+
                 return $book;
         }
 

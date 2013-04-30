@@ -368,6 +368,7 @@ class PageParser {
         public function __construct(DOMDocument $doc) {
                 $this->xPath = new DOMXPath($doc);
                 $this->xPath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+                $this->removeEnlargeLinks(); //Should be run before getChapterList in order to remove false links
         }
 
         /**
@@ -554,6 +555,13 @@ class PageParser {
                                 $node->setAttribute('id', '_' . $id);
                         }
                 }
+        }
+
+        /**
+        * remove links to enlarge pictures
+        */
+        public function removeEnlargeLinks() {
+                $this->removeNodesWithXpath('//html:*[contains(@class,"magnify")]');
         }
 
         protected function removeNodesWithXpath($query) {

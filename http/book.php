@@ -5,7 +5,7 @@ $wsexportConfig = array(
         'stat' => true
 );
 
-include('../book/init.php');
+include_once('../book/init.php');
 
 try {
         $api = new Api();

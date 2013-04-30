@@ -60,7 +60,7 @@ if(!isset($_SERVER['argc']) || $_SERVER['argc'] < 3) {
                 'tempPath' => $tempPath,
                 'stat' => true
         );
-        include($basePath.'/book/init.php');
+        include_once($basePath.'/book/init.php');
 
         try {
                 $api = new Api($lang);

@@ -7,15 +7,15 @@
 global $wsexportConfig;
 $basePath = $wsexportConfig['basePath'];
 
-include($basePath . '/utils/utils.php');
-include($basePath . '/utils/HttpException.php');
-include($basePath . '/utils/Api.php');
-include($basePath . '/utils/CurlAsync.php');
-include($basePath . '/utils/ZipCreator.php');
-include($basePath . '/book/Generator.php');
-include($basePath . '/book/Picture.php');
-include($basePath . '/book/Page.php');
-include($basePath . '/book/Book.php');
-include($basePath . '/book/BookProvider.php');
-include($basePath . '/book/Stat.php');
-include($basePath . '/book/FontProvider.php');
+include_once($basePath . '/utils/utils.php');
+include_once($basePath . '/utils/HttpException.php');
+include_once($basePath . '/utils/Api.php');
+include_once($basePath . '/utils/CurlAsync.php');
+include_once($basePath . '/utils/ZipCreator.php');
+include_once($basePath . '/book/Generator.php');
+include_once($basePath . '/book/Picture.php');
+include_once($basePath . '/book/Page.php');
+include_once($basePath . '/book/Book.php');
+include_once($basePath . '/book/BookProvider.php');
+include_once($basePath . '/book/Stat.php');
+include_once($basePath . '/book/FontProvider.php');

@@ -514,7 +514,7 @@ class PageParser {
         public function getContent() {
                 $this->removeNodesWithXpath('//*[contains(@class,"ws-noexport")]');
                 $this->removeNodesWithXpath('//html:table[@id="toc"]');
-                $this->removeNodesWithXpath('//html:span[@class="editsection"]');
+                $this->removeNodesWithXpath('//html:span[@class="editsection" or @class="mw-editsection"]');
                 $this->deprecatedNodes('center', 'div', 'text-align:center;');
                 $this->deprecatedNodes('strike', 'span', 'text-decoration:line-through;');
                 $this->deprecatedNodes('s', 'span', 'text-decoration:line-through;');
@@ -587,7 +587,7 @@ class PageParser {
         }
 
         protected function deprecatedAttributes($name, $attribute, $isCss = true) {
-                $nodes = $this->xPath->query('//html:*[@' . $name . ']'); //hack: the getElementsByTagName method doesn't catch all tags.
+                $nodes = $this->xPath->query('//html:*[@' . $name . ']');
                 foreach($nodes as $node) {
                         if($attribute != null) {
                                 if($isCss) {

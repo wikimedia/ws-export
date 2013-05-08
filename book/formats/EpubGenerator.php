@@ -416,7 +416,7 @@ class BookCleanerEpub {
                 foreach($search as $i => $pat) {
                        $map[$string] = mb_eregi_replace($pat, $replace[$i], $map[$string]);
                 }
-                $map[$string] = utf8_decode($map[$string]) . '_' . $num;
+                $map[$string] = $num . '_' . $this->cutFilename(utf8_decode($map[$string]));
                 $num++;
                 return $map[$string];
         }
@@ -479,5 +479,16 @@ class BookCleanerEpub {
                                $node->setAttribute('href', 'http:' . $href);
                         }
                 }
+        }
+
+        /**
+         * Cut a filename if it is too long but kepp the extension
+         */
+        protected function cutFilename($string, $max = 100) {
+                $length = strlen($string);
+                if($length > $max) {
+                        $string = substr($string, $length - $max, $length - 1);
+                }
+                return $string;
         }
 }

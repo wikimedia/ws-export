@@ -234,12 +234,13 @@ class BookProvider {
                         foreach($temps as $temp) {
                                 $title = $temp;
                         }
-                        if(strstr($picture->url, '/commons/'))
+                        if(strstr($picture->url, '/commons/')) {
                                 $picture->url = str_replace('commons/', 'commons/thumb/', $picture->url) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
-                        elseif(strstr($picture->url, '/wikisource/'.$lang))
+                        } elseif(strstr($picture->url, '/wikisource/'.$lang)) {
                                 $picture->url = str_replace('wikisource/'.$lang, 'wikisource/'.$lang.'/thumb/', $picture->url) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
-                        else
+                        } else {
                                 return new Picture();
+						}
                         $picture->mimetype = 'image/jpeg';
                         $picture->title .= '.jpg';
                 }
@@ -402,12 +403,12 @@ class PageParser {
         * TODO retrive only main namespace pages ?
         */
         public function getChaptersList($title, $page_list, $namespaces) {
-                $list = $this->xPath->query('//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::html:a[not(contains(@href,"action=edit"))][not(contains(@class,"extiw"))][not(contains(@class,"external"))]');
+                $list = $this->xPath->query('//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::html:a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"image"))]');
                 $chapters = array();
                 foreach($list as $link) {
                         $title = str_replace(' ', '_', $link->getAttribute('title'));
                         $parts = explode(':', $title);
-                        if(!in_array($title, $page_list) && !in_array($parts[0], $namespaces)) {
+                        if($title != '' && !in_array($title, $page_list) && !in_array($parts[0], $namespaces)) {
                             $chapter = new Page();
                             $chapter->title = $title;
                             $chapter->name = $link->nodeValue;
@@ -425,11 +426,11 @@ class PageParser {
         public function getFullChaptersList($title, $page_list, $namespaces) {
                 $chapters = $this->getChaptersList($title, $page_list, $namespaces);
                 if(empty($chapters)) {
-                        $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '")][not(contains(@class,"extiw"))][not(contains(@class,"external"))][not(contains(@href,"#"))][not(contains(@href,"action=edit"))][not(contains(@title,"/Texte entier"))]');
+                        $list = $this->xPath->query('//html:a[contains(@href,"' . Api::mediawikiUrlEncode($title) . '") and not(contains(@class,"extiw") or contains(@class,"external") or contains(@href,"#") or contains(@href,"action=edit") or contains(@title,"/Texte entier") or contains(@class,"image"))]');
                         foreach($list as $link) {
                                 $title = str_replace(' ', '_', $link->getAttribute('title'));
                                 $parts = explode(':', $title);
-                                if(!in_array($title, $page_list) && !in_array($parts[0], $namespaces)) {
+                                if($title != '' && !in_array($title, $page_list) && !in_array($parts[0], $namespaces)) {
                                         $chapter = new Page();
                                         $chapter->title = $title;
                                         $chapter->name = $link->nodeValue;
@@ -448,7 +449,7 @@ class PageParser {
         * @return array
         */
         public function getPicturesList() {
-                $list = $this->xPath->query('//html:a[@class="image"]');
+                $list = $this->xPath->query('//html:a[contains(@class,"image")]');
                 $pictures = array();
                 foreach($list as $node) {
                         $a = $node->getElementsByTagName('img')->item(0);

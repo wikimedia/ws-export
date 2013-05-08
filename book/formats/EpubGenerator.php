@@ -170,6 +170,20 @@ abstract class EpubGenerator implements Generator {
         }
 
         protected function getXhtmlTitle(Book $book) {
+                $footerElements = array();
+                if($book->publisher != '') {
+                        $footerElements[] = $book->publisher;
+                }
+                if($book->periodical != '') {
+                        $footerElements[] = $book->periodical;
+                }
+                if($book->place != '') {
+                        $footerElements[] = $book->place;
+                }
+                if($book->year != '') {
+                        $footerElements[] = $book->year;
+                }
+
                 $content = '<?xml version="1.0" encoding="UTF-8" ?>
                         <!DOCTYPE html>
                         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">
@@ -185,13 +199,7 @@ abstract class EpubGenerator implements Generator {
                                         <br />
                                         <img alt="" src="images/Accueil_scribe.png" />
                                         <br />
-                                        <h4>' . $book->publisher;
-                                        if($book->publisher != '' && ($book->year != '' || $book->place != ''))
-                                                $content .= ', ';
-                                        $content .= $book->place;
-                                        if($book->year != '' && $book->place != '')
-                                                $content .= ', ';
-                                        $content .= $book->year . '</h4>
+                                        <h4>' . implode( $footerElements, ', ' ) . '</h4>
                                         <br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
                                         <h5>' . str_replace('%d', strftime('%x'), $this->i18n['exported_from_wikisource_the']) . '</h5>
                                 </div></body>

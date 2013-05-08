@@ -60,6 +60,7 @@ class BookProvider {
                 if($book->name == '') {
                         $book->name = str_replace('_', ' ', $book->metadata_src);
                 }
+                $book->periodical = htmlspecialchars($metadata_parser->getMetadata('ws-periodical'));
                 $book->author = htmlspecialchars($metadata_parser->getMetadata('ws-author'));
                 $book->translator = htmlspecialchars($metadata_parser->getMetadata('ws-translator'));
                 $book->illustrator = htmlspecialchars($metadata_parser->getMetadata('ws-illustrator'));

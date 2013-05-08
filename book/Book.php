@@ -25,6 +25,7 @@ class Book extends Page {
         * @see https://wikisource.org/wiki/Wikisource:Microformat
         */
         public $type = '';
+        public $periodical = '';
         public $author = '';
         public $translator = '';
         public $illustrator = '';

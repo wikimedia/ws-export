@@ -8,7 +8,7 @@
 /**
  * create an epub file
  */
-abstract class EpubGenerator implements Generator {
+abstract class EpubGenerator implements FormatGenerator {
 
         /**
         * array key/value that contain translated strings

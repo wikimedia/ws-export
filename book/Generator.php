@@ -8,7 +8,7 @@
 /**
 * interface for classes creating file
 */
-interface Generator {
+interface FormatGenerator {
 
         /**
         * return the extension of the generated file

@@ -9,7 +9,7 @@
 * create an epub 2 file
 * @see http://idpf.org/epub/201
 */
-class Epub2Generator implements Generator {
+class Epub2Generator implements FormatGenerator {
 
         /**
         * array key/value that contain translated strings

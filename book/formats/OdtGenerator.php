@@ -11,7 +11,7 @@
 * @see http://xhtml2odt.org/
 * @todo the odt style doesn't work
 */
-class OdtGenerator implements Generator {
+class OdtGenerator implements FormatGenerator {
         protected $xmlContent = null;
         protected $xmlStyles = null;
 

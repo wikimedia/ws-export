@@ -9,7 +9,7 @@
 * create an an xhtml file
 * @see http://www.w3.org/TR/html5/
 */
-class XhtmlGenerator implements Generator {
+class XhtmlGenerator implements FormatGenerator {
 
         /**
         * return the extension of the generated file

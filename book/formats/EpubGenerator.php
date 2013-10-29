@@ -416,7 +416,7 @@ class BookCleanerEpub {
                 foreach($search as $i => $pat) {
                        $map[$string] = mb_eregi_replace($pat, $replace[$i], $map[$string]);
                 }
-                $map[$string] = $num . '_' . $this->cutFilename(utf8_decode($map[$string]));
+                $map[$string] = 'c' . $num . '_' . $this->cutFilename(utf8_decode($map[$string]));
                 $num++;
                 return $map[$string];
         }

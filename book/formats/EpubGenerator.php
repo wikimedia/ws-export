@@ -208,20 +208,22 @@ abstract class EpubGenerator implements FormatGenerator {
         }
 
         protected function getXhtmlAbout(Book $book, $wsUrl) {
-                $list = '';
-                $listBot = '';
+                $list = '<ul>';
+                $listBot = '<ul>';
                 foreach($book->credits as $name => $value) {
                         if(in_array('bot', $value['flags']))
                                 $listBot .= '<li>' . htmlspecialchars($name, ENT_QUOTES) . "</li>\n";
                         else
                                 $list .= '<li>' . htmlspecialchars($name, ENT_QUOTES) . "</li>\n";
                 }
+                $list .= '</ul>';
+                $listBot .= '</ul>';
                 $about = getTempFile($book->lang, 'about.xhtml');
                 if($about == '') {
                         $about = getXhtmlFromContent($book->lang, $list, $this->i18n['about']);
                 } else {
-                        $about = str_replace('{CONTRIBUTORS}', '<ul>' . $list . '</ul>', $about);
-                        $about = str_replace('{BOT-CONTRIBUTORS}', '<ul>' . $list . '</ul>', $about);
+                        $about = str_replace('{CONTRIBUTORS}', $list, $about);
+                        $about = str_replace('{BOT-CONTRIBUTORS}', $list, $about);
                         $about = str_replace('{URL}', $wsUrl, $about);
                 }
                 return $about;

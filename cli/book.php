@@ -91,7 +91,7 @@ if(!isset($_SERVER['argc']) || $_SERVER['argc'] < 3) {
                         error_log('Unable to create output file: ' . $path . "\n");
                         exit(1);
                 }
-                echo "The ebook has been created created: $path\n";
+                echo "The ebook has been created: $path\n";
         } catch(Exception $exception) {
                 echo "Error: $exception\n";
         }

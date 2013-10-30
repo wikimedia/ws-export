@@ -53,8 +53,10 @@
                 </label>
             </div>
         </div>
-        <div class="form-actions">
-            <input class="btn btn-primary" type="submit" value="Export" />
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+                <input class="btn btn-primary" type="submit" value="Export" />
+            </div>
         </div>
     </fieldset>
 </form>

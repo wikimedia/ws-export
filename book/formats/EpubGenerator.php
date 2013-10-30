@@ -116,8 +116,8 @@ abstract class EpubGenerator implements FormatGenerator {
                                         <meta name="dtb:totalPageCount" content="0" />
                                         <meta name="dtb:maxPageNumber" content="0" />
                                 </head>
-                                <docTitle><text>' . $book->name . '</text></docTitle>
-                                <docAuthor><text>' . $book->author . '</text></docAuthor>
+                                <docTitle><text>' . htmlspecialchars($book->name, ENT_QUOTES) . '</text></docTitle>
+                                <docAuthor><text>' . htmlspecialchars($book->author, ENT_QUOTES) . '</text></docAuthor>
                                 <navMap>
                                         <navPoint id="title" playOrder="1">
                                                 <navLabel><text>' . $this->i18n['title_page']  . '</text></navLabel>
@@ -126,7 +126,7 @@ abstract class EpubGenerator implements FormatGenerator {
                                         $order = 2;
                                         if($book->content) {
                                             $content.= '<navPoint id="' . $book->title . '" playOrder="' . $order . '">
-                                                    <navLabel><text>' . $book->name . '</text></navLabel>
+                                                    <navLabel><text>' . htmlspecialchars($book->name, ENT_QUOTES) . '</text></navLabel>
                                                     <content src="' . $book->title . '.xhtml" />
                                             </navPoint>';
                                             $order++;
@@ -135,13 +135,13 @@ abstract class EpubGenerator implements FormatGenerator {
                                                 foreach($book->chapters as $chapter) {
                                                         if($chapter->name != '') {
                                                                 $content.= '<navPoint id="' . $chapter->title . '" playOrder="' . $order . '">
-                                                                            <navLabel><text>' . $chapter->name . '</text></navLabel>
+                                                                            <navLabel><text>' . htmlspecialchars($chapter->name, ENT_QUOTES) . '</text></navLabel>
                                                                             <content src="' . $chapter->title . '.xhtml" />';
                                                                 $order++;
                                                                 foreach($chapter->chapters as $subpage) {
                                                                         if($subpage->name != '') {
                                                                                 $content.= '<navPoint id="' . $subpage->title . '" playOrder="' . $order . '">
-                                                                                            <navLabel><text>' . $subpage->name . '</text></navLabel>
+                                                                                            <navLabel><text>' . htmlspecialchars($subpage->name, ENT_QUOTES) . '</text></navLabel>
                                                                                             <content src="' . $subpage->title . '.xhtml" />
                                                                                 </navPoint>';
                                                                                 $order++;
@@ -153,7 +153,7 @@ abstract class EpubGenerator implements FormatGenerator {
                                         }
                                         $content.= '<navPoint id="about" playOrder="' . $order . '">
                                                 <navLabel>
-                                                        <text>' . $this->i18n['about'] . '</text>
+                                                        <text>' . htmlspecialchars($this->i18n['about'], ENT_QUOTES) . '</text>
                                                 </navLabel>
                                                 <content src="about.xhtml"/>
                                         </navPoint>
@@ -188,20 +188,20 @@ abstract class EpubGenerator implements FormatGenerator {
                         <!DOCTYPE html>
                         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">
                                 <head>
-                                        <title>' . $book->name . '</title>
+                                        <title>' . htmlspecialchars($book->name, ENT_QUOTES) . '</title>
                                         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
                                         <link type="text/css" rel="stylesheet" href="main.css" />
                                 </head>
                                 <body style="background-color:ghostwhite;"><div style="text-align:center; position:absolute;">
-                                        <h1 id="heading_id_2">' . $book->name . '</h1>
-                                        <h2>' . $book->author . '</h2>
+                                        <h1 id="heading_id_2">' . htmlspecialchars($book->name, ENT_QUOTES) . '</h1>
+                                        <h2>' . htmlspecialchars($book->author, ENT_QUOTES) . '</h2>
                                         <br />
                                         <br />
                                         <img alt="" src="images/Accueil_scribe.png" />
                                         <br />
-                                        <h4>' . implode( $footerElements, ', ' ) . '</h4>
+                                        <h4>' . implode($footerElements, ', ') . '</h4>
                                         <br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
-                                        <h5>' . str_replace('%d', strftime('%x'), $this->i18n['exported_from_wikisource_the']) . '</h5>
+                                        <h5>' . str_replace('%d', strftime('%x'), htmlspecialchars($this->i18n['exported_from_wikisource_the'], ENT_QUOTES)) . '</h5>
                                 </div></body>
                         </html>'; //TODO: Use somthing better than strftime
                 return $content;
@@ -212,16 +212,16 @@ abstract class EpubGenerator implements FormatGenerator {
                 $listBot = '';
                 foreach($book->credits as $name => $value) {
                         if(in_array('bot', $value['flags']))
-                                $listBot .= '<li>' . $name . "</li>\n";
+                                $listBot .= '<li>' . htmlspecialchars($name, ENT_QUOTES) . "</li>\n";
                         else
-                                $list .= '<li>' . $name . "</li>\n";
+                                $list .= '<li>' . htmlspecialchars($name, ENT_QUOTES) . "</li>\n";
                 }
                 $about = getTempFile($book->lang, 'about.xhtml');
                 if($about == '') {
                         $about = getXhtmlFromContent($book->lang, $list, $this->i18n['about']);
                 } else {
-                        $about = str_replace('{CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
-                        $about = str_replace('{BOT-CONTRIBUTORS}', '<ul>'.$list.'</ul>', $about);
+                        $about = str_replace('{CONTRIBUTORS}', '<ul>' . $list . '</ul>', $about);
+                        $about = str_replace('{BOT-CONTRIBUTORS}', '<ul>' . $list . '</ul>', $about);
                         $about = str_replace('{URL}', $wsUrl, $about);
                 }
                 return $about;

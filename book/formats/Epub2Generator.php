@@ -21,26 +21,26 @@ class Epub2Generator extends EpubGenerator {
                                 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcterms="http://purl.org/dc/terms/">
                                         <dc:identifier id="uid" opf:scheme="URI">' . $wsUrl . '</dc:identifier>
                                         <dc:language xsi:type="dcterms:RFC4646">' . $book->lang . '</dc:language>
-                                        <dc:title>' . $book->name . '</dc:title>
+                                        <dc:title>' . htmlspecialchars($book->name, ENT_QUOTES) . '</dc:title>
                                         <dc:source>' . $wsUrl . '</dc:source>
                                         <dc:date opf:event="ops-publication" xsi:type="dcterms:W3CDTF">' . date(DATE_W3C) . '</dc:date>
                                         <dc:rights>http://creativecommons.org/licenses/by-sa/3.0/</dc:rights>
                                         <dc:rights>http://www.gnu.org/copyleft/fdl.html</dc:rights>
                                         <dc:contributor opf:role="bkp">Wikisource</dc:contributor>';
                                 if($book->author != '') {
-                                        $content.= '<dc:creator opf:role="aut">' . $book->author . '</dc:creator>';
+                                        $content.= '<dc:creator opf:role="aut">' . htmlspecialchars($book->author, ENT_QUOTES) . '</dc:creator>';
                                 }
                                 if($book->translator != '') {
-                                        $content.= '<dc:contributor opf:role="trl">' . $book->translator . '</dc:contributor>';
+                                        $content.= '<dc:contributor opf:role="trl">' . htmlspecialchars($book->translator, ENT_QUOTES) . '</dc:contributor>';
                                 }
                                 if($book->illustrator != '') {
-                                        $content.= '<dc:contributor opf:role="ill">' . $book->illustrator . '</dc:contributor>';
+                                        $content.= '<dc:contributor opf:role="ill">' . htmlspecialchars($book->illustrator, ENT_QUOTES) . '</dc:contributor>';
                                 }
                                 if($book->publisher != '') {
-                                        $content.= '<dc:publisher>' . $book->publisher . '</dc:publisher>';
+                                        $content.= '<dc:publisher>' . htmlspecialchars($book->publisher, ENT_QUOTES) . '</dc:publisher>';
                                 }
                                 if($book->year != '') {
-                                        $content.= '<dc:date opf:event="original-publication">' . $book->year . '</dc:date>';
+                                        $content.= '<dc:date opf:event="original-publication">' . htmlspecialchars($book->year, ENT_QUOTES) . '</dc:date>';
                                 }
                                 if($book->cover != '') {
                                         $content.= '<meta name="cover" content="cover" />';
@@ -93,15 +93,15 @@ class Epub2Generator extends EpubGenerator {
                                 </spine>
                                 <guide>';
                                         if($book->cover != '') {
-                                                $content.= '<reference type="cover" title="' . $this->i18n['cover'] . '" href="cover.xhtml" />';
+                                                $content.= '<reference type="cover" title="' . htmlspecialchars($this->i18n['cover'], ENT_QUOTES) . '" href="cover.xhtml" />';
                                         } else {
-                                                $content.= '<reference type="cover" title="' . $this->i18n['cover'] . '" href="title.xhtml" />';
+                                                $content.= '<reference type="cover" title="' . htmlspecialchars($this->i18n['cover'], ENT_QUOTES) . '" href="title.xhtml" />';
                                         }
-                                        $content.= '<reference type="title-page" title="' . $this->i18n['title_page'] . '" href="title.xhtml" />';
+                                        $content.= '<reference type="title-page" title="' . htmlspecialchars($this->i18n['title_page'], ENT_QUOTES) . '" href="title.xhtml" />';
                                         if($book->content) {
-                                                    $content.= '<reference type="text" title="' . $book->name . '" href="' . $book->title . '.xhtml" />';
+                                                    $content.= '<reference type="text" title="' . htmlspecialchars($book->name, ENT_QUOTES) . '" href="' . $book->title . '.xhtml" />';
                                         }
-                                        $content.= '<reference type="copyright-page" title="' . $this->i18n['about'] . '" href="about.xhtml" />
+                                        $content.= '<reference type="copyright-page" title="' . htmlspecialchars($this->i18n['about'], ENT_QUOTES) . '" href="about.xhtml" />
                                 </guide>
                         </package>';
                 return $content;

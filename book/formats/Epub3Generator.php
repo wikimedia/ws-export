@@ -24,7 +24,7 @@ class Epub3Generator extends EpubGenerator {
                                         <dc:identifier id="uid">' . $wsUrl . '</dc:identifier>
                                         <meta property="dcterms:modified">' . date('Y-m-d\TH:i:s') . 'Z</meta>
                                         <dc:language>' . $book->lang . '</dc:language>
-                                        <dc:title id="meta-title">' . $book->name . '</dc:title>
+                                        <dc:title id="meta-title">' . htmlspecialchars($book->name, ENT_QUOTES) . '</dc:title>
                                         <meta refines="#meta-title" property="title-type">main</meta>
                                         <dc:source>' . $wsUrl . '</dc:source>
                                         <dc:rights xml:lang="en">Creative Commons BY-SA 3.0</dc:rights>
@@ -34,22 +34,22 @@ class Epub3Generator extends EpubGenerator {
                                         <dc:contributor id="meta-bkp">Wikisource</dc:contributor>
                                         <meta refines="#meta-bkp" property="role" scheme="marc:relators">bkp</meta>';
                                 if($book->author != '') {
-                                        $content.= '<dc:creator id="meta-aut">' . $book->author . '</dc:creator>
+                                        $content.= '<dc:creator id="meta-aut">' . htmlspecialchars($book->author, ENT_QUOTES) . '</dc:creator>
                                                     <meta refines="#meta-aut" property="role" scheme="marc:relators">aut</meta>';
                                 }
                                 if($book->translator != '') {
-                                        $content.= '<dc:contributor id="meta-trl">' . $book->translator . '</dc:contributor>
+                                        $content.= '<dc:contributor id="meta-trl">' . htmlspecialchars($book->translator, ENT_QUOTES) . '</dc:contributor>
                                                     <meta refines="#meta-trl" property="role" scheme="marc:relators">trl</meta>';
                                 }
                                 if($book->illustrator != '') {
-                                        $content.= '<dc:contributor id="meta-ill">' . $book->illustrator . '</dc:contributor>
+                                        $content.= '<dc:contributor id="meta-ill">' . htmlspecialchars($book->illustrator, ENT_QUOTES) . '</dc:contributor>
                                                     <meta refines="#meta-ill" property="role" scheme="marc:relators">ill</meta>';
                                 }
                                 if($book->publisher != '') {
-                                        $content.= '<dc:publisher>' . $book->publisher . '</dc:publisher>';
+                                        $content.= '<dc:publisher>' . htmlspecialchars($book->publisher, ENT_QUOTES) . '</dc:publisher>';
                                 }
                                 if($book->year != '') {
-                                        $content.= '<dc:date>' . $book->year . '</dc:date>';
+                                        $content.= '<dc:date>' . htmlspecialchars($book->year, ENT_QUOTES) . '</dc:date>';
                                 }
                                 if($book->cover != '') {
                                         $content.= '<meta name="cover" content="cover" />';
@@ -108,15 +108,15 @@ class Epub3Generator extends EpubGenerator {
                                 </spine>
                                 <guide>'; //deprecated
                                         if($book->cover != '') {
-                                                $content.= '<reference type="cover" title="' . $this->i18n['cover'] . '" href="cover.xhtml" />';
+                                                $content.= '<reference type="cover" title="' . htmlspecialchars($this->i18n['cover'], ENT_QUOTES) . '" href="cover.xhtml" />';
                                         } else {
-                                                $content.= '<reference type="cover" title="' . $this->i18n['cover'] . '" href="title.xhtml" />';
+                                                $content.= '<reference type="cover" title="' . htmlspecialchars($this->i18n['cover'], ENT_QUOTES) . '" href="title.xhtml" />';
                                         }
-                                        $content.= '<reference type="title-page" title="' . $this->i18n['title_page'] . '" href="title.xhtml" />';
+                                        $content.= '<reference type="title-page" title="' . htmlspecialchars($this->i18n['title_page'], ENT_QUOTES) . '" href="title.xhtml" />';
                                         if($book->content) {
-                                                    $content.= '<reference type="text" title="' . $book->name . '" href="' . $book->title . '.xhtml" />';
+                                                    $content.= '<reference type="text" title="' . htmlspecialchars($book->name, ENT_QUOTES) . '" href="' . $book->title . '.xhtml" />';
                                         }
-                                        $content.= '<reference type="copyright-page" title="' . $this->i18n['about'] . '" href="about.xhtml" />
+                                        $content.= '<reference type="copyright-page" title="' . htmlspecialchars($this->i18n['about'], ENT_QUOTES) . '" href="about.xhtml" />
                                 </guide>
                         </package>';
                 return $content;
@@ -127,7 +127,7 @@ class Epub3Generator extends EpubGenerator {
                         <!DOCTYPE html>
                         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="' . $book->lang . '">
                                 <head>
-                                        <title>' . $book->name . '</title>
+                                        <title>' . htmlspecialchars($book->name, ENT_QUOTES) . '</title>
                                         <meta charset="utf-8" />
                                         <link type="text/css" rel="stylesheet" href="main.css" />
                                 </head>
@@ -136,24 +136,24 @@ class Epub3Generator extends EpubGenerator {
                                                 <nav epub:type="toc" id="toc">
                                                         <ol>
                                                                 <li id="toc-title">
-                                                                        <a href="title.xhtml">' . $this->i18n['title_page']  . '</a>
+                                                                        <a href="title.xhtml">' . htmlspecialchars($this->i18n['title_page'], ENT_QUOTES)  . '</a>
                                                                 </li>';
                                         if($book->content) {
                                             $content.= '<li id="toc-' . $book->title . '">
-                                                                <a href="' . $book->title . '.xhtml">' . $book->name  . '</a>
+                                                                <a href="' . $book->title . '.xhtml">' . htmlspecialchars($book->name, ENT_QUOTES)  . '</a>
                                                         </li>';
                                         }
                                         if(!empty($book->chapters)) {
                                                 foreach($book->chapters as $chapter) {
                                                         if($chapter->name != '') {
                                                                 $content.= '<li id="toc-' . $chapter->title . '">
-                                                                        <a href="' . $chapter->title . '.xhtml">' . $chapter->name  . '</a>';
+                                                                        <a href="' . $chapter->title . '.xhtml">' . htmlspecialchars($chapter->name, ENT_QUOTES)  . '</a>';
                                                                 if(!empty($chapter->chapters)) {
                                                                         $content .= '<ol>';
                                                                         foreach($chapter->chapters as $subpage) {
                                                                                 if($subpage->name != '') {
                                                                                         $content.= '<li id="toc-' . $subpage->title . '">
-                                                                                                <a href="' . $subpage->title . '.xhtml">' . $subpage->name  . '</a>
+                                                                                                <a href="' . $subpage->title . '.xhtml">' . htmlspecialchars($subpage->name, ENT_QUOTES)  . '</a>
                                                                                         </li>';
                                                                                 }
                                                                         }
@@ -164,7 +164,7 @@ class Epub3Generator extends EpubGenerator {
                                                 }
                                         }
                                                     $content.= '<li id="toc-about">
-                                                                        <a href="about.xhtml">' . $this->i18n['about']  . '</a>
+                                                                        <a href="about.xhtml">' . htmlspecialchars($this->i18n['about'], ENT_QUOTES)  . '</a>
                                                                 </li>
                                                         </ol>
                                                 </nav>
@@ -174,10 +174,10 @@ class Epub3Generator extends EpubGenerator {
                                                                           <a epub:type="toc" href="#toc">Table of Contents</a>
                                                                    </li>
                                                                    <li>
-                                                                          <a epub:type="bodymatter" href="' . $book->title . '.xhtml">' . $book->name . '</a>
+                                                                          <a epub:type="bodymatter" href="' . $book->title . '.xhtml">' . htmlspecialchars($book->name, ENT_QUOTES) . '</a>
                                                                    </li>
                                                                    <li>
-                                                                          <a epub:type="copyright-page" href="about.xhtml">' . $this->i18n['about']  . '</a>
+                                                                          <a epub:type="copyright-page" href="about.xhtml">' . htmlspecialchars($this->i18n['about'], ENT_QUOTES)  . '</a>
                                                                    </li>
                                                         </ol>
                                                  </nav>

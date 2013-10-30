@@ -63,5 +63,7 @@ try {
                 Stat::add($format, $api->lang);
         flush();
 } catch(HttpException $exception) {
-        $exception->show();
+		header('HTTP/1.1 ' . $exception->getCode() . ' ' . $exception->getMessage());
+        $error = $exception->getMessage();
+        include 'templates/book.php';
 }

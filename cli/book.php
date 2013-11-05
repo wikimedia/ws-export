@@ -85,6 +85,9 @@ if(!isset($_SERVER['argc']) || $_SERVER['argc'] < 3) {
                 }
                 $file = $generator->create($data);
                 $path .= $title . '.' . $generator->getExtension();
+                if (!is_dir(dirname($path))) {
+                    mkdir(dirname($path), 0755, true);
+                }
                 if($fp = fopen($path, 'w')) {
                         fputs($fp, $file);
                 } else {

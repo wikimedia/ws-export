@@ -223,7 +223,7 @@ abstract class EpubGenerator implements FormatGenerator {
                         $about = getXhtmlFromContent($book->lang, $list, $this->i18n['about']);
                 } else {
                         $about = str_replace('{CONTRIBUTORS}', $list, $about);
-                        $about = str_replace('{BOT-CONTRIBUTORS}', $list, $about);
+                        $about = str_replace('{BOT-CONTRIBUTORS}', $listBot, $about);
                         $about = str_replace('{URL}', $wsUrl, $about);
                 }
                 return $about;

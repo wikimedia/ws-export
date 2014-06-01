@@ -254,7 +254,7 @@ class BookProvider {
          * @return a key id for the credit request
          */
         protected function startCredit(Book $book, $chapters, $otherPages) {
-                $url = 'http://toolserver.org/~phe/cgi-bin/credits';
+                $url = 'http://tools-webproxy/phetools/credits.py';
                 $pages = array( $book->title );
                 foreach ($chapters as $id => $chapter)
                         $pages[] = $chapter->title;

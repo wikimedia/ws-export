@@ -286,7 +286,7 @@ class BookProvider {
          * @return a key id for the credit request
          */
         protected function startCreditImage(Book $book, $pictures) {
-                $url = 'http://toolserver.org/~phe/cgi-bin/credits';
+                $url = 'http://tools-webproxy/phetools/credits.py';
                 $images_set = array( );
                 foreach ($pictures as $id => $picture) {
                         if ($picture->name)

@@ -78,7 +78,7 @@ class Api {
         * @return the content of a page
         */
         public function getPageAsync($curl_async, $title, $id, &$responses) {
-                $url = $this->domainName . '/w/index.php?action=render&title=' . urlencode($title);
+                $url = $this->domainName . '/w/index.php?action=render&title=' . $this->encoreTitle($title);
                 return $curl_async->addRequest($url, null, array($this, 'wrapPage'), array($id, &$responses));
         }
 
@@ -137,12 +137,16 @@ class Api {
                 return $responses;
         }
 
+		public function encoreTitle( $title ) {
+			return str_replace('%26quot%3B', '"', str_replace('%26amp%3B', '%26', rawurlencode($title)));
+		}
+
         /**
         * @var $title the title of the page
         * @return the content of a page
         */
         public function getPage($title) {
-                $url = $this->domainName . '/w/index.php?action=render&title=' . str_replace('%26quot%3B', '"', rawurlencode($title));
+                $url = $this->domainName . '/w/index.php?action=render&title=' . $this->encoreTitle($title);
                 $response = $this->get($url);
                 return getXhtmlFromContent($this->lang, $response);
         }

@@ -515,7 +515,7 @@ class PageParser {
         */
         public function getContent() {
                 $this->removeNodesWithXpath('//*[contains(@class,"ws-noexport")]');
-                $this->removeNodesWithXpath('//html:table[@id="toc"]');
+                $this->removeNodesWithXpath('//html:*[@id="toc"]');
                 $this->removeNodesWithXpath('//html:span[@class="editsection" or @class="mw-editsection"]');
                 $this->deprecatedNodes('center', 'div', 'text-align:center;');
                 $this->deprecatedNodes('strike', 'span', 'text-decoration:line-through;');

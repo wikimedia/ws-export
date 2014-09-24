@@ -480,7 +480,7 @@ class PageParser {
                         $a->setAttribute('alt', $picture->title);
                         $node->parentNode->replaceChild($a, $node);
                 }
-                $list = $this->xPath->query('//html:img[contains(@class,"tex")]');
+                $list = $this->xPath->query('//html:a[not(contains(@class,"image"))]/img | //html:img[not(parent::a)]');
                 foreach($list as $img) {
                         $picture = new Picture();
                         $url = $img->getAttribute('src');

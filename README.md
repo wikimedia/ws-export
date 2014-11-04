@@ -13,7 +13,7 @@ Composition
 ===========
 
 This tool is split into indeptendant parts :
-* utils : api to interact with Wikisource and others thinks
+* utils : api to interact with Wikisource and others things
 * book : export tool in many formats like epub.
 
 The tools can be used form two way :

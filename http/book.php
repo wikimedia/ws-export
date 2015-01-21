@@ -51,8 +51,11 @@ try {
         } else if($format == 'xhtml') {
                 include($basePath . '/book/formats/XhtmlGenerator.php');
                 $generator = new XhtmlGenerator();
+        } else if($format == 'atom') {
+                include($basePath . '/book/formats/AtomGenerator.php');
+                $generator = new AtomGenerator();
         } else {
-                include 'help/book.php';
+                throw new HttpException('Unsupported Media Type', 415);
         }
         $file = $generator->create($data);
         header('Content-Type: ' . $generator->getMimeType());

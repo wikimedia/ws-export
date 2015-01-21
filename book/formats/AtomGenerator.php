@@ -72,12 +72,10 @@ class AtomGenerator implements FormatGenerator {
                 //TODO published?
                 $this->addNode($dom, $node, 'updated', date(DATE_ATOM));
                 $this->addNode($dom, $node, 'rights', 'https://creativecommons.org/licenses/by-sa/3.0');
-                if($book->author !== '') {
-                        $author = $dom->createElement('author');
-                        $this->addNode($dom, $author, 'name', $book->author);
-                        //TODO URI?
-                        $node->appendChild($author);
-                }
+                $this->addPersonNode($dom, $node, 'author', $book->author);
+                $this->addPersonNode($dom, $node, 'contributor', $book->translator);
+                $this->addPersonNode($dom, $node, 'contributor', $book->illustrator);
+
                 foreach($book->categories as $categorie) {
                         $cat = $dom->createElement('category');
                         $cat->setAttribute('label', $categorie);
@@ -90,8 +88,6 @@ class AtomGenerator implements FormatGenerator {
                 $this->addNode($dom, $node, 'dc:source', wikisourceUrl($book->lang, $book->title), 'dcterms:URI');
                 $this->addNode($dom, $node, 'dcterms:issued', $book->year, 'dcterms:W3CDTF');
                 $this->addNode($dom, $node, 'dc:publisher', $book->publisher);
-                $this->addNode($dom, $node, 'dc:contributor', $book->translator);
-                $this->addNode($dom, $node, 'dc:contributor', $book->illustrator);
 
                 $this->addLink($dom, $node, 'alternate', $this->buildExportUrl($book, 'atom'), 'application/atom+xml;type=entry;profile=opds-catalog');
                 $this->addLink($dom, $node, 'alternate', $wsUrl, 'text/html');
@@ -116,6 +112,16 @@ class AtomGenerator implements FormatGenerator {
                 }
 
                 $head->appendChild($node);
+        }
+
+        private function addPersonNode(DOMDocument $dom, DOMElement $head, $type, $name = '') {
+                if($name === '') {
+                        return;
+                }
+
+                $person = $dom->createElement($type);
+                $this->addNode($dom, $person, 'name', $name);
+                $head->appendChild($person);
         }
 
         private function addLink(DOMDocument $dom, DOMElement $head, $rel, $href, $type = '') {

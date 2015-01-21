@@ -12,6 +12,19 @@
 class AtomGenerator implements FormatGenerator {
 
         /**
+         * @var string
+         */
+        private $exportBasePath;
+
+        /**
+         * @param string $exportBasePath
+         */
+        public function __construct($exportBasePath = '') {
+                $this->exportBasePath = $exportBasePath;
+        }
+
+
+        /**
         * return the extension of the generated file
         * @return string
         */
@@ -54,6 +67,7 @@ class AtomGenerator implements FormatGenerator {
                 $node = $dom->createElement('entry');
                 $node->setAttribute('xml:lang', $book->lang);
 
+                $this->addNode($dom, $node, 'title', $book->name);
                 $this->addNode($dom, $node, 'id', $wsUrl, 'dcterms:URI');
                 //TODO published?
                 $this->addNode($dom, $node, 'updated', date(DATE_ATOM));
@@ -115,6 +129,6 @@ class AtomGenerator implements FormatGenerator {
         }
 
         private function buildExportUrl(Book $book, $format) {
-                return '?' . http_build_query(array('lang' => $book->lang, 'format' => $format, 'title' => $book->title));
+                return $this->exportBasePath . '?' . http_build_query(array('lang' => $book->lang, 'format' => $format, 'page' => $book->title));
         }
 }

@@ -21,8 +21,8 @@ function uuid($prefix = '') {
 
 /**
 * return an url to a page of Wikisource
-* @var $lang the language of the wiki
-* @var $lang the name of the page
+* @var string $lang the language of the wiki
+* @var string $page the name of the page
 */
 function wikisourceUrl($lang, $page = '') {
         if($page != '')
@@ -33,7 +33,7 @@ function wikisourceUrl($lang, $page = '') {
 
 /**
 * return the content of a file
-* @var $file the path to the file
+* @var string $file the path to the file
 */
 function getFile($file) {
         $content = '';

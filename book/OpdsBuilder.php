@@ -70,11 +70,12 @@ class OpdsBuilder {
                         $this->addLink($dom, $feed, 'alternate', $wsUrl, 'text/html');
                 }
 
-                foreach($titles as $title) {
-                    $book = $this->bookProvider->get($title, true);
-                    $entry = $generator->buildEntry($book, $dom);
-                    $feed->appendChild($entry);
-                }
+	            foreach(array_chunk($titles, 20) as $chunk) {
+		            foreach($this->bookProvider->getMulti($chunk, true) as $book) {
+			            $entry = $generator->buildEntry($book, $dom);
+			            $feed->appendChild($entry);
+		            }
+	            }
 
                 $dom->appendChild($feed);
                 return $dom->saveXML();

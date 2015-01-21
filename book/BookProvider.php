@@ -13,7 +13,8 @@ class BookProvider {
         protected $curl_async = null;
         protected $options = array(
             'images' => true,
-            'fonts' => false
+            'fonts' => false,
+            'categories' => true
         );
         protected $creditPages = null;
         protected $creditImages = null;
@@ -37,8 +38,29 @@ class BookProvider {
         */
         public function get($title, $isMetadata = false) {
                 $title = str_replace(' ', '_', trim($title));
-                $page_list = array($title);
                 $doc = $this->getDocument($title);
+                return $this->getMetadata($title, $isMetadata, $doc);
+        }
+
+        public function getMulti(array $titles, $isMetadata = false) {
+                $pages = array();
+                foreach($titles as $title) {
+                        $page = new Page();
+                        $page->title = str_replace(' ', '_', trim($title));
+                        $pages[] = $page;
+                }
+
+                $pages = $this->getPages($pages);
+
+                foreach($pages as $id => $page) {
+                        $pages[$id] = $this->getMetadata($page->title, $isMetadata, $page->content);
+                }
+
+                return $pages;
+        }
+
+        public function getMetadata($title, $isMetadata, DOMDocument $doc) {
+                $page_list = array($title);
                 $parser = new PageParser($doc);
                 $book = new Book();
                 $book->credits_html = '';
@@ -81,7 +103,9 @@ class BookProvider {
                                         $book->cover = '';
                         }
                 }
-                $book->categories = $this->getCategories($book->metadata_src);
+                if($this->options['categories']) {
+                        $book->categories = $this->getCategories($book->metadata_src);
+                }
                 $pageTitles = $parser->getPagesList();
                 $namespaces = $this->getNamespaces();
                 if(!$isMetadata) {
@@ -159,8 +183,8 @@ class BookProvider {
 
         /**
         * return the content of the page
-        * @var $title array|Page the pages
-        * @return array|Page
+        * @var Page[] $the pages
+        * @return Page[]
         */
         protected function getPages($pages) {
                 $titles = array();
@@ -201,7 +225,7 @@ class BookProvider {
         */
         public function getCategories($title) {
                 $categories = array();
-                $response = $this->api->query(array('titles' => $title, 'prop' => 'categories', '!hidden' => 'true'));
+                $response = $this->api->query(array('titles' => $title, 'prop' => 'categories', 'clshow' => '!hidden'));
                 foreach($response['query']['pages'] as $list) {
                         if(isset($list['categories'])) {
                                 foreach($list['categories'] as $categorie) {

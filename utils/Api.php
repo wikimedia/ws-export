@@ -38,8 +38,8 @@ class Api {
 
         /**
         * api query
-        * @var $params an associative array for params send to the api
-        * @return an array with whe relsult of the api query
+        * @var array $params an associative array for params send to the api
+        * @return array an array with whe relsult of the api query
         * @throws HttpException
         */
         public function query($params) {

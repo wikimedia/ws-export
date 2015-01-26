@@ -52,7 +52,6 @@ try {
                 include($basePath . '/book/formats/XhtmlGenerator.php');
                 $generator = new XhtmlGenerator();
         } else if($format == 'atom') {
-                include($basePath . '/book/formats/AtomGenerator.php');
                 $generator = new AtomGenerator();
         } else {
                 throw new HttpException('Unsupported Media Type', 415);

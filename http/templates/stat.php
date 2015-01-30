@@ -6,6 +6,7 @@
     </thead>
     <tbody>
     <?php foreach($val as $lang => $temp) {
+        if ($lang === '') $lang = 'oldwiki';
         echo '<tr><th scope="row">' . $lang . '</th><td>' . ($temp['epub-2'] + $temp['epub-3']) . '</td><td>' . $temp['xhtml'] . '</td><td>' . $temp['odt'] . '</td></tr>' . "\n";
     } ?>
     </tbody>

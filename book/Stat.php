@@ -7,7 +7,7 @@
 
 class Stat {
         public static function add($format, $lang) {
-                if($format=='epub') $format='epub-2';
+                if($format === 'epub') $format = 'epub-2';
                 $stat = self::getStat();
                 if(isset($stat[$format][$lang]))
                     $stat[$format][$lang]++;

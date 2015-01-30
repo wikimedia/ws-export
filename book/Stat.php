@@ -7,6 +7,7 @@
 
 class Stat {
         public static function add($format, $lang) {
+                if($format === 'epub') $format = 'epub-2';
                 $stat = self::getStat();
                 if(isset($stat[$format][$lang]))
                     $stat[$format][$lang]++;
@@ -20,12 +21,6 @@ class Stat {
                 $path = self::getStatPath($month, $year);
                 if(file_exists($path)) {
                         $data = unserialize(file_get_contents($path));
-                        if(isset($data['epub'])) {
-                            $data['epub-2'] = isset($data['epub-2']) ? $data['epub-2'] + $data['epub'] : $data['epub'];
-                        } elseif(!isset($data['epub-2'])) {
-                            $data['epub-2'] = 0;
-                        }
-                        unset($data['epub']);
                         return $data;
                 } else
                         return array(

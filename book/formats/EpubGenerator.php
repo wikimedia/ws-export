@@ -224,7 +224,7 @@ abstract class EpubGenerator implements FormatGenerator {
                 } else {
                         $about = str_replace('{CONTRIBUTORS}', $list, $about);
                         $about = str_replace('{BOT-CONTRIBUTORS}', $listBot, $about);
-                        $about = str_replace('{URL}', $wsUrl, $about);
+                        $about = str_replace('{URL}', '<a href="' . $wsUrl . '">' . htmlspecialchars($book->name, ENT_QUOTES) . '</a>', $about);
                 }
                 return $about;
         }

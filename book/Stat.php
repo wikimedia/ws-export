@@ -19,11 +19,11 @@ class Stat {
         public static function getStat($month = 0, $year = 0) {
                 $path = self::getStatPath($month, $year);
                 if(file_exists($path)) {
-	                    $file = fopen($path, 'r');
-	                    flock($file, LOCK_SH);
+                        $file = fopen($path, 'r');
+                        flock($file, LOCK_SH);
                         $data = unserialize(fread($file, 1000000));
-	                    flock($file, LOCK_UN);
-	                    fclose($file);
+                        flock($file, LOCK_UN);
+                        fclose($file);
                         return $data;
                 } else
                         return array(
@@ -36,12 +36,12 @@ class Stat {
 
         protected static function setStat($stat) {
                 $path = self::getStatPath();
-	            $file = fopen($path, 'w');
-	            flock($file, LOCK_EX);
-	            ftruncate($file, 0);
-	            fwrite($file, serialize($stat));
-	            flock($file, LOCK_UN);
-	            fclose($file);
+                $file = fopen($path, 'w');
+                flock($file, LOCK_EX);
+                ftruncate($file, 0);
+                fwrite($file, serialize($stat));
+                flock($file, LOCK_UN);
+                fclose($file);
         }
 
         protected static function getStatPath($month = 0, $year = 0) {

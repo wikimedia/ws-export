@@ -539,6 +539,7 @@ class PageParser {
         */
         public function getContent() {
                 $this->removeNodesWithXpath('//*[contains(@class,"ws-noexport")]');
+                $this->removeNodesWithXpath('//a[contains(@class,"mw-headline-anchor")]');
                 $this->removeNodesWithXpath('//html:*[@id="toc"]');
                 $this->removeNodesWithXpath('//html:span[@class="editsection" or @class="mw-editsection"]');
                 $this->removeNodesWithXpath('//html:a[@class="mw-headline-anchor"]');

@@ -541,6 +541,7 @@ class PageParser {
                 $this->removeNodesWithXpath('//*[contains(@class,"ws-noexport")]');
                 $this->removeNodesWithXpath('//html:*[@id="toc"]');
                 $this->removeNodesWithXpath('//html:span[@class="editsection" or @class="mw-editsection"]');
+                $this->removeNodesWithXpath('//html:a[@class="mw-headline-anchor"]');
                 $this->deprecatedNodes('center', 'div', 'text-align:center;');
                 $this->deprecatedNodes('strike', 'span', 'text-decoration:line-through;');
                 $this->deprecatedNodes('s', 'span', 'text-decoration:line-through;');

@@ -18,6 +18,7 @@ class BookProvider {
         );
         protected $creditPages = null;
         protected $creditImages = null;
+        private $creditUrl = 'http://tools.wmflabs.org/phetools/credits.py';
 
         /**
         * @var $api Api
@@ -278,7 +279,6 @@ class BookProvider {
          * @return a key id for the credit request
          */
         protected function startCredit(Book $book, $chapters, $otherPages) {
-                $url = 'http://tools-webproxy/phetools/credits.py';
                 $pages = array( $book->title );
                 foreach ($chapters as $id => $chapter)
                         $pages[] = $chapter->title;
@@ -288,7 +288,7 @@ class BookProvider {
                                  'format' => 'php',
                                  'book' => $book->scan,
                                  'page' => $pages);
-                return $this->curl_async->addRequest($url, $params,
+                return $this->curl_async->addRequest($this->creditUrl, $params,
                                array($this, 'finishCredit'));
         }
 
@@ -310,7 +310,6 @@ class BookProvider {
          * @return a key id for the credit request
          */
         protected function startCreditImage(Book $book, $pictures) {
-                $url = 'http://tools-webproxy/phetools/credits.py';
                 $images_set = array( );
                 foreach ($pictures as $id => $picture) {
                         if ($picture->name)
@@ -321,7 +320,7 @@ class BookProvider {
                 $params = array( 'lang' => $book->lang,
                                  'format' => 'php',
                                  'image' => $images);
-                return $this->curl_async->addRequest($url, $params,
+                return $this->curl_async->addRequest($this->creditUrl, $params,
                                array($this, 'finishCreditImage'));
         }
 

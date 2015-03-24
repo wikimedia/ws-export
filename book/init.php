@@ -21,3 +21,4 @@ include_once( $basePath . '/book/Stat.php' );
 include_once( $basePath . '/book/FontProvider.php' );
 include_once( $basePath . '/book/formats/AtomGenerator.php' );
 include_once( $basePath . '/book/OpdsBuilder.php' );
+include_once( $basePath . '/book/CreationLog.php' );

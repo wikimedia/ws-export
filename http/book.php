@@ -70,6 +70,7 @@ try {
 	echo $file;
 	if( isset( $wsexportConfig['stat'] ) ) {
 		Stat::add( $format, $api->lang );
+		CreationLog::singleton()->add( $data, $format );
 	}
 	flush();
 } catch( HttpException $exception ) {

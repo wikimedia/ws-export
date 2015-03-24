@@ -10,7 +10,7 @@ $date = getdate();
 $month = isset( $_GET['month'] ) ? intval( $_GET['month'] ) : $date['mon'];
 $year = isset( $_GET['year'] ) ? intval( $_GET['year'] ) : $date['year'];
 
-$stat = Stat::getStat( $month, $year );
+$stat = CreationLog::singleton()->getTypeAndLangStats( $month, $year );
 $val = array();
 $total = array(
 	'epub-2' => 0, 'epub-3' => 0, 'odt' => 0, 'xhtml' => 0

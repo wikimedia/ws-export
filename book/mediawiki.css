@@ -1,49 +1,49 @@
 body {
-    line-height: 120%;
+	line-height: 120%;
 }
 
 /* images */
 div.floatright {
-    float: right;
-    clear: right;
-    position: relative;
-    margin: 0.5em 0 0.8em 1.4em;
+	float: right;
+	clear: right;
+	position: relative;
+	margin: 0.5em 0 0.8em 1.4em;
 }
 
 div.floatleft {
-    float: left;
-    clear: left;
-    position: relative;
-    margin: 0.5em 1.4em 0.8em 0;
+	float: left;
+	clear: left;
+	position: relative;
+	margin: 0.5em 1.4em 0.8em 0;
 }
 
 .center {
-    width: 100%;
-    text-align: center;
+	width: 100%;
+	text-align: center;
 }
 
 .center * {
-    margin-left: auto;
-    margin-right: auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .thumbcaption {
-	text-align:left;
+	text-align: left;
 	font-size: 95%;
 }
 
 div.tright {
-    float: right;
-    clear: right;
-    margin: 0.5em 0 0.8em 1.4em;
+	float: right;
+	clear: right;
+	margin: 0.5em 0 0.8em 1.4em;
 }
 
 div.tleft {
-    float: left;
-    clear: left;
-    margin: 0.5em 1.4em 0.8em 0;
+	float: left;
+	clear: left;
+	margin: 0.5em 1.4em 0.8em 0;
 }
 
 .small {
-    font-size: 94%;
+	font-size: 94%;
 }

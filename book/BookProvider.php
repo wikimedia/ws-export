@@ -568,6 +568,8 @@ class PageParser {
 		$this->deprecatedAttributes( 'text', 'color' );
 		$this->deprecatedAttributes( 'width', 'width' );
 		$this->deprecatedAttributes( 'srcset', null );
+		$this->deprecatedAttributes( 'cellpadding', 'padding' );
+		$this->deprecatedAttributes( 'cellspacing', 'border-spacing' );
 		$this->deprecatedAttributes( 'data-file-height', null );
 		$this->deprecatedAttributes( 'data-file-width', null );
 		$this->deprecatedAttributes( 'lang', 'xml:lang', false );

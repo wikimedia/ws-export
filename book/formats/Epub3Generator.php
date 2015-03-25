@@ -112,18 +112,6 @@ class Epub3Generator extends EpubGenerator {
 		}
 		$content .= '<itemref idref="about" linear="yes" />
 			     </spine>
-			     <guide>'; //deprecated
-		if( $book->cover != '' ) {
-			$content .= '<reference type="cover" title="' . htmlspecialchars( $this->i18n['cover'], ENT_QUOTES ) . '" href="cover.xhtml" />';
-		} else {
-			$content .= '<reference type="cover" title="' . htmlspecialchars( $this->i18n['cover'], ENT_QUOTES ) . '" href="title.xhtml" />';
-		}
-		$content .= '<reference type="title-page" title="' . htmlspecialchars( $this->i18n['title_page'], ENT_QUOTES ) . '" href="title.xhtml" />';
-		if( $book->content ) {
-			$content .= '<reference type="text" title="' . htmlspecialchars( $book->name, ENT_QUOTES ) . '" href="' . $book->title . '.xhtml" />';
-		}
-		$content .= '<reference type="copyright-page" title="' . htmlspecialchars( $this->i18n['about'], ENT_QUOTES ) . '" href="about.xhtml" />
-			     </guide>
 		      </package>';
 
 		return $content;

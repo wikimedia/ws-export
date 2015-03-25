@@ -13,6 +13,10 @@ include( __DIR__ . '/EpubGenerator.php' );
  */
 class Epub3Generator extends EpubGenerator {
 
+	protected function getVersion() {
+		return 3;
+	}
+
 	protected function addContent( Book $book, ZipCreator $zip ) {
 		$zip->addContentFile( 'OPS/nav.xhtml', $this->getXhtmlNav( $book ) );
 	}
@@ -135,7 +139,7 @@ class Epub3Generator extends EpubGenerator {
 				    <link type="text/css" rel="stylesheet" href="main.css" />
 			     </head>
 			     <body>
-				    <section class="frontmatter TableOfContents" epub:type="frontmatter toc">
+				    <section epub:type="frontmatter toc">
 					   <nav epub:type="toc" id="toc">
 						  <ol>
 							 <li id="toc-title">

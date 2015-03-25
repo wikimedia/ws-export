@@ -12,6 +12,10 @@ include( __DIR__ . '/EpubGenerator.php' );
  */
 class Epub2Generator extends EpubGenerator {
 
+	protected function getVersion() {
+		return 2;
+	}
+
 	protected function addContent( Book $book, ZipCreator $zip ) {
 	}
 

@@ -32,6 +32,11 @@ abstract class EpubGenerator implements FormatGenerator {
 	}
 
 	/**
+	 * @return integer ePub version
+	 */
+	protected abstract function getVersion();
+
+	/**
 	 * create the file
 	 * @var $data Book the content of the book
 	 * @return string
@@ -41,7 +46,7 @@ abstract class EpubGenerator implements FormatGenerator {
 		$this->i18n = getI18n( $book->lang );
 		setLocale( LC_TIME, $book->lang . '_' . strtoupper( $book->lang ) . '.utf8' );
 		$wsUrl = wikisourceUrl( $book->lang, $book->title );
-		$cleaner = new BookCleanerEpub();
+		$cleaner = new BookCleanerEpub($this->getVersion());
 		$cleaner->clean( $book );
 		$zip = new ZipCreator();
 		$zip->addContentFile( 'mimetype', 'application/epub+zip', null, false ); //the mimetype must be first and uncompressed
@@ -249,6 +254,11 @@ abstract class EpubGenerator implements FormatGenerator {
 class BookCleanerEpub {
 	protected $book = null;
 	protected $linksList = array();
+	protected $version;
+
+	public function __construct($version) {
+		$this->version = $version;
+	}
 
 	public function clean( Book $book ) {
 		$this->book = $book;
@@ -443,6 +453,7 @@ class BookCleanerEpub {
 		$this->setPictureLinks( $xPath );
 		$dom = $xPath->document;
 		$this->setLinks( $dom );
+		$this->addEpubTypeTags( $xPath );
 	}
 
 	/**
@@ -506,5 +517,21 @@ class BookCleanerEpub {
 		}
 
 		return $string;
+	}
+
+	protected function addEpubTypeTags( DOMXPath $xPath ) {
+		if($this->version < 3) {
+			return;
+		}
+
+		$this->addTypeWithXPath( $xPath, '//html:*[contains(@class, "reference")]/html:a', 'noteref' );
+		$this->addTypeWithXPath( $xPath, '//html:*[contains(@class, "references")]/html:li', 'footnote' );
+	}
+
+	protected function addTypeWithXPath( DOMXPath $xPath, $query, $type ) {
+		$nodes = $xPath->query( $query );
+		foreach( $nodes as $node ) {
+			$node->setAttributeNS( 'http://www.idpf.org/2007/ops', 'epub:type', $type );
+		}
 	}
 }

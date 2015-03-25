@@ -89,7 +89,7 @@ function getXhtmlFromContent( $lang, $content, $title = ' ' ) {
 		$html .= ' xml:lang="' . $lang . '"';
 	}
 
-	return $html . '><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="content-type" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head><body>' . $content . '</body></html>';
+	return $html . '><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="default-style" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head><body>' . $content . '</body></html>';
 }
 
 function getTempFile( $lang, $name ) {

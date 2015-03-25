@@ -115,7 +115,6 @@ abstract class EpubGenerator implements FormatGenerator {
 
 	protected function getNcxToc( Book $book, $wsUrl ) {
 		$content = '<?xml version="1.0" encoding="UTF-8" ?>
-			<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
 			<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
 				<head>
 					<meta name="dtb:uid" content="' . $wsUrl . '" />
@@ -198,7 +197,7 @@ abstract class EpubGenerator implements FormatGenerator {
 			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">
 				<head>
 					<title>' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</title>
-					<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+					<meta http-equiv="default-style" content="application/xhtml+xml; charset=utf-8" />
 					<link type="text/css" rel="stylesheet" href="main.css" />
 				</head>
 				<body style="background-color:ghostwhite;"><div style="text-align:center; position:absolute;">

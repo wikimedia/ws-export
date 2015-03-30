@@ -12,13 +12,13 @@ You have to create a temp folder in the root of directories.
 Composition
 ===========
 
-This tool is split into indeptendant parts :
-* utils : api to interact with Wikisource and others things
-* book : export tool in many formats like epub.
+This tool is split into indipendent parts:
+* `utils` : api to interact with Wikisource and others things
+* `book` : export tool in many formats like epub.
 
-The tools can be used form two way :
-* http in the http folder
-* command line in the cli folder
+The tools can be used in two ways:
+* http in the `http` folder
+* command line in the `cli` folder
 
 Licence
 =======

@@ -459,15 +459,16 @@ class BookCleanerEpub {
 	 * change the picture links
 	 */
 	protected function setHtmlTitle( DOMXPath $xPath, $name ) {
-		$title = $xPath->query( '/html:html/html:head/html:title' )->item( 0 );
-		$title->nodeValue = $name;
+		foreach( $xPath->document->getElementsByTagName('title') as $titleNode ) {
+			$titleNode->nodeValue = $name;
+		}
 	}
 
 	/**
 	 * change the picture links
 	 */
 	protected function setPictureLinks( DOMXPath $xPath ) {
-		$list = $xPath->query( '//html:img' );
+		$list = $xPath->query( '//img' );
 		foreach( $list as $node ) {
 			$title = $this->encode( $node->getAttribute( 'alt' ) );
 			if( in_array( $title, $this->linksList ) ) {
@@ -483,7 +484,6 @@ class BookCleanerEpub {
 	 */
 	protected function setLinks( DOMDocument $dom ) {
 		$list = $dom->getElementsByTagName( 'a' );
-		$title = Api::mediawikiUrlEncode( $this->book->title );
 		foreach( $list as $node ) {
 			$href = $node->getAttribute( 'href' );
 			$title = $this->encode( $node->getAttribute( 'title' ) ) . '.xhtml';
@@ -523,8 +523,8 @@ class BookCleanerEpub {
 			return;
 		}
 
-		$this->addTypeWithXPath( $xPath, '//html:*[contains(@class, "reference")]/html:a', 'noteref' );
-		$this->addTypeWithXPath( $xPath, '//html:*[contains(@class, "references")]/html:li', 'footnote' );
+		$this->addTypeWithXPath( $xPath, '//*[contains(@class, "reference")]/a', 'noteref' );
+		$this->addTypeWithXPath( $xPath, '//*[contains(@class, "references")]/li', 'footnote' );
 	}
 
 	protected function addTypeWithXPath( DOMXPath $xPath, $query, $type ) {

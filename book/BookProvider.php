@@ -175,10 +175,15 @@ class BookProvider {
 	 * @return DOMDocument
 	 */
 	protected function getDocument( $title ) {
-		$content = $this->api->getPage( $title );
-		$document = new DOMDocument( '1.0', 'UTF-8' );
-		$document->loadXML( $content );
+		return $this->domDocumentFromHtml( $this->api->getPage( $title ) );
+	}
 
+	protected function domDocumentFromHtml( $html ) {
+		$document = new DOMDocument( '1.0', 'UTF-8' );
+		libxml_use_internal_errors( true );
+		$document->loadHTML( mb_convert_encoding( str_replace( '<?xml version="1.0" encoding="UTF-8" ?>', '', $html ), 'HTML-ENTITIES', 'UTF-8' ) );
+		libxml_clear_errors();
+		$document->encoding = 'UTF-8';
 		return $document;
 	}
 
@@ -194,9 +199,7 @@ class BookProvider {
 		}
 		$data = $this->api->getPagesAsync( $this->curl_async, $titles );
 		foreach( $pages as $id => $page ) {
-			$document = new DOMDocument( '1.0', 'UTF-8' );
-			$document->loadXML( $data[$id] );
-			$page->content = $document;
+			$page->content = $this-> domDocumentFromHtml( $data[$id] );
 		}
 
 		return $pages;
@@ -432,7 +435,7 @@ class PageParser {
 	 * TODO retrive only main namespace pages ?
 	 */
 	public function getChaptersList( $title, $page_list, $namespaces ) {
-		$list = $this->xPath->query( '//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::html:a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"image"))]' );
+		$list = $this->xPath->query( '//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"image"))]' );
 		$chapters = array();
 		foreach( $list as $link ) {
 			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
@@ -456,7 +459,7 @@ class PageParser {
 	public function getFullChaptersList( $title, $page_list, $namespaces ) {
 		$chapters = $this->getChaptersList( $title, $page_list, $namespaces );
 		if( empty( $chapters ) ) {
-			$list = $this->xPath->query( '//html:a[contains(@href,"' . Api::mediawikiUrlEncode( $title ) . '") and not(contains(@class,"extiw") or contains(@class,"external") or contains(@href,"#") or contains(@href,"action=edit") or contains(@title,"/Texte entier") or contains(@class,"image"))]' );
+			$list = $this->xPath->query( '//a[contains(@href,"' . Api::mediawikiUrlEncode( $title ) . '") and not(contains(@class,"extiw") or contains(@class,"external") or contains(@href,"#") or contains(@href,"action=edit") or contains(@title,"/Texte entier") or contains(@class,"image"))]' );
 			foreach( $list as $link ) {
 				$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
 				$parts = explode( ':', $title );
@@ -480,7 +483,7 @@ class PageParser {
 	 * @return array
 	 */
 	public function getPicturesList() {
-		$list = $this->xPath->query( '//html:a[contains(@class,"image")]' );
+		$list = $this->xPath->query( '//a[contains(@class,"image")]' );
 		$pictures = array();
 		foreach( $list as $node ) {
 			$a = $node->getElementsByTagName( 'img' )->item( 0 );
@@ -511,7 +514,7 @@ class PageParser {
 			$a->setAttribute( 'alt', $picture->title );
 			$node->parentNode->replaceChild( $a, $node );
 		}
-		$list = $this->xPath->query( '//html:a[not(contains(@class,"image"))]/img | //html:img[not(parent::a)]' );
+		$list = $this->xPath->query( '//a[not(contains(@class,"image"))]/img | //img[not(parent::a)]' );
 		foreach( $list as $img ) {
 			$picture = new Picture();
 			$url = $img->getAttribute( 'src' );
@@ -531,7 +534,7 @@ class PageParser {
 	 */
 	public function getPagesList() {
 		$pages = array();
-		$list = $this->xPath->query( '//html:*[contains(@class,"ws-pagenum")]' );
+		$list = $this->xPath->query( '//*[contains(@class,"ws-pagenum")]' );
 		foreach( $list as $link ) {
 			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
 			if( $title ) {
@@ -548,9 +551,9 @@ class PageParser {
 	 */
 	public function getContent() {
 		$this->removeNodesWithXpath( '//*[contains(@class,"ws-noexport")]' );
-		$this->removeNodesWithXpath( '//html:*[@id="toc"]' );
-		$this->removeNodesWithXpath( '//html:span[@class="editsection" or @class="mw-editsection"]' );
-		$this->removeNodesWithXpath( '//html:a[@class="mw-headline-anchor"]' );
+		$this->removeNodesWithXpath( '//*[@id="toc"]' );
+		$this->removeNodesWithXpath( '//span[@class="editsection" or @class="mw-editsection"]' );
+		$this->removeNodesWithXpath( '//a[@class="mw-headline-anchor"]' );
 		$this->deprecatedNodes( 'big', 'span', 'font-size:large;' );
 		$this->deprecatedNodes( 'center', 'div', 'text-align:center;' );
 		$this->deprecatedNodes( 'strike', 'span', 'text-decoration:line-through;' );
@@ -590,7 +593,7 @@ class PageParser {
 			$node->setAttribute( 'id', preg_replace( '#^\.(.*)$#', '$1', $node->getAttribute( 'id' ) ) );
 		}
 
-		$list = $this->xPath->query( '//html:span[contains(@class,"pagenum") or contains(@class,"mw-headline")]' );
+		$list = $this->xPath->query( '//span[contains(@class,"pagenum") or contains(@class,"mw-headline")]' );
 		foreach( $list as $node ) {
 			$id = $node->getAttribute( 'id' );
 			if( is_numeric( $id ) ) {
@@ -603,7 +606,7 @@ class PageParser {
 	 * remove links to enlarge pictures
 	 */
 	public function removeEnlargeLinks() {
-		$this->removeNodesWithXpath( '//html:*[contains(@class,"magnify")]' );
+		$this->removeNodesWithXpath( '//*[contains(@class,"magnify")]' );
 	}
 
 	protected function removeNodesWithXpath( $query ) {
@@ -614,7 +617,7 @@ class PageParser {
 	}
 
 	protected function deprecatedNodes( $oldName, $newName, $style ) {
-		$nodes = $this->xPath->query( '//html:' . $oldName ); //hack: the getElementsByTagName method doesn't catch all tags.
+		$nodes = $this->xPath->query( '//' . $oldName ); //hack: the getElementsByTagName method doesn't catch all tags.
 		foreach( $nodes as $oldNode ) {
 			$newNode = $this->xPath->document->createElement( $newName );
 			while( $oldNode->firstChild ) {
@@ -629,7 +632,7 @@ class PageParser {
 	}
 
 	protected function deprecatedAttributes( $name, $attribute, $isCss = true ) {
-		$nodes = $this->xPath->query( '//html:*[@' . $name . ']' );
+		$nodes = $this->xPath->query( '//*[@' . $name . ']' );
 		foreach( $nodes as $node ) {
 			if( $attribute != null ) {
 				if( $isCss ) {

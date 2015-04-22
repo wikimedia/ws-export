@@ -39,21 +39,22 @@ class Api {
 	/**
 	 * api query
 	 * @var array $params an associative array for params send to the api
-	 * @return array an array with whe relsult of the api query
+	 * @return array an array with whe result of the api query
 	 * @throws HttpException
 	 */
 	public function query( $params ) {
-		$data = 'action=query&format=php&' . http_build_query( $params );
-		$url = $this->domainName . '/w/api.php?' . $data;
-		$response = $this->get( $url );
+		return json_decode( $this->get( $this->buildApiQueryUrl( $params ) ), true );
+	}
 
-		return unserialize( $response );
+	private function buildApiQueryUrl( $params ) {
+		$data = 'action=query&format=json&' . http_build_query( $params );
+		return $this->domainName . '/w/api.php?' . $data;
 	}
 
 	/**
 	 * api query. Give all pages of response
 	 * @var $params an associative array for params send to the api
-	 * @return an array with whe relsult of the api query
+	 * @return an array with whe result of the api query
 	 * @throws HttpException
 	 */
 	public function completeQuery( $params ) {
@@ -80,7 +81,12 @@ class Api {
 	 * @return the content of a page
 	 */
 	public function getPageAsync( $curl_async, $title, $id, &$responses ) {
-		$url = $this->domainName . '/w/index.php?action=render&title=' . $this->encoreTitle( $title );
+		$url = $this->buildApiQueryUrl( array(
+			'titles' => $title,
+			'prop' => 'revisions',
+			'rvprop' => 'content',
+			'rvparse' => true
+		) );
 
 		return $curl_async->addRequest( $url, null, array( $this, 'wrapPage' ), array( $id, &$responses ) );
 	}
@@ -92,8 +98,7 @@ class Api {
 		if( $data['http_code'] != 200 ) {
 			throw new HttpException( 'HTTP error ' . $data['http_code'] . ' with page ' . $id . ' that return: ' . htmlentities( $data['content'] ), $data['http_code'] );
 		}
-		$content = getXhtmlFromContent( $this->lang, $data['content'] );
-		$responses[$id] = $content;
+		$responses[$id] = $this->parseGetPageResponse( json_decode( $data['content'], true ) );
 	}
 
 	public function getPagesAsync( $curl_async, $titles ) {
@@ -107,6 +112,18 @@ class Api {
 		}
 
 		return $responses;
+	}
+
+	private function parseGetPageResponse( $response ) {
+		foreach( $response['query']['pages'] as $page ) {
+			if( isset( $page['revisions'] ) ) {
+				foreach( $page['revisions'] as $revision ) {
+					return getXhtmlFromContent( $this->lang, $revision['*'], $page['title'] );
+				}
+			}
+		}
+
+		throw new HttpException( 'Page revision not found', 404 );
 	}
 
 	/**
@@ -146,36 +163,19 @@ class Api {
 		return $responses;
 	}
 
-	public function encoreTitle( $title ) {
-		return str_replace( '%26quot%3B', '"', str_replace( '%26amp%3B', '%26', rawurlencode( $title ) ) );
-	}
-
 	/**
 	 * @var $title the title of the page
 	 * @return the content of a page
 	 */
 	public function getPage( $title ) {
-		$url = $this->domainName . '/w/index.php?action=render&title=' . $this->encoreTitle( $title );
-		$response = $this->get( $url );
+		$response = $this->query( array(
+			'titles' => $title,
+			'prop' => 'revisions',
+			'rvprop' => 'content',
+			'rvparse' => true
+		) );
 
-		return getXhtmlFromContent( $this->lang, $response );
-	}
-
-	/**
-	 * @var $title array|string the title of the pages
-	 * @return array|string the content of the pages
-	 */
-	public function getPages( $titles ) {
-		$urls = array();
-		foreach( $titles as $id => $title ) {
-			$urls[$id] = $this->domainName . '/w/index.php?action=render&title=' . str_replace( '%26quot%3B', '"', rawurlencode( $title ) );
-		}
-		$responses = $this->getMulti( $urls );
-		foreach( $responses as $id => $response ) {
-			$responses[$id] = getXhtmlFromContent( $this->lang, $response );
-		}
-
-		return $responses;
+		return $this->parseGetPageResponse( $response );
 	}
 
 	/**

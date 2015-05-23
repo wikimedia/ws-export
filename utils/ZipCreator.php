@@ -54,7 +54,7 @@ class ZipCreator {
 		if( file_exists( $filename ) ) {
 			$this->addContentFile( $zipFileName, file_get_contents( $filename ), filemtime( $filename ) );
 		} else {
-			throw new jException( 'jelix~errors.file.notexists', $filename );
+			throw new Exception( 'The file does not exists: ' . $filename );
 		}
 	}
 
@@ -89,7 +89,7 @@ class ZipCreator {
 				closedir( $handle );
 			}
 		} else {
-			throw new jException( 'jelix~errors.file.notexists', $path );
+			throw new Exception( 'The file does not exists: ' . $path );
 		}
 	}
 

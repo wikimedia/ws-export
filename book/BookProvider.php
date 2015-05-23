@@ -554,6 +554,7 @@ class PageParser {
 		$this->removeNodesWithXpath( '//*[@id="toc"]' );
 		$this->removeNodesWithXpath( '//span[@class="editsection" or @class="mw-editsection"]' );
 		$this->removeNodesWithXpath( '//a[@class="mw-headline-anchor"]' );
+		$this->removeNodesWithXpath( '//div[@class="mediaContainer"]' );
 		$this->deprecatedNodes( 'big', 'span', 'font-size:large;' );
 		$this->deprecatedNodes( 'center', 'div', 'text-align:center;' );
 		$this->deprecatedNodes( 'strike', 'span', 'text-decoration:line-through;' );

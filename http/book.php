@@ -69,6 +69,7 @@ try {
 	header( 'Content-length: ' . strlen( $file ) );
 	echo $file;
 	if( isset( $wsexportConfig['stat'] ) ) {
+		$data->title = $title;
 		Stat::add( $format, $api->lang );
 		CreationLog::singleton()->add( $data, $format );
 	}

@@ -105,8 +105,6 @@ function getTempFile( $lang, $name ) {
 function getI18n( $lang ) {
 	$content = getTempFile( $lang, 'i18n.sphp' );
 	if( $content == '' ) {
-		global $wsexportConfig;
-		include $wsexportConfig['basePath'] . '/book/Refresh.php';
 		$refresh = new Refresh();
 		$refresh->refresh();
 		$content = getTempFile( $lang, 'i18n.sphp' );

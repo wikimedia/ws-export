@@ -20,7 +20,6 @@ try {
 	}
 
 	if( isset( $_GET['refresh'] ) ) {
-		include $wsexportConfig['basePath'] . '/book/Refresh.php';
 		$refresh = new Refresh( $api->lang );
 		$refresh->refresh();
 		$success = 'The cache is updated for ' . $api->lang . ' language.';

@@ -26,6 +26,12 @@
 				<select id="format" name="format" class="form-control">
 					<option value="epub-2">epub 2 (recommended)</option>
 					<option value="epub-3">epub 3 (for new e-readers only, currently in beta)</option>
+					<option value="mobi">mobi (in beta)</option>
+					<option value="txt">txt (in beta)</option>
+					<option value="rtf">rtf (in beta)</option>
+					<option value="pdf-a4">pdf A4 format (in beta)</option>
+					<option value="pdf-a5">pdf A5 format (in beta)</option>
+					<option value="pdf-letter">pdf US letter format (in beta)</option>
 					<option value="xhtml">xhtml (in developpment)</option>
 				</select>
 				<span class="help-inline"></span>

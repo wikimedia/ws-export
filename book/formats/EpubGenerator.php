@@ -202,7 +202,7 @@ abstract class EpubGenerator implements FormatGenerator {
 					<meta http-equiv="default-style" content="application/xhtml+xml; charset=utf-8" />
 					<link type="text/css" rel="stylesheet" href="main.css" />
 				</head>
-				<body style="background-color:ghostwhite;"><div style="text-align:center; position:absolute;">
+				<body style="background-color:ghostwhite;"><div style="text-align:center; margin-right: auto; margin-left:auto; text-indent : 0px;">
 					<h1 id="heading_id_2">' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</h1>
 					<h2>' . htmlspecialchars( $book->author, ENT_QUOTES ) . '</h2>
 					<br />

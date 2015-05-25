@@ -4,7 +4,6 @@
  * @copyright 2012 Thomas Pellissier Tanon
  * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
  */
-include( __DIR__ . '/EpubGenerator.php' );
 
 /**
  * create an epub 3 file

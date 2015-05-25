@@ -64,16 +64,15 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 		$provider = new BookProvider( $api, $options );
 		$data = $provider->get( $title );
 		if( $format == 'epub-2' || $format == 'epub' ) {
-			include( $basePath . '/book/formats/Epub2Generator.php' );
 			$generator = new Epub2Generator();
 		} else if( $format == 'epub-3' ) {
-			include( $basePath . '/book/formats/Epub3Generator.php' );
 			$generator = new Epub3Generator();
+		} else if( $format == 'pdf' ) {
+			$generator = new ConvertGenerator( 'pdf', 'application/pdf' );
 		} else if( $format == 'xhtml' ) {
-			include( $basePath . '/book/formats/XhtmlGenerator.php' );
 			$generator = new XhtmlGenerator();
 		} else {
-			throw new Exception( 'The file format is unknown' );
+			throw new Exception( "The file format $format is unknown" );
 		}
 		$file = $generator->create( $data );
 		$path .= $title . '.' . $generator->getExtension();

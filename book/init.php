@@ -19,7 +19,13 @@ include_once( $basePath . '/book/Book.php' );
 include_once( $basePath . '/book/BookProvider.php' );
 include_once( $basePath . '/book/Stat.php' );
 include_once( $basePath . '/book/FontProvider.php' );
-include_once( $basePath . '/book/formats/AtomGenerator.php' );
 include_once( $basePath . '/book/OpdsBuilder.php' );
 include_once( $basePath . '/book/CreationLog.php' );
 include_once( $basePath . '/book/Refresh.php' );
+
+include_once( $basePath . '/book/formats/AtomGenerator.php' );
+include_once( $basePath . '/book/formats/EpubGenerator.php' );
+include_once( $basePath . '/book/formats/Epub2Generator.php' );
+include_once( $basePath . '/book/formats/Epub3Generator.php' );
+include_once( $basePath . '/book/formats/XhtmlGenerator.php' );
+include_once( $basePath . '/book/formats/ConvertGenerator.php' );

@@ -112,3 +112,35 @@ function getI18n( $lang ) {
 
 	return unserialize( $content );
 }
+
+function encodeString( $string ) {
+	static $map = array();
+	static $num = 0;
+	$string = str_replace( ' ', '_', $string );
+	if( isset( $map[$string] ) ) {
+		return $map[$string];
+	}
+	$map[$string] = $string;
+	$search = array( '[αάàâäΑÂÄ]', '[βΒ]', '[Ψç]', '[δΔ]', '[εéèêëΕÊË]', '[η]', '[φϕΦ]', '[γΓ]', '[θΘ]', '[ιîïΙÎÏ]', '[Κκ]', '[λΛ]', '[μ]', '[ν]', '[οôöÔÖ]', '[Ωω]', '[πΠ]', '[Ψψ]', '[ρΡ]', '[σΣ]', '[τ]', '[υûùüΥÛÜ]', '[ξΞ]', '[ζΖ]', '[ ]', '[^a-zA-Z0-9_\.]' );
+	$replace = array( 'a', 'b', 'c', 'd', 'e', 'eh', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'oh', 'p', 'ps', 'r', 's', 't', 'u', 'x', 'z', '_', '_' );
+	mb_regex_encoding( 'UTF-8' );
+	foreach( $search as $i => $pat ) {
+		$map[$string] = mb_eregi_replace( $pat, $replace[$i], $map[$string] );
+	}
+	$map[$string] = 'c' . $num . '_' . cutFilename( utf8_decode( $map[$string] ) );
+	$num++;
+
+	return $map[$string];
+}
+
+/**
+ * Cut a filename if it is too long but kepp the extension
+ */
+function cutFilename( $string, $max = 100 ) {
+	$length = strlen( $string );
+	if( $length > $max ) {
+		$string = substr( $string, $length - $max, $length - 1 );
+	}
+
+	return $string;
+}

@@ -1,6 +1,6 @@
 <?php
 $wsexportConfig = array(
-	'basePath' => '..', 'tempPath' => '../temp', 'stat' => true
+	'basePath' => '..', 'tempPath' => __DIR__ . '/../temp', 'stat' => true
 );
 
 include_once( '../book/init.php' );
@@ -39,14 +39,13 @@ try {
 	}
 
 	if( $format == 'epub-2' ) {
-		include( $basePath . '/book/formats/Epub2Generator.php' );
 		$generator = new Epub2Generator();
 	} else if( $format == 'epub-3' ) {
-		include( $basePath . '/book/formats/Epub3Generator.php' );
 		$generator = new Epub3Generator();
 	} else if( $format == 'xhtml' ) {
-		include( $basePath . '/book/formats/XhtmlGenerator.php' );
 		$generator = new XhtmlGenerator();
+	} else if( $format == 'pdf' ) {
+		$generator = new ConvertGenerator( 'pdf', 'application/pdf' );
 	} else if( $format == 'atom' ) {
 		$generator = new AtomGenerator();
 	} else {
@@ -59,7 +58,6 @@ try {
 	header( 'Content-length: ' . strlen( $file ) );
 	echo $file;
 	if( isset( $wsexportConfig['stat'] ) ) {
-		$data->title = $title;
 		Stat::add( $format, $api->lang );
 		CreationLog::singleton()->add( $data, $format );
 	}

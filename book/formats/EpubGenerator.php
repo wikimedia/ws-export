@@ -42,6 +42,7 @@ abstract class EpubGenerator implements FormatGenerator {
 	 * @return string
 	 */
 	public function create( Book $book ) {
+		$oldBookTitle = $book->title;
 		$css = $this->getCss( $book );
 		$this->i18n = getI18n( $book->lang );
 		setLocale( LC_TIME, $book->lang . '_' . strtoupper( $book->lang ) . '.utf8' );
@@ -84,6 +85,7 @@ abstract class EpubGenerator implements FormatGenerator {
 		}
 		$zip->addContentFile( 'OPS/main.css', $css );
 		$this->addContent( $book, $zip );
+		$book->title = $oldBookTitle;
 
 		return $zip->getContent();
 	}
@@ -395,18 +397,18 @@ class BookCleanerEpub {
 	}
 
 	protected function encodeTitles() {
-		$this->book->title = $this->encode( $this->book->title );
+		$this->book->title = encodeString( $this->book->title );
 		$this->linksList[] = $this->book->title . '.xhtml';
 		foreach( $this->book->chapters as $chapter ) {
-			$chapter->title = $this->encode( $chapter->title );
+			$chapter->title = encodeString( $chapter->title );
 			$this->linksList[] = $chapter->title . '.xhtml';
 			foreach( $chapter->chapters as $subpage ) {
-				$subpage->title = $this->encode( $subpage->title );
+				$subpage->title = encodeString( $subpage->title );
 				$this->linksList[] = $subpage->title . '.xhtml';
 			}
 		}
 		foreach( $this->book->pictures as $picture ) {
-			$picture->title = $this->encode( $picture->title );
+			$picture->title = encodeString( $picture->title );
 			$this->linksList[] = $picture->title;
 		}
 	}
@@ -423,26 +425,6 @@ class BookCleanerEpub {
 		$dom->loadXML( getXhtmlFromContent( $this->book->lang, '' ) );
 
 		return $dom;
-	}
-
-	protected function encode( $string ) {
-		static $map = array();
-		static $num = 0;
-		$string = str_replace( ' ', '_', $string );
-		if( isset( $map[$string] ) ) {
-			return $map[$string];
-		}
-		$map[$string] = $string;
-		$search = array( '[αάàâäΑÂÄ]', '[βΒ]', '[Ψç]', '[δΔ]', '[εéèêëΕÊË]', '[η]', '[φϕΦ]', '[γΓ]', '[θΘ]', '[ιîïΙÎÏ]', '[Κκ]', '[λΛ]', '[μ]', '[ν]', '[οôöÔÖ]', '[Ωω]', '[πΠ]', '[Ψψ]', '[ρΡ]', '[σΣ]', '[τ]', '[υûùüΥÛÜ]', '[ξΞ]', '[ζΖ]', '[ ]', '[^a-zA-Z0-9_\.]' );
-		$replace = array( 'a', 'b', 'c', 'd', 'e', 'eh', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'oh', 'p', 'ps', 'r', 's', 't', 'u', 'x', 'z', '_', '_' );
-		mb_regex_encoding( 'UTF-8' );
-		foreach( $search as $i => $pat ) {
-			$map[$string] = mb_eregi_replace( $pat, $replace[$i], $map[$string] );
-		}
-		$map[$string] = 'c' . $num . '_' . $this->cutFilename( utf8_decode( $map[$string] ) );
-		$num++;
-
-		return $map[$string];
 	}
 
 	/**
@@ -470,7 +452,7 @@ class BookCleanerEpub {
 	protected function setPictureLinks( DOMXPath $xPath ) {
 		$list = $xPath->query( '//img' );
 		foreach( $list as $node ) {
-			$title = $this->encode( $node->getAttribute( 'alt' ) );
+			$title = encodeString( $node->getAttribute( 'alt' ) );
 			if( in_array( $title, $this->linksList ) ) {
 				$node->setAttribute( 'src', 'images/' . $title );
 			} else {
@@ -486,7 +468,7 @@ class BookCleanerEpub {
 		$list = $dom->getElementsByTagName( 'a' );
 		foreach( $list as $node ) {
 			$href = $node->getAttribute( 'href' );
-			$title = $this->encode( $node->getAttribute( 'title' ) ) . '.xhtml';
+			$title = encodeString( $node->getAttribute( 'title' ) ) . '.xhtml';
 			if( $href[0] == '#' ) {
 				continue;
 			} elseif( in_array( $title, $this->linksList ) ) {
@@ -504,18 +486,6 @@ class BookCleanerEpub {
 				$node->setAttribute( 'href', 'http:' . $href );
 			}
 		}
-	}
-
-	/**
-	 * Cut a filename if it is too long but kepp the extension
-	 */
-	protected function cutFilename( $string, $max = 100 ) {
-		$length = strlen( $string );
-		if( $length > $max ) {
-			$string = substr( $string, $length - $max, $length - 1 );
-		}
-
-		return $string;
 	}
 
 	protected function addEpubTypeTags( DOMXPath $xPath ) {

@@ -81,8 +81,8 @@ class ConvertGenerator implements FormatGenerator {
 
 	private function getFileContent( $title ) {
 		$content = file_get_contents( $this->buildFileName( $title, $this->extension ) );
-		//unlink( $this->buildFileName( $title, 'epub' ) );
-		//unlink( $this->buildFileName( $title, $this->extension ) );
+		unlink( $this->buildFileName( $title, 'epub' ) );
+		unlink( $this->buildFileName( $title, $this->extension ) );
 		return $content;
 	}
 }

@@ -65,11 +65,11 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 		$data = $provider->get( $title );
 		if( $format == 'epub-2' || $format == 'epub' ) {
 			$generator = new Epub2Generator();
-		} else if( $format == 'epub-3' ) {
+		} elseif( $format == 'epub-3' ) {
 			$generator = new Epub3Generator();
-		} else if( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
+		} elseif( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 			$generator = new ConvertGenerator( $format );
-		} else if( $format == 'xhtml' ) {
+		} elseif( $format == 'xhtml' ) {
 			$generator = new XhtmlGenerator();
 		} else {
 			throw new Exception( "The file format $format is unknown" );

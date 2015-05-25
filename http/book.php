@@ -36,17 +36,19 @@ try {
 	$data = $provider->get( $title );
 	if( $format == 'epub' ) {
 		$format = 'epub-2';
+	} elseif( $format == 'odt' ) {
+		$format = 'rtf'; //TODO: bad hack in order to don't break urls
 	}
 
 	if( $format == 'epub-2' ) {
 		$generator = new Epub2Generator();
-	} else if( $format == 'epub-3' ) {
+	} elseif( $format == 'epub-3' ) {
 		$generator = new Epub3Generator();
-	} else if( $format == 'xhtml' ) {
+	} elseif( $format == 'xhtml' ) {
 		$generator = new XhtmlGenerator();
-	} else if( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
+	} elseif( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 		$generator = new ConvertGenerator( $format );
-	} else if( $format == 'atom' ) {
+	} elseif( $format == 'atom' ) {
 		$generator = new AtomGenerator();
 	} else {
 		throw new HttpException( 'Unsupported Media Type', 415 );

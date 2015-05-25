@@ -102,7 +102,7 @@ class ConvertGenerator implements FormatGenerator {
 			$this->getEbookConvertCommand() . ' ' .
 			$this->buildFileName( $title, 'epub' ) . ' ' .
 			$this->buildFileName( $title, $this->getExtension() ) . ' ' .
-			self::$CONFIG[$this->format]['options']
+			self::$CONFIG[$this->format]['parameters']
 		);
 	}
 

@@ -1,12 +1,12 @@
 What is Wikisource Export?
 ==========================
 
-Wikisource export is a tool for exporting Wikisource page in many format like epub, odt or xhtml. The documentation can be found here : http://wikisource.org/wiki/Wikisource:WSexport
+Wikisource export is a tool for exporting Wikisource page in many formats like epub or xhtml. The documentation can be found here : http://wikisource.org/wiki/Wikisource:WSexport
 
 Installation
 ============
 
-You have to download the files and use it with PHP 5.3 or more and for ODT export with XLS.
+You have to download the files and use it with PHP 5.3 or more.
 You have to create a temp folder in the root of directories.
 
 Composition

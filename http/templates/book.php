@@ -27,7 +27,6 @@
 					<option value="epub-2">epub 2 (recommended)</option>
 					<option value="epub-3">epub 3 (for new e-readers only, currently in beta)</option>
 					<option value="xhtml">xhtml (in developpment)</option>
-					<option value="odt">odt (in developpment)</option>
 				</select>
 				<span class="help-inline"></span>
 			</div>

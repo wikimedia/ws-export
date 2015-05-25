@@ -37,31 +37,22 @@ try {
 	if( $format == 'epub' ) {
 		$format = 'epub-2';
 	}
+
 	if( $format == 'epub-2' ) {
 		include( $basePath . '/book/formats/Epub2Generator.php' );
 		$generator = new Epub2Generator();
+	} else if( $format == 'epub-3' ) {
+		include( $basePath . '/book/formats/Epub3Generator.php' );
+		$generator = new Epub3Generator();
+	} else if( $format == 'xhtml' ) {
+		include( $basePath . '/book/formats/XhtmlGenerator.php' );
+		$generator = new XhtmlGenerator();
+	} else if( $format == 'atom' ) {
+		$generator = new AtomGenerator();
 	} else {
-		if( $format == 'epub-3' ) {
-			include( $basePath . '/book/formats/Epub3Generator.php' );
-			$generator = new Epub3Generator();
-		} else {
-			if( $format == 'odt' ) {
-				include( $basePath . '/book/formats/OdtGenerator.php' );
-				$generator = new OdtGenerator();
-			} else {
-				if( $format == 'xhtml' ) {
-					include( $basePath . '/book/formats/XhtmlGenerator.php' );
-					$generator = new XhtmlGenerator();
-				} else {
-					if( $format == 'atom' ) {
-						$generator = new AtomGenerator();
-					} else {
-						throw new HttpException( 'Unsupported Media Type', 415 );
-					}
-				}
-			}
-		}
+		throw new HttpException( 'Unsupported Media Type', 415 );
 	}
+
 	$file = $generator->create( $data );
 	header( 'Content-Type: ' . $generator->getMimeType() );
 	header( 'Content-Disposition: attachment; filename="' . $title . '.' . $generator->getExtension() . '"' );

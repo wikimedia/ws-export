@@ -56,6 +56,11 @@ class ConvertGenerator implements FormatGenerator {
 	private $format;
 
 	/**
+	 * @var int
+	 */
+	private $randomNumber;
+
+	/**
 	 * @param string $format
 	 */
 	public function __construct( $format ) {
@@ -63,6 +68,7 @@ class ConvertGenerator implements FormatGenerator {
 			throw new InvalidArgumentException( 'Invalid format: ' . $format );
 		}
 		$this->format = $format;
+		$this->randomNumber = rand();
 	}
 
 	/**
@@ -113,7 +119,7 @@ class ConvertGenerator implements FormatGenerator {
 
 	private function buildFileName( $bookTitle, $extension ) {
 		global $wsexportConfig;
-		return $wsexportConfig['tempPath'] . '/' . encodeString( $bookTitle ) . '.' . $extension;
+		return $wsexportConfig['tempPath'] . '/' . encodeString( $bookTitle ) . '-' . $this->randomNumber . '.' . $extension;
 	}
 
 	private function getFileContent( $title ) {

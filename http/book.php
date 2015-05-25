@@ -44,8 +44,8 @@ try {
 		$generator = new Epub3Generator();
 	} else if( $format == 'xhtml' ) {
 		$generator = new XhtmlGenerator();
-	} else if( $format == 'pdf' ) {
-		$generator = new ConvertGenerator( 'pdf', 'application/pdf' );
+	} else if( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
+		$generator = new ConvertGenerator( $format );
 	} else if( $format == 'atom' ) {
 		$generator = new AtomGenerator();
 	} else {

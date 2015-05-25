@@ -67,8 +67,8 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 			$generator = new Epub2Generator();
 		} else if( $format == 'epub-3' ) {
 			$generator = new Epub3Generator();
-		} else if( $format == 'pdf' ) {
-			$generator = new ConvertGenerator( 'pdf', 'application/pdf' );
+		} else if( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
+			$generator = new ConvertGenerator( $format );
 		} else if( $format == 'xhtml' ) {
 			$generator = new XhtmlGenerator();
 		} else {

@@ -8,11 +8,11 @@ Installation
 
 You have to download the files and use it with PHP 5.3 or more.
 You have to create a temp folder in the root of directories.
-
+In order to use pdf, txt, rtf and mobi formats you should install Calibre in order to allow the tool to use the `ebook-convert` command.
 Composition
 ===========
 
-This tool is split into indipendent parts:
+This tool is split into independent parts:
 * `utils` : api to interact with Wikisource and others things
 * `book` : export tool in many formats like epub.
 

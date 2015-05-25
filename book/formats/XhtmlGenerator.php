@@ -6,7 +6,7 @@
  */
 
 /**
- * create an an xhtml file
+ * create an xhtml file
  * @see http://www.w3.org/TR/html5/
  */
 class XhtmlGenerator implements FormatGenerator {

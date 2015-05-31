@@ -1,0 +1,9 @@
+{
+	"name" : "wsexport",
+	"title" : "WSexport",
+	"description" : "Export Wikisource books in many file formats.",
+	"url" : "https://tools.wmflabs.org/wsexport/tool/book.php",
+	"keywords" : "ePub, PDF",
+	"author" : "Tpt",
+	"repository" : "https://github.com/wsexport/tool"
+}

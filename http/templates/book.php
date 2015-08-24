@@ -24,8 +24,8 @@
 
 			<div class="col-lg-10">
 				<select id="format" name="format" class="form-control">
-					<option value="epub-2">epub 2 (recommended)</option>
-					<option value="epub-3">epub 3 (for new e-readers only, currently in beta)</option>
+					<option value="epub-3">epub 3</option>
+					<option value="epub-2">epub 2 (deprecated, may be useful for some very old e-readers)</option>
 					<option value="mobi">mobi (in beta)</option>
 					<option value="txt">txt (in beta)</option>
 					<option value="rtf">rtf (in beta)</option>

@@ -35,7 +35,7 @@ try {
 	$provider = new BookProvider( $api, $options );
 	$data = $provider->get( $title );
 	if( $format == 'epub' ) {
-		$format = 'epub-2';
+		$format = 'epub-3';
 	} elseif( $format == 'odt' ) {
 		$format = 'rtf'; //TODO: bad hack in order to don't break urls
 	}

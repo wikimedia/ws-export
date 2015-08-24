@@ -63,9 +63,9 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 		$options['images'] = true;
 		$provider = new BookProvider( $api, $options );
 		$data = $provider->get( $title );
-		if( $format == 'epub-2' || $format == 'epub' ) {
+		if( $format == 'epub-2' ) {
 			$generator = new Epub2Generator();
-		} elseif( $format == 'epub-3' ) {
+		} elseif( $format == 'epub-3' || $format == 'epub' ) {
 			$generator = new Epub3Generator();
 		} elseif( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 			$generator = new ConvertGenerator( $format );

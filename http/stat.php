@@ -3,6 +3,11 @@ $wsexportConfig = array(
 	'basePath' => '..', 'tempPath' => '../temp'
 );
 
+function normalizeFormat($format) {
+	$parts = explode('-', $format);
+	return $parts[0];
+}
+
 include( '../book/init.php' );
 
 date_default_timezone_set( 'UTC' );
@@ -12,19 +17,19 @@ $year = isset( $_GET['year'] ) ? intval( $_GET['year'] ) : $date['year'];
 
 $stat = CreationLog::singleton()->getTypeAndLangStats( $month, $year );
 $val = array();
-$total = array(
-	'epub-2' => 0, 'epub-3' => 0, 'odt' => 0, 'xhtml' => 0
-);
+$total = array();
 foreach( $stat as $format => $temp ) {
+	$format = normalizeFormat($format);
 	foreach( $temp as $lang => $num ) {
-		if( !array_key_exists( $lang, $val ) ) {
-			$val[$lang] = array(
-				'epub-2' => 0, 'epub-3' => 0, 'odt' => 0, 'xhtml' => 0
-			);
+		if( $lang === '' ) {
+			$lang = 'oldwiki';
 		}
-		$val[$lang][$format] = $num;
+
+		$val[$lang][$format] += $num;
 		$total[$format] += $num;
 	}
 }
+
 ksort( $val );
+ksort( $total );
 include 'templates/stat.php';

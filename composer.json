@@ -1,0 +1,14 @@
+{
+	"name": "wsexport/tool",
+	"description": "Tool to extract Wikisource books",
+	"keywords": [
+		"wikisource"
+	],
+	"homepage": "https://github.com/wsexport/tool",
+	"license": "GPL-2.0+",
+	"authors": [],
+	"require": {
+		"php": ">=5.5.0",
+		"guzzlehttp/guzzle": "~6.0"
+	}
+}

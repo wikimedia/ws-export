@@ -5,6 +5,12 @@
  * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
  */
 
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * a base class for communications with Wikisource
  */
@@ -14,7 +20,12 @@ class Api {
 	public $domainName = '';
 
 	/**
-	 * @var $lang the lang of Wikisource like 'en' or 'fr'
+	 * @var ClientInterface
+	 */
+	private $client;
+
+	/**
+	 * @var string $lang the language code of the Wikisource like 'en' or 'fr'
 	 */
 	public function __construct( $lang = '', $domainName = '' ) {
 		if( $lang == '' ) {
@@ -34,27 +45,56 @@ class Api {
 		} else {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}
+
+		$this->client = new Client([
+			'defaults' => ['headers' => ['User-Agent' => self::USER_AGENT]]
+		]);
+	}
+
+	/**
+	 * API query
+	 *
+	 * @deprecated Use Api::queryAsync
+	 *
+	 * @param array $params parameters sent to the api
+	 * @return array result of the api query
+	 * @throws HttpException
+	 */
+	public function query( $params ) {
+		return $this->queryAsync( $params )->wait();
 	}
 
 	/**
 	 * api query
 	 * @var array $params an associative array for params send to the api
-	 * @return array an array with whe result of the api query
+	 * @return PromiseInterface a Promise with the result array
 	 * @throws HttpException
+	 * TODO: remove to go full async
 	 */
-	public function query( $params ) {
-		return json_decode( $this->get( $this->buildApiQueryUrl( $params ) ), true );
+	public function queryAsync( $params ) {
+		$params += [ 'action' => 'query', 'format' => 'json' ];
+
+		return $this->client->getAsync(
+			'https://' . $this->domainName . '/w/api.php',
+			[ 'query' => $params ]
+		)->then(
+			function( ResponseInterface $response ) {
+				return $this->parseResponse( $response );
+			},
+			function( RequestException $e ) {
+				throw new HttpException( $e->getMessage() );
+			}
+		);
 	}
 
 	private function buildApiQueryUrl( $params ) {
-		$data = 'action=query&format=json&' . http_build_query( $params );
-		return $this->domainName . '/w/api.php?' . $data;
+		return '/w/api.php?action=query&format=json&' . http_build_query( $params );
 	}
 
 	/**
 	 * api query. Give all pages of response
-	 * @var $params an associative array for params send to the api
-	 * @return an array with whe result of the api query
+	 * @var array $params an associative array for params send to the api
+	 * @return array an array with whe result of the api query
 	 * @throws HttpException
 	 */
 	public function completeQuery( $params ) {
@@ -81,12 +121,12 @@ class Api {
 	 * @return the content of a page
 	 */
 	public function getPageAsync( $curl_async, $title, $id, &$responses ) {
-		$url = $this->buildApiQueryUrl( array(
+		$url = $this->buildApiQueryUrl( [
 			'titles' => $title,
 			'prop' => 'revisions',
 			'rvprop' => 'content',
 			'rvparse' => true
-		) );
+		] );
 
 		return $curl_async->addRequest( $url, null, array( $this, 'wrapPage' ), array( $id, &$responses ) );
 	}
@@ -179,22 +219,11 @@ class Api {
 	}
 
 	/**
-	 * @var $url the url
-	 * @return the file content
+	 * @var string $url the url
+	 * @return string the file content
 	 */
 	public function get( $url ) {
-		$ch = Api::getCurl( $url );
-		$response = curl_exec( $ch );
-		if( curl_errno( $ch ) ) {
-			throw new HttpException( curl_error( $ch ), curl_errno( $ch ) );
-		} else {
-			if( curl_getinfo( $ch, CURLINFO_HTTP_CODE ) >= 400 ) {
-				throw new HttpException( 'HTTP error: ' . $url, curl_getinfo( $ch, CURLINFO_HTTP_CODE ) );
-			}
-		}
-		curl_close( $ch );
-
-		return $response;
+		return $this->client->get($url)->getBody()->getContents();
 	}
 
 	/**
@@ -236,6 +265,14 @@ class Api {
 		curl_setopt( $ch, CURLOPT_MAXREDIRS, 4 );
 
 		return $ch;
+	}
+
+	private function parseResponse( ResponseInterface $response ) {
+		if($response->getStatusCode() !== 200 ) {
+			throw new HttpException( 'HTTP error ' . $response->getStatusCode(), $response->getStatusCode() );
+		}
+
+		return json_decode( $response->getBody(), true );
 	}
 
 	/**

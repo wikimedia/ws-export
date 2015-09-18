@@ -7,6 +7,8 @@
 global $wsexportConfig;
 $basePath = $wsexportConfig['basePath'];
 
+include_once( $basePath . '/vendor/autoload.php' );
+
 include_once( $basePath . '/utils/utils.php' );
 include_once( $basePath . '/utils/HttpException.php' );
 include_once( $basePath . '/utils/Api.php' );

@@ -6,8 +6,17 @@ Wikisource export is a tool for exporting Wikisource page in many formats like e
 Installation
 ============
 
-You have to download the files and use it with PHP 5.3 or more.
+You have to download the files and use it with PHP 5.5 or more.
+
 You have to create a temp folder in the root of directories.
+
+This tool depends on [Composer](http://getcomposer.org/) to install some dependencies. The easiest way to use it is to run the Wsexport Tool main directory:
+
+```
+curl -sS https://getcomposer.org/installer | php
+php composer.phar install
+```
+
 In order to use pdf, txt, rtf and mobi formats you should install Calibre in order to allow the tool to use the `ebook-convert` command.
 Composition
 ===========

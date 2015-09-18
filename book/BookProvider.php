@@ -12,7 +12,6 @@ use GuzzleHttp\Promise\PromiseInterface;
  */
 class BookProvider {
 	protected $api = null;
-	protected $curl_async = null;
 	protected $options = array(
 		'images' => true, 'fonts' => false, 'categories' => true
 	);
@@ -25,7 +24,6 @@ class BookProvider {
 	 */
 	public function __construct( Api $api, $options ) {
 		$this->api = $api;
-		$this->curl_async = new CurlAsync();
 		$this->options = array_merge( $this->options, $options );
 		$this->creditPages = array();
 		$this->creditImages = array();
@@ -152,16 +150,16 @@ class BookProvider {
 			}
 			$book->chapters = $chapters;
 
-			$key_credit = $this->startCredit( $book, $chapterTitles, $pageTitles );
+			$creditPromise = $this->startCredit( $book, $chapterTitles, $pageTitles );
 			if( $this->options['images'] && !empty( $pictures ) ) {
-				$keyCreditImage = $this->startCreditImage( $book, $pictures );
+				$creditImagePromise = $this->startCreditImage( $book, $pictures );
 			}
 
-			$this->curl_async->waitForKey( $key_credit );
-
 			$pictures = $this->getPicturesData( $pictures );
+
+			$this->finishCredit( $creditPromise );
 			if( $this->options['images'] && !empty( $pictures ) ) {
-				$this->curl_async->waitForKey( $keyCreditImage );
+				$this->finishCreditImage( $creditImagePromise );
 			}
 
 			$book->credits = $this->mergeCredit();
@@ -285,12 +283,12 @@ class BookProvider {
 	}
 
 	/**
-	 * @var $book the Book object
-	 * @var $chapters an array of Page
-	 * @var $otherPages an array of string
-	 * @return a key id for the credit request
+	 * @var Book $book
+	 * @var Page[] $chapters
+	 * @var string[] $otherPages
+	 * @return PromiseInterface
 	 */
-	protected function startCredit( Book $book, $chapters, $otherPages ) {
+	protected function startCredit( Book $book, array $chapters, array $otherPages ) {
 		$pages = array( $book->title );
 		foreach( $chapters as $id => $chapter ) {
 			$pages[] = $chapter->title;
@@ -301,24 +299,22 @@ class BookProvider {
 			'lang' => $book->lang, 'format' => 'php', 'book' => $book->scan, 'page' => $pages
 		);
 
-		return $this->curl_async->addRequest( $this->creditUrl, $params, array( $this, 'finishCredit' ) );
+		return $this->api->getAsync(
+			$this->creditUrl,
+			[ 'query' => $params ]
+		);
 	}
 
-	public function finishCredit( $data ) {
-		if( $data['http_code'] != 200 ) {
-			//$html = 'Unable to get contributor credits';
-			error_log( 'getCredit() fail:' . 'http code: ' . $data['http_code'] . ', curl errno: ' . $data['curl_errno'] . ', curl_result:' . $data['curl_result'] );
-		} else {
-			$this->creditPages = unserialize( $data['content'] );
-		}
+	public function finishCredit( PromiseInterface $promise ) {
+		$this->creditPages = unserialize( $promise->wait() );
 	}
 
 	/**
-	 * @var $book the Book object
-	 * @var $pictures an array of Picture
-	 * @return a key id for the credit request
+	 * @var Book $book
+	 * @var Picture[] $pictures
+	 * @return PromiseInterface
 	 */
-	protected function startCreditImage( Book $book, $pictures ) {
+	protected function startCreditImage( Book $book, array $pictures ) {
 		$images_set = array();
 		foreach( $pictures as $id => $picture ) {
 			if( $picture->name ) {
@@ -331,16 +327,14 @@ class BookProvider {
 			'lang' => $book->lang, 'format' => 'php', 'image' => $images
 		);
 
-		return $this->curl_async->addRequest( $this->creditUrl, $params, array( $this, 'finishCreditImage' ) );
+		return $this->api->getAsync(
+			$this->creditUrl,
+			[ 'query' => $params ]
+		);
 	}
 
-	public function finishCreditImage( $data ) {
-		if( $data['http_code'] != 200 ) {
-			//$html = 'Unable to get contributor credits';
-			error_log( 'getCreditImage() fail:' . 'http code: ' . $data['http_code'] . ', curl errno: ' . $data['curl_errno'] . ', curl_result:' . $data['curl_result'] );
-		} else {
-			$this->creditImages = unserialize( $data['content'] );
-		}
+	public function finishCreditImage( PromiseInterface $promise ) {
+		$this->creditImages = unserialize( $promise->wait() );
 	}
 
 	/*

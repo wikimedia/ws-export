@@ -182,20 +182,6 @@ class Api {
 	}
 
 	/**
-	 * @var $url the url
-	 * @return curl
-	 */
-	static function getCurl( $url ) {
-		$ch = curl_init( $url );
-		curl_setopt( $ch, CURLOPT_USERAGENT, Api::USER_AGENT );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
-		curl_setopt( $ch, CURLOPT_MAXREDIRS, 4 );
-
-		return $ch;
-	}
-
-	/**
 	 * @return the lang of the Wikisource used
 	 */
 	public static function getHttpLang() {

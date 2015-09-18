@@ -115,43 +115,18 @@ class Api {
 	}
 
 	/**
-	 * @var $curl_async multi curl async object doing the request
-	 * @var $title the title of the page
-	 * @var $callback the callback to call on each request termination
-	 * @return the content of a page
+	 * @var string $title the title of the page
+	 * @return PromiseInterface promise with the content of a page
 	 */
-	public function getPageAsync( $curl_async, $title, $id, &$responses ) {
-		$url = $this->buildApiQueryUrl( [
+	public function getPageAsync( $title ) {
+		return $this->queryAsync( [
 			'titles' => $title,
 			'prop' => 'revisions',
 			'rvprop' => 'content',
 			'rvparse' => true
-		] );
-
-		return $curl_async->addRequest( $url, null, array( $this, 'wrapPage' ), array( $id, &$responses ) );
-	}
-
-	/*
-	 * Callback called when a request started by getPageAsync() finish
-	 */
-	public function wrapPage( $data, $id, &$responses ) {
-		if( $data['http_code'] != 200 ) {
-			throw new HttpException( 'HTTP error ' . $data['http_code'] . ' with page ' . $id . ' that return: ' . htmlentities( $data['content'] ), $data['http_code'] );
-		}
-		$responses[$id] = $this->parseGetPageResponse( json_decode( $data['content'], true ) );
-	}
-
-	public function getPagesAsync( $curl_async, $titles ) {
-		$responses = array();
-		$keys = array();
-		foreach( $titles as $id => $title ) {
-			$keys[] = $this->getPageAsync( $curl_async, $title, $id, $responses );
-		}
-		foreach( $keys as $key => $id ) {
-			$curl_async->waitForKey( $id );
-		}
-
-		return $responses;
+		] )->then( function( array $result ) {
+			return $this->parseGetPageResponse( $result );
+		} );
 	}
 
 	private function parseGetPageResponse( $response ) {

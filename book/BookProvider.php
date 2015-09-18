@@ -5,6 +5,8 @@
  * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
  */
 
+use GuzzleHttp\Promise\PromiseInterface;
+
 /**
  * provide all the data needed to create a book file
  */
@@ -193,13 +195,14 @@ class BookProvider {
 	 * @return Page[]
 	 */
 	protected function getPages( $pages ) {
-		$titles = array();
+		$promises = [];
+
 		foreach( $pages as $id => $page ) {
-			$titles[$id] = $page->title;
+			$promises[$id] = $this->api->getPageAsync( $page->title );
 		}
-		$data = $this->api->getPagesAsync( $this->curl_async, $titles );
+
 		foreach( $pages as $id => $page ) {
-			$page->content = $this-> domDocumentFromHtml( $data[$id] );
+			$page->content = $this->domDocumentFromHtml( $promises[$id]->wait() );
 		}
 
 		return $pages;

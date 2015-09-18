@@ -46,9 +46,9 @@ class Api {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}
 
-		$this->client = new Client([
-			'defaults' => ['headers' => ['User-Agent' => self::USER_AGENT]]
-		]);
+		$this->client = new Client( [
+			'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ]
+		] );
 	}
 
 	/**
@@ -159,26 +159,11 @@ class Api {
 	}
 
 	/**
-	 * @var $title the title of the page
-	 * @return the content of a page
-	 */
-	public function getPage( $title ) {
-		$response = $this->query( array(
-			'titles' => $title,
-			'prop' => 'revisions',
-			'rvprop' => 'content',
-			'rvparse' => true
-		) );
-
-		return $this->parseGetPageResponse( $response );
-	}
-
-	/**
 	 * @var string $url the url
 	 * @return string the file content
 	 */
 	public function get( $url ) {
-		return $this->client->get($url)->getBody()->getContents();
+		return $this->client->get( $url )->getBody()->getContents();
 	}
 
 	/**

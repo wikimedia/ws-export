@@ -175,7 +175,7 @@ class BookProvider {
 	 * @return DOMDocument
 	 */
 	protected function getDocument( $title ) {
-		return $this->domDocumentFromHtml( $this->api->getPage( $title ) );
+		return $this->domDocumentFromHtml( $this->api->getPageAsync( $title )->wait() );
 	}
 
 	protected function domDocumentFromHtml( $html ) {

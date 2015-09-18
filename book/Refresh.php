@@ -50,10 +50,11 @@ class Refresh {
 
 	protected function getAboutXhtmlWikisource() {
 		try {
-			$content = $this->api->get( 'http://' . $this->lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_about&action=render' );
+			$content = $this->api->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 		} catch( Exception $e ) {
 			try {
-				$content = $this->api->get( 'http://wikisource.org/w/index.php?title=MediaWiki:Wsexport_about&action=render' );
+				$oldWikisourceApi = new Api( '' );
+				$content = $oldWikisourceApi->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 			} catch( Exception $e ) {
 				$content = '';
 			}
@@ -64,7 +65,7 @@ class Refresh {
 			$document = new DOMDocument( '1.0', 'UTF-8' );
 			$document->loadXML( $content );
 			$parser = new PageParser( $document );
-			$content = $parser->getContent();
+			$document = $parser->getContent();
 			$this->setTempFileContent( 'about.xhtml', str_replace( 'href="//', 'href="http://', $document->saveXML() ) );
 		}
 	}

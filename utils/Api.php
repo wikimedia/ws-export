@@ -52,6 +52,30 @@ class Api {
 	}
 
 	/**
+	 * GET action
+	 *
+	 * @param string $url the target URL
+	 * @param array $options
+	 * @return PromiseInterface the body of the result
+	 */
+	public function getAsync( $url, array $options = [] ) {
+		return $this->client->getAsync(
+			$url,
+			$options
+		)->then(
+			function( ResponseInterface $response ) {
+				if($response->getStatusCode() !== 200 ) {
+					throw new HttpException( 'HTTP error ' . $response->getStatusCode(), $response->getStatusCode() );
+				}
+				return $response->getBody();
+			},
+			function( RequestException $e ) {
+				throw new HttpException( $e->getMessage() );
+			}
+		);
+	}
+
+	/**
 	 * API query
 	 *
 	 * @deprecated Use Api::queryAsync
@@ -65,30 +89,23 @@ class Api {
 	}
 
 	/**
-	 * api query
+	 * API query
+	 *
 	 * @var array $params an associative array for params send to the api
 	 * @return PromiseInterface a Promise with the result array
 	 * @throws HttpException
-	 * TODO: remove to go full async
 	 */
 	public function queryAsync( $params ) {
 		$params += [ 'action' => 'query', 'format' => 'json' ];
 
-		return $this->client->getAsync(
+		return $this->getAsync(
 			'https://' . $this->domainName . '/w/api.php',
 			[ 'query' => $params ]
 		)->then(
-			function( ResponseInterface $response ) {
-				return $this->parseResponse( $response );
-			},
-			function( RequestException $e ) {
-				throw new HttpException( $e->getMessage() );
+			function( $result ) {
+				return json_decode( $result, true );
 			}
 		);
-	}
-
-	private function buildApiQueryUrl( $params ) {
-		return '/w/api.php?action=query&format=json&' . http_build_query( $params );
 	}
 
 	/**
@@ -115,7 +132,7 @@ class Api {
 	}
 
 	/**
-	 * @var string $title the title of the page
+	 * @param string $title the title of the page
 	 * @return PromiseInterface promise with the content of a page
 	 */
 	public function getPageAsync( $title ) {
@@ -142,43 +159,6 @@ class Api {
 	}
 
 	/**
-	 * @var $curl_async multi curl async object doing the request
-	 * @var $title the title of the page
-	 * @var $callback the callback to call on each request termination
-	 * @return the content of a page
-	 */
-	public function getImageAsync( $curl_async, $url, $id, &$responses ) {
-		return $curl_async->addRequest( $url, null, array( $this, 'endImage' ), array( $id, &$responses ) );
-	}
-
-	/*
-	 * Callback called when a request started by getImageAsync() finish
-	 */
-	public function endImage( $data, $id, &$responses ) {
-		if( $data['http_code'] != 200 ) {
-			throw new HttpException( 'HTTP error ' . $data['http_code'] . ' with image ' . $id . ' that return: ' . htmlentities( $data['content'] ), $data['http_code'] );
-		}
-		$content = $data['content'];
-		$responses[$id] = $content;
-	}
-
-	/*
-	 *
-	 */
-	function getImagesAsync( $curl_async, $urls ) {
-		$responses = array();
-		$keys = array();
-		foreach( $urls as $id => $url ) {
-			$keys[] = $this->getImageAsync( $curl_async, $url, $id, $responses );
-		}
-		foreach( $keys as $key => $id ) {
-			$curl_async->waitForKey( $id );
-		}
-
-		return $responses;
-	}
-
-	/**
 	 * @var $title the title of the page
 	 * @return the content of a page
 	 */
@@ -202,33 +182,6 @@ class Api {
 	}
 
 	/**
-	 * multi requests
-	 * @var $title array|string the urls
-	 * @return array|string the content of a pages
-	 */
-	public function getMulti( $urls ) {
-		$mh = curl_multi_init();
-		$curl_array = array();
-		foreach( $urls as $id => $url ) {
-			$curl_array[$id] = Api::getCurl( $url );
-			curl_multi_add_handle( $mh, $curl_array[$id] );
-		}
-		$running = null;
-		do {
-			$status = curl_multi_exec( $mh, $running );
-		} while( $status === CURLM_CALL_MULTI_PERFORM || $running > 0 );
-
-		$res = array();
-		foreach( $urls as $id => $url ) {
-			$res[$id] = curl_multi_getcontent( $curl_array[$id] );
-			curl_multi_remove_handle( $mh, $curl_array[$id] );
-		}
-		curl_multi_close( $mh );
-
-		return $res;
-	}
-
-	/**
 	 * @var $url the url
 	 * @return curl
 	 */
@@ -240,14 +193,6 @@ class Api {
 		curl_setopt( $ch, CURLOPT_MAXREDIRS, 4 );
 
 		return $ch;
-	}
-
-	private function parseResponse( ResponseInterface $response ) {
-		if($response->getStatusCode() !== 200 ) {
-			throw new HttpException( 'HTTP error ' . $response->getStatusCode(), $response->getStatusCode() );
-		}
-
-		return json_decode( $response->getBody(), true );
 	}
 
 	/**

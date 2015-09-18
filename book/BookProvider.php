@@ -214,13 +214,14 @@ class BookProvider {
 	 * @return array|Picture
 	 */
 	protected function getPicturesData( $pictures ) {
-		$urls = array();
+		$promises = [];
+
 		foreach( $pictures as $id => $picture ) {
-			$urls[$id] = $picture->url;
+			$promises[$id] = $this->api->getAsync( $picture->url );
 		}
-		$data = $this->api->getImagesAsync( $this->curl_async, $urls );
+
 		foreach( $pictures as $id => $picture ) {
-			$picture->content = $data[$id];
+			$picture->content = $promises[$id]->wait();
 			$picture->mimetype = getMimeType( $picture->content );
 		}
 

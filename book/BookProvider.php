@@ -171,7 +171,7 @@ class BookProvider {
 
 	/**
 	 * return the content of the page
-	 * @var $title string the title of the page in Wikisource
+	 * @param string $title the title of the page in Wikisource
 	 * @return DOMDocument
 	 */
 	protected function getDocument( $title ) {
@@ -189,7 +189,7 @@ class BookProvider {
 
 	/**
 	 * return the content of the page
-	 * @var Page[] $the pages
+	 * @param Page[] $pages
 	 * @return Page[]
 	 */
 	protected function getPages( $pages ) {
@@ -208,19 +208,21 @@ class BookProvider {
 
 	/**
 	 * return the content of the pictures
-	 * @var $pictures array|Picture the list of the pictures
-	 * @return array|Picture
+	 * @param Picture[] $pictures the list of the pictures
+	 * @return Picture[]
 	 */
 	protected function getPicturesData( $pictures ) {
 		$promises = [];
 
-		foreach( $pictures as $id => $picture ) {
-			$promises[$id] = $this->api->getAsync( $picture->url );
-		}
+		foreach( $this->splitArrayByBatch( $pictures, 10 ) as $batch ) {
+			foreach( $batch as $id => $picture ) {
+				$promises[$id] = $this->api->getAsync( $picture->url );
+			}
 
-		foreach( $pictures as $id => $picture ) {
-			$picture->content = $promises[$id]->wait();
-			$picture->mimetype = getMimeType( $picture->content );
+			foreach( $batch as $id => $picture ) {
+				$pictures[$id]->content = $promises[$id]->wait();
+				$pictures[$id]->mimetype = getMimeType( $pictures[$id]->content );
+			}
 		}
 
 		return $pictures;
@@ -228,8 +230,8 @@ class BookProvider {
 
 	/**
 	 * return the categories in the pages
-	 * @var $title string the title of the page in Wikisource
-	 * @return array|string The categories
+	 * @param string $title the title of the page in Wikisource
+	 * @return string[] The categories
 	 */
 	public function getCategories( $title ) {
 		$categories = array();
@@ -248,7 +250,7 @@ class BookProvider {
 
 	/**
 	 * return the cover of the book
-	 * @var $cover string the name of the cover
+	 * @param $cover string the name of the cover
 	 * @return Picture The cover
 	 */
 	public function getCover( $cover, $lang ) {
@@ -283,9 +285,9 @@ class BookProvider {
 	}
 
 	/**
-	 * @var Book $book
-	 * @var Page[] $chapters
-	 * @var string[] $otherPages
+	 * @param Book $book
+	 * @param Page[] $chapters
+	 * @param string[] $otherPages
 	 * @return PromiseInterface
 	 */
 	protected function startCredit( Book $book, array $chapters, array $otherPages ) {
@@ -293,7 +295,7 @@ class BookProvider {
 		foreach( $chapters as $id => $chapter ) {
 			$pages[] = $chapter->title;
 		}
-		$pages = array_unique( array_merge( $pages, $otherPages ) );
+		$pages = array_unique( array_merge( $pages /*, $otherPages*/ ) );
 		$pages = join( '|', $pages );
 		$params = array(
 			'lang' => $book->lang, 'format' => 'php', 'book' => $book->scan, 'page' => $pages
@@ -310,8 +312,8 @@ class BookProvider {
 	}
 
 	/**
-	 * @var Book $book
-	 * @var Picture[] $pictures
+	 * @param Book $book
+	 * @param Picture[] $pictures
 	 * @return PromiseInterface
 	 */
 	protected function startCreditImage( Book $book, array $pictures ) {
@@ -370,6 +372,22 @@ class BookProvider {
 		} else {
 			return array();
 		}
+	}
+
+	private function splitArrayByBatch($array, $limit) {
+		$result = [];
+		$bagCount = $limit;
+		$bagId = -1;
+		foreach($array as $id => $value) {
+			if($bagCount === $limit) {
+				$bagCount = 0;
+				$bagId++;
+				$result[$bagId] = [];
+			}
+			$result[$bagId][$id] = $value;
+			$bagCount++;
+		}
+		return $result;
 	}
 }
 
@@ -506,7 +524,7 @@ class PageParser {
 				$picture->name = $segments[count( $segments ) - 1];
 			}
 			$picture->title = urldecode( $url );
-			$picture->url = 'http:' . $url;
+			$picture->url = 'https:' . $url;
 
 			$pictures[$picture->title] = $picture;
 			$a->setAttribute( 'alt', $picture->title );
@@ -518,7 +536,7 @@ class PageParser {
 			$url = $img->getAttribute( 'src' );
 			$segments = explode( '/', $url );
 			$picture->title = urldecode( $segments[count( $segments ) - 1] );
-			$picture->url = 'http:' . $url;
+			$picture->url = 'https:' . $url;
 			$pictures[$picture->title] = $picture;
 			$img->setAttribute( 'alt', $picture->title );
 		}

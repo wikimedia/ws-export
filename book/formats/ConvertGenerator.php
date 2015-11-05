@@ -104,12 +104,21 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function convert( $title ) {
+		$output = array();
+		$returnStatus = 0;
+
 		exec(
 			$this->getEbookConvertCommand() . ' ' .
 			$this->buildFileName( $title, 'epub' ) . ' ' .
 			$this->buildFileName( $title, $this->getExtension() ) . ' ' .
-			self::$CONFIG[$this->format]['parameters']
+			self::$CONFIG[$this->format]['parameters'],
+			$output,
+			$returnStatus
 		);
+
+		if( $returnStatus !== 0 ) {
+			throw new Exception( 'Conversion to ' . $this->getExtension() . ' failed.' );
+		}
 	}
 
 	private function getEbookConvertCommand() {

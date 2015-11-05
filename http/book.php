@@ -64,8 +64,10 @@ try {
 		CreationLog::singleton()->add( $data, $format );
 	}
 	flush();
-} catch( HttpException $exception ) {
-	header( 'HTTP/1.1 ' . $exception->getCode() . ' ' . $exception->getMessage() );
+} catch( Exception $exception ) {
+	if( $exception instanceof HttpException ) {
+		header( 'HTTP/1.1 ' . $exception->getCode() . ' ' . $exception->getMessage() );
+	}
 	$error = $exception->getMessage();
 	include 'templates/book.php';
 }

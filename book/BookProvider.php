@@ -259,8 +259,8 @@ class BookProvider {
 		$picture->url = $page['imageinfo'][0]['url'];
 		$picture->mimetype = $page['imageinfo'][0]['mime'];
 		if( in_array( $picture->mimetype, array( 'image/vnd.djvu', 'application/pdf' ) ) ) {
-			if( !isset( $id[1] ) ) {
-				return new Picture();
+			if( !array_key_exists( 1, $id ) ) {
+				$id[1] = 1;
 			}
 			$temps = explode( '/', $picture->url );
 			foreach( $temps as $temp ) {

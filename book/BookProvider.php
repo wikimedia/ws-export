@@ -356,14 +356,22 @@ class BookProvider {
 				}
 			}
 		}
-		uasort( $credit, "cmp_credit" );
+		uasort( $credit, function( $a, $b ) {
+			$f1 = in_array( 'bot', $a['flags'] );
+			$f2 = in_array( 'bot', $b['flags'] );
+			if( $f1 != $f2 ) {
+				return $f1 - $f2;
+			}
+
+			return $b['count'] - $a['count'];
+		} );
 
 		return $credit;
 	}
 
 	/**
 	 * return the list of the namespaces for the current wiki.
-	 * @return array|string
+	 * @return string[]
 	 */
 	public function getNamespaces() {
 		$namespaces = unserialize( getTempFile( $this->api->lang, 'namespaces.sphp' ) );
@@ -391,20 +399,6 @@ class BookProvider {
 	}
 }
 
-/*
- * cmp_credit: compare les crédits de deux utilisateurs
- *
- */
-function cmp_credit( $a, $b ) {
-	$f1 = in_array( 'bot', $a['flags'] );
-	$f2 = in_array( 'bot', $b['flags'] );
-	if( $f1 != $f2 ) {
-		return $f1 - $f2;
-	}
-
-	return $b['count'] - $a['count'];
-}
-
 /**
  * page parser
  */
@@ -412,7 +406,7 @@ class PageParser {
 	protected $xPath = null;
 
 	/**
-	 * @var $doc DOMDocument The page to parse
+	 * @var DOMDocument $doc The page to parse
 	 */
 	public function __construct( DOMDocument $doc ) {
 		$this->xPath = new DOMXPath( $doc );
@@ -422,7 +416,7 @@ class PageParser {
 
 	/**
 	 * return a metadata in the page
-	 * @var $id the metadata id like ws-author
+	 * @param string $id the metadata id like ws-author
 	 * @return string
 	 */
 	public function getMetadata( $id ) {
@@ -436,7 +430,7 @@ class PageParser {
 
 	/**
 	 * return if a metadata exist in the page
-	 * @var $id the metadata id like ws-author
+	 * @param string $id the metadata id like ws-author
 	 * @return bool
 	 */
 	public function metadataIsSet( $id ) {
@@ -447,7 +441,7 @@ class PageParser {
 
 	/**
 	 * return the list of the chapters with the summary if it exist.
-	 * @return array|Page
+	 * @return Page[]
 	 * TODO retrive only main namespace pages ?
 	 */
 	public function getChaptersList( $title, $page_list, $namespaces ) {
@@ -470,7 +464,7 @@ class PageParser {
 
 	/**
 	 * return the list of the chapters with the summary if it exist, if not find links to subpages.
-	 * @return array|Page
+	 * @return Page[]
 	 */
 	public function getFullChaptersList( $title, $page_list, $namespaces ) {
 		$chapters = $this->getChaptersList( $title, $page_list, $namespaces );
@@ -546,7 +540,7 @@ class PageParser {
 
 	/**
 	 * return the list of the pages of the page namespace included
-	 * @return array|string
+	 * @return string[]
 	 */
 	public function getPagesList() {
 		$pages = array();

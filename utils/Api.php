@@ -110,7 +110,7 @@ class Api {
 
 	/**
 	 * api query. Give all pages of response
-	 * @var array $params an associative array for params send to the api
+	 * @param array $params an associative array for params send to the api
 	 * @return array an array with whe result of the api query
 	 * @throws HttpException
 	 */
@@ -167,7 +167,7 @@ class Api {
 	}
 
 	/**
-	 * @return the lang of the Wikisource used
+	 * @return string the lang of the Wikisource used
 	 */
 	public static function getHttpLang() {
 		$lang = '';
@@ -187,7 +187,7 @@ class Api {
 	}
 
 	/**
-	 * @return the url encoded like mediawiki does.
+	 * @return string the url encoded like mediawiki does.
 	 */
 	public static function mediawikiUrlEncode( $url ) {
 		$search = array( '%21', '%24', '%28', '%29', '%2A', '%2C', '%2D', '%2E', '%2F', '%3A', '%3B', '%40' );

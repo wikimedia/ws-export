@@ -351,7 +351,7 @@ class BookProvider {
 			}
 			$credit[$name]['count'] += $values['count'];
 			foreach( $values['flags'] as $id => $flag ) {
-				if( !inarray( $flags, $credit[$name]['flags'] ) ) {
+				if( !in_array( $flag, $credit[$name]['flags'] ) ) {
 					$credit[$name]['flags'][] = $flag;
 				}
 			}

@@ -10,7 +10,7 @@ try {
 
 	$options = array();
 	$options['images'] = isset( $_GET['images'] ) ? filter_var( $_GET['images'], FILTER_VALIDATE_BOOLEAN ) : true;
-	if( in_array( $api->lang, array( 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl' ) ) ) {
+	if( in_array( $api->lang, array( 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ) ) ) {
 		$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : '';
 	} else {
 		$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : 'freeserif';

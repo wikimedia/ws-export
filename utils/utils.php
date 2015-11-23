@@ -6,8 +6,8 @@
  */
 
 /**
- * return an uuid
- * @var $prefix a prefix for the uuid
+ * @param string $prefix a prefix for the uuid
+ * @return string an UUID
  */
 function uuid( $prefix = '' ) {
 	$chars = md5( uniqid( mt_rand(), true ) );
@@ -21,9 +21,9 @@ function uuid( $prefix = '' ) {
 }
 
 /**
- * return an url to a page of Wikisource
- * @var string $lang the language of the wiki
- * @var string $page the name of the page
+ * @param string $lang the language of the wiki
+ * @param string $page the name of the page
+ * @return string an url to a page of Wikisource
  */
 function wikisourceUrl( $lang, $page = '' ) {
 	if( $page != '' ) {
@@ -34,8 +34,8 @@ function wikisourceUrl( $lang, $page = '' ) {
 }
 
 /**
- * return the content of a file
- * @var string $file the path to the file
+ * @param string $file the path to the file
+ * @return string the content of a file
  */
 function getFile( $file ) {
 	$content = '';
@@ -52,8 +52,7 @@ function getFile( $file ) {
  * Get mimetype of a file, using finfo if its available, or mime_magic.
  *
  * @param string $contents a buffer containing the contents of the file
- * @return string mime type on success
- * @return false on failure
+ * @return string|bool mime type on success or false on failure
  */
 function getMimeType( $contents ) {
 	if( class_exists( 'finfo', false ) ) {
@@ -64,7 +63,7 @@ function getMimeType( $contents ) {
 		}
 	}
 	if( ini_get( 'mime_magic.magicfile' ) && function_exists( 'mime_content_type' ) ) {
-		$filename = tempnam();
+		$filename = tempnam( sys_get_temp_dir(), 'wsf' );
 		file_put_contents( $filename, $contents );
 		$ret = mime_content_type( $filename );
 		unlink( $filename );
@@ -77,8 +76,10 @@ function getMimeType( $contents ) {
 
 /**
  * get an xhtml page from a text content
- * @var $lang the code lang of the content
- * @var $content
+ * @param string $lang content language code
+ * @param string $content
+ * @param string $title
+ * @return string
  */
 function getXhtmlFromContent( $lang, $content, $title = ' ' ) {
 	if( $content != '' ) {
@@ -134,7 +135,7 @@ function encodeString( $string ) {
 }
 
 /**
- * Cut a filename if it is too long but kepp the extension
+ * Cut a filename if it is too long but keep the extension
  */
 function cutFilename( $string, $max = 100 ) {
 	$length = strlen( $string );

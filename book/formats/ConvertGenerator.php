@@ -56,11 +56,6 @@ class ConvertGenerator implements FormatGenerator {
 	private $format;
 
 	/**
-	 * @var int
-	 */
-	private $randomNumber;
-
-	/**
 	 * @param string $format
 	 */
 	public function __construct( $format ) {
@@ -68,7 +63,6 @@ class ConvertGenerator implements FormatGenerator {
 			throw new InvalidArgumentException( 'Invalid format: ' . $format );
 		}
 		$this->format = $format;
-		$this->randomNumber = rand();
 	}
 
 	/**
@@ -93,24 +87,31 @@ class ConvertGenerator implements FormatGenerator {
 	 * @return string
 	 */
 	public function create( Book $book ) {
-		$this->createEpub( $book );
-		$this->convert( $book->title );
-		return $this->getFileContent( $book->title );
+		$epubFileName = $this->buildFileName( $book->title, 'epub' );
+		$outputFileName = $this->buildFileName( $book->title, $this->getExtension() );
+
+		$this->createEpub( $book, $epubFileName );
+		$this->convert( $epubFileName, $outputFileName );
+
+		$content = file_get_contents( $outputFileName );
+		unlink( $epubFileName );
+		unlink( $outputFileName );
+		return $content;
 	}
 
-	private function createEpub( Book $book ) {
+	private function createEpub( Book $book, $epubFileName ) {
 		$epubGenerator = new Epub3Generator();
-		file_put_contents( $this->buildFileName( $book->title, 'epub' ), $epubGenerator->create( $book ) );
+		file_put_contents( $epubFileName, $epubGenerator->create( $book ) );
 	}
 
-	private function convert( $title ) {
+	private function convert( $epubFileName, $outputFileName ) {
 		$output = array();
 		$returnStatus = 0;
 
 		exec(
 			$this->getEbookConvertCommand() . ' ' .
-			$this->buildFileName( $title, 'epub' ) . ' ' .
-			$this->buildFileName( $title, $this->getExtension() ) . ' ' .
+			$epubFileName . ' ' .
+			$outputFileName . ' ' .
 			self::$CONFIG[$this->format]['parameters'],
 			$output,
 			$returnStatus
@@ -127,14 +128,6 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function buildFileName( $bookTitle, $extension ) {
-		global $wsexportConfig;
-		return $wsexportConfig['tempPath'] . '/' . encodeString( $bookTitle ) . '-' . $this->randomNumber . '.' . $extension;
-	}
-
-	private function getFileContent( $title ) {
-		$content = file_get_contents( $this->buildFileName( $title, $this->getExtension() ) );
-		unlink( $this->buildFileName( $title, 'epub' ) );
-		unlink( $this->buildFileName( $title, $this->getExtension() ) );
-		return $content;
+		return tempnam( sys_get_temp_dir(), encodeString( $bookTitle ) ) . '.' . $extension;
 	}
 }

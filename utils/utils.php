@@ -86,7 +86,7 @@ function getXhtmlFromContent( $lang, $content, $title = ' ' ) {
 	}
 	$html = '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"';
 	if( $lang != null ) {
-		$html .= ' xml:lang="' . $lang . '"';
+		$html .= ' xml:lang="' . $lang . '" dir="' . getLanguageDirection( $lang ) . '"';
 	}
 
 	return $html . '><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="default-style" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head><body>' . $content . '</body></html>';
@@ -143,4 +143,15 @@ function cutFilename( $string, $max = 100 ) {
 	}
 
 	return $string;
+}
+
+/**
+ * @param string $languageCode
+ * @return string "rtl" or "ltr"
+ */
+function getLanguageDirection( $languageCode ) {
+	return
+		in_array( $languageCode, array( 'ar', 'arc', 'bcc', 'bqi', 'ckb', 'dv', 'fa', 'glk', 'he', 'lrc', 'mzn', 'pnb', 'ps', 'sd', 'ug', 'ur', 'yi' ) )
+		? 'rtl'
+		: 'ltr';
 }

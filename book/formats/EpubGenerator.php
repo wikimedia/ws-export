@@ -196,7 +196,7 @@ abstract class EpubGenerator implements FormatGenerator {
 
 		$content = '<?xml version="1.0" encoding="UTF-8" ?>
 			<!DOCTYPE html>
-			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '">
+			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '" dir="' . getLanguageDirection( $book->lang ) . '">
 				<head>
 					<title>' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</title>
 					<meta http-equiv="default-style" content="application/xhtml+xml; charset=utf-8" />

@@ -128,6 +128,8 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function buildFileName( $bookTitle, $extension ) {
-		return tempnam( sys_get_temp_dir(), encodeString( $bookTitle ) ) . '.' . $extension;
+		global $wsexportConfig;
+
+		return tempnam( $wsexportConfig['tempPath'], encodeString( $bookTitle ) ) . '.' . $extension;
 	}
 }

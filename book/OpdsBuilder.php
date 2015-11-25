@@ -58,7 +58,7 @@ class OpdsBuilder {
 		date_default_timezone_set( 'UTC' );
 		$generator = new AtomGenerator( $this->exportBasePath );
 
-		$dom = new DOMDocument( "1.0", "UTF-8" );
+		$dom = new DOMDocument( '1.0', 'UTF-8' );
 		$feed = $dom->createElement( 'feed' );
 		$generator->appendNamespaces( $feed );
 		$feed->setAttribute( 'xml:lang', $this->lang );

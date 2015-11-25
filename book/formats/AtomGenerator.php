@@ -71,7 +71,7 @@ class AtomGenerator implements FormatGenerator {
 		$this->addNode( $dom, $node, 'id', $wsUrl, 'dcterms:URI' );
 		//TODO published?
 		$this->addNode( $dom, $node, 'updated', date( DATE_ATOM ) );
-		$this->addNode( $dom, $node, 'rights', 'https://creativecommons.org/licenses/by-sa/3.0' );
+		$this->addNode( $dom, $node, 'rights', 'http://creativecommons.org/licenses/by-sa/3.0' );
 		$this->addPersonNode( $dom, $node, 'author', $book->author );
 		$this->addPersonNode( $dom, $node, 'contributor', $book->translator );
 		$this->addPersonNode( $dom, $node, 'contributor', $book->illustrator );
@@ -92,6 +92,7 @@ class AtomGenerator implements FormatGenerator {
 		$this->addLink( $dom, $node, 'alternate', $this->buildExportUrl( $book, 'atom' ), 'application/atom+xml;type=entry;profile=opds-catalog' );
 		$this->addLink( $dom, $node, 'alternate', $wsUrl, 'text/html' );
 		$this->addLink( $dom, $node, 'http://opds-spec.org/acquisition', $this->buildExportUrl( $book, 'epub' ), 'application/epub+zip' );
+		$this->addLink( $dom, $node, 'http://opds-spec.org/acquisition', $this->buildExportUrl( $book, 'mobi' ), 'application/x-mobipocket-ebook' );
 		$this->addLink( $dom, $node, 'http://opds-spec.org/acquisition', $this->buildExportUrl( $book, 'xhtml' ), 'application/xhtml+xml' );
 		if( $book->cover ) {
 			$this->addLink( $dom, $node, 'http://opds-spec.org/image', $book->cover->url, $book->cover->mimetype );

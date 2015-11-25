@@ -116,16 +116,18 @@ class Api {
 	 */
 	public function completeQuery( $params ) {
 		$data = array();
+		$continue = true;
 		do {
 			$temp = $this->query( $params );
-			if( array_key_exists( 'query-continue', $temp ) ) {
-				$keys = array_keys( $temp['query-continue'] );
-				$keys2 = array_keys( $temp['query-continue'][$keys[0]] );
-				$params[$keys2[0]] = $continue = $temp['query-continue'][$keys[0]][$keys2[0]];
-			} else {
-				$continue = '';
-			}
 			$data = array_merge_recursive( $data, $temp );
+
+			if( array_key_exists( 'continue', $temp ) ) {
+				foreach( $temp['continue'] as $keys => $value ) {
+					$params[$keys] = $value;
+				}
+			} else {
+				$continue = false;
+			}
 		} while( $continue );
 
 		return $data;

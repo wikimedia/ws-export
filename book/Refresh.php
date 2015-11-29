@@ -59,9 +59,7 @@ class Refresh {
 				$content = '';
 			}
 		}
-		if( $content != '' ) {
-			$i18n = getI18n( $this->lang );
-			$content = getXhtmlFromContent( $this->lang, $content, $i18n['about'] );
+		if( $content !== '' ) {
 			$document = new DOMDocument( '1.0', 'UTF-8' );
 			$document->loadXML( $content );
 			$parser = new PageParser( $document );

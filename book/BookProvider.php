@@ -288,27 +288,40 @@ class BookProvider {
 	 * @param Book $book
 	 * @param Page[] $chapters
 	 * @param string[] $otherPages
-	 * @return PromiseInterface
+	 * @return PromiseInterface[]
 	 */
 	protected function startCredit( Book $book, array $chapters, array $otherPages ) {
 		$pages = array( $book->title );
 		foreach( $chapters as $id => $chapter ) {
 			$pages[] = $chapter->title;
 		}
-		$pages = array_unique( array_merge( $pages /*, $otherPages*/ ) );
-		$pages = join( '|', $pages );
-		$params = array(
-			'lang' => $book->lang, 'format' => 'php', 'book' => $book->scan, 'page' => $pages
-		);
+		$pages = array_unique( array_merge( $pages, $otherPages ) );
 
-		return $this->api->getAsync(
-			$this->creditUrl,
-			[ 'query' => $params ]
-		);
+		$promises = [];
+		foreach( $this->splitArrayByBatch( $pages, 50 ) as $batch ) {
+			$params = array(
+				'lang' => $book->lang, 'format' => 'json', 'book' => $book->scan, 'page' => join( '|', $batch )
+			);
+			$promises[] = $this->api->getAsync(
+				$this->creditUrl,
+				[ 'query' => $params ]
+			);
+		}
+		return $promises;
 	}
 
-	public function finishCredit( PromiseInterface $promise ) {
-		$this->creditPages = unserialize( $promise->wait() );
+	public function finishCredit( array $promises ) {
+		/** @var PromiseInterface $promise */
+		foreach( $promises as $promise ) {
+			$people = json_decode( $promise->wait(), true );
+			foreach( $people as $person => $props ) {
+				if( array_key_exists( $person, $this->creditPages ) ) {
+					$this->creditPages[$person]['count'] += $props['count'];
+				} else {
+					$this->creditPages[$person] = $props;
+				}
+			}
+		}
 	}
 
 	/**
@@ -326,7 +339,7 @@ class BookProvider {
 		$images = array_keys( $images_set );
 		$images = join( '|', $images );
 		$params = array(
-			'lang' => $book->lang, 'format' => 'php', 'image' => $images
+			'lang' => $book->lang, 'format' => 'json', 'image' => $images
 		);
 
 		return $this->api->getAsync(
@@ -336,7 +349,7 @@ class BookProvider {
 	}
 
 	public function finishCreditImage( PromiseInterface $promise ) {
-		$this->creditImages = unserialize( $promise->wait() );
+		$this->creditImages = json_decode( $promise->wait(), true );
 	}
 
 	/*

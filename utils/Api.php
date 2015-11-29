@@ -67,7 +67,7 @@ class Api {
 				if($response->getStatusCode() !== 200 ) {
 					throw new HttpException( 'HTTP error ' . $response->getStatusCode(), $response->getStatusCode() );
 				}
-				return $response->getBody();
+				return $response->getBody()->getContents();
 			},
 			function( RequestException $e ) {
 				throw new HttpException( $e->getMessage() );

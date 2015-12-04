@@ -94,8 +94,8 @@ class AtomGenerator implements FormatGenerator {
 		$this->addLink( $dom, $node, 'http://opds-spec.org/acquisition', $this->buildExportUrl( $book, 'epub' ), 'application/epub+zip' );
 		$this->addLink( $dom, $node, 'http://opds-spec.org/acquisition', $this->buildExportUrl( $book, 'mobi' ), 'application/x-mobipocket-ebook' );
 		$this->addLink( $dom, $node, 'http://opds-spec.org/acquisition', $this->buildExportUrl( $book, 'xhtml' ), 'application/xhtml+xml' );
-		if( $book->cover ) {
-			$this->addLink( $dom, $node, 'http://opds-spec.org/image', $book->cover->url, $book->cover->mimetype );
+		if( $book->cover !== '' ) {
+			$this->addLink( $dom, $node, 'http://opds-spec.org/image', $book->pictures[$book->cover]->url, $book->pictures[$book->cover]->mimetype );
 		}
 
 		return $node;

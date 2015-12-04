@@ -95,7 +95,7 @@ class BookProvider {
 		$book->volume = $metadata_parser->getMetadata( 'ws-volume' );
 		$book->scan = str_replace( ' ', '_', $metadata_parser->getMetadata( 'ws-scan' ) );
 		$pictures = array();
-		if( $this->options['images'] ) {
+		if( $this->options['images'] || $isMetadata ) {
 			$book->cover = $metadata_parser->getMetadata( 'ws-cover' );
 			if( $book->cover != '' ) {
 				$pictures[$book->cover] = $this->getCover( $book->cover, $book->lang );

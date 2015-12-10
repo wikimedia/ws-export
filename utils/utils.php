@@ -26,11 +26,17 @@ function uuid( $prefix = '' ) {
  * @return string an url to a page of Wikisource
  */
 function wikisourceUrl( $lang, $page = '' ) {
-	if( $page != '' ) {
-		return 'http://' . $lang . '.wikisource.org/wiki/' . urlencode( $page );
+	if( $lang === '' ) {
+		$url = 'http://wikisource.org';
 	} else {
-		return 'http://' . $lang . '.wikisource.org';
+		$url = 'http://' . $lang . '.wikisource.org';
 	}
+
+	if( $page !== '' ) {
+		$url .= '/wiki/' . urlencode( $page );
+	}
+
+	return $url;
 }
 
 /**

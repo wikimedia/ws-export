@@ -48,7 +48,7 @@ abstract class EpubGenerator implements FormatGenerator {
 		setLocale( LC_TIME, $book->lang . '_' . strtoupper( $book->lang ) . '.utf8' );
 		$wsUrl = wikisourceUrl( $book->lang, $book->title );
 		$cleaner = new BookCleanerEpub($this->getVersion());
-		$cleaner->clean( $book );
+		$cleaner->clean( $book, wikisourceUrl( $book->lang ) );
 		$zip = new ZipCreator();
 		$zip->addContentFile( 'mimetype', 'application/epub+zip', null, false ); //the mimetype must be first and uncompressed
 		$zip->addContentFile( 'META-INF/container.xml', $this->getXmlContainer() );
@@ -100,7 +100,7 @@ abstract class EpubGenerator implements FormatGenerator {
 	/**
 	 * return the OPF descrition file
 	 * @var $book Book
-	 * @var $wsUrl URL to the main page in Wikisource
+	 * @var $wsUrl string URL to the main page in Wikisource
 	 */
 	protected abstract function getOpfContent( Book $book, $wsUrl );
 
@@ -256,13 +256,19 @@ class BookCleanerEpub {
 	protected $book = null;
 	protected $linksList = array();
 	protected $version;
+	protected $baseUrl;
 
 	public function __construct($version) {
 		$this->version = $version;
 	}
 
-	public function clean( Book $book ) {
+	/**
+	 * @param Book $book
+	 * @param string $baseUrl base URL of the wiki like http://fr.wikisource.org
+	 */
+	public function clean( Book $book, $baseUrl ) {
 		$this->book = $book;
+		$this->baseUrl = $baseUrl;
 
 		$this->encodeTitles();
 		$this->splitChapters();
@@ -482,8 +488,10 @@ class BookCleanerEpub {
 					}
 				}
 				$node->setAttribute( 'href', $title );
-			} elseif( $href[0] == '/' ) {
+			} elseif( substr( $href, 0, 2 ) === '//' ) {
 				$node->setAttribute( 'href', 'http:' . $href );
+			} elseif( $href[0] === '/' ) {
+				$node->setAttribute( 'href', $this->baseUrl . $href );
 			}
 		}
 	}

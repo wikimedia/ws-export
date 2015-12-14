@@ -5,19 +5,21 @@ $wsexportConfig = array(
 
 include_once( '../book/init.php' );
 
+$title = isset( $_GET['page'] ) ? trim( htmlspecialchars( urldecode( $_GET['page'] ) ) ) : '';
+$format = isset( $_GET['format'] ) ? htmlspecialchars( urldecode( $_GET['format'] ) ) : 'epub';
+$options = array();
+$options['images'] = isset( $_GET['images'] ) ? filter_var( $_GET['images'], FILTER_VALIDATE_BOOLEAN ) : true;
+if( in_array( $api->lang, array( 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ) ) ) {
+	$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : '';
+} else {
+	$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : 'freeserif';
+	if( filter_var( $options['fonts'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE ) === false ) {
+		$options['fonts'] = '';
+	}
+}
+
 try {
 	$api = new Api();
-
-	$options = array();
-	$options['images'] = isset( $_GET['images'] ) ? filter_var( $_GET['images'], FILTER_VALIDATE_BOOLEAN ) : true;
-	if( in_array( $api->lang, array( 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ) ) ) {
-		$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : '';
-	} else {
-		$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : 'freeserif';
-		if( filter_var( $options['fonts'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE ) === false ) {
-			$options['fonts'] = '';
-		}
-	}
 
 	if( isset( $_GET['refresh'] ) ) {
 		$refresh = new Refresh( $api->lang );
@@ -26,12 +28,10 @@ try {
 		include 'templates/book.php';
 	}
 
-	if( !isset( $_GET['page'] ) || $_GET['page'] == '' ) {
+	if( $title === '' ) {
 		include 'templates/book.php';
 	}
 
-	$title = trim( htmlspecialchars( urldecode( $_GET['page'] ) ) );
-	$format = isset( $_GET['format'] ) ? htmlspecialchars( urldecode( $_GET['format'] ) ) : 'epub';
 	$provider = new BookProvider( $api, $options );
 	$data = $provider->get( $title );
 	if( $format == 'epub' ) {

@@ -15,7 +15,7 @@ $formats = array(
 	<fieldset>
 		<legend>Export a file</legend>
 		<div class="form-group">
-			<label for="lang" class="col-lg-2 control-label">Lang</label>
+			<label for="lang" class="col-lg-2 control-label">Language code</label>
 
 			<div class="col-lg-10">
 				<input name="lang" id="lang" type="text" size="3" maxlength="20" required="required"

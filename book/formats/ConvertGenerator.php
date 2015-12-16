@@ -130,6 +130,6 @@ class ConvertGenerator implements FormatGenerator {
 	private function buildFileName( $bookTitle, $extension ) {
 		global $wsexportConfig;
 
-		return tempnam( $wsexportConfig['tempPath'], encodeString( $bookTitle ) ) . '.' . $extension;
+		return $wsexportConfig['tempPath'] . '/' . encodeString( $bookTitle ) . '-' . mt_rand() . '.' . $extension;
 	}
 }

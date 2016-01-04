@@ -5,6 +5,7 @@ $wsexportConfig = array(
 
 include_once( '../book/init.php' );
 
+$api = new Api();
 $title = isset( $_GET['page'] ) ? trim( htmlspecialchars( urldecode( $_GET['page'] ) ) ) : '';
 $format = isset( $_GET['format'] ) ? htmlspecialchars( urldecode( $_GET['format'] ) ) : 'epub';
 $options = array();
@@ -19,8 +20,6 @@ if( in_array( $api->lang, array( 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl'
 }
 
 try {
-	$api = new Api();
-
 	if( isset( $_GET['refresh'] ) ) {
 		$refresh = new Refresh( $api->lang );
 		$refresh->refresh();

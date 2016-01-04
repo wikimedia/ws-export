@@ -67,6 +67,6 @@ try {
 	if( $exception instanceof HttpException ) {
 		header( 'HTTP/1.1 ' . $exception->getCode() . ' ' . $exception->getMessage() );
 	}
-	$error = $exception->getMessage();
+	$error = htmlspecialchars( $exception->getMessage() );
 	include 'templates/book.php';
 }

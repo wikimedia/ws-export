@@ -107,7 +107,6 @@ class BookProvider {
 		if( $this->options['categories'] ) {
 			$book->categories = $this->getCategories( $book->metadata_src );
 		}
-		$pageTitles = $parser->getPagesList();
 		$namespaces = $this->getNamespaces();
 		if( !$isMetadata ) {
 			if( !$parser->metadataIsSet( 'ws-noinclude' ) ) {
@@ -124,7 +123,6 @@ class BookProvider {
 					unset( $chapters[$chapter_key] );
 					continue;
 				}
-				$pageTitles = array_merge( $pageTitles, $parser->getPagesList() );
 				$chapter->content = $parser->getContent();
 				if( $this->options['images'] ) {
 					$pictures = array_merge( $pictures, $parser->getPicturesList() );
@@ -138,7 +136,6 @@ class BookProvider {
 							unset( $chapters[$subpage_key] );
 							continue;
 						}
-						$pageTitles = array_merge( $pageTitles, $parser->getPagesList() );
 						$subpage->content = $parser->getContent();
 						if( $this->options['images'] ) {
 							$pictures = array_merge( $pictures, $parser->getPicturesList() );
@@ -150,7 +147,7 @@ class BookProvider {
 			}
 			$book->chapters = $chapters;
 
-			$creditPromise = $this->startCredit( $book, $chapterTitles, $pageTitles );
+			$creditPromise = $this->startCredit( $book, $chapterTitles );
 			if( $this->options['images'] && !empty( $pictures ) ) {
 				$creditImagePromise = $this->startCreditImage( $book, $pictures );
 			}
@@ -287,41 +284,25 @@ class BookProvider {
 	/**
 	 * @param Book $book
 	 * @param Page[] $chapters
-	 * @param string[] $otherPages
-	 * @return PromiseInterface[]
+	 * @return PromiseInterface
 	 */
-	protected function startCredit( Book $book, array $chapters, array $otherPages ) {
+	protected function startCredit( Book $book, array $chapters ) {
 		$pages = array( $book->title );
 		foreach( $chapters as $id => $chapter ) {
 			$pages[] = $chapter->title;
 		}
-		$pages = array_unique( array_merge( $pages, $otherPages ) );
 
-		$promises = [];
-		foreach( $this->splitArrayByBatch( $pages, 50 ) as $batch ) {
-			$params = array(
-				'lang' => $book->lang, 'format' => 'json', 'book' => $book->scan, 'page' => join( '|', $batch )
-			);
-			$promises[] = $this->api->getAsync(
-				$this->creditUrl,
-				[ 'query' => $params ]
-			);
-		}
-		return $promises;
+		$params = array(
+			'lang' => $book->lang, 'format' => 'json', 'book' => $book->scan, 'page' => join( '|', $batch )
+		);
+		return $this->api->getAsync(
+			$this->creditUrl,
+			[ 'query' => $params ]
+		);
 	}
 
-	public function finishCredit( array $promises ) {
-		/** @var PromiseInterface $promise */
-		foreach( $promises as $promise ) {
-			$people = json_decode( $promise->wait(), true );
-			foreach( $people as $person => $props ) {
-				if( array_key_exists( $person, $this->creditPages ) ) {
-					$this->creditPages[$person]['count'] += $props['count'];
-				} else {
-					$this->creditPages[$person] = $props;
-				}
-			}
-		}
+	public function finishCredit( PromiseInterface $promise ) {
+		$this->creditPages = json_decode( $promise->wait(), true );
 	}
 
 	/**
@@ -549,23 +530,6 @@ class PageParser {
 		}
 
 		return $pictures;
-	}
-
-	/**
-	 * return the list of the pages of the page namespace included
-	 * @return string[]
-	 */
-	public function getPagesList() {
-		$pages = array();
-		$list = $this->xPath->query( '//*[contains(@class,"ws-pagenum")]' );
-		foreach( $list as $link ) {
-			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
-			if( $title ) {
-				$pages[] = $title;
-			}
-		}
-
-		return $pages;
 	}
 
 	/**

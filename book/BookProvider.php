@@ -15,8 +15,6 @@ class BookProvider {
 	protected $options = array(
 		'images' => true, 'fonts' => false, 'categories' => true
 	);
-	protected $creditPages = null;
-	protected $creditImages = null;
 	private $creditUrl = 'http://tools.wmflabs.org/phetools/credits.py';
 
 	/**
@@ -25,8 +23,6 @@ class BookProvider {
 	public function __construct( Api $api, $options ) {
 		$this->api = $api;
 		$this->options = array_merge( $this->options, $options );
-		$this->creditPages = array();
-		$this->creditImages = array();
 	}
 
 	/**
@@ -147,19 +143,9 @@ class BookProvider {
 			}
 			$book->chapters = $chapters;
 
-			$creditPromise = $this->startCredit( $book, $chapterTitles );
-			if( $this->options['images'] && !empty( $pictures ) ) {
-				$creditImagePromise = $this->startCreditImage( $book, $pictures );
-			}
-
+			$creditPromises = $this->startCredits( $book, $chapterTitles, $pictures );
 			$pictures = $this->getPicturesData( $pictures );
-
-			$this->finishCredit( $creditPromise );
-			if( $this->options['images'] && !empty( $pictures ) ) {
-				$this->finishCreditImage( $creditImagePromise );
-			}
-
-			$book->credits = $this->mergeCredit();
+			$book->credits = $this->finishCredit( $creditPromises );
 		}
 		$book->pictures = $pictures;
 
@@ -284,76 +270,66 @@ class BookProvider {
 	/**
 	 * @param Book $book
 	 * @param Page[] $chapters
-	 * @return PromiseInterface
+	 * @param Picture[] $pictures
+	 * @return PromiseInterface[]
 	 */
-	protected function startCredit( Book $book, array $chapters ) {
-		$pages = array( $book->title );
+	protected function startCredits( Book $book, array $chapters, array $pictures ) {
+		$pages = [ $book->title ];
 		foreach( $chapters as $id => $chapter ) {
 			$pages[] = $chapter->title;
 		}
-
 		$params = array(
 			'lang' => $book->lang, 'format' => 'json', 'book' => $book->scan, 'page' => join( '|', $pages )
 		);
-		return $this->api->getAsync(
+		$promises = [ $this->api->getAsync(
 			$this->creditUrl,
 			[ 'query' => $params ]
-		);
-	}
+		) ];
 
-	public function finishCredit( PromiseInterface $promise ) {
-		$this->creditPages = json_decode( $promise->wait(), true );
+		$imagesSet = [];
+		foreach( $pictures as $id => $picture ) {
+			if( $picture->name ) {
+				$imagesSet[$picture->name] = true;
+			}
+		}
+		if( !empty( $imagesSet ) ) {
+			$images = array_keys( $imagesSet );
+			$params = array(
+				'lang' => $book->lang, 'format' => 'json', 'image' => join( '|', $images )
+			);
+			$promises[] = $this->api->getAsync(
+				$this->creditUrl,
+				[ 'query' => $params ]
+			);
+		}
+
+		return $promises;
 	}
 
 	/**
-	 * @param Book $book
-	 * @param Picture[] $pictures
-	 * @return PromiseInterface
+	 * @param PromiseInterface[] $promises
+	 * @return array
 	 */
-	protected function startCreditImage( Book $book, array $pictures ) {
-		$images_set = array();
-		foreach( $pictures as $id => $picture ) {
-			if( $picture->name ) {
-				$images_set[$picture->name] = true;
-			}
-		}
-		$images = array_keys( $images_set );
-		$images = join( '|', $images );
-		$params = array(
-			'lang' => $book->lang, 'format' => 'json', 'image' => $images
-		);
-
-		return $this->api->getAsync(
-			$this->creditUrl,
-			[ 'query' => $params ]
-		);
-	}
-
-	public function finishCreditImage( PromiseInterface $promise ) {
-		$this->creditImages = json_decode( $promise->wait(), true );
-	}
-
-	/*
-	 * merge the credit collected for images and pages and create
-	 * an html code fragment for these credits
-	 */
-	protected function mergeCredit() {
-		$credit = $this->creditPages;
-		foreach( $this->creditImages as $name => $values ) {
-			if( !isset( $credit[$name] ) ) {
-				$credit[$name] = array( 'count' => 0, 'flags' => array() );
-			}
-			$credit[$name]['count'] += $values['count'];
-			foreach( $values['flags'] as $id => $flag ) {
-				if( !in_array( $flag, $credit[$name]['flags'] ) ) {
-					$credit[$name]['flags'][] = $flag;
+	public function finishCredit( $promises ) {
+		$credit = [];
+		foreach( $promises as $promise ) {
+			foreach( json_decode( $promise->wait(), true ) as $name => $values ) {
+				if( !in_array( $name, $credit ) ) {
+					$credit[$name] = [ 'count' => 0, 'flags' => [] ];
+				}
+				$credit[$name]['count'] += $values['count'];
+				foreach( $values['flags'] as $id => $flag ) {
+					if( !in_array( $flag, $credit[$name]['flags'] ) ) {
+						$credit[$name]['flags'][] = $flag;
+					}
 				}
 			}
 		}
+
 		uasort( $credit, function( $a, $b ) {
 			$f1 = in_array( 'bot', $a['flags'] );
 			$f2 = in_array( 'bot', $b['flags'] );
-			if( $f1 != $f2 ) {
+			if( $f1 !== $f2 ) {
 				return $f1 - $f2;
 			}
 

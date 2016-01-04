@@ -293,7 +293,7 @@ class BookProvider {
 		}
 
 		$params = array(
-			'lang' => $book->lang, 'format' => 'json', 'book' => $book->scan, 'page' => join( '|', $batch )
+			'lang' => $book->lang, 'format' => 'json', 'book' => $book->scan, 'page' => join( '|', $pages )
 		);
 		return $this->api->getAsync(
 			$this->creditUrl,

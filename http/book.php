@@ -54,6 +54,7 @@ try {
 	}
 
 	$file = $generator->create( $data );
+	header( 'X-Robots-Tag: none' );
 	header( 'Content-Type: ' . $generator->getMimeType() );
 	header( 'Content-Disposition: attachment; filename="' . $title . '.' . $generator->getExtension() . '"' );
 	header( 'Content-length: ' . strlen( $file ) );

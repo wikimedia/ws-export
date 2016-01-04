@@ -241,7 +241,7 @@ class BookProvider {
 		$title = $id[0];
 		$picture = new Picture();
 		$picture->title = $cover;
-		$response = $this->api->query( array( 'titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'mime|url' ) );
+		$response = $this->api->query( array( 'titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'mime|url|canonicaltitle' ) );
 		$page = end( $response['query']['pages'] );
 		$picture->url = $page['imageinfo'][0]['url'];
 		$picture->mimetype = $page['imageinfo'][0]['mime'];
@@ -262,6 +262,7 @@ class BookProvider {
 			}
 			$picture->mimetype = 'image/jpeg';
 			$picture->title .= '.jpg';
+			$picture->name = $page['imageinfo'][0]['canonicaltitle'];
 		}
 
 		return $picture;

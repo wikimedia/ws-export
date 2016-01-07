@@ -325,7 +325,12 @@ class BookProvider {
 	public function finishCredit( $promises ) {
 		$credit = [];
 		foreach( $promises as $promise ) {
-			foreach( json_decode( $promise->wait(), true ) as $name => $values ) {
+			try {
+				$result = json_decode( $promise->wait(), true );
+			} catch( HttpException $e ) {
+				$result = [];
+			}
+			foreach( $result as $name => $values ) {
 				if( !in_array( $name, $credit ) ) {
 					$credit[$name] = [ 'count' => 0, 'flags' => [] ];
 				}

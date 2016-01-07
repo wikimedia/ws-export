@@ -59,40 +59,39 @@ class BookProvider {
 		$page_list = array( $title );
 		$parser = new PageParser( $doc );
 		$book = new Book();
-		$book->credits_html = '';
 		$book->options = $this->options;
 		$book->title = $title;
 		$book->lang = $this->api->lang;
 
-		$book->metadata_src = $parser->getMetadata( 'ws-metadata' );
-		if( $book->metadata_src == '' ) {
-			$book->metadata_src = $title;
-			$metadata_parser = $parser;
+		$metadataSrc = $parser->getMetadata( 'ws-metadata' );
+		if( $metadataSrc == '' ) {
+			$metadataSrc = $title;
+			$metadataParser = $parser;
 		} else {
-			$doc = $this->getDocument( $book->metadata_src );
-			$metadata_parser = new PageParser( $doc );
+			$doc = $this->getDocument( $metadataSrc );
+			$metadataParser = new PageParser( $doc );
 		}
 
-		$book->type = $metadata_parser->getMetadata( 'ws-type' );
-		$book->name = htmlspecialchars( $metadata_parser->getMetadata( 'ws-title' ) );
+		$book->type = $metadataParser->getMetadata( 'ws-type' );
+		$book->name = htmlspecialchars( $metadataParser->getMetadata( 'ws-title' ) );
 		if( $book->name == '' ) {
-			$book->name = str_replace( '_', ' ', $book->metadata_src );
+			$book->name = str_replace( '_', ' ', $metadataSrc );
 		}
-		$book->periodical = htmlspecialchars( $metadata_parser->getMetadata( 'ws-periodical' ) );
-		$book->author = htmlspecialchars( $metadata_parser->getMetadata( 'ws-author' ) );
-		$book->translator = htmlspecialchars( $metadata_parser->getMetadata( 'ws-translator' ) );
-		$book->illustrator = htmlspecialchars( $metadata_parser->getMetadata( 'ws-illustrator' ) );
-		$book->school = htmlspecialchars( $metadata_parser->getMetadata( 'ws-school' ) );
-		$book->publisher = htmlspecialchars( $metadata_parser->getMetadata( 'ws-publisher' ) );
-		$book->year = htmlspecialchars( $metadata_parser->getMetadata( 'ws-year' ) );
-		$book->place = htmlspecialchars( $metadata_parser->getMetadata( 'ws-place' ) );
-		$book->key = $metadata_parser->getMetadata( 'ws-key' );
-		$book->progress = $metadata_parser->getMetadata( 'ws-progress' );
-		$book->volume = $metadata_parser->getMetadata( 'ws-volume' );
-		$book->scan = str_replace( ' ', '_', $metadata_parser->getMetadata( 'ws-scan' ) );
+		$book->periodical = htmlspecialchars( $metadataParser->getMetadata( 'ws-periodical' ) );
+		$book->author = htmlspecialchars( $metadataParser->getMetadata( 'ws-author' ) );
+		$book->translator = htmlspecialchars( $metadataParser->getMetadata( 'ws-translator' ) );
+		$book->illustrator = htmlspecialchars( $metadataParser->getMetadata( 'ws-illustrator' ) );
+		$book->school = htmlspecialchars( $metadataParser->getMetadata( 'ws-school' ) );
+		$book->publisher = htmlspecialchars( $metadataParser->getMetadata( 'ws-publisher' ) );
+		$book->year = htmlspecialchars( $metadataParser->getMetadata( 'ws-year' ) );
+		$book->place = htmlspecialchars( $metadataParser->getMetadata( 'ws-place' ) );
+		$book->key = $metadataParser->getMetadata( 'ws-key' );
+		$book->progress = $metadataParser->getMetadata( 'ws-progress' );
+		$book->volume = $metadataParser->getMetadata( 'ws-volume' );
+		$book->scan = str_replace( ' ', '_', $metadataParser->getMetadata( 'ws-scan' ) );
 		$pictures = array();
 		if( $this->options['images'] || $isMetadata ) {
-			$book->cover = $metadata_parser->getMetadata( 'ws-cover' );
+			$book->cover = $metadataParser->getMetadata( 'ws-cover' );
 			if( $book->cover != '' ) {
 				$pictures[$book->cover] = $this->getCover( $book->cover, $book->lang );
 				if( $pictures[$book->cover]->url == '' ) {
@@ -101,7 +100,7 @@ class BookProvider {
 			}
 		}
 		if( $this->options['categories'] ) {
-			$book->categories = $this->getCategories( $book->metadata_src );
+			$book->categories = $this->getCategories( $metadataSrc );
 		}
 		$pageTitles = $parser->getPagesList();
 		$namespaces = $this->getNamespaces();
@@ -430,6 +429,7 @@ class PageParser {
 	public function getChaptersList( $title, $page_list, $namespaces ) {
 		$list = $this->xPath->query( '//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"image"))]' );
 		$chapters = array();
+		/** @var DOMElement $link */
 		foreach( $list as $link ) {
 			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
 			$parts = explode( ':', $title );
@@ -453,6 +453,7 @@ class PageParser {
 		$chapters = $this->getChaptersList( $title, $page_list, $namespaces );
 		if( empty( $chapters ) ) {
 			$list = $this->xPath->query( '//a[contains(@href,"' . Api::mediawikiUrlEncode( $title ) . '") and not(contains(@class,"extiw") or contains(@class,"external") or contains(@href,"#") or contains(@href,"action=edit") or contains(@title,"/Texte entier") or contains(@class,"image"))]' );
+			/** @var DOMElement $link */
 			foreach( $list as $link ) {
 				$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
 				$parts = explode( ':', $title );
@@ -478,6 +479,7 @@ class PageParser {
 	public function getPicturesList() {
 		$list = $this->xPath->query( '//a[contains(@class,"image")]' );
 		$pictures = array();
+		/** @var DOMElement $node */
 		foreach( $list as $node ) {
 			$a = $node->getElementsByTagName( 'img' )->item( 0 );
 			$picture = new Picture();
@@ -508,6 +510,7 @@ class PageParser {
 			$node->parentNode->replaceChild( $a, $node );
 		}
 		$list = $this->xPath->query( '//a[not(contains(@class,"image"))]/img | //img[not(parent::a)]' );
+		/** @var DOMElement $img */
 		foreach( $list as $img ) {
 			$picture = new Picture();
 			$url = $img->getAttribute( 'src' );
@@ -528,6 +531,7 @@ class PageParser {
 	public function getPagesList() {
 		$pages = array();
 		$list = $this->xPath->query( '//*[contains(@class,"ws-pagenum")]' );
+		/** @var DOMElement $link */
 		foreach( $list as $link ) {
 			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
 			if( $title ) {
@@ -578,16 +582,19 @@ class PageParser {
 
 	protected function cleanIds() {
 		$list = $this->xPath->query( '//*[contains(@id,":")]' );
+		/** @var DOMElement $node */
 		foreach( $list as $node ) {
 			$node->setAttribute( 'id', str_replace( ':', '_', $node->getAttribute( 'id' ) ) );
 		}
 
 		$list = $this->xPath->query( '//*[ starts-with(@id,".")]' );
+		/** @var DOMElement $node */
 		foreach( $list as $node ) {
 			$node->setAttribute( 'id', preg_replace( '#^\.(.*)$#', '$1', $node->getAttribute( 'id' ) ) );
 		}
 
 		$list = $this->xPath->query( '//span[contains(@class,"pagenum") or contains(@class,"mw-headline")]' );
+		/** @var DOMElement $node */
 		foreach( $list as $node ) {
 			$id = $node->getAttribute( 'id' );
 			if( is_numeric( $id ) ) {
@@ -627,6 +634,7 @@ class PageParser {
 
 	protected function deprecatedAttributes( $name, $attribute, $isCss = true ) {
 		$nodes = $this->xPath->query( '//*[@' . $name . ']' );
+		/** @var DOMElement $node */
 		foreach( $nodes as $node ) {
 			if( $attribute != null ) {
 				if( $isCss ) {

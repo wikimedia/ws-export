@@ -6,6 +6,8 @@
  */
 
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * provide all the data needed to create a book file
@@ -202,20 +204,18 @@ class BookProvider {
 	 * @param Picture[] $pictures the list of the pictures
 	 * @return Picture[]
 	 */
-	protected function getPicturesData( $pictures ) {
-		$promises = [];
-
-		foreach( $this->splitArrayByBatch( $pictures, 10 ) as $batch ) {
-			foreach( $batch as $id => $picture ) {
-				$promises[$id] = $this->api->getAsync( $picture->url );
-			}
-
-			foreach( $batch as $id => $picture ) {
-				$pictures[$id]->content = $promises[$id]->wait();
-				$pictures[$id]->mimetype = getMimeType( $pictures[$id]->content );
-			}
-		}
-
+	protected function getPicturesData( array $pictures ) {
+		$this->api->getPool(
+			array_map( function( Picture $picture ) {
+				return new Request( 'GET', $picture->url );
+			}, $pictures ),
+			[
+				'fulfilled' => function( Response $response, $index ) use ( $pictures ) {
+					$pictures[$index]->content = $response->getBody();
+					$pictures[$index]->mimetype = getMimeType( $pictures[$index]->content );
+				}
+			]
+		)->wait();
 		return $pictures;
 	}
 

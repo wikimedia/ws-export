@@ -8,7 +8,9 @@
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -73,6 +75,16 @@ class Api {
 				throw new HttpException( $e->getMessage() );
 			}
 		);
+	}
+
+	/**
+	 * @param Request[] $requests
+	 * @param array $options
+	 * @return PromiseInterface
+	 */
+	public function getPool( array $requests, $options ) {
+		$pool = new Pool( $this->client, $requests, $options );
+		return $pool->promise();
 	}
 
 	/**

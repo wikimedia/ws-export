@@ -8,6 +8,7 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 } else {
 	$long_opts = array(
 		'lang::', 'title::', 'format:', 'path::', 'debug', 'tmpdir:',
+		'nocredits'
 	);
 
 	$lang = null;
@@ -15,6 +16,8 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 	$format = 'epub';
 	$path = './';
 	$tempPath = sys_get_temp_dir();
+	$options = array();
+	$options['images'] = true;
 
 	$opts = getopt( 'l:t:f::p::d', $long_opts );
 	foreach( $opts as $opt => $value ) {
@@ -45,6 +48,9 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 			case 'd':
 				error_reporting( E_STRICT | E_ALL );
 				break;
+			case 'nocredits':
+				$options['credits'] = false;
+				break;
 		}
 	}
 	if( !$lang or !$title or !$tempPath ) {
@@ -59,8 +65,6 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 
 	try {
 		$api = new Api( $lang );
-		$options = array();
-		$options['images'] = true;
 		$provider = new BookProvider( $api, $options );
 		$data = $provider->get( $title );
 		if( $format == 'epub-2' ) {

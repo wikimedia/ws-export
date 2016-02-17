@@ -13,7 +13,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 class BookProvider {
 	protected $api = null;
 	protected $options = array(
-		'images' => true, 'fonts' => false, 'categories' => true
+		'images' => true, 'fonts' => false, 'categories' => true, 'credits' => true
 	);
 	private $creditUrl = 'http://tools.wmflabs.org/phetools/credits.py';
 
@@ -145,9 +145,15 @@ class BookProvider {
 			}
 			$book->chapters = $chapters;
 
-			$creditPromises = $this->startCredits( $book, $chapterTitles, $pageTitles, $pictures );
+			if ( $this->options['credits'] ) {
+				$creditPromises = $this->startCredits( $book, $chapterTitles, $pageTitles, $pictures );
+			}
+
 			$pictures = $this->getPicturesData( $pictures );
-			$book->credits = $this->finishCredit( $creditPromises );
+
+			if (!empty($creditPromises)) {
+				$book->credits = $this->finishCredit( $creditPromises );
+			}
 		}
 		$book->pictures = $pictures;
 

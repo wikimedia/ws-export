@@ -18,6 +18,7 @@ php composer.phar install
 ```
 
 In order to use pdf, txt, rtf and mobi formats you should install Calibre in order to allow the tool to use the `ebook-convert` command.
+
 Composition
 ===========
 
@@ -28,6 +29,17 @@ This tool is split into independent parts:
 The tools can be used in two ways:
 * http in the `http` folder
 * command line in the `cli` folder
+
+
+Tests
+=====
+
+Tests are located in the `tests/` directory, to run them:
+
+```bash
+$ make test
+$ make integration-test # runs integration tests (slow)
+```
 
 Licence
 =======

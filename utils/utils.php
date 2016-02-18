@@ -113,7 +113,7 @@ function getI18n( $lang ) {
 	$content = getTempFile( $lang, 'i18n.sphp' );
 	if( $content == '' ) {
 		$refresh = new Refresh();
-		$refresh->refresh();
+		$refresh->refresh( $lang );
 		$content = getTempFile( $lang, 'i18n.sphp' );
 	}
 

@@ -1,13 +1,27 @@
 #!/usr/bin/php
 <?php
 
+function getGenerator($format) {
+	if ($format == 'epub-2') {
+		return new Epub2Generator();
+	} elseif ($format == 'epub-3' || $format == 'epub') {
+		return new Epub3Generator();
+	} elseif (in_array($format, ConvertGenerator::getSupportedTypes())) {
+		return new ConvertGenerator($format);
+	} elseif ($format == 'xhtml') {
+		return new XhtmlGenerator();
+	} else {
+		throw new Exception("The file format '$format' is unknown");
+	}
+}
+
 $basePath = realpath( dirname( __FILE__ ) . '/..' );
 
 if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 	echo file_get_contents( $basePath . '/cli/help/book.txt' );
 } else {
 	$long_opts = array(
-		'lang::', 'title::', 'format:', 'path::', 'debug', 'tmpdir:',
+		'lang:', 'title:', 'format:', 'path:', 'debug', 'tmpdir:',
 		'nocredits'
 	);
 
@@ -19,7 +33,7 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 	$options = array();
 	$options['images'] = true;
 
-	$opts = getopt( 'l:t:f::p::d', $long_opts );
+	$opts = getopt( 'l:t:f:p:d', $long_opts );
 	foreach( $opts as $opt => $value ) {
 		switch( $opt ) {
 			case 'lang':
@@ -64,20 +78,10 @@ if( !isset( $_SERVER['argc'] ) || $_SERVER['argc'] < 3 ) {
 	include_once( $basePath . '/book/init.php' );
 
 	try {
+		$generator = getGenerator($format);
 		$api = new Api( $lang );
 		$provider = new BookProvider( $api, $options );
 		$data = $provider->get( $title );
-		if( $format == 'epub-2' ) {
-			$generator = new Epub2Generator();
-		} elseif( $format == 'epub-3' || $format == 'epub' ) {
-			$generator = new Epub3Generator();
-		} elseif( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
-			$generator = new ConvertGenerator( $format );
-		} elseif( $format == 'xhtml' ) {
-			$generator = new XhtmlGenerator();
-		} else {
-			throw new Exception( "The file format $format is unknown" );
-		}
 		$file = $generator->create( $data );
 		$path .= $title . '.' . $generator->getExtension();
 		if( !is_dir( dirname( $path ) ) ) {

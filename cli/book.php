@@ -83,8 +83,6 @@ function getGenerator($format) {
 		return new Epub3Generator();
 	} elseif (in_array($format, ConvertGenerator::getSupportedTypes())) {
 		return new ConvertGenerator($format);
-	} elseif ($format == 'xhtml') {
-		return new XhtmlGenerator();
 	} else {
 		throw new WSExport_InvalidArgumentException("The file format '$format' is unknown.");
 	}

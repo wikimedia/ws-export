@@ -43,8 +43,6 @@ try {
 		$generator = new Epub2Generator();
 	} elseif( $format == 'epub-3' ) {
 		$generator = new Epub3Generator();
-	} elseif( $format == 'xhtml' ) {
-		$generator = new XhtmlGenerator();
 	} elseif( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 		$generator = new ConvertGenerator( $format );
 	} elseif( $format == 'atom' ) {

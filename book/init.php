@@ -28,5 +28,4 @@ include_once( $basePath . '/book/formats/AtomGenerator.php' );
 include_once( $basePath . '/book/formats/EpubGenerator.php' );
 include_once( $basePath . '/book/formats/Epub2Generator.php' );
 include_once( $basePath . '/book/formats/Epub3Generator.php' );
-include_once( $basePath . '/book/formats/XhtmlGenerator.php' );
 include_once( $basePath . '/book/formats/ConvertGenerator.php' );

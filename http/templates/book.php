@@ -8,7 +8,6 @@ $formats = array(
 	'pdf-a4' => 'pdf A4 format (in beta)',
 	'pdf-a5' => 'pdf A5 format (in beta)',
 	'pdf-letter' => 'pdf US letter format (in beta)',
-	'xhtml' => 'xhtml (in developpment)',
 );
 ?>
 <form method="get" action="book.php" role="form" class="form-horizontal">

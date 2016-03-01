@@ -29,11 +29,6 @@ class BookTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Epub3Generator', $generator);
     }
 
-    public function testGetGeneratorXhtml() {
-        $generator = getGenerator('xhtml');
-        $this->assertInstanceOf('XHtmlGenerator', $generator);
-    }
-
     public function testGetGeneratorMobi() {
         $generator = getGenerator('mobi');
         $this->assertInstanceOf('ConvertGenerator', $generator);

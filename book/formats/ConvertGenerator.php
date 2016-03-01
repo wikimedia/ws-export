@@ -87,21 +87,18 @@ class ConvertGenerator implements FormatGenerator {
 	 * @return string
 	 */
 	public function create( Book $book ) {
-		$epubFileName = $this->buildFileName( $book->title, 'epub' );
-		$outputFileName = $this->buildFileName( $book->title, $this->getExtension() );
+		$outputFileName = buildTemporaryFileName( $book->title, $this->getExtension() );
 
-		$this->createEpub( $book, $epubFileName );
+		$epubFileName = $this->createEpub( $book );
 		$this->convert( $epubFileName, $outputFileName );
-
-		$content = file_get_contents( $outputFileName );
 		unlink( $epubFileName );
-		unlink( $outputFileName );
-		return $content;
+
+		return $outputFileName;
 	}
 
-	private function createEpub( Book $book, $epubFileName ) {
+	private function createEpub( Book $book ) {
 		$epubGenerator = new Epub3Generator();
-		file_put_contents( $epubFileName, $epubGenerator->create( $book ) );
+		return $epubGenerator->create( $book );
 	}
 
 	private function convert( $epubFileName, $outputFileName ) {
@@ -125,11 +122,5 @@ class ConvertGenerator implements FormatGenerator {
 	private function getEbookConvertCommand() {
 		global $wsexportConfig;
 		return array_key_exists( 'ebook-convert', $wsexportConfig ) ? $wsexportConfig['ebook-convert'] : 'ebook-convert';
-	}
-
-	private function buildFileName( $bookTitle, $extension ) {
-		global $wsexportConfig;
-
-		return $wsexportConfig['tempPath'] . '/' . encodeString( $bookTitle ) . '-' . mt_rand() . '.' . $extension;
 	}
 }

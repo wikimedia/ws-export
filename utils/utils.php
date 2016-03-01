@@ -162,3 +162,16 @@ function getLanguageDirection( $languageCode ) {
 		? 'rtl'
 		: 'ltr';
 }
+
+
+/**
+ * Builds a unique temporary file name for a given title and extension
+ *
+ * @param string $title
+ * @param string $extension
+ * @return string
+ */
+function buildTemporaryFileName( $title, $extension ) {
+	global $wsexportConfig;
+	return $wsexportConfig['tempPath'] . '/' . encodeString( $title ) . '-' . mt_rand() . '.' . $extension;
+}

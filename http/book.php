@@ -53,15 +53,17 @@ try {
 
 	$file = $generator->create( $data );
 	header( 'X-Robots-Tag: none' );
+	header( 'Content-Description: File Transfer' );
 	header( 'Content-Type: ' . $generator->getMimeType() );
 	header( 'Content-Disposition: attachment; filename="' . $title . '.' . $generator->getExtension() . '"' );
-	header( 'Content-length: ' . strlen( $file ) );
-	echo $file;
+	header( 'Content-length: ' . filesize( $file ) );
+	readfile( $file );
+	unlink( $file );
+	flush();
 	if( isset( $wsexportConfig['stat'] ) ) {
 		Stat::add( $format, $api->lang );
 		CreationLog::singleton()->add( $data, $format );
 	}
-	flush();
 } catch( Exception $exception ) {
 	if( $exception instanceof HttpException ) {
 		header( 'HTTP/1.1 ' . $exception->getCode() . ' ' . $exception->getMessage() );

@@ -49,16 +49,16 @@ abstract class EpubGenerator implements FormatGenerator {
 		$wsUrl = wikisourceUrl( $book->lang, $book->title );
 		$cleaner = new BookCleanerEpub($this->getVersion());
 		$cleaner->clean( $book, wikisourceUrl( $book->lang ) );
-		$zip = new ZipCreator();
-		$zip->addContentFile( 'mimetype', 'application/epub+zip', null, false ); //the mimetype must be first and uncompressed
-		$zip->addContentFile( 'META-INF/container.xml', $this->getXmlContainer() );
-		$zip->addContentFile( 'OPS/content.opf', $this->getOpfContent( $book, $wsUrl ) );
-		$zip->addContentFile( 'OPS/toc.ncx', $this->getNcxToc( $book, $wsUrl ) );
+		$fileName = buildTemporaryFileName( $book->title, 'epub' );
+		$zip = $this->createZipFile( $fileName );
+		$zip->addFromString( 'META-INF/container.xml', $this->getXmlContainer() );
+		$zip->addFromString( 'OPS/content.opf', $this->getOpfContent( $book, $wsUrl ) );
+		$zip->addFromString( 'OPS/toc.ncx', $this->getNcxToc( $book, $wsUrl ) );
 		if( $book->cover != '' ) {
-			$zip->addContentFile( 'OPS/cover.xhtml', $this->getXhtmlCover( $book ) );
+			$zip->addFromString( 'OPS/cover.xhtml', $this->getXhtmlCover( $book ) );
 		}
-		$zip->addContentFile( 'OPS/title.xhtml', $this->getXhtmlTitle( $book ) );
-		$zip->addContentFile( 'OPS/about.xhtml', $this->getXhtmlAbout( $book, $wsUrl ) );
+		$zip->addFromString( 'OPS/title.xhtml', $this->getXhtmlTitle( $book ) );
+		$zip->addFromString( 'OPS/about.xhtml', $this->getXhtmlAbout( $book, $wsUrl ) );
 		$dir = dirname( __FILE__ );
 		$zip->addFile( $dir . '/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png' );
 
@@ -70,32 +70,31 @@ abstract class EpubGenerator implements FormatGenerator {
 		}
 
 		if( $book->content ) {
-			$zip->addContentFile( 'OPS/' . $book->title . '.xhtml', $book->content->saveXML() );
+			$zip->addFromString( 'OPS/' . $book->title . '.xhtml', $book->content->saveXML() );
 		}
 		if( !empty( $book->chapters ) ) {
 			foreach( $book->chapters as $chapter ) {
-				$zip->addContentFile( 'OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML() );
+				$zip->addFromString( 'OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML() );
 				foreach( $chapter->chapters as $subpage ) {
-					$zip->addContentFile( 'OPS/' . $subpage->title . '.xhtml', $subpage->content->saveXML() );
+					$zip->addFromString( 'OPS/' . $subpage->title . '.xhtml', $subpage->content->saveXML() );
 				}
 			}
 		}
 		foreach( $book->pictures as $picture ) {
-			$zip->addContentFile( 'OPS/images/' . $picture->title, $picture->content );
+			$zip->addFromString( 'OPS/images/' . $picture->title, $picture->content );
 		}
-		$zip->addContentFile( 'OPS/main.css', $css );
+		$zip->addFromString( 'OPS/main.css', $css );
 		$this->addContent( $book, $zip );
 		$book->title = $oldBookTitle;
 
-		return $zip->getContent();
+		$zip->close();
+		return $fileName;
 	}
 
 	/**
 	 * add extra content to the file
-	 * @var $book Book
-	 * @var $zip ZipCreator
 	 */
-	protected abstract function addContent( Book $book, ZipCreator $zip );
+	protected abstract function addContent( Book $book, ZipArchive $zip );
 
 	/**
 	 * return the OPF descrition file
@@ -246,6 +245,16 @@ abstract class EpubGenerator implements FormatGenerator {
 		$css .= getTempFile( $book->lang, 'epub.css' );
 
 		return $css;
+	}
+
+	private function createZipFile( $fileName ) {
+		//This is a simple ZIP file with only the uncompressed "mimetype" file with as value "application/epub+zip"
+		file_put_contents( $fileName, base64_decode( "UEsDBBQAAAAAAPibYUhvYassFAAAABQAAAAIAAAAbWltZXR5cGVhcHBsaWNhdGlvbi9lcHViK3ppcFBLAQIAABQAAAAAAPibYUhvYassFAAAABQAAAAIAAAAAAAAAAAAIAAAAAAAAABtaW1ldHlwZVBLBQYAAAAAAQABADYAAAA6AAAAAAA=" ) );
+		$zip = new ZipArchive();
+		if( $zip->open( $fileName, ZipArchive::CREATE ) !== true ) {
+			throw new Exception( 'Unnable to open the ZIP file ' . $fileName );
+		}
+		return $zip;
 	}
 }
 

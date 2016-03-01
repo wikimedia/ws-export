@@ -16,8 +16,8 @@ class Epub3Generator extends EpubGenerator {
 		return 3;
 	}
 
-	protected function addContent( Book $book, ZipCreator $zip ) {
-		$zip->addContentFile( 'OPS/nav.xhtml', $this->getXhtmlNav( $book ) );
+	protected function addContent( Book $book, ZipArchive $zip ) {
+		$zip->addFromString( 'OPS/nav.xhtml', $this->getXhtmlNav( $book ) );
 	}
 
 	protected function getOpfContent( Book $book, $wsUrl ) {

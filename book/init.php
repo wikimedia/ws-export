@@ -12,7 +12,6 @@ include_once( $basePath . '/vendor/autoload.php' );
 include_once( $basePath . '/utils/utils.php' );
 include_once( $basePath . '/utils/HttpException.php' );
 include_once( $basePath . '/utils/Api.php' );
-include_once( $basePath . '/utils/ZipCreator.php' );
 include_once( $basePath . '/book/Generator.php' );
 include_once( $basePath . '/book/Picture.php' );
 include_once( $basePath . '/book/Page.php' );

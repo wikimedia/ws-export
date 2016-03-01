@@ -25,7 +25,7 @@ interface FormatGenerator {
 	/**
 	 * create the file
 	 * @var $data Book the title of the main page of the book in Wikisource
-	 * @return the file
+	 * @return string path to the created book
 	 */
 	public function create( Book $data );
 }

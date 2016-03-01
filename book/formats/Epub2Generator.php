@@ -15,7 +15,7 @@ class Epub2Generator extends EpubGenerator {
 		return 2;
 	}
 
-	protected function addContent( Book $book, ZipCreator $zip ) {
+	protected function addContent( Book $book, ZipArchive $zip ) {
 	}
 
 	protected function getOpfContent( Book $book, $wsUrl ) {

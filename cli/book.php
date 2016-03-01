@@ -97,9 +97,7 @@ function createBook($title, $lang, $format, $path, $options) {
 	if( !is_dir( dirname( $output ) ) ) {
 		mkdir( dirname( $output ), 0755, true );
 	}
-	if( $fp = fopen( $output, 'w' ) ) {
-		fputs( $fp, $file );
-	} else {
+	if( !rename( $file, $output ) ) {
 		throw new Exception('Unable to create output file: ' . $output );
 	}
 	return $output;

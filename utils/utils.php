@@ -112,8 +112,8 @@ function getTempFile( $lang, $name ) {
 function getI18n( $lang ) {
 	$content = getTempFile( $lang, 'i18n.sphp' );
 	if( $content == '' ) {
-		$refresh = new Refresh();
-		$refresh->refresh( $lang );
+		$refresh = new Refresh(new Api($lang));
+		$refresh->refresh();
 		$content = getTempFile( $lang, 'i18n.sphp' );
 	}
 

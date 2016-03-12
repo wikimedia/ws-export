@@ -21,7 +21,7 @@ if( in_array( $api->lang, array( 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl'
 
 try {
 	if( isset( $_GET['refresh'] ) ) {
-		$refresh = new Refresh( $api->lang );
+		$refresh = new Refresh( $api );
 		$refresh->refresh();
 		$success = 'The cache is updated for ' . $api->lang . ' language.';
 		include 'templates/book.php';

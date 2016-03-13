@@ -27,14 +27,15 @@ class Api {
 	private $client;
 
 	/**
-	 * @var string $lang the language code of the Wikisource like 'en' or 'fr'
+	 * @param string $lang the language code of the Wikisource like 'en' or 'fr'
+	 * @param string $domainName
+	 * @param ClientInterface $client
 	 */
-	public function __construct( $lang = '', $domainName = '', $client = NULL) {
+	public function __construct( $lang = '', $domainName = '', ClientInterface $client = null ) {
 		if( $lang == '' ) {
-			$this->lang = Api::getHttpLang();
-		} else {
-			$this->lang = $lang;
+			$lang = Api::getHttpLang();
 		}
+		$this->lang = $lang;
 
 		if( $domainName != '' ) {
 			$this->domainName = $domainName;
@@ -47,7 +48,8 @@ class Api {
 		} else {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}
-		if (!isset($client)) {
+
+		if( $client === null ) {
 			$client = new Client( [
 				'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ]
 			] );

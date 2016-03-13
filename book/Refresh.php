@@ -9,10 +9,7 @@ class Refresh {
 
 	protected $api;
 
-	function __construct($api) {
-		if ( !isset($api) ) {
-			throw new Exception('invalid api');
-		}
+	function __construct( Api $api ) {
 		$this->api = $api;
 	}
 
@@ -86,7 +83,7 @@ class Refresh {
 	}
 
 	protected function setTempFileContent( $name, $content ) {
-		return file_put_contents( $this->getTempFileName($name), $content );
+		return file_put_contents( $this->getTempFileName( $name ), $content );
 	}
 
 	protected function getTempFileName( $name ) {

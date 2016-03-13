@@ -29,7 +29,7 @@ class Api {
 	/**
 	 * @var string $lang the language code of the Wikisource like 'en' or 'fr'
 	 */
-	public function __construct( $lang = '', $domainName = '' ) {
+	public function __construct( $lang = '', $domainName = '', $client = NULL) {
 		if( $lang == '' ) {
 			$this->lang = Api::getHttpLang();
 		} else {
@@ -47,10 +47,12 @@ class Api {
 		} else {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}
-
-		$this->client = new Client( [
-			'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ]
-		] );
+		if (!isset($client)) {
+			$client = new Client( [
+				'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ]
+			] );
+		}
+		$this->client = $client;
 	}
 
 	/**
@@ -115,7 +117,12 @@ class Api {
 			[ 'query' => $params ]
 		)->then(
 			function( $result ) {
-				return json_decode( $result, true );
+				$json = json_decode( $result, true );
+				if ( isset($json) ) {
+					return $json;
+				} else {
+					throw new Exception('invalid JSON: "' . $result . '": ' . json_last_error_msg());
+				}
 			}
 		);
 	}

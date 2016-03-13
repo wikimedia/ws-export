@@ -7,15 +7,18 @@
  */
 class Refresh {
 
-	protected $lang = '';
-	protected $api = null;
+	protected $api;
 
-	public function refresh( $lang = '' ) {
-		$this->api = new Api( $lang );
-		$this->lang = $this->api->lang;
+	function __construct($api) {
+		if ( !isset($api) ) {
+			throw new Exception('invalid api');
+		}
+		$this->api = $api;
+	}
 
+	public function refresh() {
 		global $wsexportConfig;
-		if( @mkdir( $wsexportConfig['tempPath'] . '/' . $this->lang ) ) {
+		if( @mkdir( $wsexportConfig['tempPath'] . '/' . $this->api->lang ) ) {
 		}
 
 		$this->getI18n();
@@ -28,7 +31,7 @@ class Refresh {
 		global $wsexportConfig;
 		$ini = parse_ini_file( $wsexportConfig['basePath'] . '/book/i18n.ini' );
 		try {
-			$response = $this->api->get( 'http://' . $this->lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain' );
+			$response = $this->api->get( 'http://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain' );
 			$temp = parse_ini_string( $response );
 			if( $ini != false ) {
 				$ini = array_merge( $ini, $temp );
@@ -42,7 +45,7 @@ class Refresh {
 		global $wsexportConfig;
 		$content = file_get_contents( $wsexportConfig['basePath'] . '/book/mediawiki.css' );
 		try {
-			$content .= "\n" . $this->api->get( 'http://' . $this->lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css' );
+			$content .= "\n" . $this->api->get( 'http://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css' );
 		} catch( Exception $e ) {
 		}
 		$this->setTempFileContent( 'epub.css', $content );
@@ -83,9 +86,12 @@ class Refresh {
 	}
 
 	protected function setTempFileContent( $name, $content ) {
-		global $wsexportConfig;
+		return file_put_contents( $this->getTempFileName($name), $content );
+	}
 
-		return file_put_contents( $wsexportConfig['tempPath'] . '/' . $this->lang . '/' . $name, $content );
+	protected function getTempFileName( $name ) {
+		global $wsexportConfig;
+		return $wsexportConfig['tempPath'] . '/' . $this->api->lang . '/' . $name;
 	}
 }
 

@@ -12,6 +12,12 @@
 		"guzzlehttp/guzzle": "~6.0"
 	},
 	"require-dev": {
+		"mediawiki/mediawiki-codesniffer": "0.6.0",
 		"phpunit/phpunit": "5.2.8"
+	},
+	"scripts": {
+		"test": [
+			"phpcs"
+		]
 	}
 }

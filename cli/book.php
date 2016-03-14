@@ -10,7 +10,7 @@ $wsexportConfig = [
 
 include_once $basePath . '/book/init.php';
 
-class WSExport_InvalidArgumentException extends Exception {
+class WSExportInvalidArgumentException extends Exception {
 }
 
 function parseCommandLine() {
@@ -65,7 +65,7 @@ function parseCommandLine() {
 	}
 
 	if ( !$lang or !$title ) {
-		throw new WSExport_InvalidArgumentException();
+		throw new WSExportInvalidArgumentException();
 	}
 
 	return [
@@ -85,7 +85,7 @@ function getGenerator( $format ) {
 	} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 		return new ConvertGenerator( $format );
 	} else {
-		throw new WSExport_InvalidArgumentException( "The file format '$format' is unknown." );
+		throw new WSExportInvalidArgumentException( "The file format '$format' is unknown." );
 	}
 }
 function createBook( $title, $lang, $format, $path, $options ) {
@@ -111,7 +111,7 @@ if ( isset( $argc ) ) {
 			$arguments['path'], $arguments['options'] );
 
 		echo "The ebook has been created: $output\n";
-	} catch ( WSExport_InvalidArgumentException $exception ) {
+	} catch ( WSExportInvalidArgumentException $exception ) {
 		if ( !empty( $exception->getMessage() ) ) {
 			fwrite( STDERR, $exception->getMessage() . "\n\n" );
 		}

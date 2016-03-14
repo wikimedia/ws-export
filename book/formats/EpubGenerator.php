@@ -366,9 +366,7 @@ class BookCleanerEpub {
 					$files[] = $curFile;
 					$curParent = $curFile;
 					if ( $domDepth > 0 ) {
-						reset( $domPath );
-						reset( $domClonedPath );
-						while ( list( $k, $v ) = each( $domClonedPath ) ) {
+						foreach ( $domClonedPath as $v ) {
 							$newParent = $v->cloneNode( false );
 							$curParent->appendChild( $newParent );
 							$curParent = $newParent;

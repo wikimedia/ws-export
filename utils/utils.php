@@ -45,7 +45,8 @@ function wikisourceUrl( $lang, $page = '' ) {
  */
 function getFile( $file ) {
 	$content = '';
-	if ( $fp = fopen( $file, 'r' ) ) {
+	$fp = fopen( $file, 'r' );
+	if ( $fp ) {
 		while ( !feof( $fp ) ) {
 			$content .= fgets( $fp, 4096 );
 		}

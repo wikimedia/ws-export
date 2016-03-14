@@ -2,9 +2,8 @@
 
 require_once __DIR__ . '/../../cli/book.php';
 
-class BookTest extends \PHPUnit_Framework_TestCase
-{
-	/** @expectedException WSExport_InvalidArgumentException */
+class BookTest extends \PHPUnit_Framework_TestCase {
+	/** @expectedException WSExportInvalidArgumentException */
 	public function testParseArguments() {
 		// not sure how to test getopt(), since it relies on global state,
 		// just test error case for now
@@ -12,7 +11,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException WSExport_InvalidArgumentException
+	 * @expectedException WSExportInvalidArgumentException
 	 * @expectedExceptionMessage The file format 'unknown' is unknown.
 	 */
 	public function testGetUnknownGeneratorRaisesException() {

@@ -89,6 +89,7 @@ function getGenerator( $format ) {
 	}
 }
 function createBook( $title, $lang, $format, $path, $options ) {
+	date_default_timezone_set( 'UTC' );
 	$generator = getGenerator( $format );
 	$api = new Api( $lang );
 	$provider = new BookProvider( $api, $options );

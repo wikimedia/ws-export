@@ -61,7 +61,6 @@ try {
 	unlink( $file );
 	flush();
 	if ( isset( $wsexportConfig['stat'] ) ) {
-		Stat::add( $format, $api->lang );
 		CreationLog::singleton()->add( $data, $format );
 	}
 } catch ( Exception $exception ) {

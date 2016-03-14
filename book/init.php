@@ -17,7 +17,6 @@ include_once $basePath . '/book/Picture.php';
 include_once $basePath . '/book/Page.php';
 include_once $basePath . '/book/Book.php';
 include_once $basePath . '/book/BookProvider.php';
-include_once $basePath . '/book/Stat.php';
 include_once $basePath . '/book/FontProvider.php';
 include_once $basePath . '/book/OpdsBuilder.php';
 include_once $basePath . '/book/CreationLog.php';

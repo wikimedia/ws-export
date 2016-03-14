@@ -5,8 +5,8 @@ dist: trusty
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq --force-yes calibre-bin default-jre
-  - phpenv install 5.5.9
-  - phpenv global 5.5.9
+  - phpenv install 5.6.13
+  - phpenv global 5.6.13
   - php --version
 
 install:

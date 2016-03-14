@@ -63,7 +63,6 @@ class AtomGenerator implements FormatGenerator {
 	}
 
 	public function buildEntry( Book $book, DOMDocument $dom ) {
-		date_default_timezone_set( 'UTC' );
 		$wsUrl = wikisourceUrl( $book->lang, $book->title );
 
 		$node = $dom->createElement( 'entry' );

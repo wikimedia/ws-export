@@ -55,7 +55,6 @@ class OpdsBuilder {
 	}
 
 	private function buildFromTitles( array $titles, $fromPage = '' ) {
-		date_default_timezone_set( 'UTC' );
 		$generator = new AtomGenerator( $this->exportBasePath );
 
 		$dom = new DOMDocument( '1.0', 'UTF-8' );

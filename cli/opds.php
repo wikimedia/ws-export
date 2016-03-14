@@ -15,6 +15,7 @@ $outputFile = 'wikisource-fr-good.atom';
 $exportPath = 'https://tools.wmflabs.org/wsexport/tool/book.php';
 
 try {
+	date_default_timezone_set( 'UTC' );
 	$api = new Api( $lang );
 	$provider = new BookProvider( $api, [ 'categories' => false, 'images' => false ] );
 

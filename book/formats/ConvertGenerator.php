@@ -10,38 +10,38 @@
  */
 class ConvertGenerator implements FormatGenerator {
 
-	private static $CONFIG = array(
-		'mobi' => array(
+	private static $CONFIG = [
+		'mobi' => [
 			'extension' => 'mobi',
 			'mime' => 'application/x-mobipocket-ebook',
 			'parameters' => ''
-		),
-		'pdf-a4' => array(
+		],
+		'pdf-a4' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
 			'parameters' => '--paper-size a4 --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
-		),
-		'pdf-a5' => array(
+		],
+		'pdf-a5' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
 			'parameters' => '--paper-size a5 --margin-bottom 32 --margin-top 40 --margin-left 24 --margin-right 24 --pdf-page-numbers --preserve-cover-aspect-ratio'
-		),
-		'pdf-letter' => array(
+		],
+		'pdf-letter' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
 			'parameters' => '--paper-size letter --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
-		),
-		'rtf' => array(
+		],
+		'rtf' => [
 			'extension' => 'rtf',
 			'mime' => 'application/rtf',
 			'parameters' => ''
-		),
-		'txt' => array(
+		],
+		'txt' => [
 			'extension' => 'txt',
 			'mime' => 'text/plain',
 			'parameters' => ''
-		)
-	);
+		]
+	];
 
 	/**
 	 * @return string[]
@@ -59,7 +59,7 @@ class ConvertGenerator implements FormatGenerator {
 	 * @param string $format
 	 */
 	public function __construct( $format ) {
-		if( !array_key_exists( $format, self::$CONFIG ) ) {
+		if ( !array_key_exists( $format, self::$CONFIG ) ) {
 			throw new InvalidArgumentException( 'Invalid format: ' . $format );
 		}
 		$this->format = $format;
@@ -102,7 +102,7 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function convert( $epubFileName, $outputFileName ) {
-		$output = array();
+		$output = [];
 		$returnStatus = 0;
 
 		exec(
@@ -114,7 +114,7 @@ class ConvertGenerator implements FormatGenerator {
 			$returnStatus
 		);
 
-		if( $returnStatus !== 0 ) {
+		if ( $returnStatus !== 0 ) {
 			throw new Exception( 'Conversion to ' . $this->getExtension() . ' failed.' );
 		}
 	}

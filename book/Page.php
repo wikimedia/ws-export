@@ -29,5 +29,5 @@ class Page {
 	/**
 	 * list of the subpages as Page object
 	 */
-	public $chapters = array();
+	public $chapters = [];
 }

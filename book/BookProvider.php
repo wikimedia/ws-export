@@ -14,9 +14,9 @@ use GuzzleHttp\Psr7\Response;
  */
 class BookProvider {
 	protected $api = null;
-	protected $options = array(
+	protected $options = [
 		'images' => true, 'fonts' => false, 'categories' => true, 'credits' => true
-	);
+	];
 	private $creditUrl = 'http://tools.wmflabs.org/phetools/credits.py';
 
 	/**
@@ -41,8 +41,8 @@ class BookProvider {
 	}
 
 	public function getMulti( array $titles, $isMetadata = false ) {
-		$pages = array();
-		foreach( $titles as $title ) {
+		$pages = [];
+		foreach ( $titles as $title ) {
 			$page = new Page();
 			$page->title = str_replace( ' ', '_', trim( $title ) );
 			$pages[] = $page;
@@ -50,7 +50,7 @@ class BookProvider {
 
 		$pages = $this->getPages( $pages );
 
-		foreach( $pages as $id => $page ) {
+		foreach ( $pages as $id => $page ) {
 			$pages[$id] = $this->getMetadata( $page->title, $isMetadata, $page->content );
 		}
 
@@ -58,7 +58,7 @@ class BookProvider {
 	}
 
 	public function getMetadata( $title, $isMetadata, DOMDocument $doc ) {
-		$page_list = array( $title );
+		$page_list = [ $title ];
 		$parser = new PageParser( $doc );
 		$book = new Book();
 		$book->options = $this->options;
@@ -66,7 +66,7 @@ class BookProvider {
 		$book->lang = $this->api->lang;
 
 		$metadataSrc = $parser->getMetadata( 'ws-metadata' );
-		if( $metadataSrc == '' ) {
+		if ( $metadataSrc == '' ) {
 			$metadataSrc = $title;
 			$metadataParser = $parser;
 		} else {
@@ -76,7 +76,7 @@ class BookProvider {
 
 		$book->type = $metadataParser->getMetadata( 'ws-type' );
 		$book->name = htmlspecialchars( $metadataParser->getMetadata( 'ws-title' ) );
-		if( $book->name == '' ) {
+		if ( $book->name == '' ) {
 			$book->name = str_replace( '_', ' ', $metadataSrc );
 		}
 		$book->periodical = htmlspecialchars( $metadataParser->getMetadata( 'ws-periodical' ) );
@@ -91,53 +91,53 @@ class BookProvider {
 		$book->progress = $metadataParser->getMetadata( 'ws-progress' );
 		$book->volume = $metadataParser->getMetadata( 'ws-volume' );
 		$book->scan = str_replace( ' ', '_', $metadataParser->getMetadata( 'ws-scan' ) );
-		$pictures = array();
-		if( $this->options['images'] || $isMetadata ) {
+		$pictures = [];
+		if ( $this->options['images'] || $isMetadata ) {
 			$book->cover = $metadataParser->getMetadata( 'ws-cover' );
-			if( $book->cover != '' ) {
+			if ( $book->cover != '' ) {
 				$pictures[$book->cover] = $this->getCover( $book->cover, $book->lang );
-				if( $pictures[$book->cover]->url == '' ) {
+				if ( $pictures[$book->cover]->url == '' ) {
 					$book->cover = '';
 				}
 			}
 		}
-		if( $this->options['categories'] ) {
+		if ( $this->options['categories'] ) {
 			$book->categories = $this->getCategories( $metadataSrc );
 		}
 		$pageTitles = $parser->getPagesList();
 		$namespaces = $this->getNamespaces();
-		if( !$isMetadata ) {
-			if( !$parser->metadataIsSet( 'ws-noinclude' ) ) {
+		if ( !$isMetadata ) {
+			if ( !$parser->metadataIsSet( 'ws-noinclude' ) ) {
 				$book->content = $parser->getContent();
-				if( $this->options['images'] ) {
+				if ( $this->options['images'] ) {
 					$pictures = array_merge( $pictures, $parser->getPicturesList() );
 				}
 			}
 			$chapterTitles = $parser->getFullChaptersList( $title, $page_list, $namespaces );
 			$chapters = $this->getPages( $chapterTitles );
-			foreach( $chapters as $chapter_key => $chapter ) {
+			foreach ( $chapters as $chapter_key => $chapter ) {
 				$parser = new PageParser( $chapter->content );
-				if( $parser->metadataIsSet( 'ws-noinclude' ) ) {
+				if ( $parser->metadataIsSet( 'ws-noinclude' ) ) {
 					unset( $chapters[$chapter_key] );
 					continue;
 				}
 				$pageTitles = array_merge( $pageTitles, $parser->getPagesList() );
 				$chapter->content = $parser->getContent();
-				if( $this->options['images'] ) {
+				if ( $this->options['images'] ) {
 					$pictures = array_merge( $pictures, $parser->getPicturesList() );
 				}
 				$subpagesTitles = $parser->getChaptersList( $chapter, $page_list, $namespaces );
-				if( !empty( $subpagesTitles ) ) {
+				if ( !empty( $subpagesTitles ) ) {
 					$subpages = $this->getPages( $subpagesTitles );
-					foreach( $subpages as $subpage_key => $subpage ) {
+					foreach ( $subpages as $subpage_key => $subpage ) {
 						$parser = new PageParser( $subpage->content );
-						if( $parser->metadataIsSet( 'ws-noinclude' ) ) {
+						if ( $parser->metadataIsSet( 'ws-noinclude' ) ) {
 							unset( $chapters[$subpage_key] );
 							continue;
 						}
 						$pageTitles = array_merge( $pageTitles, $parser->getPagesList() );
 						$subpage->content = $parser->getContent();
-						if( $this->options['images'] ) {
+						if ( $this->options['images'] ) {
 							$pictures = array_merge( $pictures, $parser->getPicturesList() );
 						}
 					}
@@ -153,7 +153,7 @@ class BookProvider {
 
 			$pictures = $this->getPicturesData( $pictures );
 
-			if (!empty($creditPromises)) {
+			if ( !empty( $creditPromises ) ) {
 				$book->credits = $this->finishCredit( $creditPromises );
 			}
 		}
@@ -188,11 +188,11 @@ class BookProvider {
 	protected function getPages( $pages ) {
 		$promises = [];
 
-		foreach( $pages as $id => $page ) {
+		foreach ( $pages as $id => $page ) {
 			$promises[$id] = $this->api->getPageAsync( $page->title );
 		}
 
-		foreach( $pages as $id => $page ) {
+		foreach ( $pages as $id => $page ) {
 			$page->content = $this->domDocumentFromHtml( $promises[$id]->wait() );
 		}
 
@@ -225,11 +225,11 @@ class BookProvider {
 	 * @return string[] The categories
 	 */
 	public function getCategories( $title ) {
-		$categories = array();
-		$response = $this->api->query( array( 'titles' => $title, 'prop' => 'categories', 'clshow' => '!hidden' ) );
-		foreach( $response['query']['pages'] as $list ) {
-			if( isset( $list['categories'] ) ) {
-				foreach( $list['categories'] as $categorie ) {
+		$categories = [];
+		$response = $this->api->query( [ 'titles' => $title, 'prop' => 'categories', 'clshow' => '!hidden' ] );
+		foreach ( $response['query']['pages'] as $list ) {
+			if ( isset( $list['categories'] ) ) {
+				foreach ( $list['categories'] as $categorie ) {
 					$cat = explode( ':', $categorie['title'], 2 );
 					$categories[] = $cat[1];
 				}
@@ -249,19 +249,19 @@ class BookProvider {
 		$title = $id[0];
 		$picture = new Picture();
 		$picture->title = $cover;
-		$response = $this->api->query( array( 'titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'mime|url|canonicaltitle' ) );
+		$response = $this->api->query( [ 'titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'mime|url|canonicaltitle' ] );
 		$page = end( $response['query']['pages'] );
 		$picture->url = $page['imageinfo'][0]['url'];
 		$picture->mimetype = $page['imageinfo'][0]['mime'];
-		if( in_array( $picture->mimetype, array( 'image/vnd.djvu', 'application/pdf' ) ) ) {
-			if( !array_key_exists( 1, $id ) ) {
+		if ( in_array( $picture->mimetype, [ 'image/vnd.djvu', 'application/pdf' ] ) ) {
+			if ( !array_key_exists( 1, $id ) ) {
 				$id[1] = 1;
 			}
 			$temps = explode( '/', $picture->url );
-			foreach( $temps as $temp ) {
+			foreach ( $temps as $temp ) {
 				$title = $temp;
 			}
-			if( strstr( $picture->url, '/commons/' ) ) {
+			if ( strstr( $picture->url, '/commons/' ) ) {
 				$picture->url = str_replace( 'commons/', 'commons/thumb/', $picture->url ) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
 			} elseif( strstr( $picture->url, '/wikisource/' . $lang ) ) {
 				$picture->url = str_replace( 'wikisource/' . $lang, 'wikisource/' . $lang . '/thumb/', $picture->url ) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
@@ -289,17 +289,17 @@ class BookProvider {
 		$promises = [];
 
 		$pages = [ $book->title ];
-		foreach( $chapters as $id => $chapter ) {
+		foreach ( $chapters as $id => $chapter ) {
 			$pages[] = $chapter->title;
 		}
-		if( $book->scan != '' ) {
+		if ( $book->scan != '' ) {
 			$pages[] = 'Index:' . $book->scan;
 		}
 		$pages = array_unique( array_merge( $pages, $otherPages ) );
-		foreach( $this->splitArrayByBatch( $pages, 50 ) as $batch ) {
-			$params = array(
+		foreach ( $this->splitArrayByBatch( $pages, 50 ) as $batch ) {
+			$params = [
 				'lang' => $book->lang, 'format' => 'json', 'page' => join( '|', $batch )
-			);
+			];
 			$promises[] = $this->api->getAsync(
 				$this->creditUrl,
 				[ 'query' => $params ]
@@ -307,16 +307,16 @@ class BookProvider {
 		}
 
 		$imagesSet = [];
-		foreach( $pictures as $id => $picture ) {
-			if( $picture->name ) {
+		foreach ( $pictures as $id => $picture ) {
+			if ( $picture->name ) {
 				$imagesSet[$picture->name] = true;
 			}
 		}
-		if( !empty( $imagesSet ) ) {
+		if ( !empty( $imagesSet ) ) {
 			$images = array_keys( $imagesSet );
-			$params = array(
+			$params = [
 				'lang' => $book->lang, 'format' => 'json', 'image' => join( '|', $images )
-			);
+			];
 			$promises[] = $this->api->getAsync(
 				$this->creditUrl,
 				[ 'query' => $params ]
@@ -332,19 +332,19 @@ class BookProvider {
 	 */
 	public function finishCredit( $promises ) {
 		$credit = [];
-		foreach( $promises as $promise ) {
+		foreach ( $promises as $promise ) {
 			try {
 				$result = json_decode( $promise->wait(), true );
-			} catch( HttpException $e ) {
+			} catch ( HttpException $e ) {
 				$result = [];
 			}
-			foreach( $result as $name => $values ) {
-				if( !in_array( $name, $credit ) ) {
+			foreach ( $result as $name => $values ) {
+				if ( !in_array( $name, $credit ) ) {
 					$credit[$name] = [ 'count' => 0, 'flags' => [] ];
 				}
 				$credit[$name]['count'] += $values['count'];
-				foreach( $values['flags'] as $id => $flag ) {
-					if( !in_array( $flag, $credit[$name]['flags'] ) ) {
+				foreach ( $values['flags'] as $id => $flag ) {
+					if ( !in_array( $flag, $credit[$name]['flags'] ) ) {
 						$credit[$name]['flags'][] = $flag;
 					}
 				}
@@ -354,7 +354,7 @@ class BookProvider {
 		uasort( $credit, function( $a, $b ) {
 			$f1 = in_array( 'bot', $a['flags'] );
 			$f2 = in_array( 'bot', $b['flags'] );
-			if( $f1 !== $f2 ) {
+			if ( $f1 !== $f2 ) {
 				return $f1 - $f2;
 			}
 
@@ -370,19 +370,19 @@ class BookProvider {
 	 */
 	public function getNamespaces() {
 		$namespaces = unserialize( getTempFile( $this->api->lang, 'namespaces.sphp' ) );
-		if( is_array( $namespaces ) ) {
+		if ( is_array( $namespaces ) ) {
 			return $namespaces;
 		} else {
-			return array();
+			return [];
 		}
 	}
 
-	private function splitArrayByBatch($array, $limit) {
+	private function splitArrayByBatch( $array, $limit ) {
 		$result = [];
 		$bagCount = $limit;
 		$bagId = -1;
-		foreach($array as $id => $value) {
-			if($bagCount === $limit) {
+		foreach ( $array as $id => $value ) {
+			if ( $bagCount === $limit ) {
 				$bagCount = 0;
 				$bagId++;
 				$result[$bagId] = [];
@@ -406,7 +406,7 @@ class PageParser {
 	public function __construct( DOMDocument $doc ) {
 		$this->xPath = new DOMXPath( $doc );
 		$this->xPath->registerNamespace( 'html', 'http://www.w3.org/1999/xhtml' );
-		$this->removeEnlargeLinks(); //Should be run before getChapterList in order to remove false links
+		$this->removeEnlargeLinks(); // Should be run before getChapterList in order to remove false links
 	}
 
 	/**
@@ -416,7 +416,7 @@ class PageParser {
 	 */
 	public function getMetadata( $id ) {
 		$node = $this->xPath->query( '//*[@id="' . $id . '" or contains(@class, "' . $id . '")]' );
-		if( $node->length != 0 ) {
+		if ( $node->length != 0 ) {
 			return $node->item( 0 )->nodeValue;
 		} else {
 			return '';
@@ -441,12 +441,12 @@ class PageParser {
 	 */
 	public function getChaptersList( $title, $page_list, $namespaces ) {
 		$list = $this->xPath->query( '//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"image"))]' );
-		$chapters = array();
+		$chapters = [];
 		/** @var DOMElement $link */
-		foreach( $list as $link ) {
+		foreach ( $list as $link ) {
 			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
 			$parts = explode( ':', $title );
-			if( $title != '' && !in_array( $title, $page_list ) && !in_array( $parts[0], $namespaces ) ) {
+			if ( $title != '' && !in_array( $title, $page_list ) && !in_array( $parts[0], $namespaces ) ) {
 				$chapter = new Page();
 				$chapter->title = $title;
 				$chapter->name = $link->nodeValue;
@@ -464,13 +464,13 @@ class PageParser {
 	 */
 	public function getFullChaptersList( $title, $page_list, $namespaces ) {
 		$chapters = $this->getChaptersList( $title, $page_list, $namespaces );
-		if( empty( $chapters ) ) {
+		if ( empty( $chapters ) ) {
 			$list = $this->xPath->query( '//a[contains(@href,"' . Api::mediawikiUrlEncode( $title ) . '") and not(contains(@class,"extiw") or contains(@class,"external") or contains(@href,"#") or contains(@href,"action=edit") or contains(@title,"/Texte entier") or contains(@class,"image"))]' );
 			/** @var DOMElement $link */
-			foreach( $list as $link ) {
+			foreach ( $list as $link ) {
 				$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
 				$parts = explode( ':', $title );
-				if( $title != '' && !in_array( $title, $page_list ) && !in_array( $parts[0], $namespaces ) ) {
+				if ( $title != '' && !in_array( $title, $page_list ) && !in_array( $parts[0], $namespaces ) ) {
 					$chapter = new Page();
 					$chapter->title = $title;
 					$chapter->name = $link->nodeValue;
@@ -491,9 +491,9 @@ class PageParser {
 	 */
 	public function getPicturesList() {
 		$list = $this->xPath->query( '//a[contains(@class,"image")]' );
-		$pictures = array();
+		$pictures = [];
 		/** @var DOMElement $node */
-		foreach( $list as $node ) {
+		foreach ( $list as $node ) {
 			$a = $node->getElementsByTagName( 'img' )->item( 0 );
 			$picture = new Picture();
 			$url = $a->getAttribute( 'src' );
@@ -510,7 +510,7 @@ class PageParser {
 			// key, so we need only to extract the File:name. This
 			// is kludgy as we need to rely on the path format,
 			// either the 6/62 part is at pos -4/-3 or -3/-2.
-			if( count( $segments ) >= 4 && is_numeric( "0x" . $segments[count( $segments ) - 4] ) && is_numeric( "0x" . $segments[count( $segments ) - 3] ) ) {
+			if ( count( $segments ) >= 4 && is_numeric( "0x" . $segments[count( $segments ) - 4] ) && is_numeric( "0x" . $segments[count( $segments ) - 3] ) ) {
 				$picture->name = $segments[count( $segments ) - 2];
 			} else {
 				$picture->name = $segments[count( $segments ) - 1];
@@ -524,7 +524,7 @@ class PageParser {
 		}
 		$list = $this->xPath->query( '//a[not(contains(@class,"image"))]/img | //img[not(parent::a)]' );
 		/** @var DOMElement $img */
-		foreach( $list as $img ) {
+		foreach ( $list as $img ) {
 			$picture = new Picture();
 			$url = $img->getAttribute( 'src' );
 			$segments = explode( '/', $url );
@@ -542,12 +542,12 @@ class PageParser {
 	 * @return string[]
 	 */
 	public function getPagesList() {
-		$pages = array();
+		$pages = [];
 		$list = $this->xPath->query( '//*[contains(@class,"ws-pagenum")]' );
 		/** @var DOMElement $link */
-		foreach( $list as $link ) {
+		foreach ( $list as $link ) {
 			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
-			if( $title ) {
+			if ( $title ) {
 				$pages[] = $title;
 			}
 		}
@@ -596,21 +596,21 @@ class PageParser {
 	protected function cleanIds() {
 		$list = $this->xPath->query( '//*[contains(@id,":")]' );
 		/** @var DOMElement $node */
-		foreach( $list as $node ) {
+		foreach ( $list as $node ) {
 			$node->setAttribute( 'id', str_replace( ':', '_', $node->getAttribute( 'id' ) ) );
 		}
 
 		$list = $this->xPath->query( '//*[ starts-with(@id,".")]' );
 		/** @var DOMElement $node */
-		foreach( $list as $node ) {
+		foreach ( $list as $node ) {
 			$node->setAttribute( 'id', preg_replace( '#^\.(.*)$#', '$1', $node->getAttribute( 'id' ) ) );
 		}
 
 		$list = $this->xPath->query( '//span[contains(@class,"pagenum") or contains(@class,"mw-headline")]' );
 		/** @var DOMElement $node */
-		foreach( $list as $node ) {
+		foreach ( $list as $node ) {
 			$id = $node->getAttribute( 'id' );
-			if( is_numeric( $id ) ) {
+			if ( is_numeric( $id ) ) {
 				$node->setAttribute( 'id', '_' . $id );
 			}
 		}
@@ -625,19 +625,19 @@ class PageParser {
 
 	protected function removeNodesWithXpath( $query ) {
 		$nodes = $this->xPath->query( $query );
-		foreach( $nodes as $node ) {
+		foreach ( $nodes as $node ) {
 			$node->parentNode->removeChild( $node );
 		}
 	}
 
 	protected function deprecatedNodes( $oldName, $newName, $style ) {
-		$nodes = $this->xPath->query( '//' . $oldName ); //hack: the getElementsByTagName method doesn't catch all tags.
-		foreach( $nodes as $oldNode ) {
+		$nodes = $this->xPath->query( '//' . $oldName ); // hack: the getElementsByTagName method doesn't catch all tags.
+		foreach ( $nodes as $oldNode ) {
 			$newNode = $this->xPath->document->createElement( $newName );
-			while( $oldNode->firstChild ) {
+			while ( $oldNode->firstChild ) {
 				$newNode->appendChild( $oldNode->firstChild );
 			}
-			foreach( $oldNode->attributes as $attribute ) {
+			foreach ( $oldNode->attributes as $attribute ) {
 				$newNode->setAttribute( $attribute->name, $attribute->value );
 			}
 			$newNode->setAttribute( 'style', $style . ' ' . $newNode->getAttribute( 'style' ) );
@@ -648,9 +648,9 @@ class PageParser {
 	protected function deprecatedAttributes( $name, $attribute, $isCss = true ) {
 		$nodes = $this->xPath->query( '//*[@' . $name . ']' );
 		/** @var DOMElement $node */
-		foreach( $nodes as $node ) {
-			if( $attribute != null ) {
-				if( $isCss ) {
+		foreach ( $nodes as $node ) {
+			if ( $attribute != null ) {
+				if ( $isCss ) {
 					$node->setAttribute( 'style', $attribute . ':' . $node->getAttribute( $name ) . '; ' . $node->getAttribute( 'style' ) );
 				} else {
 					$node->setAttribute( $attribute, $node->getAttribute( $name ) );

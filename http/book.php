@@ -1,45 +1,45 @@
 <?php
-$wsexportConfig = array(
+$wsexportConfig = [
 	'basePath' => '..', 'tempPath' => __DIR__ . '/../temp', 'stat' => true
-);
+];
 
-include_once( '../book/init.php' );
+include_once '../book/init.php';
 
 $api = new Api();
 $title = isset( $_GET['page'] ) ? trim( htmlspecialchars( urldecode( $_GET['page'] ) ) ) : '';
 $format = isset( $_GET['format'] ) ? htmlspecialchars( urldecode( $_GET['format'] ) ) : 'epub';
-$options = array();
+$options = [];
 $options['images'] = isset( $_GET['images'] ) ? filter_var( $_GET['images'], FILTER_VALIDATE_BOOLEAN ) : true;
-if( in_array( $api->lang, array( 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ) ) ) {
+if ( in_array( $api->lang, [ 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ] ) ) {
 	$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : '';
 } else {
 	$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : 'freeserif';
-	if( filter_var( $options['fonts'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE ) === false ) {
+	if ( filter_var( $options['fonts'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE ) === false ) {
 		$options['fonts'] = '';
 	}
 }
 
 try {
-	if( isset( $_GET['refresh'] ) ) {
+	if ( isset( $_GET['refresh'] ) ) {
 		$refresh = new Refresh( $api );
 		$refresh->refresh();
 		$success = 'The cache is updated for ' . $api->lang . ' language.';
 		include 'templates/book.php';
 	}
 
-	if( $title === '' ) {
+	if ( $title === '' ) {
 		include 'templates/book.php';
 	}
 
 	$provider = new BookProvider( $api, $options );
 	$data = $provider->get( $title );
-	if( $format == 'epub' ) {
+	if ( $format == 'epub' ) {
 		$format = 'epub-3';
 	} elseif( $format == 'odt' ) {
-		$format = 'rtf'; //TODO: bad hack in order to don't break urls
+		$format = 'rtf'; // TODO: bad hack in order to don't break urls
 	}
 
-	if( $format == 'epub-2' ) {
+	if ( $format == 'epub-2' ) {
 		$generator = new Epub2Generator();
 	} elseif( $format == 'epub-3' ) {
 		$generator = new Epub3Generator();
@@ -60,12 +60,12 @@ try {
 	readfile( $file );
 	unlink( $file );
 	flush();
-	if( isset( $wsexportConfig['stat'] ) ) {
+	if ( isset( $wsexportConfig['stat'] ) ) {
 		Stat::add( $format, $api->lang );
 		CreationLog::singleton()->add( $data, $format );
 	}
-} catch( Exception $exception ) {
-	if( $exception instanceof HttpException ) {
+} catch ( Exception $exception ) {
+	if ( $exception instanceof HttpException ) {
 		header( 'HTTP/1.1 ' . $exception->getCode() . ' ' . $exception->getMessage() );
 	}
 	$error = htmlspecialchars( $exception->getMessage() );

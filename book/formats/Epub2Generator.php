@@ -30,22 +30,22 @@ class Epub2Generator extends EpubGenerator {
 					<dc:rights>http://creativecommons.org/licenses/by-sa/3.0/</dc:rights>
 					<dc:rights>http://www.gnu.org/copyleft/fdl.html</dc:rights>
 					<dc:contributor opf:role="bkp">Wikisource</dc:contributor>';
-		if( $book->author != '' ) {
+		if ( $book->author != '' ) {
 			$content .= '<dc:creator opf:role="aut">' . htmlspecialchars( $book->author, ENT_QUOTES ) . '</dc:creator>';
 		}
-		if( $book->translator != '' ) {
+		if ( $book->translator != '' ) {
 			$content .= '<dc:contributor opf:role="trl">' . htmlspecialchars( $book->translator, ENT_QUOTES ) . '</dc:contributor>';
 		}
-		if( $book->illustrator != '' ) {
+		if ( $book->illustrator != '' ) {
 			$content .= '<dc:contributor opf:role="ill">' . htmlspecialchars( $book->illustrator, ENT_QUOTES ) . '</dc:contributor>';
 		}
-		if( $book->publisher != '' ) {
+		if ( $book->publisher != '' ) {
 			$content .= '<dc:publisher>' . htmlspecialchars( $book->publisher, ENT_QUOTES ) . '</dc:publisher>';
 		}
-		if( $book->year != '' ) {
+		if ( $book->year != '' ) {
 			$content .= '<dc:date opf:event="original-publication">' . htmlspecialchars( $book->year, ENT_QUOTES ) . '</dc:date>';
 		}
-		if( $book->cover != '' ) {
+		if ( $book->cover != '' ) {
 			$content .= '<meta name="cover" content="cover" />';
 		} else {
 			$content .= '<meta name="cover" content="title" />';
@@ -53,44 +53,44 @@ class Epub2Generator extends EpubGenerator {
 		$content .= '</metadata>
 				<manifest>
 					<item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>';
-		if( $book->cover != '' ) {
+		if ( $book->cover != '' ) {
 			$content .= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />';
 		}
 		$content .= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
 					<item id="mainCss" href="main.css" media-type="text/css" />
 					<item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
 		$font = FontProvider::getData( $book->options['fonts'] );
-		if( $font !== null ) {
-			foreach( $font['otf'] as $name => $path ) {
+		if ( $font !== null ) {
+			foreach ( $font['otf'] as $name => $path ) {
 				$content .= '<item id="' . $font['name'] . $name . '" href="fonts/' . $font['name'] . $name . '.otf" media-type="font/opentype" />' . "\n";
 			}
 		}
-		if( $book->content ) {
+		if ( $book->content ) {
 			$content .= '<item id="' . $book->title . '" href="' . $book->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
 		}
-		foreach( $book->chapters as $chapter ) {
+		foreach ( $book->chapters as $chapter ) {
 			$content .= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
-			foreach( $chapter->chapters as $subpage ) {
+			foreach ( $chapter->chapters as $subpage ) {
 				$content .= '<item id="' . $subpage->title . '" href="' . $subpage->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
 			}
 		}
-		foreach( $book->pictures as $picture ) {
+		foreach ( $book->pictures as $picture ) {
 			$content .= '<item id="' . $picture->title . '" href="images/' . $picture->title . '" media-type="' . $picture->mimetype . '" />' . "\n";
 		}
 		$content .= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
 				</manifest>
 				<spine toc="ncx">';
-		if( $book->cover != '' ) {
+		if ( $book->cover != '' ) {
 			$content .= '<itemref idref="cover" linear="no" />';
 		}
 		$content .= '<itemref idref="title" linear="yes" />';
-		if( $book->content ) {
+		if ( $book->content ) {
 			$content .= '<itemref idref="' . $book->title . '" linear="yes" />';
 		}
-		if( !empty( $book->chapters ) ) {
-			foreach( $book->chapters as $chapter ) {
+		if ( !empty( $book->chapters ) ) {
+			foreach ( $book->chapters as $chapter ) {
 				$content .= '<itemref idref="' . $chapter->title . '" linear="yes" />';
-				foreach( $chapter->chapters as $subpage ) {
+				foreach ( $chapter->chapters as $subpage ) {
 					$content .= '<itemref idref="' . $subpage->title . '" linear="yes" />';
 				}
 			}
@@ -98,13 +98,13 @@ class Epub2Generator extends EpubGenerator {
 		$content .= '<itemref idref="about" linear="yes" />
 				</spine>
 				<guide>';
-		if( $book->cover != '' ) {
+		if ( $book->cover != '' ) {
 			$content .= '<reference type="cover" title="' . htmlspecialchars( $this->i18n['cover'], ENT_QUOTES ) . '" href="cover.xhtml" />';
 		} else {
 			$content .= '<reference type="cover" title="' . htmlspecialchars( $this->i18n['cover'], ENT_QUOTES ) . '" href="title.xhtml" />';
 		}
 		$content .= '<reference type="title-page" title="' . htmlspecialchars( $this->i18n['title_page'], ENT_QUOTES ) . '" href="title.xhtml" />';
-		if( $book->content ) {
+		if ( $book->content ) {
 			$content .= '<reference type="text" title="' . htmlspecialchars( $book->name, ENT_QUOTES ) . '" href="' . $book->title . '.xhtml" />';
 		}
 		$content .= '<reference type="copyright-page" title="' . htmlspecialchars( $this->i18n['about'], ENT_QUOTES ) . '" href="about.xhtml" />

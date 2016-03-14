@@ -35,9 +35,9 @@
 		<div class="page-header">
 			<h1>Export tool of Wikisource books in many file formats.</h1>
 		</div>
-		<?php if( isset( $success ) ) {
+		<?php if ( isset( $success ) ) {
 			echo '<div class="alert alert-success">' . $success . '</div>' . "\n";
-		} ?>
-		<?php if( isset( $error ) ) {
+} ?>
+		<?php if ( isset( $error ) ) {
 			echo '<div class="alert alert-danger">' . $error . '</div>' . "\n";
-		} ?>
+}

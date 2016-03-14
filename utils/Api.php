@@ -32,12 +32,12 @@ class Api {
 	 * @param ClientInterface $client
 	 */
 	public function __construct( $lang = '', $domainName = '', ClientInterface $client = null ) {
-		if( $lang == '' ) {
+		if ( $lang == '' ) {
 			$lang = Api::getHttpLang();
 		}
 		$this->lang = $lang;
 
-		if( $domainName != '' ) {
+		if ( $domainName != '' ) {
 			$this->domainName = $domainName;
 		} elseif( $this->lang == 'www' || $this->lang == '' ) {
 			$this->domainName = 'wikisource.org';
@@ -49,7 +49,7 @@ class Api {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}
 
-		if( $client === null ) {
+		if ( $client === null ) {
 			$client = new Client( [
 				'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ]
 			] );
@@ -70,7 +70,7 @@ class Api {
 			$options
 		)->then(
 			function( ResponseInterface $response ) {
-				if($response->getStatusCode() !== 200 ) {
+				if ( $response->getStatusCode() !== 200 ) {
 					throw new HttpException( 'HTTP error ' . $response->getStatusCode(), $response->getStatusCode() );
 				}
 				return $response->getBody()->getContents();
@@ -120,10 +120,10 @@ class Api {
 		)->then(
 			function( $result ) {
 				$json = json_decode( $result, true );
-				if ( isset($json) ) {
+				if ( isset( $json ) ) {
 					return $json;
 				} else {
-					throw new Exception('invalid JSON: "' . $result . '": ' . json_last_error_msg());
+					throw new Exception( 'invalid JSON: "' . $result . '": ' . json_last_error_msg() );
 				}
 			}
 		);
@@ -136,20 +136,20 @@ class Api {
 	 * @throws HttpException
 	 */
 	public function completeQuery( $params ) {
-		$data = array();
+		$data = [];
 		$continue = true;
 		do {
 			$temp = $this->query( $params );
 			$data = array_merge_recursive( $data, $temp );
 
-			if( array_key_exists( 'continue', $temp ) ) {
-				foreach( $temp['continue'] as $keys => $value ) {
+			if ( array_key_exists( 'continue', $temp ) ) {
+				foreach ( $temp['continue'] as $keys => $value ) {
 					$params[$keys] = $value;
 				}
 			} else {
 				$continue = false;
 			}
-		} while( $continue );
+		} while ( $continue );
 
 		return $data;
 	}
@@ -170,9 +170,9 @@ class Api {
 	}
 
 	private function parseGetPageResponse( $response ) {
-		foreach( $response['query']['pages'] as $page ) {
-			if( isset( $page['revisions'] ) ) {
-				foreach( $page['revisions'] as $revision ) {
+		foreach ( $response['query']['pages'] as $page ) {
+			if ( isset( $page['revisions'] ) ) {
+				foreach ( $page['revisions'] as $revision ) {
 					return getXhtmlFromContent( $this->lang, $revision['*'], $page['title'] );
 				}
 			}
@@ -194,12 +194,12 @@ class Api {
 	 */
 	public static function getHttpLang() {
 		$lang = '';
-		if( isset( $_GET['lang'] ) ) {
+		if ( isset( $_GET['lang'] ) ) {
 			$lang = $_GET['lang'];
 		} else {
-			if( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+			if ( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
 				$langs = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
-				if( isset( $langs[0] ) ) {
+				if ( isset( $langs[0] ) ) {
 					$langs = explode( '-', $langs[0] );
 					$lang = $langs[0];
 				}
@@ -213,8 +213,8 @@ class Api {
 	 * @return string the url encoded like mediawiki does.
 	 */
 	public static function mediawikiUrlEncode( $url ) {
-		$search = array( '%21', '%24', '%28', '%29', '%2A', '%2C', '%2D', '%2E', '%2F', '%3A', '%3B', '%40' );
-		$replace = array( '!', '$', '(', ')', '*', ',', '-', '.', '/', ':', ';', '@' );
+		$search = [ '%21', '%24', '%28', '%29', '%2A', '%2C', '%2D', '%2E', '%2F', '%3A', '%3B', '%40' ];
+		$replace = [ '!', '$', '(', ')', '*', ',', '-', '.', '/', ':', ';', '@' ];
 
 		return str_replace( $search, $replace, urlencode( str_replace( ' ', '_', $url ) ) );
 	}

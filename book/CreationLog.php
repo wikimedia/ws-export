@@ -33,23 +33,23 @@ class CreationLog {
 	public function add( Book $book, $format ) {
 		$this->pdo->prepare(
 			'INSERT INTO `creation` (`lang`, `title`, `format`, `time`) VALUES (:lang, :title, :format, datetime("now"));'
-		)->execute( array(
+		)->execute( [
 			'lang' => $book->lang, 'title' => $book->title, 'format' => $format
-		) );
+		] );
 	}
 
 	public function getTypeAndLangStats( $month, $year ) {
 		$month = ( $month < 10 ) ? '0' . $month : $month;
-		$stats = array();
+		$stats = [];
 
 		$cursor = $this->pdo->prepare(
 			'SELECT `format`, `lang`, count(1) AS `number` FROM `creation` WHERE `time` BETWEEN :from AND :to GROUP BY `format`, `lang`'
 		);
-		$cursor->execute( array(
+		$cursor->execute( [
 			'from' => $year . '-' . $month . '-00', 'to' => $year . '-' . $month . '-31'
-		) );
+		] );
 
-		foreach( $cursor as $row ) {
+		foreach ( $cursor as $row ) {
 			$stats[$row['format']][$row['lang']] = $row['number'];
 		}
 
@@ -59,7 +59,7 @@ class CreationLog {
 	public static function singleton() {
 		static $self;
 
-		if( $self === null ) {
+		if ( $self === null ) {
 			$self = new CreationLog();
 		}
 

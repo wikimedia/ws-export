@@ -1,5 +1,5 @@
 <?php include 'header.php';
-$formats = array(
+$formats = [
 	'epub-3' => 'epub 3',
 	'epub-2' => 'epub 2 (deprecated, may be useful for some very old e-readers)',
 	'mobi' => 'mobi (in beta)',
@@ -8,7 +8,7 @@ $formats = array(
 	'pdf-a4' => 'pdf A4 format (in beta)',
 	'pdf-a5' => 'pdf A5 format (in beta)',
 	'pdf-letter' => 'pdf US letter format (in beta)',
-);
+];
 ?>
 <form method="get" action="book.php" role="form" class="form-horizontal">
 	<fieldset>
@@ -36,13 +36,13 @@ $formats = array(
 
 			<div class="col-lg-10">
 				<select id="format" name="format" class="form-control">
-					<?php foreach( $formats as $key => $label ) {
+					<?php foreach ( $formats as $key => $label ) {
 						echo '<option value="' . $key . '"';
-						if( $format === $key ) {
+						if ( $format === $key ) {
 							echo ' selected="selected"';
 						}
 						echo '>' . $label . '</option>';
-					} ?>
+} ?>
 				</select>
 				<span class="help-inline"></span>
 			</div>
@@ -54,9 +54,9 @@ $formats = array(
 				<select id="fonts" name="fonts" class="form-control">
 					<option value="">None</option><?php
 					$list = FontProvider::getList();
-					foreach( $list as $key => $label ) {
+					foreach ( $list as $key => $label ) {
 						echo '<option value="' . $key . '"';
-						if( $options['fonts'] == $key ) {
+						if ( $options['fonts'] == $key ) {
 							echo ' selected="selected"';
 						}
 						echo '>' . $label . '</option>' . "\n";
@@ -69,9 +69,9 @@ $formats = array(
 
 			<div class="col-lg-10">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="false" <?php if( !$options['images'] ) {
+					<input type="checkbox" value="false" <?php if ( !$options['images'] ) {
 						echo 'checked="checked"';
-					} ?> name="images"/>
+} ?> name="images"/>
 					Do not include images
 				</label>
 			</div>
@@ -84,4 +84,4 @@ $formats = array(
 	</fieldset>
 </form>
 <?php include 'footer.php';
-exit(); ?>
+exit();

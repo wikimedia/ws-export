@@ -18,7 +18,7 @@ class Book extends Page {
 	/**
 	 * output options
 	 */
-	public $options = array();
+	public $options = [];
 
 	/**
 	 * meatadata on the book
@@ -42,16 +42,16 @@ class Book extends Page {
 	/**
 	 * list of the categories as string object like array('1859', 'France')
 	 */
-	public $categories = array();
+	public $categories = [];
 
 	/**
 	 * pictures included in the page
 	 * @type array
 	 */
-	public $pictures = array();
+	public $pictures = [];
 
 	/**
 	 * list of contributors of the book array('PSEUDO' => array('flags' => array(), 'count' => integer))
 	 */
-	public $credits = array();
+	public $credits = [];
 }

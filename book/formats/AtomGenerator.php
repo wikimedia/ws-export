@@ -71,14 +71,14 @@ class AtomGenerator implements FormatGenerator {
 
 		$this->addNode( $dom, $node, 'title', $book->name );
 		$this->addNode( $dom, $node, 'id', $wsUrl, 'dcterms:URI' );
-		//TODO published?
+		// TODO published?
 		$this->addNode( $dom, $node, 'updated', date( DATE_ATOM ) );
 		$this->addNode( $dom, $node, 'rights', 'http://creativecommons.org/licenses/by-sa/3.0' );
 		$this->addPersonNode( $dom, $node, 'author', $book->author );
 		$this->addPersonNode( $dom, $node, 'contributor', $book->translator );
 		$this->addPersonNode( $dom, $node, 'contributor', $book->illustrator );
 
-		foreach( $book->categories as $categorie ) {
+		foreach ( $book->categories as $categorie ) {
 			$cat = $dom->createElement( 'category' );
 			$cat->setAttribute( 'label', $categorie );
 			$cat->setAttribute( 'term', $categorie );
@@ -96,7 +96,7 @@ class AtomGenerator implements FormatGenerator {
 		$this->addLink( $dom, $node, 'http://opds-spec.org/acquisition', $this->buildExportUrl( $book, 'epub' ), 'application/epub+zip' );
 		$this->addLink( $dom, $node, 'http://opds-spec.org/acquisition', $this->buildExportUrl( $book, 'mobi' ), 'application/x-mobipocket-ebook' );
 		$this->addLink( $dom, $node, 'http://opds-spec.org/acquisition', $this->buildExportUrl( $book, 'xhtml' ), 'application/xhtml+xml' );
-		if( $book->cover !== '' ) {
+		if ( $book->cover !== '' ) {
 			$this->addLink( $dom, $node, 'http://opds-spec.org/image', $book->pictures[$book->cover]->url, $book->pictures[$book->cover]->mimetype );
 		}
 
@@ -104,13 +104,13 @@ class AtomGenerator implements FormatGenerator {
 	}
 
 	private function addNode( DOMDocument $dom, DOMElement $head, $name, $value, $type = '' ) {
-		if( $value === '' ) {
+		if ( $value === '' ) {
 			return;
 		}
 
 		$node = $dom->createElement( $name, $value );
 
-		if( $type !== '' ) {
+		if ( $type !== '' ) {
 			$node->setAttribute( 'xsi:type', $type );
 		}
 
@@ -118,7 +118,7 @@ class AtomGenerator implements FormatGenerator {
 	}
 
 	private function addPersonNode( DOMDocument $dom, DOMElement $head, $type, $name = '' ) {
-		if( $name === '' ) {
+		if ( $name === '' ) {
 			return;
 		}
 
@@ -130,7 +130,7 @@ class AtomGenerator implements FormatGenerator {
 	private function addLink( DOMDocument $dom, DOMElement $head, $rel, $href, $type = '' ) {
 		$node = $dom->createElement( 'link' );
 		$node->setAttribute( 'rel', $rel );
-		if( $type !== '' ) {
+		if ( $type !== '' ) {
 			$node->setAttribute( 'type', $type );
 		}
 		$node->setAttribute( 'href', $href );
@@ -138,6 +138,6 @@ class AtomGenerator implements FormatGenerator {
 	}
 
 	private function buildExportUrl( Book $book, $format ) {
-		return $this->exportBasePath . '?' . http_build_query( array( 'lang' => $book->lang, 'format' => $format, 'page' => $book->title ) );
+		return $this->exportBasePath . '?' . http_build_query( [ 'lang' => $book->lang, 'format' => $format, 'page' => $book->title ] );
 	}
 }

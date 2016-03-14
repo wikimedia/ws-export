@@ -1,35 +1,36 @@
 #!/usr/bin/php
 <?php
 
-$basePath = realpath( dirname( __FILE__ ) . '/..' );
+$basePath = realpath( __DIR__ . '/..' );
 global $wsexportConfig;
 
-$wsexportConfig = array(
+$wsexportConfig = [
 	'basePath' => $basePath, 'stat' => true, 'tempPath' => sys_get_temp_dir()
-);
+];
 
-include_once($basePath . '/book/init.php');
+include_once $basePath . '/book/init.php';
 
-class WSExport_InvalidArgumentException extends Exception {}
+class WSExport_InvalidArgumentException extends Exception {
+}
 
 function parseCommandLine() {
 	global $wsexportConfig;
 
-	$long_opts = array(
+	$long_opts = [
 		'lang:', 'title:', 'format:', 'path:', 'debug', 'tmpdir:',
 		'nocredits'
-	);
+	];
 
 	$lang = null;
 	$title = null;
 	$format = 'epub';
 	$path = '.';
-	$options = array();
+	$options = [];
 	$options['images'] = true;
 
 	$opts = getopt( 'l:t:f:p:d', $long_opts );
-	foreach( $opts as $opt => $value ) {
-		switch( $opt ) {
+	foreach ( $opts as $opt => $value ) {
+		switch ( $opt ) {
 			case 'lang':
 			case 'l':
 				$lang = $value;
@@ -48,8 +49,8 @@ function parseCommandLine() {
 				break;
 			case 'tmpdir':
 				$tempPath = realpath( $value );
-				if( !$tempPath ) {
-					throw new Exception("Error: $value does not exist.");
+				if ( !$tempPath ) {
+					throw new Exception( "Error: $value does not exist." );
 				}
 				$wsexportConfig['tempPath'] = $tempPath;
 				break;
@@ -63,42 +64,42 @@ function parseCommandLine() {
 		}
 	}
 
-	if( !$lang or !$title ) {
+	if ( !$lang or !$title ) {
 		throw new WSExport_InvalidArgumentException();
 	}
 
-	return array(
+	return [
 		'title' => $title,
 		'lang' => $lang,
 		'format' => $format,
 		'path' => $path,
 		'options' => $options
-	);
+	];
 }
 
-function getGenerator($format) {
-	if ($format == 'epub-2') {
+function getGenerator( $format ) {
+	if ( $format == 'epub-2' ) {
 		return new Epub2Generator();
-	} elseif ($format == 'epub-3' || $format == 'epub') {
+	} elseif ( $format == 'epub-3' || $format == 'epub' ) {
 		return new Epub3Generator();
-	} elseif (in_array($format, ConvertGenerator::getSupportedTypes())) {
-		return new ConvertGenerator($format);
+	} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
+		return new ConvertGenerator( $format );
 	} else {
-		throw new WSExport_InvalidArgumentException("The file format '$format' is unknown.");
+		throw new WSExport_InvalidArgumentException( "The file format '$format' is unknown." );
 	}
 }
-function createBook($title, $lang, $format, $path, $options) {
-	$generator = getGenerator($format);
+function createBook( $title, $lang, $format, $path, $options ) {
+	$generator = getGenerator( $format );
 	$api = new Api( $lang );
 	$provider = new BookProvider( $api, $options );
 	$data = $provider->get( $title );
 	$file = $generator->create( $data );
 	$output = $path . '/' .  $title . '.' . $generator->getExtension();
-	if( !is_dir( dirname( $output ) ) ) {
+	if ( !is_dir( dirname( $output ) ) ) {
 		mkdir( dirname( $output ), 0755, true );
 	}
-	if( !rename( $file, $output ) ) {
-		throw new Exception('Unable to create output file: ' . $output );
+	if ( !rename( $file, $output ) ) {
+		throw new Exception( 'Unable to create output file: ' . $output );
 	}
 	return $output;
 }
@@ -106,18 +107,18 @@ function createBook($title, $lang, $format, $path, $options) {
 if ( isset( $argc ) ) {
 	try {
 		$arguments = parseCommandLine();
-		$output = createBook($arguments['title'], $arguments['lang'], $arguments['format'],
-			$arguments['path'], $arguments['options']);
+		$output = createBook( $arguments['title'], $arguments['lang'], $arguments['format'],
+			$arguments['path'], $arguments['options'] );
 
 		echo "The ebook has been created: $output\n";
-	} catch (WSExport_InvalidArgumentException $exception) {
-		if ( !empty($exception->getMessage())) {
-			fwrite(STDERR, $exception->getMessage() . "\n\n");
+	} catch ( WSExport_InvalidArgumentException $exception ) {
+		if ( !empty( $exception->getMessage() ) ) {
+			fwrite( STDERR, $exception->getMessage() . "\n\n" );
 		}
-		fwrite(STDERR, file_get_contents( $basePath . '/cli/help/book.txt' ));
+		fwrite( STDERR, file_get_contents( $basePath . '/cli/help/book.txt' ) );
 		exit( 1 );
-	} catch( Exception $exception ) {
-		fwrite(STDERR, "Error: $exception\n");
+	} catch ( Exception $exception ) {
+		fwrite( STDERR, "Error: $exception\n" );
 		exit ( 1 );
 	}
 }

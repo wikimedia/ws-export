@@ -26,13 +26,13 @@ function uuid( $prefix = '' ) {
  * @return string an url to a page of Wikisource
  */
 function wikisourceUrl( $lang, $page = '' ) {
-	if( $lang === '' ) {
+	if ( $lang === '' ) {
 		$url = 'http://wikisource.org';
 	} else {
 		$url = 'http://' . $lang . '.wikisource.org';
 	}
 
-	if( $page !== '' ) {
+	if ( $page !== '' ) {
 		$url .= '/wiki/' . urlencode( $page );
 	}
 
@@ -45,8 +45,8 @@ function wikisourceUrl( $lang, $page = '' ) {
  */
 function getFile( $file ) {
 	$content = '';
-	if( $fp = fopen( $file, 'r' ) ) {
-		while( !feof( $fp ) ) {
+	if ( $fp = fopen( $file, 'r' ) ) {
+		while ( !feof( $fp ) ) {
 			$content .= fgets( $fp, 4096 );
 		}
 	}
@@ -61,14 +61,14 @@ function getFile( $file ) {
  * @return string|bool mime type on success or false on failure
  */
 function getMimeType( $contents ) {
-	if( class_exists( 'finfo', false ) ) {
+	if ( class_exists( 'finfo', false ) ) {
 		$finfoOpt = defined( 'FILEINFO_MIME_TYPE' ) ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
 		$info = new finfo( $finfoOpt );
-		if( $info ) {
+		if ( $info ) {
 			return $info->buffer( $contents );
 		}
 	}
-	if( ini_get( 'mime_magic.magicfile' ) && function_exists( 'mime_content_type' ) ) {
+	if ( ini_get( 'mime_magic.magicfile' ) && function_exists( 'mime_content_type' ) ) {
 		$filename = tempnam( sys_get_temp_dir(), 'wsf' );
 		file_put_contents( $filename, $contents );
 		$ret = mime_content_type( $filename );
@@ -88,11 +88,11 @@ function getMimeType( $contents ) {
  * @return string
  */
 function getXhtmlFromContent( $lang, $content, $title = ' ' ) {
-	if( $content != '' ) {
+	if ( $content != '' ) {
 		$content = preg_replace( '#<\!--(.+)-->#isU', '', $content );
 	}
 	$html = '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"';
-	if( $lang != null ) {
+	if ( $lang != null ) {
 		$html .= ' xml:lang="' . $lang . '" dir="' . getLanguageDirection( $lang ) . '"';
 	}
 
@@ -102,7 +102,7 @@ function getXhtmlFromContent( $lang, $content, $title = ' ' ) {
 function getTempFile( $lang, $name ) {
 	global $wsexportConfig;
 	$path = $wsexportConfig['tempPath'] . '/' . $lang . '/' . $name;
-	if( file_exists( $path ) ) {
+	if ( file_exists( $path ) ) {
 		return file_get_contents( $path );
 	} else {
 		return '';
@@ -111,7 +111,7 @@ function getTempFile( $lang, $name ) {
 
 function getI18n( $lang ) {
 	$content = getTempFile( $lang, 'i18n.sphp' );
-	if( $content == '' ) {
+	if ( $content == '' ) {
 		$refresh = new Refresh( new Api( $lang ) );
 		$refresh->refresh();
 		$content = getTempFile( $lang, 'i18n.sphp' );
@@ -121,17 +121,17 @@ function getI18n( $lang ) {
 }
 
 function encodeString( $string ) {
-	static $map = array();
+	static $map = [];
 	static $num = 0;
 	$string = str_replace( ' ', '_', $string );
-	if( isset( $map[$string] ) ) {
+	if ( isset( $map[$string] ) ) {
 		return $map[$string];
 	}
 	$map[$string] = $string;
-	$search = array( '[αάàâäΑÂÄ]', '[βΒ]', '[Ψç]', '[δΔ]', '[εéèêëΕÊË]', '[η]', '[φϕΦ]', '[γΓ]', '[θΘ]', '[ιîïΙÎÏ]', '[Κκ]', '[λΛ]', '[μ]', '[ν]', '[οôöÔÖ]', '[Ωω]', '[πΠ]', '[Ψψ]', '[ρΡ]', '[σΣ]', '[τ]', '[υûùüΥÛÜ]', '[ξΞ]', '[ζΖ]', '[ ]', '[^a-zA-Z0-9_\.]' );
-	$replace = array( 'a', 'b', 'c', 'd', 'e', 'eh', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'oh', 'p', 'ps', 'r', 's', 't', 'u', 'x', 'z', '_', '_' );
+	$search = [ '[αάàâäΑÂÄ]', '[βΒ]', '[Ψç]', '[δΔ]', '[εéèêëΕÊË]', '[η]', '[φϕΦ]', '[γΓ]', '[θΘ]', '[ιîïΙÎÏ]', '[Κκ]', '[λΛ]', '[μ]', '[ν]', '[οôöÔÖ]', '[Ωω]', '[πΠ]', '[Ψψ]', '[ρΡ]', '[σΣ]', '[τ]', '[υûùüΥÛÜ]', '[ξΞ]', '[ζΖ]', '[ ]', '[^a-zA-Z0-9_\.]' ];
+	$replace = [ 'a', 'b', 'c', 'd', 'e', 'eh', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'oh', 'p', 'ps', 'r', 's', 't', 'u', 'x', 'z', '_', '_' ];
 	mb_regex_encoding( 'UTF-8' );
-	foreach( $search as $i => $pat ) {
+	foreach ( $search as $i => $pat ) {
 		$map[$string] = mb_eregi_replace( $pat, $replace[$i], $map[$string] );
 	}
 	$map[$string] = 'c' . $num . '_' . cutFilename( utf8_decode( $map[$string] ) );
@@ -145,7 +145,7 @@ function encodeString( $string ) {
  */
 function cutFilename( $string, $max = 100 ) {
 	$length = strlen( $string );
-	if( $length > $max ) {
+	if ( $length > $max ) {
 		$string = substr( $string, $length - $max, $length - 1 );
 	}
 
@@ -158,11 +158,10 @@ function cutFilename( $string, $max = 100 ) {
  */
 function getLanguageDirection( $languageCode ) {
 	return
-		in_array( $languageCode, array( 'ar', 'arc', 'bcc', 'bqi', 'ckb', 'dv', 'fa', 'glk', 'he', 'lrc', 'mzn', 'pnb', 'ps', 'sd', 'ug', 'ur', 'yi' ) )
+		in_array( $languageCode, [ 'ar', 'arc', 'bcc', 'bqi', 'ckb', 'dv', 'fa', 'glk', 'he', 'lrc', 'mzn', 'pnb', 'ps', 'sd', 'ug', 'ur', 'yi' ] )
 		? 'rtl'
 		: 'ltr';
 }
-
 
 /**
  * Builds a unique temporary file name for a given title and extension

@@ -36,25 +36,25 @@ class Epub3Generator extends EpubGenerator {
 				    <link rel="cc:license" href="http://www.gnu.org/copyleft/fdl.html" />
 				    <dc:contributor id="meta-bkp">Wikisource</dc:contributor>
 				    <meta refines="#meta-bkp" property="role" scheme="marc:relators">bkp</meta>';
-		if( $book->author != '' ) {
+		if ( $book->author != '' ) {
 			$content .= '<dc:creator id="meta-aut">' . htmlspecialchars( $book->author, ENT_QUOTES ) . '</dc:creator>
 					       <meta refines="#meta-aut" property="role" scheme="marc:relators">aut</meta>';
 		}
-		if( $book->translator != '' ) {
+		if ( $book->translator != '' ) {
 			$content .= '<dc:contributor id="meta-trl">' . htmlspecialchars( $book->translator, ENT_QUOTES ) . '</dc:contributor>
 					       <meta refines="#meta-trl" property="role" scheme="marc:relators">trl</meta>';
 		}
-		if( $book->illustrator != '' ) {
+		if ( $book->illustrator != '' ) {
 			$content .= '<dc:contributor id="meta-ill">' . htmlspecialchars( $book->illustrator, ENT_QUOTES ) . '</dc:contributor>
 					       <meta refines="#meta-ill" property="role" scheme="marc:relators">ill</meta>';
 		}
-		if( $book->publisher != '' ) {
+		if ( $book->publisher != '' ) {
 			$content .= '<dc:publisher>' . htmlspecialchars( $book->publisher, ENT_QUOTES ) . '</dc:publisher>';
 		}
-		if( $book->year != '' ) {
+		if ( $book->year != '' ) {
 			$content .= '<dc:date>' . htmlspecialchars( $book->year, ENT_QUOTES ) . '</dc:date>';
 		}
-		if( $book->cover != '' ) {
+		if ( $book->cover != '' ) {
 			$content .= '<meta name="cover" content="cover" />';
 		} else {
 			$content .= '<meta name="cover" content="title" />';
@@ -62,31 +62,31 @@ class Epub3Generator extends EpubGenerator {
 		$content .= '</metadata>
 			     <manifest>
 				    <item href="nav.xhtml" id="nav" media-type="application/xhtml+xml" properties="nav" />
-				    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>'; //deprecated
-		if( $book->cover != '' ) { //TODO use image ?
+				    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>'; // deprecated
+		if ( $book->cover != '' ) { // TODO use image ?
 			$content .= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />';
 		}
 		$content .= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
 				    <item id="mainCss" href="main.css" media-type="text/css" />
 				    <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
 		$font = FontProvider::getData( $book->options['fonts'] );
-		if( $font !== null ) {
-			foreach( $font['otf'] as $name => $path ) {
+		if ( $font !== null ) {
+			foreach ( $font['otf'] as $name => $path ) {
 				$content .= '<item id="' . $font['name'] . $name . '" href="fonts/' . $font['name'] . $name . '.otf" media-type="font/opentype" />' . "\n";
 			}
 		}
-		if( $book->content ) {
+		if ( $book->content ) {
 			$content .= '<item id="' . $book->title . '" href="' . $book->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
 		}
-		foreach( $book->chapters as $chapter ) {
+		foreach ( $book->chapters as $chapter ) {
 			$content .= '<item id="' . $chapter->title . '" href="' . $chapter->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
-			foreach( $chapter->chapters as $subpage ) {
+			foreach ( $chapter->chapters as $subpage ) {
 				$content .= '<item id="' . $subpage->title . '" href="' . $subpage->title . '.xhtml" media-type="application/xhtml+xml" />' . "\n";
 			}
 		}
-		foreach( $book->pictures as $pictureId => $picture ) {
+		foreach ( $book->pictures as $pictureId => $picture ) {
 			$content .= '<item id="' . $picture->title . '" href="images/' . $picture->title . '" media-type="' . $picture->mimetype . '"';
-			if( $book->cover === $pictureId ) {
+			if ( $book->cover === $pictureId ) {
 				$content .= ' properties="cover-image"';
 			}
 			$content .= ' />' . "\n";
@@ -94,17 +94,17 @@ class Epub3Generator extends EpubGenerator {
 		$content .= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
 			     </manifest>
 			     <spine toc="ncx">';
-		if( $book->cover != '' ) {
+		if ( $book->cover != '' ) {
 			$content .= '<itemref idref="cover" linear="no" />';
 		}
 		$content .= '<itemref idref="title" linear="yes" />';
-		if( $book->content ) {
+		if ( $book->content ) {
 			$content .= '<itemref idref="' . $book->title . '" linear="yes" />';
 		}
-		if( !empty( $book->chapters ) ) {
-			foreach( $book->chapters as $chapter ) {
+		if ( !empty( $book->chapters ) ) {
+			foreach ( $book->chapters as $chapter ) {
 				$content .= '<itemref idref="' . $chapter->title . '" linear="yes" />';
-				foreach( $chapter->chapters as $subpage ) {
+				foreach ( $chapter->chapters as $subpage ) {
 					$content .= '<itemref idref="' . $subpage->title . '" linear="yes" />';
 				}
 			}
@@ -132,20 +132,20 @@ class Epub3Generator extends EpubGenerator {
 							 <li id="toc-title">
 								<a href="title.xhtml">' . htmlspecialchars( $this->i18n['title_page'], ENT_QUOTES ) . '</a>
 							 </li>';
-		if( $book->content ) {
+		if ( $book->content ) {
 			$content .= '<li id="toc-' . $book->title . '">
 							 <a href="' . $book->title . '.xhtml">' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</a>
 						  </li>';
 		}
-		if( !empty( $book->chapters ) ) {
-			foreach( $book->chapters as $chapter ) {
-				if( $chapter->name != '' ) {
+		if ( !empty( $book->chapters ) ) {
+			foreach ( $book->chapters as $chapter ) {
+				if ( $chapter->name != '' ) {
 					$content .= '<li id="toc-' . $chapter->title . '">
 								<a href="' . $chapter->title . '.xhtml">' . htmlspecialchars( $chapter->name, ENT_QUOTES ) . '</a>';
-					if( !empty( $chapter->chapters ) ) {
+					if ( !empty( $chapter->chapters ) ) {
 						$content .= '<ol>';
-						foreach( $chapter->chapters as $subpage ) {
-							if( $subpage->name != '' ) {
+						foreach ( $chapter->chapters as $subpage ) {
+							if ( $subpage->name != '' ) {
 								$content .= '<li id="toc-' . $subpage->title . '">
 										      <a href="' . $subpage->title . '.xhtml">' . htmlspecialchars( $subpage->name, ENT_QUOTES ) . '</a>
 									       </li>';

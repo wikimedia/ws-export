@@ -39,15 +39,15 @@ class OpdsBuilder {
 
 	public function buildFromCategory( $categoryTitle ) {
 		$api = new Api( $this->lang );
-		$response = $api->completeQuery( array( 'generator' => 'categorymembers', 'gcmtitle' => $categoryTitle, 'gcmnamespace' => '0', 'prop' => 'info', 'gcmlimit' => '100' ) );
-		if( !array_key_exists( 'query', $response ) ) {
+		$response = $api->completeQuery( [ 'generator' => 'categorymembers', 'gcmtitle' => $categoryTitle, 'gcmnamespace' => '0', 'prop' => 'info', 'gcmlimit' => '100' ] );
+		if ( !array_key_exists( 'query', $response ) ) {
 			throw new HttpException( 'Not Found', 404 );
 		}
 
 		$pages = $response['query']['pages'];
 
-		$titles = array();
-		foreach( $pages as $page ) {
+		$titles = [];
+		foreach ( $pages as $page ) {
 			$titles[] = $page['title'];
 		}
 
@@ -64,14 +64,14 @@ class OpdsBuilder {
 		$feed->setAttribute( 'xml:lang', $this->lang );
 		$this->addNode( $dom, $feed, 'title', $fromPage );
 		$this->addNode( $dom, $feed, 'updated', date( DATE_ATOM ) );
-		if( $fromPage !== '' ) {
+		if ( $fromPage !== '' ) {
 			$wsUrl = wikisourceUrl( $this->lang, $fromPage );
 			$this->addNode( $dom, $feed, 'id', $wsUrl, 'dcterms:URI' );
 			$this->addLink( $dom, $feed, 'alternate', $wsUrl, 'text/html' );
 		}
 
-		foreach( array_chunk( $titles, 20 ) as $chunk ) {
-			foreach( $this->bookProvider->getMulti( $chunk, true ) as $book ) {
+		foreach ( array_chunk( $titles, 20 ) as $chunk ) {
+			foreach ( $this->bookProvider->getMulti( $chunk, true ) as $book ) {
 				$entry = $generator->buildEntry( $book, $dom );
 				$feed->appendChild( $entry );
 			}
@@ -83,13 +83,13 @@ class OpdsBuilder {
 	}
 
 	private function addNode( DOMDocument $dom, DOMElement $head, $name, $value, $type = '' ) {
-		if( $value === '' ) {
+		if ( $value === '' ) {
 			return;
 		}
 
 		$node = $dom->createElement( $name, $value );
 
-		if( $type !== '' ) {
+		if ( $type !== '' ) {
 			$node->setAttribute( 'xsi:type', $type );
 		}
 
@@ -99,7 +99,7 @@ class OpdsBuilder {
 	private function addLink( DOMDocument $dom, DOMElement $head, $rel, $href, $type = '' ) {
 		$node = $dom->createElement( 'link' );
 		$node->setAttribute( 'rel', $rel );
-		if( $type !== '' ) {
+		if ( $type !== '' ) {
 			$node->setAttribute( 'type', $type );
 		}
 		$node->setAttribute( 'href', $href );

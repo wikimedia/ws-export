@@ -15,7 +15,7 @@ class Refresh {
 
 	public function refresh() {
 		global $wsexportConfig;
-		if( @mkdir( $wsexportConfig['tempPath'] . '/' . $this->api->lang ) ) {
+		if ( @mkdir( $wsexportConfig['tempPath'] . '/' . $this->api->lang ) ) {
 		}
 
 		$this->getI18n();
@@ -30,10 +30,10 @@ class Refresh {
 		try {
 			$response = $this->api->get( 'http://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain' );
 			$temp = parse_ini_string( $response );
-			if( $ini != false ) {
+			if ( $ini != false ) {
 				$ini = array_merge( $ini, $temp );
 			}
-		} catch( Exception $e ) {
+		} catch ( Exception $e ) {
 		}
 		$this->setTempFileContent( 'i18n.sphp', serialize( $ini ) );
 	}
@@ -43,7 +43,7 @@ class Refresh {
 		$content = file_get_contents( $wsexportConfig['basePath'] . '/book/mediawiki.css' );
 		try {
 			$content .= "\n" . $this->api->get( 'http://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css' );
-		} catch( Exception $e ) {
+		} catch ( Exception $e ) {
 		}
 		$this->setTempFileContent( 'epub.css', $content );
 	}
@@ -51,15 +51,15 @@ class Refresh {
 	protected function getAboutXhtmlWikisource() {
 		try {
 			$content = $this->api->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
-		} catch( Exception $e ) {
+		} catch ( Exception $e ) {
 			try {
 				$oldWikisourceApi = new Api( '' );
 				$content = $oldWikisourceApi->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
-			} catch( Exception $e ) {
+			} catch ( Exception $e ) {
 				$content = '';
 			}
 		}
-		if( $content !== '' ) {
+		if ( $content !== '' ) {
 			$document = new DOMDocument( '1.0', 'UTF-8' );
 			$document->loadXML( $content );
 			$parser = new PageParser( $document );
@@ -69,13 +69,13 @@ class Refresh {
 	}
 
 	protected function getNamespacesList() {
-		$namespaces = array();
-		$response = $this->api->query( array( 'meta' => 'siteinfo', 'siprop' => 'namespaces' ) );
-		foreach( $response['query']['namespaces'] as $namespace ) {
-			if( isset( $namespace['*'] ) && $namespace['*'] ) {
+		$namespaces = [];
+		$response = $this->api->query( [ 'meta' => 'siteinfo', 'siprop' => 'namespaces' ] );
+		foreach ( $response['query']['namespaces'] as $namespace ) {
+			if ( isset( $namespace['*'] ) && $namespace['*'] ) {
 				$namespaces[] = $namespace['*'];
 			}
-			if( isset( $namespace['canonical'] ) && $namespace['canonical'] ) {
+			if ( isset( $namespace['canonical'] ) && $namespace['canonical'] ) {
 				$namespaces[] = $namespace['canonical'];
 			}
 		}

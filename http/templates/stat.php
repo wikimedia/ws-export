@@ -5,7 +5,7 @@
 	<tr>
 		<th scope="col">Lang</th>
 		<?php
-		foreach($total as $format => $value) {
+		foreach ( $total as $format => $value ) {
 			echo '<th scope="col">' . $format . '</th>';
 		}
 		?>
@@ -13,10 +13,10 @@
 	</thead>
 	<tbody>
 	<?php
-	foreach( $val as $lang => $temp ) {
+	foreach ( $val as $lang => $temp ) {
 		echo '<tr><th scope="row">' . $lang . '</th>';
-		foreach($total as $format => $value) {
-			echo '<td>' . (array_key_exists($format, $temp) ? $temp[$format] : 0) . '</td>';
+		foreach ( $total as $format => $value ) {
+			echo '<td>' . ( array_key_exists( $format, $temp ) ? $temp[$format] : 0 ) . '</td>';
 		}
 		echo "</tr>\n";
 	} ?>
@@ -25,7 +25,7 @@
 	<tr>
 		<th scope="row">Total</th>
 		<?php
-		foreach($total as $format => $value) {
+		foreach ( $total as $format => $value ) {
 			echo '<td>' . $value . '</td>';
 		}
 		?>
@@ -46,4 +46,4 @@
 	<button class="btn" type="btn btn-default">Go</button>
 </form>
 <?php include 'footer.php';
-exit(); ?>
+exit();

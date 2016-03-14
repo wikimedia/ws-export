@@ -13,7 +13,7 @@ abstract class EpubGenerator implements FormatGenerator {
 	/**
 	 * array key/value that contain translated strings
 	 */
-	protected $i18n = array();
+	protected $i18n = [];
 
 	/**
 	 * return the extension of the generated file
@@ -34,7 +34,7 @@ abstract class EpubGenerator implements FormatGenerator {
 	/**
 	 * @return integer ePub version
 	 */
-	protected abstract function getVersion();
+	abstract protected function getVersion();
 
 	/**
 	 * create the file
@@ -47,40 +47,40 @@ abstract class EpubGenerator implements FormatGenerator {
 		$this->i18n = getI18n( $book->lang );
 		setLocale( LC_TIME, $book->lang . '_' . strtoupper( $book->lang ) . '.utf8' );
 		$wsUrl = wikisourceUrl( $book->lang, $book->title );
-		$cleaner = new BookCleanerEpub($this->getVersion());
+		$cleaner = new BookCleanerEpub( $this->getVersion() );
 		$cleaner->clean( $book, wikisourceUrl( $book->lang ) );
 		$fileName = buildTemporaryFileName( $book->title, 'epub' );
 		$zip = $this->createZipFile( $fileName );
 		$zip->addFromString( 'META-INF/container.xml', $this->getXmlContainer() );
 		$zip->addFromString( 'OPS/content.opf', $this->getOpfContent( $book, $wsUrl ) );
 		$zip->addFromString( 'OPS/toc.ncx', $this->getNcxToc( $book, $wsUrl ) );
-		if( $book->cover != '' ) {
+		if ( $book->cover != '' ) {
 			$zip->addFromString( 'OPS/cover.xhtml', $this->getXhtmlCover( $book ) );
 		}
 		$zip->addFromString( 'OPS/title.xhtml', $this->getXhtmlTitle( $book ) );
 		$zip->addFromString( 'OPS/about.xhtml', $this->getXhtmlAbout( $book, $wsUrl ) );
-		$dir = dirname( __FILE__ );
+		$dir = __DIR__;
 		$zip->addFile( $dir . '/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png' );
 
 		$font = FontProvider::getData( $book->options['fonts'] );
-		if( $font !== null ) {
-			foreach( $font['otf'] as $name => $path ) {
+		if ( $font !== null ) {
+			foreach ( $font['otf'] as $name => $path ) {
 				$zip->addFile( $dir . '/fonts/' . $font['name'] . '/' . $path, 'OPS/fonts/' . $font['name'] . $name . '.otf' );
 			}
 		}
 
-		if( $book->content ) {
+		if ( $book->content ) {
 			$zip->addFromString( 'OPS/' . $book->title . '.xhtml', $book->content->saveXML() );
 		}
-		if( !empty( $book->chapters ) ) {
-			foreach( $book->chapters as $chapter ) {
+		if ( !empty( $book->chapters ) ) {
+			foreach ( $book->chapters as $chapter ) {
 				$zip->addFromString( 'OPS/' . $chapter->title . '.xhtml', $chapter->content->saveXML() );
-				foreach( $chapter->chapters as $subpage ) {
+				foreach ( $chapter->chapters as $subpage ) {
 					$zip->addFromString( 'OPS/' . $subpage->title . '.xhtml', $subpage->content->saveXML() );
 				}
 			}
 		}
-		foreach( $book->pictures as $picture ) {
+		foreach ( $book->pictures as $picture ) {
 			$zip->addFromString( 'OPS/images/' . $picture->title, $picture->content );
 		}
 		$zip->addFromString( 'OPS/main.css', $css );
@@ -94,14 +94,14 @@ abstract class EpubGenerator implements FormatGenerator {
 	/**
 	 * add extra content to the file
 	 */
-	protected abstract function addContent( Book $book, ZipArchive $zip );
+	abstract protected function addContent( Book $book, ZipArchive $zip );
 
 	/**
 	 * return the OPF descrition file
 	 * @var $book Book
 	 * @var $wsUrl string URL to the main page in Wikisource
 	 */
-	protected abstract function getOpfContent( Book $book, $wsUrl );
+	abstract protected function getOpfContent( Book $book, $wsUrl );
 
 	protected function getXmlContainer() {
 		$content = '<?xml version="1.0" encoding="UTF-8" ?>
@@ -131,22 +131,22 @@ abstract class EpubGenerator implements FormatGenerator {
 						<content src="title.xhtml"/>
 					</navPoint>';
 		$order = 2;
-		if( $book->content ) {
+		if ( $book->content ) {
 			$content .= '<navPoint id="' . $book->title . '" playOrder="' . $order . '">
 						    <navLabel><text>' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</text></navLabel>
 						    <content src="' . $book->title . '.xhtml" />
 					    </navPoint>';
 			$order++;
 		}
-		if( !empty( $book->chapters ) ) {
-			foreach( $book->chapters as $chapter ) {
-				if( $chapter->name != '' ) {
+		if ( !empty( $book->chapters ) ) {
+			foreach ( $book->chapters as $chapter ) {
+				if ( $chapter->name != '' ) {
 					$content .= '<navPoint id="' . $chapter->title . '" playOrder="' . $order . '">
 									    <navLabel><text>' . htmlspecialchars( $chapter->name, ENT_QUOTES ) . '</text></navLabel>
 									    <content src="' . $chapter->title . '.xhtml" />';
 					$order++;
-					foreach( $chapter->chapters as $subpage ) {
-						if( $subpage->name != '' ) {
+					foreach ( $chapter->chapters as $subpage ) {
+						if ( $subpage->name != '' ) {
 							$content .= '<navPoint id="' . $subpage->title . '" playOrder="' . $order . '">
 											    <navLabel><text>' . htmlspecialchars( $subpage->name, ENT_QUOTES ) . '</text></navLabel>
 											    <content src="' . $subpage->title . '.xhtml" />
@@ -179,17 +179,17 @@ abstract class EpubGenerator implements FormatGenerator {
 	}
 
 	protected function getXhtmlTitle( Book $book ) {
-		$footerElements = array();
-		if( $book->publisher != '' ) {
+		$footerElements = [];
+		if ( $book->publisher != '' ) {
 			$footerElements[] = $book->publisher;
 		}
-		if( $book->periodical != '' ) {
+		if ( $book->periodical != '' ) {
 			$footerElements[] = $book->periodical;
 		}
-		if( $book->place != '' ) {
+		if ( $book->place != '' ) {
 			$footerElements[] = $book->place;
 		}
-		if( $book->year != '' ) {
+		if ( $book->year != '' ) {
 			$footerElements[] = $book->year;
 		}
 
@@ -212,15 +212,15 @@ abstract class EpubGenerator implements FormatGenerator {
 					<br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
 					<h5>' . str_replace( '%d', strftime( '%x' ), htmlspecialchars( $this->i18n['exported_from_wikisource_the'], ENT_QUOTES ) ) . '</h5>
 				</div></body>
-			</html>'; //TODO: Use somthing better than strftime
+			</html>'; // TODO: Use somthing better than strftime
 		return $content;
 	}
 
 	protected function getXhtmlAbout( Book $book, $wsUrl ) {
 		$list = '<ul>';
 		$listBot = '<ul>';
-		foreach( $book->credits as $name => $value ) {
-			if( in_array( 'bot', $value['flags'] ) ) {
+		foreach ( $book->credits as $name => $value ) {
+			if ( in_array( 'bot', $value['flags'] ) ) {
 				$listBot .= '<li>' . htmlspecialchars( $name, ENT_QUOTES ) . "</li>\n";
 			} else {
 				$list .= '<li>' . htmlspecialchars( $name, ENT_QUOTES ) . "</li>\n";
@@ -229,7 +229,7 @@ abstract class EpubGenerator implements FormatGenerator {
 		$list .= '</ul>';
 		$listBot .= '</ul>';
 		$about = getTempFile( $book->lang, 'about.xhtml' );
-		if( $about == '' ) {
+		if ( $about == '' ) {
 			$about = getXhtmlFromContent( $book->lang, $list, $this->i18n['about'] );
 		} else {
 			$about = str_replace( '{CONTRIBUTORS}', $list, $about );
@@ -248,10 +248,10 @@ abstract class EpubGenerator implements FormatGenerator {
 	}
 
 	private function createZipFile( $fileName ) {
-		//This is a simple ZIP file with only the uncompressed "mimetype" file with as value "application/epub+zip"
+		// This is a simple ZIP file with only the uncompressed "mimetype" file with as value "application/epub+zip"
 		file_put_contents( $fileName, base64_decode( "UEsDBBQAAAAAAPibYUhvYassFAAAABQAAAAIAAAAbWltZXR5cGVhcHBsaWNhdGlvbi9lcHViK3ppcFBLAQIAABQAAAAAAPibYUhvYassFAAAABQAAAAIAAAAAAAAAAAAIAAAAAAAAABtaW1ldHlwZVBLBQYAAAAAAQABADYAAAA6AAAAAAA=" ) );
 		$zip = new ZipArchive();
-		if( $zip->open( $fileName, ZipArchive::CREATE ) !== true ) {
+		if ( $zip->open( $fileName, ZipArchive::CREATE ) !== true ) {
 			throw new Exception( 'Unnable to open the ZIP file ' . $fileName );
 		}
 		return $zip;
@@ -263,11 +263,11 @@ abstract class EpubGenerator implements FormatGenerator {
  */
 class BookCleanerEpub {
 	protected $book = null;
-	protected $linksList = array();
+	protected $linksList = [];
 	protected $version;
 	protected $baseUrl;
 
-	public function __construct($version) {
+	public function __construct( $version ) {
 		$this->version = $version;
 	}
 
@@ -282,16 +282,16 @@ class BookCleanerEpub {
 		$this->encodeTitles();
 		$this->splitChapters();
 
-		if( $book->content ) {
+		if ( $book->content ) {
 			$xPath = $this->getXPath( $book->content );
 			$this->setHtmlTitle( $xPath, $book->name );
 			$this->cleanHtml( $xPath );
 		}
-		foreach( $this->book->chapters as $chapter ) {
+		foreach ( $this->book->chapters as $chapter ) {
 			$xPath = $this->getXPath( $chapter->content );
 			$this->setHtmlTitle( $xPath, $chapter->name );
 			$this->cleanHtml( $xPath );
-			foreach( $chapter->chapters as $subpage ) {
+			foreach ( $chapter->chapters as $subpage ) {
 				$xPath = $this->getXPath( $subpage->content );
 				$this->setHtmlTitle( $xPath, $subpage->name );
 				$this->cleanHtml( $xPath );
@@ -300,16 +300,16 @@ class BookCleanerEpub {
 	}
 
 	protected function splitChapters() {
-		$chapters = array();
-		if( $this->book->content ) {
+		$chapters = [];
+		if ( $this->book->content ) {
 			$main = $this->splitChapter( $this->book );
 			$this->book->content = $main[0]->content;
-			if( !empty( $main ) ) {
+			if ( !empty( $main ) ) {
 				unset( $main[0] );
 				$chapters = $main;
 			}
 		}
-		foreach( $this->book->chapters as $chapter ) {
+		foreach ( $this->book->chapters as $chapter ) {
 			$chapters = array_merge( $chapters, $this->splitChapter( $chapter ) );
 		}
 		$this->book->chapters = $chapters;
@@ -322,19 +322,19 @@ class BookCleanerEpub {
 	protected function splitChapter( $chapter ) {
 		$partSize = 250000;
 		$length = strlen( $chapter->content->saveXML() );
-		if( $length <= $partSize ) {
-			return array( $chapter );
+		if ( $length <= $partSize ) {
+			return [ $chapter ];
 		}
 
 		$parts = ceil( $length / $partSize );
 		$partSize = ( $length / $parts ) + 2000;
 
-		$pages = array();
+		$pages = [];
 
-		$files = array();
+		$files = [];
 		$domDepth = 0;
-		$domPath = array();
-		$domClonedPath = array();
+		$domPath = [];
+		$domClonedPath = [];
 
 		$curFile = $chapter->content->createDocumentFragment();
 		$files[] = $curFile;
@@ -347,7 +347,7 @@ class BookCleanerEpub {
 			$nodeData = $chapter->content->saveXML( $node );
 			$nodeLen = strlen( $nodeData );
 
-			if( $nodeLen > $partSize && $node->hasChildNodes() ) {
+			if ( $nodeLen > $partSize && $node->hasChildNodes() ) {
 				$domPath[] = $node;
 				$domClonedPath[] = $node->cloneNode( false );
 				$domDepth++;
@@ -360,15 +360,15 @@ class BookCleanerEpub {
 
 			$next_node = $node->nextSibling;
 
-			if( $node != null && $node->nodeName != "#text" ) {
-				if( $curSize > 0 && $curSize + $nodeLen > $partSize ) {
+			if ( $node != null && $node->nodeName != "#text" ) {
+				if ( $curSize > 0 && $curSize + $nodeLen > $partSize ) {
 					$curFile = $chapter->content->createDocumentFragment();
 					$files[] = $curFile;
 					$curParent = $curFile;
-					if( $domDepth > 0 ) {
+					if ( $domDepth > 0 ) {
 						reset( $domPath );
 						reset( $domClonedPath );
-						while( list( $k, $v ) = each( $domClonedPath ) ) {
+						while ( list( $k, $v ) = each( $domClonedPath ) ) {
 							$newParent = $v->cloneNode( false );
 							$curParent->appendChild( $newParent );
 							$curParent = $newParent;
@@ -382,23 +382,23 @@ class BookCleanerEpub {
 			$curSize += $nodeLen;
 
 			$node = $next_node;
-			while( $node == null && $domDepth > 0 ) {
+			while ( $node == null && $domDepth > 0 ) {
 				$domDepth--;
 				$node = end( $domPath )->nextSibling;
 				array_pop( $domPath );
 				array_pop( $domClonedPath );
-				if( $curParent->parentNode ) {
+				if ( $curParent->parentNode ) {
 					$curParent = $curParent->parentNode;
 				}
 			}
-		} while( $node != null );
+		} while ( $node != null );
 
-		foreach( $files as $idx => $file ) {
+		foreach ( $files as $idx => $file ) {
 			$xml = $this->getEmptyDom();
 			$body = $xml->getElementsByTagName( "body" )->item( 0 );
 			$body->appendChild( $xml->importNode( $file, true ) );
 			$page = new Page();
-			if( $idx == 0 ) {
+			if ( $idx == 0 ) {
 				$page->title = $chapter->title;
 				$page->name = $chapter->name;
 			} else {
@@ -414,15 +414,15 @@ class BookCleanerEpub {
 	protected function encodeTitles() {
 		$this->book->title = encodeString( $this->book->title );
 		$this->linksList[] = $this->book->title . '.xhtml';
-		foreach( $this->book->chapters as $chapter ) {
+		foreach ( $this->book->chapters as $chapter ) {
 			$chapter->title = encodeString( $chapter->title );
 			$this->linksList[] = $chapter->title . '.xhtml';
-			foreach( $chapter->chapters as $subpage ) {
+			foreach ( $chapter->chapters as $subpage ) {
 				$subpage->title = encodeString( $subpage->title );
 				$this->linksList[] = $subpage->title . '.xhtml';
 			}
 		}
-		foreach( $this->book->pictures as $picture ) {
+		foreach ( $this->book->pictures as $picture ) {
 			$picture->title = encodeString( $picture->title );
 			$this->linksList[] = $picture->title;
 		}
@@ -456,7 +456,7 @@ class BookCleanerEpub {
 	 * change the picture links
 	 */
 	protected function setHtmlTitle( DOMXPath $xPath, $name ) {
-		foreach( $xPath->document->getElementsByTagName('title') as $titleNode ) {
+		foreach ( $xPath->document->getElementsByTagName( 'title' ) as $titleNode ) {
 			$titleNode->nodeValue = $name;
 		}
 	}
@@ -466,9 +466,9 @@ class BookCleanerEpub {
 	 */
 	protected function setPictureLinks( DOMXPath $xPath ) {
 		$list = $xPath->query( '//img' );
-		foreach( $list as $node ) {
+		foreach ( $list as $node ) {
 			$title = encodeString( $node->getAttribute( 'alt' ) );
-			if( in_array( $title, $this->linksList ) ) {
+			if ( in_array( $title, $this->linksList ) ) {
 				$node->setAttribute( 'src', 'images/' . $title );
 			} else {
 				$node->parentNode->removeChild( $node );
@@ -481,16 +481,16 @@ class BookCleanerEpub {
 	 */
 	protected function setLinks( DOMDocument $dom ) {
 		$list = $dom->getElementsByTagName( 'a' );
-		foreach( $list as $node ) {
+		foreach ( $list as $node ) {
 			$href = $node->getAttribute( 'href' );
 			$title = encodeString( $node->getAttribute( 'title' ) ) . '.xhtml';
-			if( $href[0] == '#' ) {
+			if ( $href[0] == '#' ) {
 				continue;
 			} elseif( in_array( $title, $this->linksList ) ) {
 				$pos = strpos( $href, '#' );
-				if( $pos !== false ) {
+				if ( $pos !== false ) {
 					$anchor = substr( $href, $pos + 1 );
-					if( is_numeric( $anchor ) ) {
+					if ( is_numeric( $anchor ) ) {
 						$title .= '#_' . $anchor;
 					} else {
 						$title .= '#' . $anchor;
@@ -506,7 +506,7 @@ class BookCleanerEpub {
 	}
 
 	protected function addEpubTypeTags( DOMXPath $xPath ) {
-		if($this->version < 3) {
+		if ( $this->version < 3 ) {
 			return;
 		}
 
@@ -516,7 +516,7 @@ class BookCleanerEpub {
 
 	protected function addTypeWithXPath( DOMXPath $xPath, $query, $type ) {
 		$nodes = $xPath->query( $query );
-		foreach( $nodes as $node ) {
+		foreach ( $nodes as $node ) {
 			$node->setAttributeNS( 'http://www.idpf.org/2007/ops', 'epub:type', $type );
 		}
 	}

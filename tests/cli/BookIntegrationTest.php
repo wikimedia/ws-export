@@ -64,8 +64,8 @@ class BookIntegrationTest extends \PHPUnit_Framework_TestCase {
 		}
 		$jsonOut = tempnam( sys_get_temp_dir(), 'results-' . $file . '.json' );
 		$expandedEpub = $this->expandEpub( $file );
-		$command = 'java -jar ' . $this->epubCheckJar . ' --quiet --mode exp --json ' .
-			$jsonOut . ' ' . $expandedEpub . ' 2>&1';
+		$command = 'java -jar ' . escapeshellarg( $this->epubCheckJar ) . ' --quiet --mode exp --json ' .
+			escapeshellarg( $jsonOut ) . ' ' . escapeshellarg( $expandedEpub ) . ' 2>&1';
 
 		exec( $command, $output, $exitCode );
 

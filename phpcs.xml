@@ -7,6 +7,9 @@
 	<rule ref="MediaWiki.NamingConventions.ValidGlobalName.wgPrefix">
 		<severity>0</severity>
 	</rule>
+	<rule ref="Generic.Files.LineLength.TooLong">
+		<severity>0</severity>
+	</rule>
 	<file>.</file>
 	<exclude-pattern>vendor/</exclude-pattern>
 </ruleset>

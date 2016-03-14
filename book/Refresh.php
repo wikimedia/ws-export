@@ -14,8 +14,8 @@ class Refresh {
 	}
 
 	public function refresh() {
-		global $wsexportConfig;
-		if ( @mkdir( $wsexportConfig['tempPath'] . '/' . $this->api->lang ) ) {
+		if ( !is_dir( $this->getTempFileName( '' ) ) ) {
+			mkdir( $this->getTempFileName( '' ) );
 		}
 
 		$this->getI18n();

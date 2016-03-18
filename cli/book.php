@@ -5,7 +5,7 @@ $basePath = realpath( __DIR__ . '/..' );
 global $wsexportConfig;
 
 $wsexportConfig = [
-	'basePath' => $basePath, 'stat' => true, 'tempPath' => sys_get_temp_dir()
+	'basePath' => $basePath, 'stat' => true, 'tempPath' => sys_get_temp_dir(), 'debug' => false
 ];
 
 include_once $basePath . '/book/init.php';
@@ -56,6 +56,7 @@ function parseCommandLine() {
 				break;
 			case 'debug':
 			case 'd':
+				$wsexportConfig['debug'] = true;
 				error_reporting( E_STRICT | E_ALL );
 				break;
 			case 'nocredits':

@@ -8,10 +8,14 @@
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * a base class for communications with Wikisource
@@ -48,11 +52,8 @@ class Api {
 		} else {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}
-
 		if ( $client === null ) {
-			$client = new Client( [
-				'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ]
-			] );
+			$client = static::createClient( ToolLogger::get( __CLASS__ ) );
 		}
 		$this->client = $client;
 	}
@@ -217,5 +218,14 @@ class Api {
 		$replace = [ '!', '$', '(', ')', '*', ',', '-', '.', '/', ':', ';', '@' ];
 
 		return str_replace( $search, $replace, urlencode( str_replace( ' ', '_', $url ) ) );
+	}
+
+	private static function createClient( LoggerInterface $logger ) {
+		$handler = HandlerStack::create();
+		$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
+		return new Client( [
+			'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ],
+			'handler' => $handler
+		] );
 	}
 }

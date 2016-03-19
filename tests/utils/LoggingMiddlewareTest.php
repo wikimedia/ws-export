@@ -9,6 +9,11 @@ use Monolog\Logger;
 use Monolog\Handler\TestHandler;
 
 class LoggingMiddlewareTest extends \PHPUnit_Framework_TestCase {
+	/** @before */
+	public function before() {
+		date_default_timezone_set( 'UTC' );
+	}
+
 	public function testRequestGetsForwardedAndLogged() {
 		$testHandler = new TestHandler();
 		$logger = new Logger( 'test', [ $testHandler ] );

@@ -108,7 +108,7 @@ class BookProvider {
 		$namespaces = $this->getNamespaces();
 		if ( !$isMetadata ) {
 			if ( !$parser->metadataIsSet( 'ws-noinclude' ) ) {
-				$book->content = $parser->getContent();
+				$book->content = $parser->getContent( true );
 				if ( $this->options['images'] ) {
 					$pictures = array_merge( $pictures, $parser->getPicturesList() );
 				}
@@ -122,7 +122,7 @@ class BookProvider {
 					continue;
 				}
 				$pageTitles = array_merge( $pageTitles, $parser->getPagesList() );
-				$chapter->content = $parser->getContent();
+				$chapter->content = $parser->getContent( false );
 				if ( $this->options['images'] ) {
 					$pictures = array_merge( $pictures, $parser->getPicturesList() );
 				}
@@ -136,7 +136,7 @@ class BookProvider {
 							continue;
 						}
 						$pageTitles = array_merge( $pageTitles, $parser->getPagesList() );
-						$subpage->content = $parser->getContent();
+						$subpage->content = $parser->getContent( false );
 						if ( $this->options['images'] ) {
 							$pictures = array_merge( $pictures, $parser->getPicturesList() );
 						}
@@ -559,8 +559,11 @@ class PageParser {
 	 * return the content cleaned : This action must be done after getting metadata that can be in deleted nodes
 	 * @return DOMDocument The page
 	 */
-	public function getContent() {
+	public function getContent( $isMainPage ) {
 		$this->removeNodesWithXpath( '//*[contains(@class,"ws-noexport")]' );
+		if ( !$isMainPage ) {
+			$this->removeNodesWithXpath( '//*[contains(@class,"ws-noexport-if-subpage")]' );
+		}
 		$this->removeNodesWithXpath( '//*[@id="toc"]' );
 		$this->removeNodesWithXpath( '//span[@class="editsection" or @class="mw-editsection"]' );
 		$this->removeNodesWithXpath( '//a[@class="mw-headline-anchor"]' );

@@ -63,7 +63,7 @@ class Refresh {
 			$document = new DOMDocument( '1.0', 'UTF-8' );
 			$document->loadXML( $content );
 			$parser = new PageParser( $document );
-			$document = $parser->getContent();
+			$document = $parser->getContent( true );
 			$this->setTempFileContent( 'about.xhtml', str_replace( 'href="//', 'href="http://', $document->saveXML() ) );
 		}
 	}

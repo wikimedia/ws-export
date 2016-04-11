@@ -195,7 +195,7 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 	}
 
 	public function reportAsWarning( $test, PHPUnit_Framework_TestResult $listener ) {
-		if( method_exists( $listener, 'addWarning' ) ) { //TODO: remove when we will drop PHP 5.5 support
+		if ( method_exists( $listener, 'addWarning' ) ) { // TODO: remove when we will drop PHP 5.5 support
 			$listener->addWarning( $test, new PHPUnit_Framework_Warning( $this->toString() ), 0 );
 		}
 	}

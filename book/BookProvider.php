@@ -562,7 +562,7 @@ class PageParser {
 	public function getContent( $isMainPage ) {
 		$this->removeNodesWithXpath( '//*[contains(@class,"ws-noexport")]' );
 		if ( !$isMainPage ) {
-			$this->removeNodesWithXpath( '//*[contains(@class,"ws-noexport-if-subpage")]' );
+			$this->removeNodesWithXpath( '//*[contains(@class,"ws-if-subpage-noexport")]' );
 		}
 		$this->removeNodesWithXpath( '//*[@id="toc"]' );
 		$this->removeNodesWithXpath( '//span[@class="editsection" or @class="mw-editsection"]' );

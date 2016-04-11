@@ -211,7 +211,7 @@ class BookProvider {
 			}, $pictures ),
 			[
 				'fulfilled' => function( Response $response, $index ) use ( $pictures ) {
-					$pictures[$index]->content = $response->getBody();
+					$pictures[$index]->content = $response->getBody()->getContents();
 					$pictures[$index]->mimetype = getMimeType( $pictures[$index]->content );
 				}
 			]

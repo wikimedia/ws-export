@@ -2,10 +2,6 @@
 
 require_once __DIR__ . '/../../cli/book.php';
 
-use PHPUnit\Framework\Warning;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\SelfDescribing;
-
 class BookIntegrationTest extends \PHPUnit_Framework_TestCase {
 	private $epubCheckJar = null;
 	private $testResult = null;
@@ -69,6 +65,7 @@ class BookIntegrationTest extends \PHPUnit_Framework_TestCase {
 
 		exec( $command, $output, $exitCode );
 
+		/** @var EpubCheckResult $checkResult */
 		foreach ( $this->parseResults( $jsonOut, $expandedEpub ) as $checkResult ) {
 			$checkResult->reportAsWarning( $this, $this->testResult );
 		}
@@ -159,7 +156,13 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 	private $severity;
 	private $message;
 
-	function __construct( $severity, $message, $locations, $additionalLocations ) {
+	/**
+	 * @param string $severity
+	 * @param string $message
+	 * @param Location[] $locations
+	 * @param int $additionalLocations
+	 */
+	function __construct( $severity, $message, array $locations, $additionalLocations ) {
 		$this->message = $message;
 		$this->severity = $severity;
 		$this->locations = $locations;
@@ -167,8 +170,8 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 	}
 
 	public function toString() {
-		$allLocations = "\n\n\t" . join( "\n\t", array_map( function( $l ) { return $l->toString();
-
+		$allLocations = "\n\n\t" . join( "\n\t", array_map( function( Location $l ) {
+			return $l->toString();
 	 }, $this->locations ) );
 		if ( $this->additionalLocations > 0 ) {
 			$allLocations .= "\n\t + " . $this->additionalLocations . ' other locations';
@@ -176,7 +179,7 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 		return $this->message . $allLocations;
 	}
 
-	public function report( $test, $listener ) {
+	public function report( $test, PHPUnit_Framework_TestResult $listener ) {
 		switch ( $this->severity ) {
 			case "ERROR":
 				$this->reportAsError( $test, $listener );
@@ -187,11 +190,13 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 		}
 	}
 
-	public function reportAsError( $test, $listener ) {
+	public function reportAsError( $test, PHPUnit_Framework_TestResult $listener ) {
 		$listener->addError( $test, new PHPUnit_Framework_AssertionFailedError( $this->toString() ), 0 );
 	}
 
-	public function reportAsWarning( $test, $listener ) {
-		$listener->addWarning( $test, new PHPUnit_Framework_Warning( $this->toString() ), 0 );
+	public function reportAsWarning( $test, PHPUnit_Framework_TestResult $listener ) {
+		if( method_exists( $listener, 'addWarning' ) ) { //TODO: remove when we will drop PHP 5.5 support
+			$listener->addWarning( $test, new PHPUnit_Framework_Warning( $this->toString() ), 0 );
+		}
 	}
 }

@@ -1,13 +1,14 @@
+language: php
+php:
+  - '5.5'
+  - '7.0'
+  - hhvm
 
 sudo: required
-dist: trusty
 
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq --force-yes calibre-bin default-jre
-  - phpenv install 5.6.13
-  - phpenv global 5.6.13
-  - php --version
+  - sudo apt-get update -q
+  - sudo apt-get install calibre-bin default-jre -y
 
 install:
   - make install

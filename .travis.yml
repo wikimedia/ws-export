@@ -10,10 +10,9 @@ before_install:
   - php --version
 
 install:
-  - curl -sS https://getcomposer.org/installer | php
-  - php composer.phar install
+  - make install
 
 script:
   - make test
-  - php composer.phar test
+  - make composer-test
   - make integration-test

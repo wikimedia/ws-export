@@ -19,17 +19,17 @@ class ConvertGenerator implements FormatGenerator {
 		'pdf-a4' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--paper-size a4 --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --preserve-cover-aspect-ratio'
+			'parameters' => '--paper-size a4 --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'pdf-a5' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--paper-size a5 --margin-bottom 32 --margin-top 40 --margin-left 24 --margin-right 24 --preserve-cover-aspect-ratio'
+			'parameters' => '--paper-size a5 --margin-bottom 32 --margin-top 40 --margin-left 24 --margin-right 24 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'pdf-letter' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--paper-size letter --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --preserve-cover-aspect-ratio'
+			'parameters' => '--paper-size letter --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'rtf' => [
 			'extension' => 'rtf',

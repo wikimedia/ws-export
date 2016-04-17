@@ -7,7 +7,7 @@ class PageParserTest extends PHPUnit_Framework_TestCase {
 
 	/** @before */
 	public function before() {
-		$this->pageParser = $this->parseFile(__DIR__ . '/fixtures/Tales_of_Unrest/Navigation.html');
+		$this->pageParser = $this->parseFile( __DIR__ . '/fixtures/Tales_of_Unrest/Navigation.html' );
 	}
 
 	public function testGetChaptersList() {

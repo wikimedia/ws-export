@@ -17,7 +17,9 @@ before_install:
 install:
   - make install
 
+before_script:
+  - make composer-test
+
 script:
   - make test
-  - make composer-test
   - make integration-test

@@ -27,9 +27,20 @@ class PageParserTest extends PHPUnit_Framework_TestCase {
 		$this->assertArrayHasKey( '48px-PD-icon.svg.png', $pictureList );
 	}
 
-	public function testGetPagesList() {
+	public function testGetPagesListEmpty() {
 		$pagesList = $this->pageParser->getPagesList();
 		$this->assertCount( 0, $pagesList );
+	}
+
+	public function testGetPagesList() {
+		$parser = $this->parseFile( __DIR__ . '/fixtures/Pacotilha_poetica/Se_namora_por_gosto_ou_por_precisão.html' );
+		$pagesList = $parser->getPagesList();
+		$this->assertEquals( [
+			'Página:Pacotilha_poetica.pdf/10',
+			'Página:Pacotilha_poetica.pdf/11',
+			'Página:Pacotilha_poetica.pdf/12',
+			'Página:Pacotilha_poetica.pdf/13'
+		], $pagesList );
 	}
 
 	public function testMetadataIsSetReturnsTrueIfSet() {

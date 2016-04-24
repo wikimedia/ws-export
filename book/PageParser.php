@@ -151,7 +151,7 @@ class PageParser {
 		$list = $this->xPath->query( '//*[contains(@class,"ws-pagenum")]' );
 		/** @var DOMElement $link */
 		foreach ( $list as $link ) {
-			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
+			$title = str_replace( ' ', '_', urldecode( $link->getAttribute( 'title' ) ) );
 			if ( $title ) {
 				$pages[] = $title;
 			}

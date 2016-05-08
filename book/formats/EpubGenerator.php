@@ -45,7 +45,7 @@ abstract class EpubGenerator implements FormatGenerator {
 		$oldBookTitle = $book->title;
 		$css = $this->getCss( $book );
 		$this->i18n = getI18n( $book->lang );
-		setLocale( LC_TIME, $book->lang . '_' . strtoupper( $book->lang ) . '.utf8' );
+		setlocale( LC_TIME, $book->lang . '_' . strtoupper( $book->lang ) . '.utf8' );
 		$wsUrl = wikisourceUrl( $book->lang, $book->title );
 		$cleaner = new BookCleanerEpub( $this->getVersion() );
 		$cleaner->clean( $book, wikisourceUrl( $book->lang ) );
@@ -484,7 +484,7 @@ class BookCleanerEpub {
 			$title = encodeString( $node->getAttribute( 'title' ) ) . '.xhtml';
 			if ( $href[0] == '#' ) {
 				continue;
-			} elseif( in_array( $title, $this->linksList ) ) {
+			} elseif ( in_array( $title, $this->linksList ) ) {
 				$pos = strpos( $href, '#' );
 				if ( $pos !== false ) {
 					$anchor = substr( $href, $pos + 1 );
@@ -495,9 +495,9 @@ class BookCleanerEpub {
 					}
 				}
 				$node->setAttribute( 'href', $title );
-			} elseif( substr( $href, 0, 2 ) === '//' ) {
+			} elseif ( substr( $href, 0, 2 ) === '//' ) {
 				$node->setAttribute( 'href', 'http:' . $href );
-			} elseif( $href[0] === '/' ) {
+			} elseif ( $href[0] === '/' ) {
 				$node->setAttribute( 'href', $this->baseUrl . $href );
 			}
 		}

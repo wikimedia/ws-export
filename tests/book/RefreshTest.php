@@ -12,7 +12,7 @@ class RefreshTest extends \PHPUnit_Framework_TestCase {
 
 		$i18n = unserialize( getTempFile( 'en', 'i18n.sphp' ) );
 		$this->assertInternalType( 'array', $i18n );
-		$this->assertEquals( 'Test-Title', $i18n['title_page'] );
+		$this->assertEquals( 'Test-Title', $i18n[ 'title_page' ] );
 	}
 
 	public function testRefreshUpdatesEpubCssWikisource() {
@@ -33,7 +33,7 @@ class RefreshTest extends \PHPUnit_Framework_TestCase {
 		$this->refresh( 'en' );
 
 		$namespaces = unserialize( getTempFile( 'en', 'namespaces.sphp' ) );
-		$this->assertEquals( ['0' => 'test'], $namespaces );
+		$this->assertEquals( [ '0' => 'test' ], $namespaces );
 	}
 
 	private function refresh( $lang ) {
@@ -43,7 +43,7 @@ class RefreshTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function mockClient( $responses ) {
-		return new Client( ['handler' => HandlerStack::create( new MockHandler( $responses ) )] );
+		return new Client( [ 'handler' => HandlerStack::create( new MockHandler( $responses ) ) ] );
 	}
 
 	private function defaultResponses() {
@@ -51,25 +51,25 @@ class RefreshTest extends \PHPUnit_Framework_TestCase {
 			$this->mockI18NResponse( 'title_page = "Test-Title"' ),
 			$this->mockCssWikisourceResponse( '#TEST-CSS' ),
 			$this->mockAboutWikisourceResponse( 'Test-About-Title', 'Test-About-Content' ),
-			$this->mockNamespacesListResponse( ['*' => 'test'] )
+			$this->mockNamespacesListResponse( [ '*' => 'test' ] )
 		];
 	}
 
 	private function mockI18NResponse( $content ) {
-		return new Response( 200, ['Content' => 'text/x-wiki'], $content );
+		return new Response( 200, [ 'Content' => 'text/x-wiki' ], $content );
 	}
 
 	private function mockCssWikisourceResponse( $content ) {
-		return new Response( 200, ['Content' => 'text/css'], $content );
+		return new Response( 200, [ 'Content' => 'text/css' ], $content );
 	}
 
 	private function mockAboutWikisourceResponse( $title, $content ) {
-		return new Response( 200, ['Content' => 'application/json'], json_encode( [
+		return new Response( 200, [ 'Content' => 'application/json' ], json_encode( [
 			'query' => [
 				'pages' => [
 					[
 						'title' => $title,
-						'revisions' => [ ['*' => $content] ]
+						'revisions' => [ [ '*' => $content ] ]
 					],
 				]
 			]
@@ -77,8 +77,8 @@ class RefreshTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function mockNamespacesListResponse( $namespaces ) {
-		return new Response( 200, ['Content' => 'application/json'],
-			json_encode( ['query' => ['namespaces' => [$namespaces]]] )
+		return new Response( 200, [ 'Content' => 'application/json' ],
+			json_encode( [ 'query' => [ 'namespaces' => [ $namespaces ] ] ] )
 		 );
 	}
 }

@@ -263,9 +263,9 @@ class BookProvider {
 			}
 			if ( strstr( $picture->url, '/commons/' ) ) {
 				$picture->url = str_replace( 'commons/', 'commons/thumb/', $picture->url ) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
-			} elseif( strstr( $picture->url, '/wikisource/' . $lang ) ) {
+			} elseif ( strstr( $picture->url, '/wikisource/' . $lang ) ) {
 				$picture->url = str_replace( 'wikisource/' . $lang, 'wikisource/' . $lang . '/thumb/', $picture->url ) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
-			} elseif( strstr( $picture->url, '/sources/' ) ) {
+			} elseif ( strstr( $picture->url, '/sources/' ) ) {
 				$picture->url = str_replace( 'sources/', 'sources/thumb/', $picture->url ) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
 			} else {
 				return new Picture();

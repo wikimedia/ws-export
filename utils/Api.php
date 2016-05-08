@@ -9,11 +9,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
@@ -43,10 +41,10 @@ class Api {
 
 		if ( $domainName != '' ) {
 			$this->domainName = $domainName;
-		} elseif( $this->lang == 'www' || $this->lang == '' ) {
+		} elseif ( $this->lang == 'www' || $this->lang == '' ) {
 			$this->domainName = 'wikisource.org';
 			$this->lang = '';
-		} elseif( $this->lang == 'wl' || $this->lang == 'wikilivres' ) {
+		} elseif ( $this->lang == 'wl' || $this->lang == 'wikilivres' ) {
 			$this->domainName = 'wikilivres.ca';
 			$this->lang = '';
 		} else {
@@ -222,7 +220,7 @@ class Api {
 
 	private static function createClient( LoggerInterface $logger ) {
 		$handler = HandlerStack::create();
-		$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
+		$handler->push( LoggingMiddleWare::forLogger( $logger ), 'logging' );
 		return new Client( [
 			'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ],
 			'handler' => $handler

@@ -7,9 +7,9 @@ use GuzzleHttp\Psr7\Response;
 
 class ApiTest extends \PHPUnit_Framework_TestCase {
 	public function testQueryAsyncParsesJsonResponse() {
-		$api = $this->apiWithJsonResponse( ['result' => 'test'] );
-		$result = $api->queryAsync( ['prop' => 'revisions'] )->wait();
-		$this->assertEquals( ['result' => 'test'], $result );
+		$api = $this->apiWithJsonResponse( [ 'result' => 'test' ] );
+		$result = $api->queryAsync( [ 'prop' => 'revisions' ] )->wait();
+		$this->assertEquals( [ 'result' => 'test' ], $result );
 	}
 
 	/**
@@ -17,7 +17,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase {
 	 * @expectedExceptionMessage invalid JSON: "xxx-invalid": Syntax error
 	 */
 	public function testQueryAsyncThrowsExceptionOnInvalidJsonResponse() {
-		$api = $this->apiWithResponse( 200, ['Content-Type' => 'application/json'], 'xxx-invalid' );
+		$api = $this->apiWithResponse( 200, [ 'Content-Type' => 'application/json' ], 'xxx-invalid' );
 		$api->queryAsync( [] )->wait();
 	}
 
@@ -26,18 +26,18 @@ class ApiTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testQueryAsyncRaisesExceptionOnHttpError() {
 		$api = $this->apiWithResponse( 404, [], 'Not found' );
-		$api->queryAsync( ['prop' => 'revisions'] )->wait();
+		$api->queryAsync( [ 'prop' => 'revisions' ] )->wait();
 	}
 
 	private function apiWithJsonResponse( $data ) {
-		return $this->apiWithResponse( 200, ['Content-Type' => 'application/json'], json_encode( $data ) );
+		return $this->apiWithResponse( 200, [ 'Content-Type' => 'application/json' ], json_encode( $data ) );
 	}
 
 	private function apiWithResponse( $status, $header, $body ) {
-		return new API( 'en', '', $this->mockClient( [new Response( $status, $header, $body )] ) );
+		return new API( 'en', '', $this->mockClient( [ new Response( $status, $header, $body ) ] ) );
 	}
 
 	private function mockClient( $responses ) {
-		return new Client( ['handler' => HandlerStack::create( new MockHandler( $responses ) )] );
+		return new Client( [ 'handler' => HandlerStack::create( new MockHandler( $responses ) ) ] );
 	}
 }

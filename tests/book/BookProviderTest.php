@@ -17,7 +17,7 @@ class BookProviderTest extends PHPUnit_Framework_TestCase {
 			'User A' => [ 'count' => 20, 'flags' => [ 'autoreview', 'editor', 'reviewer', 'sysop' ] ]
 		];
 
-		$api = $this->apiWithResponse( 200, ['Content-Type' => 'application/json'], json_encode( $creditResponse ) );
+		$api = $this->apiWithResponse( 200, [ 'Content-Type' => 'application/json' ], json_encode( $creditResponse ) );
 		$this->bookProvider = new BookProvider( $api, [ 'categories' => false, 'credits' => true ] );
 	}
 
@@ -44,7 +44,7 @@ class BookProviderTest extends PHPUnit_Framework_TestCase {
 	public function testGetCreditsReturnsUsersSortedByEditCountAndsBotsLast() {
 		$book = $this->bookProvider->getMetadata( 'test', false, new DOMDocument() );
 		// sorted by edit count, bots last
-		$this->assertEquals( ['User A', 'User B', 'Bot User'], array_keys( $book->credits ) );
+		$this->assertEquals( [ 'User A', 'User B', 'Bot User' ], array_keys( $book->credits ) );
 	}
 
 	public function testGetCreditsUsesCorrectToolServerURL() {
@@ -58,7 +58,7 @@ class BookProviderTest extends PHPUnit_Framework_TestCase {
 	private function apiWithResponse( $status, $header, $body ) {
 		$responses = [ new Response( $status, $header, $body ) ];
 		$this->mockHandler =  new MockHandler( $responses );
-		$client = new Client( ['handler' => HandlerStack::create( $this->mockHandler ) ] );
+		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
 		return new API( 'en', '', $client );
 	}
 

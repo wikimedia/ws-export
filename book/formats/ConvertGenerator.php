@@ -11,6 +11,11 @@
 class ConvertGenerator implements FormatGenerator {
 
 	private static $CONFIG = [
+		'htmlz' => [
+			'extension' => 'htmlz',
+			'mime' => 'application/zip',
+			'parameters' => ''
+		],
 		'mobi' => [
 			'extension' => 'mobi',
 			'mime' => 'application/x-mobipocket-ebook',

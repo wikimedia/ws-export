@@ -8,6 +8,7 @@ $formats = [
 	'pdf-a4' => 'pdf A4 format (in beta)',
 	'pdf-a5' => 'pdf A5 format (in beta)',
 	'pdf-letter' => 'pdf US letter format (in beta)',
+	'htmlz' => 'htmlz (zip archive with an html file inside, in beta)'
 ];
 ?>
 <form method="get" action="book.php" role="form" class="form-horizontal">

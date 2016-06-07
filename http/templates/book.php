@@ -2,13 +2,13 @@
 $formats = [
 	'epub-3' => 'epub 3',
 	'epub-2' => 'epub 2 (deprecated, may be useful for some very old e-readers)',
+	'htmlz' => 'htmlz (zip archive with an html file inside, in beta)',
 	'mobi' => 'mobi (in beta)',
-	'txt' => 'txt (in beta)',
-	'rtf' => 'rtf (in beta)',
 	'pdf-a4' => 'pdf A4 format (in beta)',
 	'pdf-a5' => 'pdf A5 format (in beta)',
 	'pdf-letter' => 'pdf US letter format (in beta)',
-	'htmlz' => 'htmlz (zip archive with an html file inside, in beta)'
+	'rtf' => 'rtf (in beta)',
+	'txt' => 'txt (in beta)'
 ];
 ?>
 <form method="get" action="book.php" role="form" class="form-horizontal">

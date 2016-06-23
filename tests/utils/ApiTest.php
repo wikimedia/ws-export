@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../test_init.php';
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;

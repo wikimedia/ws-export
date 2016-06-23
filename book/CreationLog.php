@@ -13,9 +13,7 @@ class CreationLog {
 	private $pdo;
 
 	private function __construct() {
-		global $wsexportConfig;
-
-		$this->pdo = new PDO( 'sqlite:' . $wsexportConfig['tempPath'] . '/logs.sqlite' );
+		$this->pdo = new PDO( self::getDbPath() );
 		$this->createTable();
 	}
 
@@ -54,6 +52,15 @@ class CreationLog {
 		}
 
 		return $stats;
+	}
+
+	private static function getDbPath() {
+		global $wsexportConfig;
+		if ( $wsexportConfig['stat'] && $wsexportConfig['tempPath'] ) {
+			return 'sqlite:' . $wsexportConfig['tempPath'] . '/logs.sqlite';
+		} else {
+			return 'sqlite::memory:';
+		}
 	}
 
 	public static function singleton() {

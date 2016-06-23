@@ -85,4 +85,3 @@ $formats = [
 	</fieldset>
 </form>
 <?php include 'footer.html';
-exit();

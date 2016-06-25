@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../book/PageParser.php';
+require_once __DIR__ . '/../test_init.php';
 
 class PageParserTest extends PHPUnit_Framework_TestCase {
 	private $pageParser;

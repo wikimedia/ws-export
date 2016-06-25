@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../test_init.php';
+
 class ToolLoggerTest extends \PHPUnit_Framework_TestCase {
 	public function testLoggerImplementsPsrLoggerInterface() {
 		$logger = ToolLogger::get( 'test' );

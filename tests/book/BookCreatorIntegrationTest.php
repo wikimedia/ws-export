@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../../cli/book.php';
+require_once __DIR__ . '/../test_init.php';
 
-class BookIntegrationTest extends \PHPUnit_Framework_TestCase {
+class BookCreatorIntegrationTest extends \PHPUnit_Framework_TestCase {
 	private $epubCheckJar = null;
 	private $testResult = null;
 
@@ -49,13 +49,15 @@ class BookIntegrationTest extends \PHPUnit_Framework_TestCase {
 	 }
 
 	private function createBook( $title, $language, $format ) {
-		$output = createBook( $title, $language, $format, sys_get_temp_dir(), [ 'credits' => false ] );
-		$this->assertFileExists( $output );
-		return $output;
+		$creator = BookCreator::forLanguage( $language, $format, [ 'credits' => false ] );
+		list( $book, $file ) = $creator->create( $title );
+		$this->assertFileExists( $file );
+		$this->assertNotNull( $book );
+		return $file;
 	}
 
 	private function epubCheck( $file ) {
-		if ( $this->epubCheckJar == null ) {
+		if ( $this->epubCheckJar == null || getenv( 'SKIP_EPUBCHECK' ) ) {
 			return;
 		}
 		$jsonOut = tempnam( sys_get_temp_dir(), 'results-' . $file . '.json' );

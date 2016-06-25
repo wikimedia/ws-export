@@ -45,5 +45,4 @@
 	</div>
 	<button class="btn" type="btn btn-default">Go</button>
 </form>
-<?php include 'footer.php';
-exit();
+<?php include 'footer.html';

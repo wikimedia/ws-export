@@ -3,7 +3,7 @@ $wsexportConfig = [
 	'basePath' => '..', 'tempPath' => __DIR__ . '/../temp', 'stat' => true
 ];
 
-include_once '../book/init.php';
+include_once __DIR__  . '/../book/init.php';
 
 $api = new Api();
 $title = isset( $_GET['page'] ) ? trim( htmlspecialchars( urldecode( $_GET['page'] ) ) ) : '';
@@ -29,39 +29,22 @@ try {
 
 	if ( $title === '' ) {
 		include 'templates/book.php';
-	}
-
-	$provider = new BookProvider( $api, $options );
-	$data = $provider->get( $title );
-	if ( $format == 'epub' ) {
-		$format = 'epub-3';
-	} elseif ( $format == 'odt' ) {
-		$format = 'rtf'; // TODO: bad hack in order to don't break urls
-	}
-
-	if ( $format == 'epub-2' ) {
-		$generator = new Epub2Generator();
-	} elseif ( $format == 'epub-3' ) {
-		$generator = new Epub3Generator();
-	} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
-		$generator = new ConvertGenerator( $format );
-	} elseif ( $format == 'atom' ) {
-		$generator = new AtomGenerator();
 	} else {
-		throw new HttpException( 'Unsupported Media Type', 415 );
-	}
-
-	$file = $generator->create( $data );
-	header( 'X-Robots-Tag: none' );
-	header( 'Content-Description: File Transfer' );
-	header( 'Content-Type: ' . $generator->getMimeType() );
-	header( 'Content-Disposition: attachment; filename="' . $title . '.' . $generator->getExtension() . '"' );
-	header( 'Content-length: ' . filesize( $file ) );
-	readfile( $file );
-	unlink( $file );
-	flush();
-	if ( isset( $wsexportConfig['stat'] ) ) {
-		CreationLog::singleton()->add( $data, $format );
+		$creator = BookCreator::forApi( $api, $format, $options );
+		try {
+			list( $book, $file ) = $creator->create( $title );
+		} catch ( WSExportInvalidArgumentException $exception ) {
+			throw new HttpException( 'Unsupported Media Type', 415 );
+		}
+		header( 'X-Robots-Tag: none' );
+		header( 'Content-Description: File Transfer' );
+		header( 'Content-Type: ' . $creator->getMimeType() );
+		header( 'Content-Disposition: attachment; filename="' . $title . '.' . $creator->getExtension() . '"' );
+		header( 'Content-length: ' . filesize( $file ) );
+		readfile( $file );
+		unlink( $file );
+		flush();
+		CreationLog::singleton()->add( $book, $format );
 	}
 } catch ( Exception $exception ) {
 	if ( $exception instanceof HttpException ) {

@@ -8,7 +8,7 @@ function normalizeFormat( $format ) {
 	return $parts[0];
 }
 
-include_once '../book/init.php';
+include_once __DIR__ . '/../book/init.php';
 
 date_default_timezone_set( 'UTC' );
 $date = getdate();

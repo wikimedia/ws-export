@@ -1,6 +1,6 @@
 <?php
 $wsexportConfig = [
-	'basePath' => '..', 'tempPath' => '../temp'
+	'basePath' => '..', 'tempPath' => '../temp', 'stat' => true
 ];
 
 function normalizeFormat( $format ) {

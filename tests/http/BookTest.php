@@ -37,6 +37,7 @@ class BookTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @runInSeparateProcess
+	 * @group integration
 	 */
 	public function testGetNonExistingTitleDisplaysError() {
 		$_GET['page'] = 'xxx';

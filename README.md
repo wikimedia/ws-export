@@ -5,7 +5,7 @@ What is Wikisource Export?
 
 Wikisource export is a tool for exporting Wikisource page in many formats like
 epub or xhtml. The documentation can be found here:
-http://wikisource.org/wiki/Wikisource:WSexport
+https://wikisource.org/wiki/Wikisource:WSexport
 
 Installation
 ============

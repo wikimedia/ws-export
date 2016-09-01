@@ -58,7 +58,7 @@ class BookProvider {
 	}
 
 	public function getMetadata( $title, $isMetadata, DOMDocument $doc ) {
-		$page_list = [ $title ];
+		$pageList = [ $title ];
 		$parser = new PageParser( $doc );
 		$book = new Book();
 		$book->options = $this->options;
@@ -113,7 +113,7 @@ class BookProvider {
 					$pictures = array_merge( $pictures, $parser->getPicturesList() );
 				}
 			}
-			$chapterTitles = $parser->getFullChaptersList( $title, $page_list, $namespaces );
+			$chapterTitles = $parser->getFullChaptersList( $title, $pageList, $namespaces );
 			$chapters = $this->getPages( $chapterTitles );
 			foreach ( $chapters as $chapter_key => $chapter ) {
 				$parser = new PageParser( $chapter->content );
@@ -126,7 +126,7 @@ class BookProvider {
 				if ( $this->options['images'] ) {
 					$pictures = array_merge( $pictures, $parser->getPicturesList() );
 				}
-				$subpagesTitles = $parser->getChaptersList( $chapter, $page_list, $namespaces );
+				$subpagesTitles = $parser->getChaptersList( $pageList, $namespaces );
 				if ( !empty( $subpagesTitles ) ) {
 					$subpages = $this->getPages( $subpagesTitles );
 					foreach ( $subpages as $subpage_key => $subpage ) {

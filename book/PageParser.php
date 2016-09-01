@@ -44,19 +44,19 @@ class PageParser {
 	 * @return Page[]
 	 * TODO retrive only main namespace pages ?
 	 */
-	public function getChaptersList( $title, $page_list, $namespaces ) {
+	public function getChaptersList( $pageList, $namespaces ) {
 		$list = $this->xPath->query( '//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"image"))]' );
 		$chapters = [];
 		/** @var DOMElement $link */
 		foreach ( $list as $link ) {
 			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
 			$parts = explode( ':', $title );
-			if ( $title != '' && !in_array( $title, $page_list ) && !in_array( $parts[0], $namespaces ) ) {
+			if ( $title != '' && !in_array( $title, $pageList ) && !in_array( $parts[0], $namespaces ) ) {
 				$chapter = new Page();
 				$chapter->title = $title;
 				$chapter->name = $link->nodeValue;
 				$chapters[] = $chapter;
-				$page_list[] = $chapter->title;
+				$pageList[] = $chapter->title;
 			}
 		}
 
@@ -67,20 +67,20 @@ class PageParser {
 	 * return the list of the chapters with the summary if it exist, if not find links to subpages.
 	 * @return Page[]
 	 */
-	public function getFullChaptersList( $title, $page_list, $namespaces ) {
-		$chapters = $this->getChaptersList( $title, $page_list, $namespaces );
+	public function getFullChaptersList( $title, $pageList, $namespaces ) {
+		$chapters = $this->getChaptersList( $pageList, $namespaces );
 		if ( empty( $chapters ) ) {
 			$list = $this->xPath->query( '//a[contains(@href,"' . Api::mediawikiUrlEncode( $title ) . '") and not(contains(@class,"extiw") or contains(@class,"external") or contains(@href,"#") or contains(@href,"action=edit") or contains(@title,"/Texte entier") or contains(@class,"image"))]' );
 			/** @var DOMElement $link */
 			foreach ( $list as $link ) {
 				$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
 				$parts = explode( ':', $title );
-				if ( $title != '' && !in_array( $title, $page_list ) && !in_array( $parts[0], $namespaces ) ) {
+				if ( $title != '' && !in_array( $title, $pageList ) && !in_array( $parts[0], $namespaces ) ) {
 					$chapter = new Page();
 					$chapter->title = $title;
 					$chapter->name = $link->nodeValue;
 					$chapters[] = $chapter;
-					$page_list[] = $chapter->title;
+					$pageList[] = $chapter->title;
 				}
 			}
 		}
@@ -99,6 +99,7 @@ class PageParser {
 		$pictures = [];
 		/** @var DOMElement $node */
 		foreach ( $list as $node ) {
+			/** @var DOMElement $a */
 			$a = $node->getElementsByTagName( 'img' )->item( 0 );
 			$picture = new Picture();
 			$url = $a->getAttribute( 'src' );

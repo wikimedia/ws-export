@@ -211,8 +211,10 @@ class BookProvider {
 			}, $pictures ),
 			[
 				'fulfilled' => function( Response $response, $index ) use ( $pictures ) {
-					$pictures[$index]->content = $response->getBody()->getContents();
-					$pictures[$index]->mimetype = getMimeType( $pictures[$index]->content );
+					$content = $response->getBody()->getContents();
+					$mimeType = getMimeType( $content );
+					$pictures[$index]->mimetype = $mimeType;
+					$pictures[$index]->content = FileCleaner::cleanFile( $content, $mimeType );
 				}
 			]
 		)->wait();

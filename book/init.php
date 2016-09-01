@@ -19,6 +19,7 @@ include_once $basePath . '/book/Picture.php';
 include_once $basePath . '/book/Page.php';
 include_once $basePath . '/book/Book.php';
 include_once $basePath . '/book/PageParser.php';
+include_once $basePath . '/book/FileCleaner.php';
 include_once $basePath . '/book/BookProvider.php';
 include_once $basePath . '/book/GeneratorSelector.php';
 include_once $basePath . '/book/BookCreator.php';

@@ -95,14 +95,31 @@ class PageParser {
 	 * @return array
 	 */
 	public function getPicturesList() {
-		$list = $this->xPath->query( '//a[contains(@class,"image")]' );
 		$pictures = [];
+
+		$list = $this->xPath->query( '//a[not(contains(@class,"image"))]/img | //img[not(parent::a)]' );
+		/** @var DOMElement $img */
+		foreach ( $list as $img ) {
+			$picture = new Picture();
+			$url = $img->getAttribute( 'src' );
+			$segments = explode( '/', $url );
+			$picture->title = urldecode( $segments[count( $segments ) - 1] );
+			$picture->url = $this->resolveProtocolRelativeUrl( $url );
+			if ( strpos( $url, '/svg/' ) !== false ) {
+				$picture->title .= '.svg';
+			}
+			$pictures[$picture->title] = $picture;
+			$img->setAttribute( 'data-title', $picture->title );
+
+		}
+
+		$list = $this->xPath->query( '//a[contains(@class,"image")]' );
 		/** @var DOMElement $node */
 		foreach ( $list as $node ) {
-			/** @var DOMElement $a */
-			$a = $node->getElementsByTagName( 'img' )->item( 0 );
+			/** @var DOMElement $img */
+			$img = $node->getElementsByTagName( 'img' )->item( 0 );
 			$picture = new Picture();
-			$url = $a->getAttribute( 'src' );
+			$url = $img->getAttribute( 'src' );
 			$segments = explode( '/', $url );
 
 			// We need 1st) an unique key for each different image
@@ -118,29 +135,27 @@ class PageParser {
 			// either the 6/62 part is at pos -4/-3 or -3/-2.
 			if ( count( $segments ) >= 4 && is_numeric( "0x" . $segments[count( $segments ) - 4] ) && is_numeric( "0x" . $segments[count( $segments ) - 3] ) ) {
 				$picture->name = $segments[count( $segments ) - 2];
+				$picture->title = $segments[count( $segments ) - 2] . '-' . $segments[count( $segments ) - 1];
 			} else {
 				$picture->name = $segments[count( $segments ) - 1];
+				$picture->title = $segments[count( $segments ) - 1];
 			}
-			$picture->title = urldecode( $url );
-			$picture->url = 'https:' . $url;
+			$picture->url = $this->resolveProtocolRelativeUrl( $url );
 
 			$pictures[$picture->title] = $picture;
-			$a->setAttribute( 'alt', $picture->title );
-			$node->parentNode->replaceChild( $a, $node );
-		}
-		$list = $this->xPath->query( '//a[not(contains(@class,"image"))]/img | //img[not(parent::a)]' );
-		/** @var DOMElement $img */
-		foreach ( $list as $img ) {
-			$picture = new Picture();
-			$url = $img->getAttribute( 'src' );
-			$segments = explode( '/', $url );
-			$picture->title = urldecode( $segments[count( $segments ) - 1] );
-			$picture->url = 'https:' . $url;
-			$pictures[$picture->title] = $picture;
-			$img->setAttribute( 'alt', $picture->title );
+			$img->setAttribute( 'data-title', $picture->title );
+			$node->parentNode->replaceChild( $img, $node );
 		}
 
 		return $pictures;
+	}
+
+	private function resolveProtocolRelativeUrl( $url ) {
+		if ( strpos( $url, '//' ) === 0 ) {
+			return 'https:' . $url;
+		} else {
+			return $url;
+		}
 	}
 
 	/**
@@ -170,6 +185,7 @@ class PageParser {
 		if ( !$isMainPage ) {
 			$this->removeNodesWithXpath( '//*[contains(@class,"ws-if-subpage-noexport")]' );
 		}
+		$this->removeNodesWithXpath( '//*[contains(@class,"mwe-math-mathml-inline")]' ); // TODO: add better MathML support
 		$this->removeNodesWithXpath( '//*[@id="toc"]' );
 		$this->removeNodesWithXpath( '//span[@class="editsection" or @class="mw-editsection"]' );
 		$this->removeNodesWithXpath( '//a[@class="mw-headline-anchor"]' );

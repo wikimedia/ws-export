@@ -262,7 +262,7 @@ abstract class EpubGenerator implements FormatGenerator {
  * Clean and modify book content in order to epub generation
  */
 class BookCleanerEpub {
-	protected $book = null;
+	protected $book;
 	protected $linksList = [];
 	protected $version;
 	protected $baseUrl;
@@ -319,7 +319,7 @@ class BookCleanerEpub {
 	 * Credit for the tricky part of this code: Asbjorn Grandt
 	 * https://github.com/Grandt/PHPePub/blob/master/EPubChapterSplitter.php
 	 */
-	protected function splitChapter( $chapter ) {
+	protected function splitChapter( Page $chapter ) {
 		$partSize = 250000;
 		$length = strlen( $chapter->content->saveXML() );
 		if ( $length <= $partSize ) {
@@ -341,7 +341,7 @@ class BookCleanerEpub {
 		$curParent = $curFile;
 		$curSize = 0;
 
-		$body = $chapter->content->getElementsbytagname( "body" );
+		$body = $chapter->content->getElementsByTagName( "body" );
 		$node = $body->item( 0 )->firstChild;
 		do {
 			$nodeData = $chapter->content->saveXML( $node );
@@ -464,8 +464,9 @@ class BookCleanerEpub {
 	 */
 	protected function setPictureLinks( DOMXPath $xPath ) {
 		$list = $xPath->query( '//img' );
+		/** @var DOMElement $node */
 		foreach ( $list as $node ) {
-			$title = encodeString( $node->getAttribute( 'alt' ) );
+			$title = encodeString( $node->getAttribute( 'data-title' ) );
 			if ( in_array( $title, $this->linksList ) ) {
 				$node->setAttribute( 'src', 'images/' . $title );
 			} else {
@@ -479,6 +480,7 @@ class BookCleanerEpub {
 	 */
 	protected function setLinks( DOMDocument $dom ) {
 		$list = $dom->getElementsByTagName( 'a' );
+		/** @var DOMElement $node */
 		foreach ( $list as $node ) {
 			$href = $node->getAttribute( 'href' );
 			$title = encodeString( $node->getAttribute( 'title' ) ) . '.xhtml';
@@ -514,6 +516,7 @@ class BookCleanerEpub {
 
 	protected function addTypeWithXPath( DOMXPath $xPath, $query, $type ) {
 		$nodes = $xPath->query( $query );
+		/** @var DOMElement $node */
 		foreach ( $nodes as $node ) {
 			$node->setAttributeNS( 'http://www.idpf.org/2007/ops', 'epub:type', $type );
 		}

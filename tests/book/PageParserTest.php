@@ -3,6 +3,9 @@
 require_once __DIR__ . '/../test_init.php';
 
 class PageParserTest extends PHPUnit_Framework_TestCase {
+	/**
+	 * @var PageParser
+	 */
 	private $pageParser;
 
 	/** @before */
@@ -11,7 +14,7 @@ class PageParserTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testGetChaptersList() {
-		$chapterList = $this->pageParser->getChaptersList( 'Tales Of Unrest', [], [] );
+		$chapterList = $this->pageParser->getChaptersList( [], [] );
 		$this->assertCount( 14, $chapterList );
 	}
 

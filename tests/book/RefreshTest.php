@@ -80,7 +80,7 @@ class RefreshTest extends \PHPUnit_Framework_TestCase {
 
 	private function mockNamespacesListResponse( $namespaces ) {
 		return new Response( 200, [ 'Content' => 'application/json' ],
-			json_encode( [ 'query' => [ 'namespaces' => [ $namespaces ] ] ] )
+			json_encode( [ 'query' => [ 'namespaces' => [ $namespaces ], 'namespacealiases' => [] ] ] )
 		 );
 	}
 }

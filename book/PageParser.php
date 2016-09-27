@@ -214,6 +214,7 @@ class PageParser {
 		$this->deprecatedAttributes( 'lang', 'xml:lang', false );
 
 		$this->cleanIds();
+		$this->cleanRedLinks();
 
 		return $this->xPath->document;
 	}
@@ -282,6 +283,19 @@ class PageParser {
 				}
 			}
 			$node->removeAttribute( $name );
+		}
+	}
+
+	private function cleanRedLinks() {
+		$list = $this->xPath->query( '//a[contains(@href,"action=edit")]' );
+		/** @var DOMElement $node */
+		foreach ( $list as $node ) {
+			foreach ( $node->childNodes as $childNode ) {
+				if ( $childNode !== $node ) {
+					$node->parentNode->insertBefore( $childNode, $node );
+				}
+			}
+			$node->parentNode->removeChild( $node );
 		}
 	}
 }

@@ -72,7 +72,6 @@ class FontProvider {
 		if ( isset( $font['otf']['RBI'] ) ) {
 			$css .= '@font-face { font-family: "' . $font['name'] . '"; font-weight: bold; font-style: italic; src: url("' . $basePath . $font['name'] . 'RBI.otf"); }' . "\n";
 		}
-		$css .= 'body { font-family: ' . $font['name'] . ', Arial, serif; }' . "\n\n";
 
 		return $css;
 	}

@@ -77,7 +77,7 @@ class BookProvider {
 		$book->type = $metadataParser->getMetadata( 'ws-type' );
 		$book->name = htmlspecialchars( $metadataParser->getMetadata( 'ws-title' ) );
 		if ( $book->name == '' ) {
-			$book->name = str_replace( '_', ' ', $metadataSrc );
+			$book->name = $this->removeNamespacesFromTitle( str_replace( '_', ' ', $metadataSrc ) );
 		}
 		$book->periodical = htmlspecialchars( $metadataParser->getMetadata( 'ws-periodical' ) );
 		$book->author = htmlspecialchars( $metadataParser->getMetadata( 'ws-author' ) );
@@ -393,5 +393,14 @@ class BookProvider {
 			$bagCount++;
 		}
 		return $result;
+	}
+
+	private function removeNamespacesFromTitle( $title ) {
+		foreach ( $this->getNamespaces() as $namespace ) {
+			if ( strpos( $title, $namespace . ':' ) === 0 ) {
+				return substr( $title, strlen( $namespace ) + 1 );
+			}
+		}
+		return $title;
 	}
 }

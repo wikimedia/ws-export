@@ -70,13 +70,18 @@ class Refresh {
 
 	protected function getNamespacesList() {
 		$namespaces = [];
-		$response = $this->api->query( [ 'meta' => 'siteinfo', 'siprop' => 'namespaces' ] );
+		$response = $this->api->query( [ 'meta' => 'siteinfo', 'siprop' => 'namespaces|namespacealiases' ] );
 		foreach ( $response['query']['namespaces'] as $namespace ) {
-			if ( isset( $namespace['*'] ) && $namespace['*'] ) {
+			if ( array_key_exists( '*', $namespace ) && $namespace['*'] ) {
 				$namespaces[] = $namespace['*'];
 			}
-			if ( isset( $namespace['canonical'] ) && $namespace['canonical'] ) {
+			if ( array_key_exists( 'canonical', $namespace ) && $namespace['canonical'] ) {
 				$namespaces[] = $namespace['canonical'];
+			}
+		}
+		foreach ( $response['query']['namespacealiases'] as $namespaceAlias ) {
+			if ( array_key_exists( '*', $namespaceAlias ) ) {
+				$namespaces[] = $namespaceAlias['*'];
 			}
 		}
 		$this->setTempFileContent( 'namespaces.sphp', serialize( $namespaces ) );

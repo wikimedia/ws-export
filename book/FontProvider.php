@@ -15,11 +15,11 @@ class FontProvider {
 	 */
 	protected static $data = [
 		'freeserif' => [
-			'name' => 'FreeSerif', 'label' => 'Free Serif', 'otf' => [
+			'name' => 'f_s', 'label' => 'Free Serif', 'otf' => [
 				'R' => 'FreeSerif.otf', 'RB' => 'FreeSerifBold.otf', 'RBI' => 'FreeSerifBoldItalic.otf', 'RI' => 'FreeSerifItalic.otf'
 			]
 		], 'linuxlibertine' => [
-			'name' => 'LinuxLibertine', 'label' => 'Linux Libertine', 'otf' => [
+			'name' => 'l_l', 'label' => 'Linux Libertine', 'otf' => [
 				'R' => 'LinLibertine_R.otf', 'RB' => 'LinLibertine_RB.otf', 'RBI' => 'LinLibertine_RBI.otf', 'RI' => 'LinLibertine_RI.otf'
 			]
 		]
@@ -72,7 +72,6 @@ class FontProvider {
 		if ( isset( $font['otf']['RBI'] ) ) {
 			$css .= '@font-face { font-family: "' . $font['name'] . '"; font-weight: bold; font-style: italic; src: url("' . $basePath . $font['name'] . 'RBI.otf"); }' . "\n";
 		}
-		$css .= 'body { font-family: ' . $font['name'] . ', Arial, serif; }' . "\n\n";
 
 		return $css;
 	}

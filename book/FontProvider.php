@@ -15,11 +15,11 @@ class FontProvider {
 	 */
 	protected static $data = [
 		'freeserif' => [
-			'name' => 'f_s', 'label' => 'Free Serif', 'otf' => [
+			'name' => 'wse_FreeSerif', 'label' => 'Free Serif', 'otf' => [
 				'R' => 'FreeSerif.otf', 'RB' => 'FreeSerifBold.otf', 'RBI' => 'FreeSerifBoldItalic.otf', 'RI' => 'FreeSerifItalic.otf'
 			]
 		], 'linuxlibertine' => [
-			'name' => 'l_l', 'label' => 'Linux Libertine', 'otf' => [
+			'name' => 'wse_LinuxLibertine', 'label' => 'Linux Libertine', 'otf' => [
 				'R' => 'LinLibertine_R.otf', 'RB' => 'LinLibertine_RB.otf', 'RBI' => 'LinLibertine_RBI.otf', 'RI' => 'LinLibertine_RI.otf'
 			]
 		]

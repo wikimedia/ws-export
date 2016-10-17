@@ -15,11 +15,11 @@ class FontProvider {
 	 */
 	protected static $data = [
 		'freeserif' => [
-			'name' => 'wse_FreeSerif', 'label' => 'Free Serif', 'otf' => [
+			'name' => 'FreeSerif', 'label' => 'Free Serif', 'css_name' => 'wse_FreeSerif', 'otf' => [
 				'R' => 'FreeSerif.otf', 'RB' => 'FreeSerifBold.otf', 'RBI' => 'FreeSerifBoldItalic.otf', 'RI' => 'FreeSerifItalic.otf'
 			]
 		], 'linuxlibertine' => [
-			'name' => 'wse_LinuxLibertine', 'label' => 'Linux Libertine', 'otf' => [
+			'name' => 'LinuxLibertine', 'label' => 'Linux Libertine', 'css_name' => 'wse_LinuxLibertine', 'otf' => [
 				'R' => 'LinLibertine_R.otf', 'RB' => 'LinLibertine_RB.otf', 'RBI' => 'LinLibertine_RBI.otf', 'RI' => 'LinLibertine_RI.otf'
 			]
 		]
@@ -61,16 +61,16 @@ class FontProvider {
 		$css = '';
 		$font = self::$data[$id];
 		if ( isset( $font['otf']['R'] ) ) {
-			$css .= '@font-face { font-family: "' . $font['name'] . '"; font-weight: normal; font-style: normal; src: url("' . $basePath . $font['name'] . 'R.otf"); }' . "\n";
+			$css .= '@font-face { font-family: "' . $font['css_name'] . '"; font-weight: normal; font-style: normal; src: url("' . $basePath . $font['name'] . 'R.otf"); }' . "\n";
 		}
 		if ( isset( $font['otf']['RB'] ) ) {
-			$css .= '@font-face { font-family: "' . $font['name'] . '"; font-weight: bold; font-style: normal; src: url("' . $basePath . $font['name'] . 'RB.otf"); }' . "\n";
+			$css .= '@font-face { font-family: "' . $font['css_name'] . '"; font-weight: bold; font-style: normal; src: url("' . $basePath . $font['name'] . 'RB.otf"); }' . "\n";
 		}
 		if ( isset( $font['otf']['RI'] ) ) {
-			$css .= '@font-face { font-family: "' . $font['name'] . '"; font-weight: normal; font-style: italic; src: url("' . $basePath . $font['name'] . 'RI.otf"); }' . "\n";
+			$css .= '@font-face { font-family: "' . $font['css_name'] . '"; font-weight: normal; font-style: italic; src: url("' . $basePath . $font['name'] . 'RI.otf"); }' . "\n";
 		}
 		if ( isset( $font['otf']['RBI'] ) ) {
-			$css .= '@font-face { font-family: "' . $font['name'] . '"; font-weight: bold; font-style: italic; src: url("' . $basePath . $font['name'] . 'RBI.otf"); }' . "\n";
+			$css .= '@font-face { font-family: "' . $font['css_name'] . '"; font-weight: bold; font-style: italic; src: url("' . $basePath . $font['name'] . 'RBI.otf"); }' . "\n";
 		}
 
 		return $css;

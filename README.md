@@ -16,13 +16,13 @@ Installation
 
 3. Install dependencies
 
-#### This tool depends on [Composer](http://getcomposer.org/) to install some dependencies. The easiest way to use it is to run `make` from the Wsexport Tool main directory:
+This tool depends on [Composer](http://getcomposer.org/) to install some dependencies. The easiest way to use it is to run `make` from the Wsexport Tool main directory:
 
 ```bash
 make install
 ```
 
-#### Or, to install and run composer manually:
+Or, to install and run composer manually:
 
 ```bash
 curl -sS https://getcomposer.org/installer | php

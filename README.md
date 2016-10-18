@@ -10,18 +10,19 @@ https://wikisource.org/wiki/Wikisource:WSexport
 Installation
 ============
 
-You have to download the files and use it with PHP 5.5 or more.
+1. First you need download the files and use it with PHP 5.5 or more.
 
-You have to create a temp folder in the root of directories.
+2. You should create a temp folder in the root of directories.
 
-This tool depends on [Composer](http://getcomposer.org/) to install some dependencies.
-The easiest way to use it is to run `make` from the Wsexport Tool main directory:
+3. Install dependencies
+
+#### This tool depends on [Composer](http://getcomposer.org/) to install some dependencies. The easiest way to use it is to run `make` from the Wsexport Tool main directory:
 
 ```bash
 make install
 ```
 
-Or, to install and run composer manually:
+#### Or, to install and run composer manually:
 
 ```bash
 curl -sS https://getcomposer.org/installer | php

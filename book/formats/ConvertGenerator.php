@@ -31,6 +31,11 @@ class ConvertGenerator implements FormatGenerator {
 			'mime' => 'application/pdf',
 			'parameters' => '--paper-size a5 --margin-bottom 32 --margin-top 40 --margin-left 24 --margin-right 24 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
+		'pdf-a6' => [
+			'extension' => 'pdf',
+			'mime' => 'application/pdf',
+			'parameters' => '--paper-size a6 --margin-bottom 16 --margin-top 20 --margin-left 12 --margin-right 12 --pdf-page-numbers --preserve-cover-aspect-ratio'
+		],
 		'pdf-letter' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',

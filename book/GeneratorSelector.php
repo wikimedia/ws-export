@@ -12,6 +12,7 @@ class GeneratorSelector {
 		'mobi'		=> 'mobi (in beta)',
 		'pdf-a4'	=> 'pdf A4 format (in beta)',
 		'pdf-a5'	=> 'pdf A5 format (in beta)',
+		'pdf-a6'	=> 'pdf A6 format (in beta)',
 		'pdf-letter'=> 'pdf US letter format (in beta)',
 		'rtf' 		=> 'rtf (in beta)',
 		'txt'		=> 'txt (in beta)'

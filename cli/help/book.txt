@@ -4,7 +4,7 @@ Command line options are:
 
 -l  --lang      Language code.  Required.
 -t  --title     Wikisource page title, with spaces replaced by underscores.  Required.
--f  --format    Valid formats: epub-2, epub-3, mobi, txt, rtf, pdf-a5, pdf-a4, pdf-letter  Default: epub-3
+-f  --format    Valid formats: epub-2, epub-3, mobi, txt, rtf, pdf-a5, pdf-a4, pdf-a6, pdf-letter  Default: epub-3
 -p  --path      Output path.  Optional.  Defaults to the current directory.
 -d  --debug     Verbose debugging output.  Optional.
     --tmpdir    Directory in which to store temporary files.  Optional.

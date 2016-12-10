@@ -47,6 +47,9 @@ class Api {
 		} elseif ( $this->lang == 'wl' || $this->lang == 'wikilivres' ) {
 			$this->domainName = 'wikilivres.ca';
 			$this->lang = '';
+		} elseif ( preg_match('/^([a-z_]{2,})-?wikibooks$/', $this->lang, $m ) ) {
+			$this->domainName = $m[1] . '.wikibooks.org';
+			$this->lang = $m[1];
 		} else {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}

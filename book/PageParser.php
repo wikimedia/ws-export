@@ -45,7 +45,7 @@ class PageParser {
 	 * TODO retrive only main namespace pages ?
 	 */
 	public function getChaptersList( $pageList, $namespaces ) {
-		$list = $this->xPath->query( '//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"image"))]' );
+		$list = $this->xPath->query( '//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"internal") or contains(@class,"image"))]' );
 		$chapters = [];
 		/** @var DOMElement $link */
 		foreach ( $list as $link ) {
@@ -70,7 +70,7 @@ class PageParser {
 	public function getFullChaptersList( $title, $pageList, $namespaces ) {
 		$chapters = $this->getChaptersList( $pageList, $namespaces );
 		if ( empty( $chapters ) ) {
-			$list = $this->xPath->query( '//a[contains(@href,"' . Api::mediawikiUrlEncode( $title ) . '") and not(contains(@class,"extiw") or contains(@class,"external") or contains(@href,"#") or contains(@href,"action=edit") or contains(@title,"/Texte entier") or contains(@class,"image"))]' );
+			$list = $this->xPath->query( '//a[contains(@href,"' . Api::mediawikiUrlEncode( $title ) . '") and not(contains(@class,"extiw") or contains(@class,"external") or contains(@href,"#") or contains(@class,"internal") or contains(@href,"action=edit") or contains(@title,"/Texte entier") or contains(@class,"image"))]' );
 			/** @var DOMElement $link */
 			foreach ( $list as $link ) {
 				$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );

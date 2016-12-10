@@ -245,7 +245,6 @@ class BookProvider {
 	 * return the cover of the book
 	 * @param $cover string the name of the cover
 	 * @return Picture The cover
-	 * @todo support other wikis than Wikisource
 	 */
 	public function getCover( $cover, $lang ) {
 		$id = explode( '/', $cover );
@@ -287,7 +286,6 @@ class BookProvider {
 	 * @param string[] $otherPages
 	 * @param Picture[] $pictures
 	 * @return PromiseInterface[]
-	 * @todo work on other wikis than Wikisource
 	 */
 	protected function startCredits( Book $book, array $chapters, array $otherPages, array $pictures ) {
 		$promises = [];
@@ -373,7 +371,7 @@ class BookProvider {
 	 * @return string[]
 	 */
 	public function getNamespaces() {
-		$namespaces = unserialize( getTempFile( $this->api->domainName, 'namespaces.sphp' ) );
+		$namespaces = unserialize( getTempFile( $this->api->lang, 'namespaces.sphp' ) );
 		if ( is_array( $namespaces ) ) {
 			return $namespaces;
 		} else {

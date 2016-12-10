@@ -103,22 +103,15 @@ function getXhtmlFromContent( $lang, $content, $title = ' ' ) {
 function getTempFile( $lang, $name ) {
 	global $wsexportConfig;
 	$path = $wsexportConfig['tempPath'] . '/' . $lang . '/' . $name;
-	if ( file_exists( $path ) ) {
-		return file_get_contents( $path );
-	} else {
-		return '';
+	if ( !file_exists( $path ) ) {
+		$refresh = new Refresh( new Api( $lang ) );
+		$refresh->refresh();
 	}
+	return file_get_contents( $path );
 }
 
 function getI18n( $lang ) {
-	$content = getTempFile( $lang, 'i18n.sphp' );
-	if ( $content == '' ) {
-		$refresh = new Refresh( new Api( $lang ) );
-		$refresh->refresh();
-		$content = getTempFile( $lang, 'i18n.sphp' );
-	}
-
-	return unserialize( $content );
+	return unserialize( getTempFile( $lang, 'i18n.sphp' ) );
 }
 
 function encodeString( $string ) {

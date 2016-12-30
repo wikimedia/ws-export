@@ -1,6 +1,11 @@
 #!/usr/bin/php
 <?php
 
+if ( count( $argv ) < 2 ) {
+	print( 'You should provide the output path like "wikisource-fr-good.atom"' );
+	exit( 1 );
+}
+
 $basePath = realpath( __DIR__ . '/..' );
 $tempPath = sys_get_temp_dir();
 
@@ -11,7 +16,7 @@ include_once $basePath . '/book/init.php';
 
 $lang = 'fr';
 $category = 'Catégorie:Bon_pour_export';
-$outputFile = 'wikisource-fr-good.atom';
+$outputFile = $argv[1];
 $exportPath = 'https://tools.wmflabs.org/wsexport/tool/book.php';
 
 try {

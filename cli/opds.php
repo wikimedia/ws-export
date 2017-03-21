@@ -2,7 +2,7 @@
 <?php
 
 if ( count( $argv ) < 2 ) {
-	print( 'You should provide the output path like "wikisource-fr-good.atom"' );
+	echo 'You should provide the output path like "wikisource-fr-good.atom"';
 	exit( 1 );
 }
 

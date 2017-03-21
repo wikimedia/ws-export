@@ -101,7 +101,7 @@ class ConvertGenerator implements FormatGenerator {
 
 		$epubFileName = $this->createEpub( $book );
 		$this->convert( $epubFileName, $outputFileName );
-		unlink( $epubFileName );
+		unlink( realpath( $epubFileName ) );
 
 		return $outputFileName;
 	}

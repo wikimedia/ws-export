@@ -73,7 +73,7 @@ function getMimeType( $contents ) {
 		$filename = tempnam( sys_get_temp_dir(), 'wsf' );
 		file_put_contents( $filename, $contents );
 		$ret = mime_content_type( $filename );
-		unlink( $filename );
+		unlink( realpath( $filename ) );
 
 		return $ret;
 	}

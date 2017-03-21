@@ -42,7 +42,7 @@ try {
 		header( 'Content-Disposition: attachment; filename="' . $title . '.' . $creator->getExtension() . '"' );
 		header( 'Content-length: ' . filesize( $file ) );
 		readfile( $file );
-		unlink( $file );
+		unlink( realpath( $file ) );
 		flush();
 		CreationLog::singleton()->add( $book, $format );
 	}

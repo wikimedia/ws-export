@@ -172,5 +172,5 @@ function buildTemporaryFileName( $title, $extension, $systemTemp = false ) {
 		global $wsexportConfig;
 		$directory = $wsexportConfig['tempPath'];
 	}
-	return tempnam( $directory, 'ws-' . encodeString( $title ) . '.' . $extension );
+	return tempnam( $directory, 'ws-' . encodeString( $title ) ) . '.' . $extension;
 }

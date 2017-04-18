@@ -162,9 +162,15 @@ function getLanguageDirection( $languageCode ) {
  *
  * @param string $title
  * @param string $extension
+ * @param bool $systemTemp Use the system /tmp directory
  * @return string
  */
-function buildTemporaryFileName( $title, $extension ) {
-	global $wsexportConfig;
-	return $wsexportConfig['tempPath'] . '/' . encodeString( $title ) . '-' . mt_rand() . '.' . $extension;
+function buildTemporaryFileName( $title, $extension, $systemTemp = false ) {
+	if ( $systemTemp ) {
+		$directory = sys_get_temp_dir();
+	} else {
+		global $wsexportConfig;
+		$directory = $wsexportConfig['tempPath'];
+	}
+	return tempnam( $directory, 'ws-' . encodeString( $title ) . '.' . $extension );
 }

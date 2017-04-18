@@ -49,7 +49,7 @@ abstract class EpubGenerator implements FormatGenerator {
 		$wsUrl = wikisourceUrl( $book->lang, $book->title );
 		$cleaner = new BookCleanerEpub( $this->getVersion() );
 		$cleaner->clean( $book, wikisourceUrl( $book->lang ) );
-		$fileName = buildTemporaryFileName( $book->title, 'epub' );
+		$fileName = buildTemporaryFileName( $book->title, 'epub', true );
 		$zip = $this->createZipFile( $fileName );
 		$zip->addFromString( 'META-INF/container.xml', $this->getXmlContainer() );
 		$zip->addFromString( 'OPS/content.opf', $this->getOpfContent( $book, $wsUrl ) );

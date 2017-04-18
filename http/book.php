@@ -33,18 +33,20 @@ try {
 		$creator = BookCreator::forApi( $api, $format, $options );
 		try {
 			list( $book, $file ) = $creator->create( $title );
+			header( 'X-Robots-Tag: none' );
+			header( 'Content-Description: File Transfer' );
+			header( 'Content-Type: ' . $creator->getMimeType() );
+			header( 'Content-Disposition: attachment; filename="' . $title . '.' . $creator->getExtension() . '"' );
+			header( 'Content-length: ' . filesize( $file ) );
+			readfile( $file );
+			flush();
+			CreationLog::singleton()->add( $book, $format );
 		} catch ( WSExportInvalidArgumentException $exception ) {
 			throw new HttpException( 'Unsupported Media Type', 415 );
+		} finally {
+			unlink( realpath( $file ) );
 		}
-		header( 'X-Robots-Tag: none' );
-		header( 'Content-Description: File Transfer' );
-		header( 'Content-Type: ' . $creator->getMimeType() );
-		header( 'Content-Disposition: attachment; filename="' . $title . '.' . $creator->getExtension() . '"' );
-		header( 'Content-length: ' . filesize( $file ) );
-		readfile( $file );
-		unlink( realpath( $file ) );
-		flush();
-		CreationLog::singleton()->add( $book, $format );
+
 	}
 } catch ( Exception $exception ) {
 	if ( $exception instanceof HttpException ) {

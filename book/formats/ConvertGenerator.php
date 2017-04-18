@@ -99,9 +99,12 @@ class ConvertGenerator implements FormatGenerator {
 	public function create( Book $book ) {
 		$outputFileName = buildTemporaryFileName( $book->title, $this->getExtension() );
 
-		$epubFileName = $this->createEpub( $book );
-		$this->convert( $epubFileName, $outputFileName );
-		unlink( realpath( $epubFileName ) );
+		try {
+			$epubFileName = $this->createEpub( $book );
+			$this->convert( $epubFileName, $outputFileName );
+		} finally {
+			unlink( realpath( $epubFileName ) );
+		}
 
 		return $outputFileName;
 	}

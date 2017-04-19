@@ -170,7 +170,15 @@ function buildTemporaryFileName( $title, $extension, $systemTemp = false ) {
 		$directory = sys_get_temp_dir();
 	} else {
 		global $wsexportConfig;
-		$directory = $wsexportConfig['tempPath'];
+		$directory = realpath( $wsexportConfig['tempPath'] );
 	}
-	return tempnam( $directory, 'ws-' . encodeString( $title ) ) . '.' . $extension;
+
+	for ( $i = 0; $i < 100; $i++ ) {
+		$path = $directory . '/' . 'ws-' . encodeString( $title ) . '-' . getmypid() . rand() . '.' . $extension;
+		if ( !file_exists( $path ) ) {
+			return $path;
+		}
+	}
+
+	throw new Exception( 'Unable to create temporary file' );
 }

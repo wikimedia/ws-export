@@ -44,7 +44,9 @@ try {
 		} catch ( WSExportInvalidArgumentException $exception ) {
 			throw new HttpException( 'Unsupported Media Type', 415 );
 		} finally {
-			unlink( realpath( $file ) );
+			if ( isset( $file ) ) {
+				unlink( realpath( $file ) );
+			}
 		}
 
 	}

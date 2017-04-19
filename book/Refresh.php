@@ -53,13 +53,15 @@ class Refresh {
 			$content = $this->api->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 		} catch ( Exception $e ) {
 			try {
-				$oldWikisourceApi = new Api( '' );
+				$oldWikisourceApi = new Api( 'www' );
 				$content = $oldWikisourceApi->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 			} catch ( Exception $e ) {
 				$content = '';
 			}
 		}
-		if ( $content !== '' ) {
+		if ( $content === '' ) {
+			$this->setTempFileContent( 'about.xhtml', '' );
+		} else {
 			$document = new DOMDocument( '1.0', 'UTF-8' );
 			$document->loadXML( $content );
 			$parser = new PageParser( $document );

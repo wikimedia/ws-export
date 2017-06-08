@@ -45,7 +45,7 @@ try {
 			throw new HttpException( 'Unsupported Media Type', 415 );
 		} finally {
 			if ( isset( $file ) ) {
-				unlink( realpath( $file ) );
+				removeFile( $file );
 			}
 		}
 

@@ -77,7 +77,7 @@ class BookCreatorIntegrationTest extends \PHPUnit_Framework_TestCase {
 		$zip = new ZipArchive();
 		$this->assertTrue( $zip->open( $file, ZipArchive::CHECKCONS ) );
 		$expandedEpub = tempnam( sys_get_temp_dir(), 'unpacked-epub-' . $file );
-		$this->assertTrue( unlink( $expandedEpub ) );
+		$this->assertTrue( removeFile( $expandedEpub ) );
 		$this->assertTrue( mkdir( $expandedEpub ) );
 		$this->assertTrue( $zip->extractTo( $expandedEpub ) );
 		$zip->close();

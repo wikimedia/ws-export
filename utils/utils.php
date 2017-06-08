@@ -73,7 +73,7 @@ function getMimeType( $contents ) {
 		$filename = tempnam( sys_get_temp_dir(), 'wsf' );
 		file_put_contents( $filename, $contents );
 		$ret = mime_content_type( $filename );
-		unlink( realpath( $filename ) );
+		removeFile( $filename );
 
 		return $ret;
 	}
@@ -181,4 +181,12 @@ function buildTemporaryFileName( $title, $extension, $systemTemp = false ) {
 	}
 
 	throw new Exception( 'Unable to create temporary file' );
+}
+
+function removeFile( $fileName ) {
+	exec( 'rm ' . escapeshellcmd( realpath( $fileName ) ), $output, $result );
+	if ( $result !== 0 ) {
+		error_log( 'rm failed on file ' . $fileName . ' with output: ' . implode( '\n', $output ) );
+	}
+	return $result === 0;
 }

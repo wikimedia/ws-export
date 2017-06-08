@@ -484,7 +484,7 @@ class BookCleanerEpub {
 		foreach ( $list as $node ) {
 			$href = $node->getAttribute( 'href' );
 			$title = encodeString( $node->getAttribute( 'title' ) ) . '.xhtml';
-			if ( $href[0] == '#' ) {
+			if ( substr( $href, 0, 1 ) == '#' ) {
 				continue;
 			} elseif ( in_array( $title, $this->linksList ) ) {
 				$pos = strpos( $href, '#' );
@@ -499,7 +499,7 @@ class BookCleanerEpub {
 				$node->setAttribute( 'href', $title );
 			} elseif ( substr( $href, 0, 2 ) === '//' ) {
 				$node->setAttribute( 'href', 'http:' . $href );
-			} elseif ( $href[0] === '/' ) {
+			} elseif ( substr( $href, 0, 1 ) === '/' ) {
 				$node->setAttribute( 'href', $this->baseUrl . $href );
 			}
 		}

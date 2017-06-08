@@ -1,7 +1,6 @@
 <?php
 
-class WSExportInvalidArgumentException extends Exception
-{
+class WSExportInvalidArgumentException extends Exception {
 }
 
 class GeneratorSelector {

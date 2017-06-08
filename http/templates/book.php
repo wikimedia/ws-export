@@ -7,7 +7,7 @@
 
 			<div class="col-lg-10">
 				<input name="lang" id="lang" type="text" size="3" maxlength="20" required="required"
-				       value="<?php echo Api::getHttpLang(); ?>" class="form-control input-mini"/>
+					   value="<?php echo Api::getHttpLang(); ?>" class="form-control input-mini"/>
 				<span class="help-block">Language code of Wikisource domain, like en or fr</span>
 			</div>
 		</div>
@@ -31,7 +31,7 @@
 							echo ' selected="selected"';
 						}
 						echo '>' . $label . '</option>';
-} ?>
+		   } ?>
 				</select>
 				<span class="help-inline"></span>
 			</div>
@@ -60,7 +60,7 @@
 				<label class="checkbox-inline">
 					<input type="checkbox" value="false" <?php if ( !$options['images'] ) {
 						echo 'checked="checked"';
-} ?> name="images"/>
+																																							   } ?> name="images"/>
 					Do not include images
 				</label>
 			</div>

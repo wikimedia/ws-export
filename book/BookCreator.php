@@ -3,8 +3,7 @@
 /**
  * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
  */
-class BookCreator
-{
+class BookCreator {
 	private $bookProvider;
 	private $bookGenerator;
 

@@ -104,7 +104,6 @@ class BookCreatorIntegrationTest extends \PHPUnit_Framework_TestCase {
 			}
 		};
 		return array_filter( array_map( $mapper, $data ), function( $location ) { return $location != null;
-
 	 } );
 	}
 

@@ -2,8 +2,7 @@
 
 require_once __DIR__ . '/../test_init.php';
 
-class BookCreatorTest extends PHPUnit_Framework_TestCase
-{
+class BookCreatorTest extends PHPUnit_Framework_TestCase {
 	private $bookCreator;
 	private $bookProvider;
 	private $bookGenerator;

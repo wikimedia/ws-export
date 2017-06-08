@@ -37,7 +37,7 @@
 		</div>
 		<?php if ( isset( $success ) ) {
 			echo '<div class="alert alert-success">' . $success . '</div>' . "\n";
-} ?>
+  } ?>
 		<?php if ( isset( $error ) ) {
 			echo '<div class="alert alert-danger">' . $error . '</div>' . "\n";
-}
+  }

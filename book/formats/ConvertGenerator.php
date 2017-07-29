@@ -14,42 +14,42 @@ class ConvertGenerator implements FormatGenerator {
 		'htmlz' => [
 			'extension' => 'htmlz',
 			'mime' => 'application/zip',
-			'parameters' => ''
+			'parameters' => '--page-breaks-before /'
 		],
 		'mobi' => [
 			'extension' => 'mobi',
 			'mime' => 'application/x-mobipocket-ebook',
-			'parameters' => ''
+			'parameters' => '--page-breaks-before /'
 		],
 		'pdf-a4' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--paper-size a4 --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size a4 --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'pdf-a5' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--paper-size a5 --margin-bottom 32 --margin-top 40 --margin-left 24 --margin-right 24 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size a5 --margin-bottom 32 --margin-top 40 --margin-left 24 --margin-right 24 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'pdf-a6' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--paper-size a6 --margin-bottom 16 --margin-top 20 --margin-left 12 --margin-right 12 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size a6 --margin-bottom 16 --margin-top 20 --margin-left 12 --margin-right 12 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'pdf-letter' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--paper-size letter --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size letter --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'rtf' => [
 			'extension' => 'rtf',
 			'mime' => 'application/rtf',
-			'parameters' => ''
+			'parameters' => '--page-breaks-before /'
 		],
 		'txt' => [
 			'extension' => 'txt',
 			'mime' => 'text/plain',
-			'parameters' => ''
+			'parameters' => '--page-breaks-before /'
 		]
 	];
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Thomas Pellissier Tanon
- * @copyright 2012 Thomas Pellissier Tanon
+ * @copyright 2017 Thomas Pellissier Tanon
  * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
  */
 
@@ -21,6 +21,10 @@ class FontProvider {
 		], 'linuxlibertine' => [
 			'name' => 'LinuxLibertine', 'label' => 'Linux Libertine', 'css_name' => 'wse_LinuxLibertine', 'otf' => [
 				'R' => 'LinLibertine_R.otf', 'RB' => 'LinLibertine_RB.otf', 'RBI' => 'LinLibertine_RBI.otf', 'RI' => 'LinLibertine_RI.otf'
+			]
+		], 'libertinus' => [
+			'name' = 'Libertinus', 'label' => 'Libertinus', 'css_name' => 'wse_Libertinus', 'otf' => [
+				'R' => 'libertinusserif-regular.otf', 'RB' => 'libertinusserif-bold.otf', 'RBI' => 'libertinusserif-bolditalic.otf', 'RI' => 'libertinusserif-italic.otf'
 			]
 		]
 	];

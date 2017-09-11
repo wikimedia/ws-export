@@ -58,7 +58,7 @@ class BookCreatorIntegrationTest extends \PHPUnit_Framework_TestCase {
 
 	private function epubCheck( $file ) {
 		if ( $this->epubCheckJar == null || getenv( 'SKIP_EPUBCHECK' ) ) {
-			return;
+			$this->markTestSkipped( 'EpubCheck not found. Please provide it uing the EPUBCHECK_JAR environment variable' );
 		}
 		$jsonOut = tempnam( sys_get_temp_dir(), 'results-' . $file . '.json' );
 		$expandedEpub = $this->expandEpub( $file );

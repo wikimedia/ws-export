@@ -62,7 +62,7 @@ function parseCommandLine() {
 		}
 	}
 
-	if ( !$lang or !$title ) {
+	if ( !$lang || !$title ) {
 		throw new WSExportInvalidArgumentException();
 	}
 
@@ -89,6 +89,6 @@ if ( isset( $argc ) ) {
 		exit( 1 );
 	} catch ( Exception $exception ) {
 		fwrite( STDERR, "Error: $exception\n" );
-		exit ( 1 );
+		exit( 1 );
 	}
 }

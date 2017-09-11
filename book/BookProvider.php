@@ -206,11 +206,11 @@ class BookProvider {
 	 */
 	protected function getPicturesData( array $pictures ) {
 		$this->api->getPool(
-			array_map( function( Picture $picture ) {
+			array_map( function ( Picture $picture ) {
 				return new Request( 'GET', $picture->url );
 			}, $pictures ),
 			[
-				'fulfilled' => function( Response $response, $index ) use ( $pictures ) {
+				'fulfilled' => function ( Response $response, $index ) use ( $pictures ) {
 					$content = $response->getBody()->getContents();
 					$mimeType = getMimeType( $content );
 					$pictures[$index]->mimetype = $mimeType;
@@ -353,7 +353,7 @@ class BookProvider {
 			}
 		}
 
-		uasort( $credit, function( $a, $b ) {
+		uasort( $credit, function ( $a, $b ) {
 			$f1 = in_array( 'bot', $a['flags'] );
 			$f2 = in_array( 'bot', $b['flags'] );
 			if ( $f1 !== $f2 ) {

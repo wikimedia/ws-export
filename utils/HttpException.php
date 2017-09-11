@@ -10,4 +10,3 @@
  */
 class HttpException extends Exception {
 }
-

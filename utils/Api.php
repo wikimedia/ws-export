@@ -35,7 +35,7 @@ class Api {
 	 */
 	public function __construct( $lang = '', $domainName = '', ClientInterface $client = null ) {
 		if ( $lang == '' ) {
-			$lang = Api::getHttpLang();
+			$lang = self::getHttpLang();
 		}
 		$this->lang = $lang;
 
@@ -71,13 +71,13 @@ class Api {
 			$url,
 			$options
 		)->then(
-			function( ResponseInterface $response ) {
+			function ( ResponseInterface $response ) {
 				if ( $response->getStatusCode() !== 200 ) {
 					throw new HttpException( 'HTTP error ' . $response->getStatusCode(), $response->getStatusCode() );
 				}
 				return $response->getBody()->getContents();
 			},
-			function( RequestException $e ) {
+			function ( RequestException $e ) {
 				throw new HttpException( $e->getMessage() );
 			}
 		);
@@ -120,7 +120,7 @@ class Api {
 			'https://' . $this->domainName . '/w/api.php',
 			[ 'query' => $params ]
 		)->then(
-			function( $result ) {
+			function ( $result ) {
 				$json = json_decode( $result, true );
 				if ( isset( $json ) ) {
 					return $json;
@@ -166,7 +166,7 @@ class Api {
 			'prop' => 'revisions',
 			'rvprop' => 'content',
 			'rvparse' => true
-		] )->then( function( array $result ) {
+		] )->then( function ( array $result ) {
 			return $this->parseGetPageResponse( $result );
 		} );
 	}
@@ -223,7 +223,7 @@ class Api {
 
 	private static function createClient( LoggerInterface $logger ) {
 		$handler = HandlerStack::create();
-		$handler->push( LoggingMiddleWare::forLogger( $logger ), 'logging' );
+		$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
 		return new Client( [
 			'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ],
 			'handler' => $handler

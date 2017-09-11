@@ -92,7 +92,7 @@ class BookCreatorIntegrationTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function mapLocations( $data, $basePath ) {
-		$mapper = function( $location ) use( $basePath ) {
+		$mapper = function ( $location ) use( $basePath ) {
 			$path = $location['path'];
 			$line = $location['line'];
 			$column = $location['column'];
@@ -103,12 +103,12 @@ class BookCreatorIntegrationTest extends \PHPUnit_Framework_TestCase {
 				return null;
 			}
 		};
-		return array_filter( array_map( $mapper, $data ), function( $location ) { return $location != null;
+		return array_filter( array_map( $mapper, $data ), function ( $location ) { return $location != null;
 	 } );
 	}
 
 	private function mapResults( $data, $basePath ) {
-		$mapper = function( $message ) use( $basePath ) {
+		$mapper = function ( $message ) use( $basePath ) {
 			$severity = $message['severity'];
 			$message_text = $message['message'];
 			$locations = $this->mapLocations( $message['locations'], $basePath );
@@ -119,7 +119,7 @@ class BookCreatorIntegrationTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function epubCheckJar() {
-		$epubCheckJar =  getenv( 'EPUBCHECK_JAR' );
+		$epubCheckJar = getenv( 'EPUBCHECK_JAR' );
 		if ( $epubCheckJar && file_exists( $epubCheckJar ) && $this->isJavaInstalled() ) {
 			return $epubCheckJar;
 		} else {
@@ -171,7 +171,7 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 	}
 
 	public function toString() {
-		$allLocations = "\n\n\t" . join( "\n\t", array_map( function( Location $l ) {
+		$allLocations = "\n\n\t" . join( "\n\t", array_map( function ( Location $l ) {
 			return $l->toString();
 	 }, $this->locations ) );
 		if ( $this->additionalLocations > 0 ) {

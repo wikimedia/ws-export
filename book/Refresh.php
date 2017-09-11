@@ -98,4 +98,3 @@ class Refresh {
 		return $wsexportConfig['tempPath'] . '/' . $this->api->lang . '/' . $name;
 	}
 }
-

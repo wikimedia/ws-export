@@ -59,7 +59,7 @@ class BookProviderTest extends PHPUnit_Framework_TestCase {
 
 	private function apiWithResponse( $status, $header, $body ) {
 		$responses = [ new Response( $status, $header, $body ) ];
-		$this->mockHandler =  new MockHandler( $responses );
+		$this->mockHandler = new MockHandler( $responses );
 		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
 		return new API( 'en', '', $client );
 	}

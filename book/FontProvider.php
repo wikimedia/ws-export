@@ -23,7 +23,7 @@ class FontProvider {
 				'R' => 'LinLibertine_R.otf', 'RB' => 'LinLibertine_RB.otf', 'RBI' => 'LinLibertine_RBI.otf', 'RI' => 'LinLibertine_RI.otf'
 			]
 		], 'libertinus' => [
-			'name' = 'Libertinus', 'label' => 'Libertinus', 'css_name' => 'wse_Libertinus', 'otf' => [
+			'name' => 'Libertinus', 'label' => 'Libertinus', 'css_name' => 'wse_Libertinus', 'otf' => [
 				'R' => 'libertinusserif-regular.otf', 'RB' => 'libertinusserif-bold.otf', 'RBI' => 'libertinusserif-bolditalic.otf', 'RI' => 'libertinusserif-italic.otf'
 			]
 		]

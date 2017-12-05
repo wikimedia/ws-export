@@ -105,8 +105,8 @@ class ConvertGenerator implements FormatGenerator {
 			rename( $epubFileName, $persistentEpubFileName );
 			$this->convert( $persistentEpubFileName, $outputFileName );
 		} finally {
-			if (isset($persistentEpubFileName)) {
-				removeFile($persistentEpubFileName);
+			if ( isset( $persistentEpubFileName ) ) {
+				removeFile( $persistentEpubFileName );
 			}
 		}
 

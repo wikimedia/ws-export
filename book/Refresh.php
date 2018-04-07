@@ -3,13 +3,13 @@
 /**
  * @author Thomas Pellissier Tanon
  * @copyright 2012 Thomas Pellissier Tanon
- * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
+ * @license GPL-2.0-or-later
  */
-class Refresh {
+public class Refresh {
 
 	protected $api;
 
-	function __construct( Api $api ) {
+	public function __construct( Api $api ) {
 		$this->api = $api;
 	}
 

@@ -2,13 +2,15 @@
 
 require_once __DIR__ . '/../test_init.php';
 
-class BookCreatorTest extends PHPUnit_Framework_TestCase {
+/**
+ * @covers BookCreator
+ */
+class BookCreatorTest extends PHPUnit\Framework\TestCase {
 	private $bookCreator;
 	private $bookProvider;
 	private $bookGenerator;
 
-	/** @before */
-	public function before() {
+	public function setUp() {
 		$this->bookProvider = $observer = $this->getMockBuilder( BookProvider::class )->disableOriginalConstructor()->getMock();
 		$this->bookGenerator = $observer = $this->getMockBuilder( FormatGenerator::class )->getMock();
 		$this->bookCreator = new BookCreator( $this->bookProvider, $this->bookGenerator );

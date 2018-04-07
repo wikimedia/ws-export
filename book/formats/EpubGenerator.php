@@ -2,7 +2,7 @@
 /**
  * @author Thomas Pellissier Tanon
  * @copyright 2011 Thomas Pellissier Tanon
- * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
+ * @license GPL-2.0-or-later
  */
 
 /**
@@ -360,7 +360,7 @@ class BookCleanerEpub {
 
 			$next_node = $node->nextSibling;
 
-			if ( $node != null && $node->nodeName != "#text" ) {
+			if ( $node != null && $node->nodeName !== "#text" ) {
 				if ( $curSize > 0 && $curSize + $nodeLen > $partSize ) {
 					$curFile = $chapter->content->createDocumentFragment();
 					$files[] = $curFile;
@@ -484,7 +484,7 @@ class BookCleanerEpub {
 		foreach ( $list as $node ) {
 			$href = $node->getAttribute( 'href' );
 			$title = encodeString( $node->getAttribute( 'title' ) ) . '.xhtml';
-			if ( substr( $href, 0, 1 ) == '#' ) {
+			if ( substr( $href, 0, 1 ) === '#' ) {
 				continue;
 			} elseif ( in_array( $title, $this->linksList ) ) {
 				$pos = strpos( $href, '#' );

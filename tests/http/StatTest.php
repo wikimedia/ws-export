@@ -2,7 +2,10 @@
 
 require_once __DIR__ . '/../test_init.php';
 
-class StatTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @covers CreationLog
+ */
+class StatTest extends \PHPUnit\Framework\TestCase {
 	/**
 	 * @runInSeparateProcess
 	 */

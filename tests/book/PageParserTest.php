@@ -2,14 +2,16 @@
 
 require_once __DIR__ . '/../test_init.php';
 
-class PageParserTest extends PHPUnit_Framework_TestCase {
+/**
+ * @covers PageParser
+ */
+class PageParserTest extends PHPUnit\Framework\TestCase {
 	/**
 	 * @var PageParser
 	 */
 	private $pageParser;
 
-	/** @before */
-	public function before() {
+	public function setUp() {
 		$this->pageParser = $this->parseFile( __DIR__ . '/fixtures/Tales_of_Unrest/Navigation.html' );
 	}
 

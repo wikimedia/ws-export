@@ -7,12 +7,14 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 
-class BookProviderTest extends PHPUnit_Framework_TestCase {
+/**
+ * @covers BookProvider
+ */
+class BookProviderTest extends PHPUnit\Framework\TestCase {
 	private $bookProvider;
 	private $mockHandler;
 
-	/** @before */
-	public function before() {
+	public function setUp() {
 		$creditResponse = [
 			'User B' => [ 'count' => 1, 'flags' => [ 'editor', 'reviewer' ] ],
 			'Bot User' => [ 'count' => 5, 'flags' => [ 'bot' ] ],

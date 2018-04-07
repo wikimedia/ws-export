@@ -10,9 +10,12 @@ use GuzzleHttp\Psr7\Response;
 use Monolog\Logger;
 use Monolog\Handler\TestHandler;
 
-class LoggingMiddlewareTest extends \PHPUnit_Framework_TestCase {
-	/** @before */
-	public function before() {
+/**
+ * @covers \Monolog\Logger
+ */
+class LoggingMiddlewareTest extends \PHPUnit\Framework\TestCase {
+
+	public function setUp() {
 		date_default_timezone_set( 'UTC' );
 	}
 

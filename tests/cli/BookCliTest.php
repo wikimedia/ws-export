@@ -1,6 +1,9 @@
 <?php
 
-class BookCliTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @covers BookCreator
+ */
+class BookCliTest extends \PHPUnit\Framework\TestCase {
 	public function bookProvider() {
 		return [
 			[ 'The_Kiss_and_its_History', 'en' ],

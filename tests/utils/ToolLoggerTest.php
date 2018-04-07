@@ -2,7 +2,10 @@
 
 require_once __DIR__ . '/../test_init.php';
 
-class ToolLoggerTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @covers ToolLogger
+ */
+class ToolLoggerTest extends \PHPUnit\Framework\TestCase {
 	public function testLoggerImplementsPsrLoggerInterface() {
 		$logger = ToolLogger::get( 'test' );
 		$this->assertInstanceOf( 'Psr\Log\LoggerInterface', $logger );

@@ -2,7 +2,10 @@
 
 require_once __DIR__ . '/../test_init.php';
 
-class BookTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @covers BookCreator
+ */
+class BookTest extends \PHPUnit\Framework\TestCase {
 	public function bookProvider() {
 		return [
 			[ 'The_Kiss_and_its_History', 'en' ],

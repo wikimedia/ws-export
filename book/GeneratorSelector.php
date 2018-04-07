@@ -1,6 +1,6 @@
 <?php
 
-class WSExportInvalidArgumentException extends Exception {
+class WSExportInvalidArgumentException extends InvalidArgumentException {
 }
 
 class GeneratorSelector {
@@ -17,18 +17,18 @@ class GeneratorSelector {
 		'txt'		=> 'txt (in beta)'
 	];
 
-	static function select( $format ) {
-		if ( $format == 'odt' ) {
+	public static function select( $format ) {
+		if ( $format === 'odt' ) {
 			$format = 'rtf'; // TODO: bad hack in order to don't break urls
 		}
 
-		if ( $format == 'epub-2' ) {
+		if ( $format === 'epub-2' ) {
 			return new Epub2Generator();
-		} elseif ( $format == 'epub-3' || $format == 'epub' ) {
+		} elseif ( $format === 'epub-3' || $format === 'epub' ) {
 			return new Epub3Generator();
 		} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 			return new ConvertGenerator( $format );
-		} elseif ( $format == 'atom' ) {
+		} elseif ( $format === 'atom' ) {
 			return new AtomGenerator();
 		} else {
 			throw new WSExportInvalidArgumentException( "The file format '$format' is unknown." );

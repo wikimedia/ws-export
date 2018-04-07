@@ -2,7 +2,10 @@
 
 require_once __DIR__ . '/../test_init.php';
 
-class BookCreatorIntegrationTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @covers BookCreator
+ */
+class BookCreatorIntegrationTest extends \PHPUnit\Framework\TestCase {
 	private $epubCheckJar = null;
 	private $testResult = null;
 
@@ -163,7 +166,7 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 	 * @param Location[] $locations
 	 * @param int $additionalLocations
 	 */
-	function __construct( $severity, $message, array $locations, $additionalLocations ) {
+	public function __construct( $severity, $message, array $locations, $additionalLocations ) {
 		$this->message = $message;
 		$this->severity = $severity;
 		$this->locations = $locations;
@@ -171,7 +174,7 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 	}
 
 	public function toString() {
-		$allLocations = "\n\n\t" . join( "\n\t", array_map( function ( Location $l ) {
+		$allLocations = "\n\n\t" . implode( "\n\t", array_map( function ( Location $l ) {
 			return $l->toString();
 	 }, $this->locations ) );
 		if ( $this->additionalLocations > 0 ) {

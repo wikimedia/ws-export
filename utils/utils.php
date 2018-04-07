@@ -2,7 +2,7 @@
 /**
  * @author Thomas Pellissier Tanon
  * @copyright 2011 Thomas Pellissier Tanon
- * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
+ * @license GPL-2.0-or-later
  */
 
 /**
@@ -151,8 +151,7 @@ function cutFilename( $string, $max = 100 ) {
  * @return string "rtl" or "ltr"
  */
 function getLanguageDirection( $languageCode ) {
-	return
-		in_array( $languageCode, [ 'ar', 'arc', 'bcc', 'bqi', 'ckb', 'dv', 'fa', 'glk', 'he', 'lrc', 'mzn', 'pnb', 'ps', 'sd', 'ug', 'ur', 'yi' ] )
+	return in_array( $languageCode, [ 'ar', 'arc', 'bcc', 'bqi', 'ckb', 'dv', 'fa', 'glk', 'he', 'lrc', 'mzn', 'pnb', 'ps', 'sd', 'ug', 'ur', 'yi' ] )
 		? 'rtl'
 		: 'ltr';
 }

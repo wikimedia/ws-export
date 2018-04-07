@@ -3,7 +3,7 @@
 /**
  * @author Thomas Pellissier Tanon
  * @copyright 2012 Thomas Pellissier Tanon
- * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
+ * @license GPL-2.0-or-later
  */
 class CreationLog {
 

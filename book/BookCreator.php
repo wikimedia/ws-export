@@ -1,20 +1,20 @@
 <?php
 
 /**
- * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
+ * @license GPL-2.0-or-later
  */
 class BookCreator {
 	private $bookProvider;
 	private $bookGenerator;
 
-	static function forApi( Api $api, $format, $options ) {
+	public static function forApi( Api $api, $format, $options ) {
 		return new BookCreator(
 			new BookProvider( $api, $options ),
 			GeneratorSelector::select( $format )
 		);
 	}
 
-	static function forLanguage( $language, $format, $options ) {
+	public static function forLanguage( $language, $format, $options ) {
 		return new BookCreator(
 			new BookProvider( new Api( $language ), $options ),
 			GeneratorSelector::select( $format )
@@ -26,7 +26,7 @@ class BookCreator {
 		$this->bookGenerator = $bookGenerator;
 	}
 
-	function create( $title, $outputPath = null ) {
+	public function create( $title, $outputPath = null ) {
 		date_default_timezone_set( 'UTC' );
 
 		$book = $this->bookProvider->get( $title );
@@ -38,11 +38,11 @@ class BookCreator {
 		}
 	}
 
-	function getMimeType() {
+	public function getMimeType() {
 		return $this->bookGenerator->getMimeType();
 	}
 
-	function getExtension() {
+	public function getExtension() {
 		return $this->bookGenerator->getExtension();
 	}
 

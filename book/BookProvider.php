@@ -2,7 +2,7 @@
 /**
  * @author Thomas Pellissier Tanon
  * @copyright 2011 Thomas Pellissier Tanon
- * @licence http://www.gnu.org/licenses/gpl.html GNU General Public Licence
+ * @license GPL-2.0-or-later
  */
 
 use GuzzleHttp\Promise\PromiseInterface;
@@ -300,7 +300,7 @@ class BookProvider {
 		$pages = array_unique( array_merge( $pages, $otherPages ) );
 		foreach ( $this->splitArrayByBatch( $pages, 50 ) as $batch ) {
 			$params = [
-				'lang' => $book->lang, 'format' => 'json', 'page' => join( '|', $batch )
+				'lang' => $book->lang, 'format' => 'json', 'page' => implode( '|', $batch )
 			];
 			$promises[] = $this->api->getAsync(
 				$this->creditUrl,
@@ -317,7 +317,7 @@ class BookProvider {
 		if ( !empty( $imagesSet ) ) {
 			$images = array_keys( $imagesSet );
 			$params = [
-				'lang' => $book->lang, 'format' => 'json', 'image' => join( '|', $images )
+				'lang' => $book->lang, 'format' => 'json', 'image' => implode( '|', $images )
 			];
 			$promises[] = $this->api->getAsync(
 				$this->creditUrl,

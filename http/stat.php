@@ -12,8 +12,8 @@ include_once __DIR__ . '/../book/init.php';
 
 date_default_timezone_set( 'UTC' );
 $date = getdate();
-$month = isset( $_GET['month'] ) ? intval( $_GET['month'] ) : $date['mon'];
-$year = isset( $_GET['year'] ) ? intval( $_GET['year'] ) : $date['year'];
+$month = isset( $_GET['month'] ) ? (int)$_GET['month'] : $date['mon'];
+$year = isset( $_GET['year'] ) ? (int)$_GET['year'] : $date['year'];
 
 $stat = CreationLog::singleton()->getTypeAndLangStats( $month, $year );
 $val = [];

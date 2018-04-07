@@ -7,7 +7,10 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 
-class ApiTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @covers Api
+ */
+class ApiTest extends \PHPUnit\Framework\TestCase {
 	public function testQueryAsyncParsesJsonResponse() {
 		$api = $this->apiWithJsonResponse( [ 'result' => 'test' ] );
 		$result = $api->queryAsync( [ 'prop' => 'revisions' ] )->wait();

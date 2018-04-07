@@ -7,7 +7,10 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 
-class RefreshTest extends \PHPUnit_Framework_TestCase {
+/**
+ * @covers Refresh
+ */
+class RefreshTest extends \PHPUnit\Framework\TestCase {
 
 	public function testRefreshUpdatesI18N() {
 		$this->refresh( 'en' );

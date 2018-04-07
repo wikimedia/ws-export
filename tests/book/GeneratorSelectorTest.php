@@ -2,7 +2,10 @@
 
 require_once __DIR__ . '/../test_init.php';
 
-class GeneratorSelectorTest extends PHPUnit_Framework_TestCase {
+/**
+ * @covers GeneratorSelector
+ */
+class GeneratorSelectorTest extends PHPUnit\Framework\TestCase {
 	/**
 	 * @expectedException WSExportInvalidArgumentException
 	 * @expectedExceptionMessage The file format 'unknown' is unknown.

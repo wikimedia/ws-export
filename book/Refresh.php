@@ -5,7 +5,7 @@
  * @copyright 2012 Thomas Pellissier Tanon
  * @license GPL-2.0-or-later
  */
-public class Refresh {
+class Refresh {
 
 	protected $api;
 

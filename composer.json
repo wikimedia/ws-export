@@ -13,7 +13,7 @@
 		"monolog/monolog": "^1.18"
 	},
 	"require-dev": {
-		"mediawiki/mediawiki-codesniffer": "~17.0",
+		"mediawiki/mediawiki-codesniffer": "~18.0",
 		"phpunit/phpunit": "~4.0|~5.0"
 	},
 	"scripts": {

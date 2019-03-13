@@ -10,7 +10,7 @@ class BookCreatorTest extends PHPUnit\Framework\TestCase {
 	private $bookProvider;
 	private $bookGenerator;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->bookProvider = $observer = $this->getMockBuilder( BookProvider::class )->disableOriginalConstructor()->getMock();
 		$this->bookGenerator = $observer = $this->getMockBuilder( FormatGenerator::class )->getMock();
 		$this->bookCreator = new BookCreator( $this->bookProvider, $this->bookGenerator );

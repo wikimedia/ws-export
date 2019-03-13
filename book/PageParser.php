@@ -6,7 +6,7 @@ class PageParser {
 	protected $xPath = null;
 
 	/**
-	 * @var DOMDocument $doc The page to parse
+	 * @param DOMDocument $doc The page to parse
 	 */
 	public function __construct( DOMDocument $doc ) {
 		$this->xPath = new DOMXPath( $doc );

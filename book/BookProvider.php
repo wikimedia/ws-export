@@ -20,7 +20,7 @@ class BookProvider {
 	private $creditUrl = 'http://tools.wmflabs.org/phetools/credits.py';
 
 	/**
-	 * @var $api Api
+	 * @param $api Api
 	 */
 	public function __construct( Api $api, $options ) {
 		$this->api = $api;
@@ -29,8 +29,8 @@ class BookProvider {
 
 	/**
 	 * return all the data on a book needed to export it
-	 * @var $title string the title of the main page of the book in Wikisource
-	 * @var $isMetadata bool only retrive metadata on the book
+	 * @param $title string the title of the main page of the book in Wikisource
+	 * @param $isMetadata bool only retrive metadata on the book
 	 * @return Book
 	 */
 	public function get( $title, $isMetadata = false ) {

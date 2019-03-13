@@ -109,7 +109,7 @@ class Api {
 	/**
 	 * API query
 	 *
-	 * @var array $params an associative array for params send to the api
+	 * @param array $params an associative array for params send to the api
 	 * @return PromiseInterface a Promise with the result array
 	 * @throws HttpException
 	 */
@@ -184,7 +184,7 @@ class Api {
 	}
 
 	/**
-	 * @var string $url the url
+	 * @param string $url the url
 	 * @return string the file content
 	 */
 	public function get( $url ) {

@@ -11,7 +11,7 @@ class PageParserTest extends PHPUnit\Framework\TestCase {
 	 */
 	private $pageParser;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->pageParser = $this->parseFile( __DIR__ . '/fixtures/Tales_of_Unrest/Navigation.html' );
 	}
 
@@ -68,7 +68,7 @@ class PageParserTest extends PHPUnit\Framework\TestCase {
 
 	public function testGetContentReturnsADOMDocument() {
 		$content = $this->pageParser->getContent( true );
-		$this->assertInstanceOf( 'DOMDocument', $content );
+		$this->assertInstanceOf( DOMDocument::class, $content );
 	}
 
 	private function parseFile( $filename ) {

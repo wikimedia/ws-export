@@ -3,6 +3,7 @@
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
 		<exclude name="Generic.Files.LineLength.TooLong" />
 		<exclude name="Generic.Files.OneObjectStructurePerFile" />
+		<exclude name="MediaWiki.Commenting.FunctionAnnotations" />
 		<exclude name="MediaWiki.Commenting.FunctionComment.MissingParamComment" />
 		<exclude name="MediaWiki.Commenting.FunctionComment.MissingParamName" />
 		<exclude name="MediaWiki.Commenting.FunctionComment.MissingParamTag" />
@@ -12,7 +13,10 @@
 		<exclude name="MediaWiki.Commenting.PhpunitAnnotations" />
 		<exclude name="MediaWiki.Files.ClassMatchesFilename.NotMatch" />
 		<exclude name="MediaWiki.NamingConventions.PrefixedGlobalFunctions.wfPrefix" />
-		<exclude name="MediaWiki.NamingConventions.ValidGlobalName.wgPrefix" />
+		<exclude name="MediaWiki.NamingConventions.ValidGlobalName" />
+		<exclude name="MediaWiki.PHP70Features.ScalarTypeHintUsage" />
+		<exclude name="MediaWiki.PHP71Features.VoidReturnType" />
+		<exclude name="MediaWiki.Usage.ForbiddenFunctions" />
 		<exclude name="MediaWiki.Usage.SuperGlobalsUsage.SuperGlobals" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
 	</rule>

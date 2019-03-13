@@ -41,7 +41,7 @@ class AtomGenerator implements FormatGenerator {
 
 	/**
 	 * create the file
-	 * @var $data Book the title of the main page of the book in Wikisource
+	 * @param $book Book the title of the main page of the book in Wikisource
 	 * @return string
 	 */
 	public function create( Book $book ) {

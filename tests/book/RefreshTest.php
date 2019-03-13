@@ -16,7 +16,7 @@ class RefreshTest extends \PHPUnit\Framework\TestCase {
 		$this->refresh( 'en' );
 
 		$i18n = unserialize( getTempFile( 'en', 'i18n.sphp' ) );
-		$this->assertInternalType( 'array', $i18n );
+		$this->assertIsArray( $i18n );
 		$this->assertEquals( 'Test-Title', $i18n[ 'title_page' ] );
 	}
 
@@ -31,7 +31,7 @@ class RefreshTest extends \PHPUnit\Framework\TestCase {
 		$this->refresh( 'en' );
 
 		$about = getTempFile( 'en', 'about.xhtml' );
-		$this->assertContains( 'Test-About-Content', $about );
+		$this->assertStringContainsString( 'Test-About-Content', $about );
 	}
 
 	public function testRefreshUpdatesNamespacesList() {

@@ -38,7 +38,7 @@ abstract class EpubGenerator implements FormatGenerator {
 
 	/**
 	 * create the file
-	 * @var $data Book the content of the book
+	 * @param $data Book the content of the book
 	 * @return string
 	 */
 	public function create( Book $book ) {
@@ -98,8 +98,8 @@ abstract class EpubGenerator implements FormatGenerator {
 
 	/**
 	 * return the OPF descrition file
-	 * @var $book Book
-	 * @var $wsUrl string URL to the main page in Wikisource
+	 * @param $book Book
+	 * @param $wsUrl string URL to the main page in Wikisource
 	 */
 	abstract protected function getOpfContent( Book $book, $wsUrl );
 

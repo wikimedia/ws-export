@@ -93,7 +93,7 @@ class ConvertGenerator implements FormatGenerator {
 
 	/**
 	 * create the file
-	 * @var $data Book the title of the main page of the book in Wikisource
+	 * @param $data Book the title of the main page of the book in Wikisource
 	 * @return string
 	 */
 	public function create( Book $book ) {

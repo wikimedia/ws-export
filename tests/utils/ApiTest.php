@@ -17,19 +17,16 @@ class ApiTest extends \PHPUnit\Framework\TestCase {
 		$this->assertEquals( [ 'result' => 'test' ], $result );
 	}
 
-	/**
-	 * @expectedException Exception
-	 * @expectedExceptionMessage invalid JSON: "xxx-invalid": Syntax error
-	 */
 	public function testQueryAsyncThrowsExceptionOnInvalidJsonResponse() {
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'invalid JSON: "xxx-invalid": Syntax error' );
+
 		$api = $this->apiWithResponse( 200, [ 'Content-Type' => 'application/json' ], 'xxx-invalid' );
 		$api->queryAsync( [] )->wait();
 	}
 
-	/**
-	 * @expectedException HttpException
-	 */
 	public function testQueryAsyncRaisesExceptionOnHttpError() {
+		$this->expectException( HttpException::class );
 		$api = $this->apiWithResponse( 404, [], 'Not found' );
 		$api->queryAsync( [ 'prop' => 'revisions' ] )->wait();
 	}

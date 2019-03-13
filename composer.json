@@ -20,8 +20,8 @@
 	},
 	"require-dev": {
 		"ext-xdebug": "*",
-		"mediawiki/mediawiki-codesniffer": "~18.0",
-		"phpunit/phpunit": "~4.0|~5.0"
+		"mediawiki/mediawiki-codesniffer": "~24.0",
+		"phpunit/phpunit": "~8.0"
     },
 	"scripts": {
 		"test": [

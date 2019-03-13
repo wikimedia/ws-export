@@ -9,10 +9,10 @@ class BookCreatorIntegrationTest extends \PHPUnit\Framework\TestCase {
 	private $epubCheckJar = null;
 	private $testResult = null;
 
-	public function run( PHPUnit_Framework_TestResult $result = null ) {
+	public function run( \PHPUnit\Framework\TestResult $result = null ): \PHPUnit\Framework\TestResult {
 		$this->epubCheckJar = $this->epubCheckJar();
 		$this->testResult = $result;
-		parent::run( $result );
+		return parent::run( $result );
 	}
 
 	public function bookProvider() {
@@ -123,7 +123,7 @@ class BookCreatorIntegrationTest extends \PHPUnit\Framework\TestCase {
 	}
 }
 
-class Location implements PHPUnit_Framework_SelfDescribing {
+class Location implements \PHPUnit\Framework\SelfDescribing {
 	private $path;
 	private $line = 0;
 	private $column = 0;
@@ -134,12 +134,12 @@ class Location implements PHPUnit_Framework_SelfDescribing {
 		$this->column = $column;
 	}
 
-	public function toString() {
+	public function toString(): string {
 		return '/' . $this->path . ':' . $this->line . ':' . $this->column;
 	}
 }
 
-class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
+class EpubCheckResult implements \PHPUnit\Framework\SelfDescribing {
 	private $locations = [];
 	private $additionalLocations;
 	private $severity;
@@ -158,7 +158,7 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 		$this->additionalLocations = $additionalLocations;
 	}
 
-	public function toString() {
+	public function toString(): string {
 		$allLocations = "\n\n\t" . implode( "\n\t", array_map( function ( Location $l ) {
 			return $l->toString();
 	 }, $this->locations ) );
@@ -168,7 +168,7 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 		return $this->message . $allLocations;
 	}
 
-	public function report( $test, PHPUnit_Framework_TestResult $listener ) {
+	public function report( $test, \PHPUnit\Framework\TestResult $listener ) {
 		switch ( $this->severity ) {
 			case "ERROR":
 				$this->reportAsError( $test, $listener );
@@ -179,13 +179,13 @@ class EpubCheckResult implements PHPUnit_Framework_SelfDescribing {
 		}
 	}
 
-	public function reportAsError( $test, PHPUnit_Framework_TestResult $listener ) {
-		$listener->addError( $test, new PHPUnit_Framework_AssertionFailedError( $this->toString() ), 0 );
+	public function reportAsError( $test, \PHPUnit\Framework\TestResult $listener ) {
+		$listener->addError( $test, new \PHPUnit\Framework\AssertionFailedError( $this->toString() ), 0 );
 	}
 
-	public function reportAsWarning( $test, PHPUnit_Framework_TestResult $listener ) {
+	public function reportAsWarning( $test, \PHPUnit\Framework\TestResult $listener ) {
 		if ( method_exists( $listener, 'addWarning' ) ) { // TODO: remove when we will drop PHP 5.5 support
-			$listener->addWarning( $test, new PHPUnit_Framework_Warning( $this->toString() ), 0 );
+			$listener->addWarning( $test, new \PHPUnit\Framework\Warning( $this->toString() ), 0 );
 		}
 	}
 }

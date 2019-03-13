@@ -21,8 +21,6 @@ class BookCliTest extends \PHPUnit\Framework\TestCase {
 		$book_php = __DIR__ . '/../../cli/book.php';
 		$outputPath = sys_get_temp_dir();
 		exec( "php $book_php --title $title --lang $language --path $outputPath", $output, $returnStatus );
-		if ( $returnStatus !== 0 ) {
-			throw new Exception( "Conversion to of $title in $language failed: " . var_dump( $output ) );
-		}
+		$this->assertEquals( $returnStatus, 0, "Conversion to of $title in $language failed:\n" . implode( "\n", $output ) );
 	}
 }

@@ -14,7 +14,7 @@ class BookProviderTest extends PHPUnit\Framework\TestCase {
 	private $bookProvider;
 	private $mockHandler;
 
-	public function setUp() {
+	public function setUp(): void {
 		$creditResponse = [
 			'User B' => [ 'count' => 1, 'flags' => [ 'editor', 'reviewer' ] ],
 			'Bot User' => [ 'count' => 5, 'flags' => [ 'bot' ] ],

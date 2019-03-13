@@ -2,12 +2,7 @@ language: php
 sudo: required
 dist: trusty
 php:
-  - '5.5'
   - '7.2'
-
-matrix:
-    allow_failures:
-        - php: '7.2'
 
 before_install:
   - sudo apt-get update -q

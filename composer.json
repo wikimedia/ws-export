@@ -8,14 +8,21 @@
 	"license": "GPL-2.0+",
 	"authors": [],
 	"require": {
-		"php": ">=5.5.0",
+		"php": ">=7.2",
+		"ext-dom": "*",
+		"ext-fileinfo": "*",
+		"ext-json": "*",
+		"ext-libxml": "*",
+		"ext-mbstring": "*",
+		"ext-zip": "*",
 		"guzzlehttp/guzzle": "~6.0",
 		"monolog/monolog": "^1.18"
 	},
 	"require-dev": {
+		"ext-xdebug": "*",
 		"mediawiki/mediawiki-codesniffer": "~18.0",
 		"phpunit/phpunit": "~4.0|~5.0"
-	},
+    },
 	"scripts": {
 		"test": [
 			"phpcs"

@@ -64,44 +64,31 @@ class BookCreatorIntegrationTest extends \PHPUnit\Framework\TestCase {
 			$this->markTestSkipped( 'EpubCheck not found. Please provide it uing the EPUBCHECK_JAR environment variable' );
 		}
 		$jsonOut = tempnam( sys_get_temp_dir(), 'results-' . $file . '.json' );
-		$expandedEpub = $this->expandEpub( $file );
-		$command = 'java -jar ' . escapeshellarg( $this->epubCheckJar ) . ' --quiet --mode exp --json ' .
-			escapeshellarg( $jsonOut ) . ' ' . escapeshellarg( $expandedEpub ) . ' 2>&1';
+		$command = 'java -jar ' . escapeshellarg( $this->epubCheckJar ) . ' --quiet --json ' .
+			escapeshellarg( $jsonOut ) . ' ' . escapeshellarg( $file ) . ' 2>&1';
 
 		exec( $command, $output, $exitCode );
 
 		/** @var EpubCheckResult $checkResult */
-		foreach ( $this->parseResults( $jsonOut, $expandedEpub ) as $checkResult ) {
+		foreach ( $this->parseResults( $jsonOut ) as $checkResult ) {
 			$checkResult->reportAsWarning( $this, $this->testResult );
 		}
 	}
 
-	private function expandEpub( $file ) {
-		$zip = new ZipArchive();
-		$this->assertTrue( $zip->open( $file, ZipArchive::CHECKCONS ) );
-		$expandedEpub = tempnam( sys_get_temp_dir(), 'unpacked-epub' );
-		$this->assertTrue( removeFile( $expandedEpub ) );
-		$this->assertTrue( mkdir( $expandedEpub ) );
-		$this->assertTrue( $zip->extractTo( $expandedEpub ) );
-		$zip->close();
-
-		return $expandedEpub;
-	}
-
-	private function parseResults( $file, $basePath ) {
+	private function parseResults( $file ) {
 		$decoded = json_decode( file_get_contents( $file ), true );
 		$this->assertNotNull( $decoded, json_last_error_msg() );
-		return $this->mapResults( $decoded['messages'], $basePath );
+		return $this->mapResults( $decoded['messages'] );
 	}
 
-	private function mapLocations( $data, $basePath ) {
-		$mapper = function ( $location ) use( $basePath ) {
+	private function mapLocations( $data ) {
+		$mapper = function ( $location ) {
 			$path = $location['path'];
 			$line = $location['line'];
 			$column = $location['column'];
 
 			if ( $line != -1 ) {
-				return new Location( $basePath, $path, $line, $column );
+				return new Location( $path, $line, $column );
 			} else {
 				return null;
 			}
@@ -110,11 +97,11 @@ class BookCreatorIntegrationTest extends \PHPUnit\Framework\TestCase {
 	 } );
 	}
 
-	private function mapResults( $data, $basePath ) {
-		$mapper = function ( $message ) use( $basePath ) {
+	private function mapResults( $data ) {
+		$mapper = function ( $message ) {
 			$severity = $message['severity'];
 			$message_text = $message['message'];
-			$locations = $this->mapLocations( $message['locations'], $basePath );
+			$locations = $this->mapLocations( $message['locations'] );
 			$additionalLocations = $message['additionalLocations'];
 			return new EpubCheckResult( $severity, $message_text, $locations, $additionalLocations );
 		};
@@ -137,20 +124,18 @@ class BookCreatorIntegrationTest extends \PHPUnit\Framework\TestCase {
 }
 
 class Location implements PHPUnit_Framework_SelfDescribing {
-	private $base = null;
-	private $path = null;
+	private $path;
 	private $line = 0;
 	private $column = 0;
 
-	public function __construct( $base, $path, $line, $column ) {
-		$this->base = $base;
+	public function __construct( $path, $line, $column ) {
 		$this->path = $path;
 		$this->line = $line;
 		$this->column = $column;
 	}
 
 	public function toString() {
-		return $this->base . '/' . $this->path . ':' . $this->line . ':' . $this->column;
+		return '/' . $this->path . ':' . $this->line . ':' . $this->column;
 	}
 }
 

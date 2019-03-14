@@ -24,8 +24,17 @@ foreach ( $stat as $format => $temp ) {
 		if ( $lang === '' ) {
 			$lang = 'oldwiki';
 		}
-
+		if ( !array_key_exists( $lang, $val ) ) {
+			$val[$lang] = [];
+		}
+		if ( !array_key_exists( $format, $val[$lang] ) ) {
+			$val[$lang][$format] = 0;
+		}
 		$val[$lang][$format] += $num;
+
+		if ( !array_key_exists( $format, $total ) ) {
+			$total[$format] = 0;
+		}
 		$total[$format] += $num;
 	}
 }

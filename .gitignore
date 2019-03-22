@@ -1,4 +1,5 @@
-temp
+temp/*
+!temp/.gitkeep
 vendor/*
 composer.phar
 composer.lock

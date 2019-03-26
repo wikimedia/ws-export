@@ -40,17 +40,21 @@ class PageParser {
 	}
 
 	/**
-	 * return the list of the chapters with the summary if it exist.
+	 * Return the list of the chapters (based on the ws-summary HTML if it exists, otherwise via all internal links).
+	 * @param string[] $pageList Array of page titles.
+	 * @param string[] $namespaces Array of all localized namespace names of the current wiki.
 	 * @return Page[]
-	 * TODO retrive only main namespace pages ?
 	 */
 	public function getChaptersList( $pageList, $namespaces ) {
 		$list = $this->xPath->query( '//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"internal") or contains(@class,"image"))]' );
 		$chapters = [];
 		/** @var DOMElement $link */
 		foreach ( $list as $link ) {
-			$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
+			// Extract the page title (including namespace) from the relative URL in the link (via a dummy URL).
+			$urlParts = parse_url( 'http://example.com' . $link->getAttribute( 'href' ) );
+			$title = urldecode( substr( $urlParts['path'], strlen( '/wiki/' ) ) );
 			$parts = explode( ':', $title );
+			// Include the chapter if it's not already present and is a main-namespace page.
 			if ( $title != '' && !in_array( $title, $pageList ) && !in_array( $parts[0], $namespaces ) ) {
 				$chapter = new Page();
 				$chapter->title = $title;

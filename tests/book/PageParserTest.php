@@ -18,6 +18,8 @@ class PageParserTest extends PHPUnit\Framework\TestCase {
 	public function testGetChaptersList() {
 		$chapterList = $this->pageParser->getChaptersList( [], [] );
 		$this->assertCount( 14, $chapterList );
+		$this->assertEquals( "Tales_of_Unrest/Author's_Note", $chapterList[0]->title );
+		$this->assertEquals( "Karain/Chapter_V", $chapterList[6]->title );
 	}
 
 	public function testGetFullChaptersList() {

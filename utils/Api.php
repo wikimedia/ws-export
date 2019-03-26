@@ -173,14 +173,14 @@ class Api {
 
 	private function parseGetPageResponse( $response ) {
 		foreach ( $response['query']['pages'] as $page ) {
+			$title = $page['title'];
 			if ( isset( $page['revisions'] ) ) {
 				foreach ( $page['revisions'] as $revision ) {
-					return getXhtmlFromContent( $this->lang, $revision['*'], $page['title'] );
+					return getXhtmlFromContent( $this->lang, $revision['*'], $title );
 				}
 			}
 		}
-
-		throw new HttpException( 'Page revision not found', 404 );
+		throw new HttpException( "Page revision not found for: $title", 404 );
 	}
 
 	/**

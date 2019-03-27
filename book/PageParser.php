@@ -52,6 +52,10 @@ class PageParser {
 		foreach ( $list as $link ) {
 			// Extract the page title (including namespace) from the relative URL in the link (via a dummy URL).
 			$urlParts = parse_url( 'http://example.com' . $link->getAttribute( 'href' ) );
+			if ( empty( $urlParts['path'] ) ) {
+				// If there's no path component, it can't be a link to a chapter.
+				continue;
+			}
 			$title = urldecode( substr( $urlParts['path'], strlen( '/wiki/' ) ) );
 			$parts = explode( ':', $title );
 			// Include the chapter if it's not already present and is a main-namespace page.

@@ -180,6 +180,9 @@ class Api {
 				}
 			}
 		}
+		if ( !isset( $title ) ) {
+			throw new HttpException( 'No page information found in response', 500 );
+		}
 		throw new HttpException( "Page revision not found for: $title", 404 );
 	}
 

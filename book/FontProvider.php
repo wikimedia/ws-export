@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Thomas Pellissier Tanon
- * @copyright 2017 Thomas Pellissier Tanon
+ * @copyright 2017-2019 Thomas Pellissier Tanon
  * @license GPL-2.0-or-later
  */
 
@@ -18,13 +18,35 @@ class FontProvider {
 			'name' => 'FreeSerif', 'label' => 'Free Serif', 'css_name' => 'wse_FreeSerif', 'otf' => [
 				'R' => 'FreeSerif.otf', 'RB' => 'FreeSerifBold.otf', 'RBI' => 'FreeSerifBoldItalic.otf', 'RI' => 'FreeSerifItalic.otf'
 			]
-		], 'linuxlibertine' => [
+		],
+		'linuxlibertine' => [
 			'name' => 'LinuxLibertine', 'label' => 'Linux Libertine', 'css_name' => 'wse_LinuxLibertine', 'otf' => [
 				'R' => 'LinLibertine_R.otf', 'RB' => 'LinLibertine_RB.otf', 'RBI' => 'LinLibertine_RBI.otf', 'RI' => 'LinLibertine_RI.otf'
 			]
-		], 'libertinus' => [
+		],
+		'libertinus' => [
 			'name' => 'Libertinus', 'label' => 'Libertinus', 'css_name' => 'wse_Libertinus', 'otf' => [
 				'R' => 'libertinusserif-regular.otf', 'RB' => 'libertinusserif-bold.otf', 'RBI' => 'libertinusserif-bolditalic.otf', 'RI' => 'libertinusserif-italic.otf'
+			]
+		],
+		'mukta' => [
+			'name' => 'Mukta', 'label' => 'Mukta (Devanagari)', 'css_name' => 'wse_Mukta', 'otf' => [
+				'R' => 'Mukta-Regular.otf', 'RB' => 'Mukta-Bold.otf'
+			]
+		],
+		'mukta-mahee' => [
+			'name' => 'Mukta', 'label' => 'Mukta Mahee (Gurmukhi)', 'css_name' => 'wse_MuktaMahee', 'otf' => [
+				'R' => 'MuktaMahee-Regular.otf', 'RB' => 'MuktaMahee-Bold.otf'
+			]
+		],
+		'mukta-malar' => [
+			'name' => 'Mukta', 'label' => 'Mukta Malar (Tamil)', 'css_name' => 'wse_MuktaMalar', 'otf' => [
+				'R' => 'MuktaMalar-Regular.otf', 'RB' => 'MuktaMalar-Bold.otf'
+			]
+		],
+		'mukta-vaani' => [
+			'name' => 'Mukta', 'label' => 'Mukta Vaani (Gujarati)', 'css_name' => 'wse_MuktaVaani', 'otf' => [
+				'R' => 'MuktaVaani-Regular.otf', 'RB' => 'MuktaVaani-Bold.otf'
 			]
 		]
 	];

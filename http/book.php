@@ -52,8 +52,9 @@ try {
 	}
 } catch ( Exception $exception ) {
 	if ( $exception instanceof HttpException ) {
-		header( 'HTTP/1.1 ' . $exception->getCode() . ' ' . $exception->getMessage() );
+		$parts = preg_split( '/[\r\n]+/', $exception->getMessage(), 2 );
+		header( 'HTTP/1.1 ' . $exception->getCode() . ' ' . $parts[0] );
 	}
-	$error = htmlspecialchars( $exception->getMessage() );
+	$error = nl2br( htmlspecialchars( $exception->getMessage() ) );
 	include 'templates/book.php';
 }

@@ -172,7 +172,8 @@ class Api {
 	}
 
 	private function parseGetPageResponse( $response ) {
-		foreach ( $response['query']['pages'] as $page ) {
+		$pages = $response['query']['pages'] ?? [];
+		foreach ( $pages as $page ) {
 			$title = $page['title'];
 			if ( isset( $page['revisions'] ) ) {
 				foreach ( $page['revisions'] as $revision ) {

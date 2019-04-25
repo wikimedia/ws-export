@@ -28,7 +28,7 @@ class Refresh {
 		global $wsexportConfig;
 		$ini = parse_ini_file( $wsexportConfig['basePath'] . '/book/i18n.ini' );
 		try {
-			$response = $this->api->get( 'http://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain' );
+			$response = $this->api->get( 'https://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain' );
 			$temp = parse_ini_string( $response );
 			if ( $ini != false ) {
 				$ini = array_merge( $ini, $temp );
@@ -42,7 +42,7 @@ class Refresh {
 		global $wsexportConfig;
 		$content = file_get_contents( $wsexportConfig['basePath'] . '/book/mediawiki.css' );
 		try {
-			$content .= "\n" . $this->api->get( 'http://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css' );
+			$content .= "\n" . $this->api->get( 'https://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css' );
 		} catch ( Exception $e ) {
 		}
 		$this->setTempFileContent( 'epub.css', $content );
@@ -66,7 +66,7 @@ class Refresh {
 			$document->loadXML( $content );
 			$parser = new PageParser( $document );
 			$document = $parser->getContent( true );
-			$this->setTempFileContent( 'about.xhtml', str_replace( 'href="//', 'href="http://', $document->saveXML() ) );
+			$this->setTempFileContent( 'about.xhtml', str_replace( 'href="//', 'href="https://', $document->saveXML() ) );
 		}
 	}
 

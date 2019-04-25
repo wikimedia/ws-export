@@ -27,9 +27,9 @@ function uuid( $prefix = '' ) {
  */
 function wikisourceUrl( $lang, $page = '' ) {
 	if ( $lang === '' ) {
-		$url = 'http://wikisource.org';
+		$url = 'https://wikisource.org';
 	} else {
-		$url = 'http://' . $lang . '.wikisource.org';
+		$url = 'https://' . $lang . '.wikisource.org';
 	}
 
 	if ( $page !== '' ) {

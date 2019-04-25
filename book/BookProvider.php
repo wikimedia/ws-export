@@ -17,7 +17,7 @@ class BookProvider {
 	protected $options = [
 		'images' => true, 'fonts' => false, 'categories' => true, 'credits' => true
 	];
-	private $creditUrl = 'http://tools.wmflabs.org/phetools/credits.py';
+	private $creditUrl = 'https://tools.wmflabs.org/phetools/credits.py';
 
 	/**
 	 * @param $api Api

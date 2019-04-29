@@ -55,7 +55,7 @@ class BookProviderTest extends PHPUnit\Framework\TestCase {
 		$this->bookProvider->getMetadata( 'test', false, new DOMDocument() );
 
 		$this->assertEquals(
-			'http://tools.wmflabs.org/phetools/credits.py?lang=en&format=json&page=test',
+			'https://tools.wmflabs.org/phetools/credits.py?lang=en&format=json&page=test',
 			$this->mockHandler->getLastRequest()->getUri()->__toString() );
 	}
 

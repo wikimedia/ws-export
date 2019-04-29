@@ -25,9 +25,7 @@ try {
 		$refresh->refresh();
 		$success = 'The cache is updated for ' . $api->lang . ' language.';
 		include 'templates/book.php';
-	}
-
-	if ( $title === '' ) {
+	} elseif ( $title === '' ) {
 		include 'templates/book.php';
 	} else {
 		$creator = BookCreator::forApi( $api, $format, $options );

@@ -46,7 +46,7 @@ class Book extends Page {
 
 	/**
 	 * pictures included in the page
-	 * @type array
+	 * @var Picture[]
 	 */
 	public $pictures = [];
 

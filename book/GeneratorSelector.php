@@ -1,8 +1,5 @@
 <?php
 
-class WSExportInvalidArgumentException extends InvalidArgumentException {
-}
-
 class GeneratorSelector {
 	public static $formats = [
 		'epub-3' 	=> 'epub 3',

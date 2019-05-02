@@ -23,4 +23,5 @@
 	<file>.</file>
 	<exclude-pattern>temp/</exclude-pattern>
 	<exclude-pattern>vendor/</exclude-pattern>
+	<exclude-pattern>config.php</exclude-pattern>
 </ruleset>

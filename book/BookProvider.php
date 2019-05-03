@@ -6,8 +6,6 @@
  */
 
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 
 /**
  * provide all the data needed to create a book file
@@ -205,19 +203,23 @@ class BookProvider {
 	 * @return Picture[]
 	 */
 	protected function getPicturesData( array $pictures ) {
-		$this->api->getPool(
-			array_map( function ( Picture $picture ) {
-				return new Request( 'GET', $picture->url );
-			}, $pictures ),
-			[
-				'fulfilled' => function ( Response $response, $index ) use ( $pictures ) {
-					$content = $response->getBody()->getContents();
-					$mimeType = getMimeType( $content );
-					$pictures[$index]->mimetype = $mimeType;
-					$pictures[$index]->content = FileCleaner::cleanFile( $content, $mimeType );
-				}
-			]
-		)->wait();
+		$promises = array_map(
+			function ( Picture $picture ) {
+				global $wsexportConfig;
+
+				$picture->tempFile = tempnam( $wsexportConfig['tempPath'], 'pic-' );
+				$options = [ 'sink' => $picture->tempFile ];
+				return $this->api->createAsyncRequest( $picture->url, $options );
+			},
+			$pictures
+		);
+
+		$results = \GuzzleHttp\Promise\unwrap( $promises );
+
+		foreach ( $results as $index => $result ) {
+			$pictures[$index]->mimetype = getMimeType( $pictures[$index]->tempFile );
+		}
+
 		return $pictures;
 	}
 

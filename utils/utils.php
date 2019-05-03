@@ -58,24 +58,19 @@ function getFile( $file ) {
 /**
  * Get mimetype of a file, using finfo if its available, or mime_magic.
  *
- * @param string $contents a buffer containing the contents of the file
- * @return string|bool mime type on success or false on failure
+ * @param string $filename
+ * @return string|false mime type on success or false on failure
  */
-function getMimeType( $contents ) {
+function getMimeType( string $filename ) {
 	if ( class_exists( 'finfo', false ) ) {
 		$finfoOpt = defined( 'FILEINFO_MIME_TYPE' ) ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
 		$info = new finfo( $finfoOpt );
 		if ( $info ) {
-			return $info->buffer( $contents );
+			return $info->file( $filename );
 		}
 	}
 	if ( ini_get( 'mime_magic.magicfile' ) && function_exists( 'mime_content_type' ) ) {
-		$filename = tempnam( sys_get_temp_dir(), 'wsf' );
-		file_put_contents( $filename, $contents );
-		$ret = mime_content_type( $filename );
-		removeFile( $filename );
-
-		return $ret;
+		return mime_content_type( $filename );
 	}
 
 	return false;

@@ -84,6 +84,18 @@ class Api {
 	}
 
 	/**
+	 * @param string $url
+	 * @param array $options
+	 * @return PromiseInterface
+	 */
+	public function createAsyncRequest( string $url, array $options = [] ): PromiseInterface {
+		return $this->client->getAsync(
+			$url,
+			$options
+		);
+	}
+
+	/**
 	 * @param Request[] $requests
 	 * @param array $options
 	 * @return PromiseInterface

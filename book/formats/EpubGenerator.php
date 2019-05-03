@@ -81,7 +81,7 @@ abstract class EpubGenerator implements FormatGenerator {
 			}
 		}
 		foreach ( $book->pictures as $picture ) {
-			$zip->addFromString( 'OPS/images/' . $picture->title, $picture->content );
+			$picture->saveToZip( $zip, 'OPS/images/' . $picture->title );
 		}
 		$zip->addFromString( 'OPS/main.css', $css );
 		$this->addContent( $book, $zip );

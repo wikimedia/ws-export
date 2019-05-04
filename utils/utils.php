@@ -184,3 +184,16 @@ function removeFile( $fileName ) {
 	}
 	return $result === 0;
 }
+
+/**
+ * Returns a string representation of an exception useful for logging
+ *
+ * @param Exception $ex
+ * @return string
+ */
+function formatException( Exception $ex ): string {
+	$date = date( DATE_RFC3339 );
+	$class = get_class( $ex );
+
+	return "$date: $class {$ex->getMessage()}\n{$ex->getTraceAsString()}\n";
+}

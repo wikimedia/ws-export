@@ -49,10 +49,22 @@ try {
 
 	}
 } catch ( Exception $exception ) {
+	$code = 500;
+	$message = 'Internal Server Error';
+	$doLog = true;
 	if ( $exception instanceof HttpException ) {
 		$parts = preg_split( '/[\r\n]+/', $exception->getMessage(), 2 );
-		header( 'HTTP/1.1 ' . $exception->getCode() . ' ' . $parts[0] );
+		$code = $exception->getCode();
+		$message = $parts[0];
+		// 404's are quite popular, not logging them
+		$doLog = $exception->getCode() !== 404;
 	}
+	if ( $doLog && !defined( 'IN_UNIT_TEST' ) ) {
+		$stdout = fopen( 'php://stderr', 'w' );
+		fprintf( $stdout, formatException( $exception ) );
+	}
+
+	header( "HTTP/1.1 $code $message" );
 	$error = nl2br( htmlspecialchars( $exception->getMessage() ) );
 	include 'templates/book.php';
 }

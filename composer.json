@@ -34,6 +34,15 @@
 		],
 		"fix": [
 			"phpcbf"
+		],
+		"mkconfig": [
+			"php -r \"file_exists('config.php') || copy('config.dist.php', 'config.php');\""
+		],
+		"post-install-cmd": [
+			"@mkconfig"
+		],
+		"post-update-cmd": [
+			"@mkconfig"
 		]
 	}
 }

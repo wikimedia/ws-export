@@ -1,9 +1,9 @@
 <?php
-$wsexportConfig = [
-	'basePath' => '..', 'tempPath' => __DIR__ . '/../temp', 'stat' => true
-];
 
-include_once __DIR__ . '/../book/init.php';
+global $wsexportConfig;
+$wsexportConfig = require_once dirname( __DIR__ ) . '/config.php';
+
+include_once $wsexportConfig['basePath'] . '/book/init.php';
 
 $api = new Api();
 $title = isset( $_GET['page'] ) ? trim( htmlspecialchars( urldecode( $_GET['page'] ) ) ) : '';

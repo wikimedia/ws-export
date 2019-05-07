@@ -2,3 +2,4 @@ temp/*
 !temp/.gitkeep
 vendor/*
 composer.phar
+config.php

@@ -1,14 +1,10 @@
 #!/usr/bin/php
 <?php
 
-$basePath = realpath( __DIR__ . '/..' );
 global $wsexportConfig;
+$wsexportConfig = require_once dirname( __DIR__ ) . '/config.php';
 
-$wsexportConfig = [
-	'basePath' => $basePath, 'stat' => false, 'tempPath' => $basePath . '/temp', 'debug' => false
-];
-
-include_once $basePath . '/book/init.php';
+include_once $wsexportConfig['basePath'] . '/book/init.php';
 
 function parseCommandLine() {
 	global $wsexportConfig;

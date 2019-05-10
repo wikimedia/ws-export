@@ -52,6 +52,7 @@ class BookTest extends \PHPUnit\Framework\TestCase {
 	 * @runInSeparateProcess
 	 */
 	public function testGetInvalidFormatDisplaysError() {
+		define( 'IN_UNIT_TEST', true );
 		$_GET['page'] = 'xxx';
 		$_GET['format'] = 'xxx';
 		$this->expectOutputRegex( '/' . preg_quote( "The file format 'xxx' is unknown." ) . '/' );

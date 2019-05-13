@@ -7,6 +7,16 @@
 	"homepage": "https://github.com/wsexport/tool",
 	"license": "GPL-2.0-or-later",
 	"authors": [],
+	"autoload": {
+		"psr-4": {
+			"App\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"App\\Tests\\": "tests/"
+		}
+	},
 	"require": {
 		"php": ">=7.2",
 		"ext-dom": "*",

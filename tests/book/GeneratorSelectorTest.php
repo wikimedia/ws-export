@@ -1,11 +1,18 @@
 <?php
 
-require_once __DIR__ . '/../test_init.php';
+namespace App\Tests;
+
+use App\Generator\ConvertGenerator;
+use App\Generator\Epub2Generator;
+use App\Generator\Epub3Generator;
+use App\GeneratorSelector;
+use App\Exception\WSExportInvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers GeneratorSelector
  */
-class GeneratorSelectorTest extends PHPUnit\Framework\TestCase {
+class GeneratorSelectorTest extends TestCase {
 
 	public function testGetUnknownGeneratorRaisesException() {
 		$this->expectException( WSExportInvalidArgumentException::class );

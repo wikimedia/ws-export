@@ -1,11 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../test_init.php';
+namespace App\Tests;
+
+use App\PageParser;
+use DOMDocument;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers PageParser
  */
-class PageParserTest extends PHPUnit\Framework\TestCase {
+class PageParserTest extends TestCase {
 	/**
 	 * @var PageParser
 	 */

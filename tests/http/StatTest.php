@@ -1,16 +1,18 @@
 <?php
 
-require_once __DIR__ . '/../test_init.php';
+namespace App\Tests;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers CreationLog
  */
-class StatTest extends \PHPUnit\Framework\TestCase {
+class StatTest extends TestCase {
 	/**
 	 * @runInSeparateProcess
 	 */
 	public function testGet() {
 		$this->expectOutputRegex( '/' . preg_quote( 'Stats for ' ) . '/' );
-		include __DIR__ . '/../../http/stat.php';
+		include __DIR__ . '/../../public/stat.php';
 	}
 }

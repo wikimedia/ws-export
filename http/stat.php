@@ -1,7 +1,7 @@
 <?php
-$wsexportConfig = [
-	'basePath' => '..', 'tempPath' => '../temp', 'stat' => true
-];
+
+global $wsexportConfig;
+$wsexportConfig = require_once dirname( __DIR__ ) . '/config.php';
 
 function normalizeFormat( $format ) {
 	$parts = explode( '-', $format );

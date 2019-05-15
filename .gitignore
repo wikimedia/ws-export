@@ -3,3 +3,5 @@ temp/*
 vendor/*
 composer.phar
 config.php
+*.sqlite
+

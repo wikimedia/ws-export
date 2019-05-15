@@ -56,8 +56,8 @@ class CreationLog {
 
 	private static function getDbPath() {
 		global $wsexportConfig;
-		if ( $wsexportConfig['stat'] && $wsexportConfig['tempPath'] ) {
-			return 'sqlite:' . $wsexportConfig['tempPath'] . '/logs.sqlite';
+		if ( $wsexportConfig['stat'] && $wsexportConfig['logDatabase'] ) {
+			return 'sqlite:' . $wsexportConfig['logDatabase'];
 		} else {
 			return 'sqlite::memory:';
 		}

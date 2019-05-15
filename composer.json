@@ -18,7 +18,8 @@
 		"ext-sqlite3": "*",
 		"ext-zip": "*",
 		"guzzlehttp/guzzle": "~6.0",
-		"monolog/monolog": "^1.18"
+		"monolog/monolog": "^1.18",
+		"wikimedia/html-formatter": "^1.0"
 	},
 	"require-dev": {
 		"ext-xdebug": "*",

@@ -7,7 +7,6 @@
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -76,9 +75,6 @@ class Api {
 					throw new HttpException( 'HTTP error ' . $response->getStatusCode(), $response->getStatusCode() );
 				}
 				return $response->getBody()->getContents();
-			},
-			function ( RequestException $e ) {
-				throw new HttpException( $e->getMessage() );
 			}
 		);
 	}

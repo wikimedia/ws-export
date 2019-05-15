@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6a2db201344d3f1ac7b5f1d0eb3314b",
+    "content-hash": "1e6c0f1e25369d6f446a6f4c748aa769",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -403,6 +403,50 @@
             ],
             "description": "A polyfill for getallheaders.",
             "time": "2016-02-11T07:05:27+00:00"
+        },
+        {
+            "name": "wikimedia/html-formatter",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wikimedia/html-formatter.git",
+                "reference": "d6241e74d8091cf1fad91a764da5e1ba5f46e785"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wikimedia/html-formatter/zipball/d6241e74d8091cf1fad91a764da5e1ba5f46e785",
+                "reference": "d6241e74d8091cf1fad91a764da5e1ba5f46e785",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "jakub-onderka/php-console-highlighter": "0.3.2",
+                "jakub-onderka/php-parallel-lint": "1.0.0",
+                "mediawiki/mediawiki-codesniffer": "18.0.0",
+                "mediawiki/minus-x": "0.3.1",
+                "phpunit/phpunit": "4.8.36 || ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "MediaWiki contributors"
+                }
+            ],
+            "description": "Performs transformations of HTML by wrapping around libxml2 and working around its countless bugs.",
+            "homepage": "https://www.mediawiki.org/wiki/HtmlFormatter",
+            "time": "2018-04-14T10:06:56+00:00"
         }
     ],
     "packages-dev": [
@@ -2180,7 +2224,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",

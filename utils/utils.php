@@ -5,6 +5,9 @@
  * @license GPL-2.0-or-later
  */
 
+use HtmlFormatter\HtmlFormatter;
+use Psr\Http\Message\ResponseInterface;
+
 /**
  * @param string $prefix a prefix for the uuid
  * @return string an UUID
@@ -196,4 +199,44 @@ function formatException( Exception $ex ): string {
 	$class = get_class( $ex );
 
 	return "$date: $class {$ex->getMessage()}\n{$ex->getTraceAsString()}\n";
+}
+
+/**
+ * Attempts to extract a string error message from the error response returned by the remote server
+ *
+ * @param ResponseInterface|null $resp
+ * @return string|null
+ */
+function extractErrorMessage( ?ResponseInterface $resp ): ?string {
+	if ( !$resp || $resp->getHeader( 'Content-Type' )[0] !== 'text/html' ) {
+		return null;
+	}
+
+	$body = $resp->getBody()->getContents();
+	if ( strpos( $body, '<title>Wikimedia Error</title>' ) === false ) {
+		return null;
+	}
+	$formatter = new HtmlFormatter( $body );
+	$doc = $formatter->getDoc();
+	$text = null;
+
+	// Try wmerrors style error page
+	$xpath = new DOMXPath( $doc );
+	$nodes = $xpath->query( '//div[contains(@class, "AdditionalTechnicalStuff")]' );
+	/** @var DOMElement $node */
+	foreach ( $nodes as $node ) {
+		if ( $node->parentNode->getAttribute( 'class' ) === 'TechnicalStuff' ) {
+			$text = html_entity_decode( $node->parentNode->textContent );
+			break;
+		}
+	}
+
+	// Otherwise, try hhvm-fatal-error.php style
+	if ( !$text ) {
+		foreach ( $doc->getElementsByTagName( 'code' ) as $node ) {
+			$text = trim( $text . "\n" . $node->textContent );
+		}
+	}
+
+	return $text ? "Wikisource servers returned an error: $text" : null;
 }

@@ -1,6 +1,9 @@
 <?php
 
+use GuzzleHttp\Exception\ServerException;
+
 global $wsexportConfig;
+
 $wsexportConfig = require_once dirname( __DIR__ ) . '/config.php';
 
 include_once $wsexportConfig['basePath'] . '/book/init.php';
@@ -51,6 +54,7 @@ try {
 } catch ( Exception $exception ) {
 	$code = 500;
 	$message = 'Internal Server Error';
+	$error = $exception->getMessage();
 	$doLog = true;
 	if ( $exception instanceof HttpException ) {
 		$parts = preg_split( '/[\r\n]+/', $exception->getMessage(), 2 );
@@ -58,13 +62,18 @@ try {
 		$message = $parts[0];
 		// 404's are quite popular, not logging them
 		$doLog = $exception->getCode() !== 404;
+	} elseif ( $exception instanceof ServerException ) {
+		$response = $exception->getResponse();
+		if ( $response ) {
+			$error = extractErrorMessage( $response ) ?: $error;
+		}
 	}
 	if ( $doLog && !defined( 'IN_UNIT_TEST' ) ) {
 		$stdout = fopen( 'php://stderr', 'w' );
-		fprintf( $stdout, formatException( $exception ) );
+		fputs( $stdout, formatException( $exception ) );
 	}
 
 	header( "HTTP/1.1 $code $message" );
-	$error = nl2br( htmlspecialchars( $exception->getMessage() ) );
+	$error = nl2br( htmlspecialchars( $error ) );
 	include 'templates/book.php';
 }

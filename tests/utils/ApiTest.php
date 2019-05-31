@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../test_init.php';
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -26,7 +27,7 @@ class ApiTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testQueryAsyncRaisesExceptionOnHttpError() {
-		$this->expectException( HttpException::class );
+		$this->expectException( ClientException::class );
 		$api = $this->apiWithResponse( 404, [], 'Not found' );
 		$api->queryAsync( [ 'prop' => 'revisions' ] )->wait();
 	}

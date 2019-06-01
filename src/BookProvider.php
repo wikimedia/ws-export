@@ -212,9 +212,9 @@ class BookProvider {
 	protected function getPicturesData( array $pictures ) {
 		$promises = array_map(
 			function ( Picture $picture ) {
-				global $wsexportConfig;
+				$cache = FileCache::singleton();
 
-				$picture->tempFile = tempnam( $wsexportConfig['tempPath'], 'pic-' );
+				$picture->tempFile = tempnam( $cache->getDirectory(), 'pic-' );
 				$options = [ 'sink' => $picture->tempFile ];
 				return $this->api->createAsyncRequest( $picture->url, $options );
 			},

@@ -58,7 +58,7 @@ class AtomGenerator implements FormatGenerator {
 		$this->appendNamespaces( $entry );
 		$dom->appendChild( $entry );
 
-		$fileName = Util::buildTemporaryFileName( $book->title, 'atom', true );
+		$fileName = Util::buildTemporaryFileName( $book->title, 'atom' );
 		$dom->save( $fileName );
 		return $fileName;
 	}

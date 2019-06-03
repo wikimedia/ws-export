@@ -1,16 +1,20 @@
 <?php
 
-require_once __DIR__ . '/../test_init.php';
+namespace App\Tests;
 
+use App\BookProvider;
+use App\Util\Api;
+use DOMDocument;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers BookProvider
  */
-class BookProviderTest extends PHPUnit\Framework\TestCase {
+class BookProviderTest extends TestCase {
 	private $bookProvider;
 	private $mockHandler;
 
@@ -63,7 +67,7 @@ class BookProviderTest extends PHPUnit\Framework\TestCase {
 		$responses = [ new Response( $status, $header, $body ) ];
 		$this->mockHandler = new MockHandler( $responses );
 		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
-		return new API( 'en', '', $client );
+		return new Api( 'en', '', $client );
 	}
 
 	private function parseDocument( $filename ) {

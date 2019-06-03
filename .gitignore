@@ -4,4 +4,4 @@ vendor/*
 composer.phar
 config.php
 *.sqlite
-
+phpunit.xml

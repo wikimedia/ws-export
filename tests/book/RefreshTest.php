@@ -1,21 +1,25 @@
 <?php
 
-require_once __DIR__ . '/../test_init.php';
+namespace App\Tests;
 
+use App\Refresh;
+use App\Util\Api;
+use App\Util\Util;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Refresh
  */
-class RefreshTest extends \PHPUnit\Framework\TestCase {
+class RefreshTest extends TestCase {
 
 	public function testRefreshUpdatesI18N() {
 		$this->refresh( 'en' );
 
-		$i18n = unserialize( getTempFile( 'en', 'i18n.sphp' ) );
+		$i18n = unserialize( Util::getTempFile( 'en', 'i18n.sphp' ) );
 		$this->assertIsArray( $i18n );
 		$this->assertEquals( 'Test-Title', $i18n[ 'title_page' ] );
 	}
@@ -23,26 +27,26 @@ class RefreshTest extends \PHPUnit\Framework\TestCase {
 	public function testRefreshUpdatesEpubCssWikisource() {
 		$this->refresh( 'en' );
 
-		$css = getTempFile( 'en', 'epub.css' );
+		$css = Util::getTempFile( 'en', 'epub.css' );
 		$this->assertStringEndsWith( '#TEST-CSS', $css );
 	}
 
 	public function testRefreshUpdatesAboutXhtmlWikisource() {
 		$this->refresh( 'en' );
 
-		$about = getTempFile( 'en', 'about.xhtml' );
+		$about = Util::getTempFile( 'en', 'about.xhtml' );
 		$this->assertStringContainsString( 'Test-About-Content', $about );
 	}
 
 	public function testRefreshUpdatesNamespacesList() {
 		$this->refresh( 'en' );
 
-		$namespaces = unserialize( getTempFile( 'en', 'namespaces.sphp' ) );
+		$namespaces = unserialize( Util::getTempFile( 'en', 'namespaces.sphp' ) );
 		$this->assertEquals( [ '0' => 'test' ], $namespaces );
 	}
 
 	private function refresh( $lang ) {
-		$api = new API( $lang, '', $this->mockClient( $this->defaultResponses() ) );
+		$api = new Api( $lang, '', $this->mockClient( $this->defaultResponses() ) );
 		$refresh = new Refresh( $api );
 		$refresh->refresh();
 	}

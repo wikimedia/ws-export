@@ -5,7 +5,7 @@ PHPUNIT = $(VENDOR)/phpunit/phpunit/phpunit
 PHPUNIT_ARGS =
 COMPOSER_PHAR = composer.phar
 
-EPUBCHECK_VERSION = 4.1.1
+EPUBCHECK_VERSION = 4.2.1
 EPUBCHECK_URL = https://github.com/IDPF/epubcheck/releases/download/v$(EPUBCHECK_VERSION)/epubcheck-$(EPUBCHECK_VERSION).zip
 EPUBCHECK_JAR = $(VENDOR)/epubcheck-$(EPUBCHECK_VERSION)/epubcheck.jar
 

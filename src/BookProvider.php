@@ -13,6 +13,7 @@ use App\Util\Api;
 use App\Util\Util;
 use DOMDocument;
 use GuzzleHttp\Promise\PromiseInterface;
+use Iterator;
 
 /**
  * provide all the data needed to create a book file
@@ -307,7 +308,7 @@ class BookProvider {
 			$pages[] = 'Index:' . $book->scan;
 		}
 		$pages = array_unique( array_merge( $pages, $otherPages ) );
-		foreach ( $this->splitArrayByBatch( $pages, 50 ) as $batch ) {
+		foreach ( $this->splitArrayByLength( $pages, 3000 ) as $batch ) {
 			$params = [
 				'lang' => $book->lang, 'format' => 'json', 'page' => implode( '|', $batch )
 			];
@@ -388,20 +389,25 @@ class BookProvider {
 		}
 	}
 
-	private function splitArrayByBatch( $array, $limit ) {
-		$result = [];
-		$bagCount = $limit;
-		$bagId = -1;
-		foreach ( $array as $id => $value ) {
-			if ( $bagCount === $limit ) {
-				$bagCount = 0;
-				$bagId++;
-				$result[$bagId] = [];
+	/**
+	 * Splits an array of strings into multiple arrays small enough to fit into a Toolforge URL
+	 *
+	 * @param string[] $array
+	 * @param int $charLimit
+	 * @return Iterator
+	 */
+	private function splitArrayByLength( array $array, int $charLimit ): Iterator {
+		$batch = [];
+		foreach ( $array as $value ) {
+			$batch[] = $value;
+			if ( strlen( urlencode( implode( '|', $batch ) ) ) > $charLimit ) {
+				yield $batch;
+				$batch = [];
 			}
-			$result[$bagId][$id] = $value;
-			$bagCount++;
 		}
-		return $result;
+		if ( $batch ) {
+			yield $batch;
+		}
 	}
 
 	private function removeNamespacesFromTitle( $title ) {

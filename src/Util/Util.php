@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use App\FileCache;
 use App\Refresh;
 use DOMElement;
 use DOMXPath;
@@ -109,8 +110,8 @@ class Util {
 	}
 
 	public static function getTempFile( $lang, $name ) {
-		global $wsexportConfig;
-		$path = $wsexportConfig['tempPath'] . '/' . $lang . '/' . $name;
+		$cache = FileCache::singleton();
+		$path = $cache->getDirectory() . '/' . $lang . '/' . $name;
 		if ( !file_exists( $path ) ) {
 			$refresh = new Refresh( new Api( $lang ) );
 			$refresh->refresh();
@@ -169,16 +170,11 @@ class Util {
 	 *
 	 * @param string $title
 	 * @param string $extension
-	 * @param bool $systemTemp Use the system /tmp directory
 	 * @return string
 	 */
-	public static function buildTemporaryFileName( $title, $extension, $systemTemp = false ) {
-		if ( $systemTemp ) {
-			$directory = sys_get_temp_dir();
-		} else {
-			global $wsexportConfig;
-			$directory = realpath( $wsexportConfig['tempPath'] );
-		}
+	public static function buildTemporaryFileName( $title, $extension ) {
+		$cache = FileCache::singleton();
+		$directory = $cache->getDirectory();
 
 		for ( $i = 0; $i < 100; $i++ ) {
 			$path = $directory . '/' . 'ws-' . static::encodeString( $title ) . '-' . getmypid() . rand() . '.' . $extension;

@@ -98,7 +98,8 @@ class Refresh {
 	}
 
 	protected function getTempFileName( $name ) {
-		global $wsexportConfig;
-		return $wsexportConfig['tempPath'] . '/' . $this->api->lang . '/' . $name;
+		$cache = FileCache::singleton();
+
+		return $cache->getDirectory() . '/' . $this->api->lang . '/' . $name;
 	}
 }

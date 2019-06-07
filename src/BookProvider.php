@@ -8,7 +8,6 @@ namespace App;
  * @license GPL-2.0-or-later
  */
 
-use App\Exception\HttpException;
 use App\Util\Api;
 use App\Util\Util;
 use DOMDocument;
@@ -326,13 +325,14 @@ class BookProvider {
 		}
 		if ( !empty( $imagesSet ) ) {
 			$images = array_keys( $imagesSet );
-			$params = [
-				'lang' => $book->lang, 'format' => 'json', 'image' => implode( '|', $images )
-			];
-			$promises[] = $this->api->getAsync(
-				$this->creditUrl,
-				[ 'query' => $params ]
-			);
+			foreach ( $this->splitArrayByLength( $images, 3000 ) as $batch ) {
+				$params = [
+					'lang' => $book->lang,
+					'format' => 'json',
+					'image' => implode( '|', $batch ),
+				];
+				$promises[] = $this->api->getAsync( $this->creditUrl, [ 'query' => $params ] );
+			}
 		}
 
 		return $promises;
@@ -345,11 +345,7 @@ class BookProvider {
 	public function finishCredit( $promises ) {
 		$credit = [];
 		foreach ( $promises as $promise ) {
-			try {
-				$result = json_decode( $promise->wait(), true );
-			} catch ( HttpException $e ) {
-				$result = [];
-			}
+			$result = json_decode( $promise->wait(), true );
 			foreach ( $result as $name => $values ) {
 				if ( !in_array( $name, $credit ) ) {
 					$credit[$name] = [ 'count' => 0, 'flags' => [] ];

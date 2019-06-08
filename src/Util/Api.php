@@ -229,9 +229,10 @@ class Api {
 	}
 
 	/**
+	 * @param string $url
 	 * @return string the url encoded like mediawiki does.
 	 */
-	public static function mediawikiUrlEncode( $url ) {
+	public static function mediawikiUrlEncode( string $url ): string {
 		$search = [ '%21', '%24', '%28', '%29', '%2A', '%2C', '%2D', '%2E', '%2F', '%3A', '%3B', '%40' ];
 		$replace = [ '!', '$', '(', ')', '*', ',', '-', '.', '/', ':', ';', '@' ];
 

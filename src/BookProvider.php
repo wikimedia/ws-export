@@ -26,8 +26,9 @@ class BookProvider {
 
 	/**
 	 * @param $api Api
+	 * @param bool[] $options
 	 */
-	public function __construct( Api $api, $options ) {
+	public function __construct( Api $api, array $options ) {
 		$this->api = $api;
 		$this->options = array_merge( $this->options, $options );
 	}

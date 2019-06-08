@@ -48,7 +48,7 @@ abstract class EpubGenerator implements FormatGenerator {
 
 	/**
 	 * create the file
-	 * @param $data Book the content of the book
+	 * @param Book $book the content of the book
 	 * @return string
 	 */
 	public function create( Book $book ) {

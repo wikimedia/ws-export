@@ -145,8 +145,11 @@ class Util {
 
 	/**
 	 * Cut a filename if it is too long but keep the extension
+	 * @param string $string
+	 * @param int $max
+	 * @return string
 	 */
-	public static function cutFilename( $string, $max = 100 ) {
+	public static function cutFilename( string $string, int $max = 100 ): string {
 		$length = strlen( $string );
 		if ( $length > $max ) {
 			$string = substr( $string, $length - $max, $length - 1 );

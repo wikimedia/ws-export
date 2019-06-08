@@ -56,9 +56,10 @@ class FontProvider {
 
 	/**
 	 * return data about a font
+	 * @param string $id Font id
 	 * @return array
 	 */
-	public static function getData( $id ) {
+	public static function getData( string $id ) {
 		if ( isset( self::$data[$id] ) ) {
 			return self::$data[$id];
 		} else {

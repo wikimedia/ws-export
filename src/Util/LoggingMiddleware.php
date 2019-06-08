@@ -3,9 +3,11 @@
 namespace App\Util;
 
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 class LoggingMiddleware {
+	/** @var LoggerInterface */
 	private $logger;
 	private $nextHandler;
 
@@ -21,11 +23,11 @@ class LoggingMiddleware {
 	}
 
 	public function __invoke( RequestInterface $request, array $options ) {
-		$this->logger->addDebug( $request->getMethod() . ' ' . $request->getUri() );
+		$this->logger->debug( $request->getMethod() . ' ' . $request->getUri() );
 		$fn = $this->nextHandler;
-		return $fn( $request, $options )->then( function ( $response ) {
+		return $fn( $request, $options )->then( function ( ResponseInterface $response ) {
 			if ( $response->getStatusCode() < 200 || $response->getStatusCode() > 299 ) {
-				$this->logger->addWarning( 'HTTP response ' . $response->getStatusCode() );
+				$this->logger->warning( 'HTTP response ' . $response->getStatusCode() );
 			}
 			return $response;
 		} );

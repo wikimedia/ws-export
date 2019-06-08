@@ -9,6 +9,7 @@ use DOMXPath;
 use Exception;
 use finfo;
 use HtmlFormatter\HtmlFormatter;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -211,16 +212,21 @@ class Util {
 	 * Attempts to extract a string error message from the error response returned by the remote server
 	 *
 	 * @param ResponseInterface|null $resp
+	 * @param RequestInterface $req
 	 * @return string|null
 	 */
-	public static function extractErrorMessage( ?ResponseInterface $resp ): ?string {
+	public static function extractErrorMessage( ?ResponseInterface $resp, RequestInterface $req ): ?string {
 		if ( !$resp || $resp->getHeader( 'Content-Type' )[0] !== 'text/html' ) {
 			return null;
 		}
 
+		$message = 'Error performing an external request';
+		if ( preg_match( '/^(.*\.)?wikisource.org$/', $req->getUri()->getHost() ) ) {
+			$message = 'Wikisource servers returned an error';
+		}
 		$body = $resp->getBody()->getContents();
 		if ( strpos( $body, '<title>Wikimedia Error</title>' ) === false ) {
-			return null;
+			return $message;
 		}
 		$formatter = new HtmlFormatter( $body );
 		$doc = $formatter->getDoc();
@@ -244,6 +250,6 @@ class Util {
 			}
 		}
 
-		return $text ? "Wikisource servers returned an error: $text" : null;
+		return $text ? "$message: $text" : $message;
 	}
 }

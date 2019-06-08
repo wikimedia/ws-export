@@ -9,7 +9,7 @@ use App\Exception\WSExportInvalidArgumentException;
 use App\Refresh;
 use App\Util\Api;
 use App\Util\Util;
-use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\RequestException;
 
 global $wsexportConfig;
 $wsexportConfig = require_once dirname( __DIR__ ) . '/config.php';
@@ -68,10 +68,10 @@ try {
 		$message = $parts[0];
 		// 404's are quite popular, not logging them
 		$doLog = $exception->getCode() !== 404;
-	} elseif ( $exception instanceof ServerException ) {
+	} elseif ( $exception instanceof RequestException ) {
 		$response = $exception->getResponse();
 		if ( $response ) {
-			$error = Util::extractErrorMessage( $response ) ?: $error;
+			$error = Util::extractErrorMessage( $response, $exception->getRequest() ) ?: $error;
 		}
 	}
 	if ( $doLog && !defined( 'IN_UNIT_TEST' ) ) {

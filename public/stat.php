@@ -1,11 +1,8 @@
 <?php
 
-require_once dirname( __DIR__ ) . '/vendor/autoload.php';
+require_once dirname( __DIR__ ) . '/bootstrap.php';
 
 use App\CreationLog;
-
-global $wsexportConfig;
-$wsexportConfig = require_once dirname( __DIR__ ) . '/config.php';
 
 function normalizeFormat( $format ) {
 	$parts = explode( '-', $format );

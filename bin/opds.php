@@ -6,13 +6,7 @@ if ( count( $argv ) < 2 ) {
 	exit( 1 );
 }
 
-$basePath = realpath( __DIR__ . '/..' );
-$tempPath = sys_get_temp_dir();
-
-$wsexportConfig = [
-	'basePath' => $basePath, 'tempPath' => $tempPath, 'stat' => true
-];
-require_once dirname( __DIR__ ) . '/vendor/autoload.php';
+require_once dirname( __DIR__ ) . '/bootstrap.php';
 
 use App\BookProvider;
 use App\OpdsBuilder;

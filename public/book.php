@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname( __DIR__ ) . '/vendor/autoload.php';
+require_once dirname( __DIR__ ) . '/bootstrap.php';
 
 use App\BookCreator;
 use App\CreationLog;
@@ -10,9 +10,6 @@ use App\Refresh;
 use App\Util\Api;
 use App\Util\Util;
 use GuzzleHttp\Exception\RequestException;
-
-global $wsexportConfig;
-$wsexportConfig = require_once dirname( __DIR__ ) . '/config.php';
 
 $api = new Api();
 $title = isset( $_GET['page'] ) ? trim( htmlspecialchars( urldecode( $_GET['page'] ) ) ) : '';

@@ -1,13 +1,10 @@
 #!/usr/bin/php
 <?php
 
-require_once dirname( __DIR__ ) . '/vendor/autoload.php';
+require_once dirname( __DIR__ ) . '/bootstrap.php';
 
 use App\BookCreator;
 use App\Exception\WSExportInvalidArgumentException;
-
-global $wsexportConfig;
-$wsexportConfig = require_once dirname( __DIR__ ) . '/config.php';
 
 function parseCommandLine() {
 	global $wsexportConfig;

@@ -13,9 +13,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
@@ -64,6 +62,13 @@ class Api {
 	}
 
 	/**
+	 * @return ClientInterface
+	 */
+	public function getClient() {
+		return $this->client;
+	}
+
+	/**
 	 * GET action
 	 *
 	 * @param string $url the target URL
@@ -94,16 +99,6 @@ class Api {
 			$url,
 			$options
 		);
-	}
-
-	/**
-	 * @param Request[] $requests
-	 * @param array $options
-	 * @return PromiseInterface
-	 */
-	public function getPool( array $requests, $options ) {
-		$pool = new Pool( $this->client, $requests, $options );
-		return $pool->promise();
 	}
 
 	/**
@@ -239,6 +234,10 @@ class Api {
 		return str_replace( $search, $replace, urlencode( str_replace( ' ', '_', $url ) ) );
 	}
 
+	/**
+	 * @param LoggerInterface $logger
+	 * @return ClientInterface
+	 */
 	private static function createClient( LoggerInterface $logger ) {
 		$handler = HandlerStack::create();
 		$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );

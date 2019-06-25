@@ -172,9 +172,6 @@ class Epub3Generator extends EpubGenerator {
 					   <nav epub:type="landmarks" id="guide">
 						  <ol>
 							    <li>
-								  <a epub:type="toc" href="#toc">Table of Contents</a>
-							    </li>
-							    <li>
 								  <a epub:type="bodymatter" href="' . $book->title . '.xhtml">' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</a>
 							    </li>
 							    <li>

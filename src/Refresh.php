@@ -70,7 +70,11 @@ class Refresh {
 			$document->loadXML( $content );
 			$parser = new PageParser( $document );
 			$document = $parser->getContent( true );
-			$this->setTempFileContent( 'about.xhtml', str_replace( 'href="//', 'href="https://', $document->saveXML() ) );
+			// Add https to protocol-relative links.
+			$aboutHtml = str_replace( 'href="//', 'href="https://', $document->saveXML() );
+			// Fully qualify unqualified links.
+			$aboutHtml = str_replace( 'href="/', 'href="https://' . $this->api->domainName . '/', $aboutHtml );
+			$this->setTempFileContent( 'about.xhtml', $aboutHtml );
 		}
 	}
 

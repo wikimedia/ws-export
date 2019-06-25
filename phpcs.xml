@@ -2,7 +2,6 @@
 <ruleset name="wsexport">
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
 		<exclude name="Generic.Files.LineLength.TooLong" />
-		<exclude name="Generic.Files.OneObjectStructurePerFile" />
 		<exclude name="MediaWiki.Commenting.FunctionAnnotations" />
 		<exclude name="MediaWiki.Commenting.FunctionComment.MissingParamComment" />
 		<exclude name="MediaWiki.Commenting.FunctionComment.MissingParamName" />

@@ -15,7 +15,6 @@
 		<exclude name="MediaWiki.PHP70Features.ScalarTypeHintUsage" />
 		<exclude name="MediaWiki.PHP71Features.VoidReturnType" />
 		<exclude name="MediaWiki.PHP71Features.NullableType.NotAllowed" />
-		<exclude name="MediaWiki.Usage.ForbiddenFunctions" />
 		<exclude name="MediaWiki.Usage.SuperGlobalsUsage.SuperGlobals" />
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
 	</rule>

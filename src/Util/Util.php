@@ -11,6 +11,7 @@ use finfo;
 use HtmlFormatter\HtmlFormatter;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Process\Process;
 
 /**
  * @author Thomas Pellissier Tanon
@@ -191,11 +192,8 @@ class Util {
 	}
 
 	public static function removeFile( $fileName ) {
-		exec( 'rm ' . escapeshellcmd( realpath( $fileName ) ), $output, $result );
-		if ( $result !== 0 ) {
-			error_log( 'rm failed on file ' . $fileName . ' with output: ' . implode( '\n', $output ) );
-		}
-		return $result === 0;
+		$process = new Process( [ 'rm', realpath( $fileName ) ] );
+		$process->mustRun();
 	}
 
 	/**

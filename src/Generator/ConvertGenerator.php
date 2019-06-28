@@ -4,8 +4,8 @@ namespace App\Generator;
 
 use App\Book;
 use App\Util\Util;
-use Exception;
 use InvalidArgumentException;
+use Symfony\Component\Process\Process;
 
 /**
  * @author Thomas Pellissier Tanon
@@ -127,21 +127,12 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function convert( $epubFileName, $outputFileName ) {
-		$output = [];
-		$returnStatus = 0;
-
-		exec(
-			$this->getEbookConvertCommand() . ' ' .
-			escapeshellarg( $epubFileName ) . ' ' .
-			escapeshellarg( $outputFileName ) . ' ' .
-			self::$CONFIG[$this->format]['parameters'],
-			$output,
-			$returnStatus
+		$command = array_merge(
+			[ $this->getEbookConvertCommand(), $epubFileName, $outputFileName ],
+			explode( ' ', self::$CONFIG[$this->format]['parameters'] )
 		);
-
-		if ( $returnStatus !== 0 ) {
-			throw new Exception( 'Conversion to ' . $this->getExtension() . ' failed.' );
-		}
+		$process = new Process( $command );
+		$process->mustRun();
 	}
 
 	private function getEbookConvertCommand() {

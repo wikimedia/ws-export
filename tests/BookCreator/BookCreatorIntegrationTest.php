@@ -5,6 +5,7 @@ namespace App\Tests\BookCreator;
 use App\BookCreator;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestResult;
+use Symfony\Component\Process\Process;
 
 /**
  * @covers BookCreator
@@ -68,10 +69,8 @@ class BookCreatorIntegrationTest extends TestCase {
 			$this->markTestSkipped( 'EpubCheck not found. Please provide it uing the EPUBCHECK_JAR environment variable' );
 		}
 		$jsonOut = tempnam( sys_get_temp_dir(), 'results-' . $file . '.json' );
-		$command = 'java -jar ' . escapeshellarg( $this->epubCheckJar ) . ' --quiet --json ' .
-			escapeshellarg( $jsonOut ) . ' ' . escapeshellarg( $file ) . ' 2>&1';
-
-		exec( $command, $output, $exitCode );
+		$process = new Process( [ 'java', '-jar', $this->epubCheckJar, '--quiet', '--json', $jsonOut, $file ] );
+		$process->run();
 
 		/** @var EpubCheckResult $checkResult */
 		foreach ( $this->parseResults( $jsonOut ) as $checkResult ) {
@@ -122,7 +121,7 @@ class BookCreatorIntegrationTest extends TestCase {
 	}
 
 	private function isJavaInstalled() {
-		exec( 'java -version >/dev/null 2>&1', $output, $exitCode );
-		return $exitCode == 0;
+		$process = new Process( [ 'java', '-version' ] );
+		return $process->isSuccessful();
 	}
 }

@@ -29,6 +29,7 @@
 		"ext-zip": "*",
 		"guzzlehttp/guzzle": "~6.0",
 		"monolog/monolog": "^1.18",
+		"symfony/process": "^4.3",
 		"wikimedia/html-formatter": "^1.0"
 	},
 	"require-dev": {

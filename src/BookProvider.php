@@ -11,7 +11,9 @@ namespace App;
 use App\Util\Api;
 use App\Util\Util;
 use DOMDocument;
+use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\Response;
 use Iterator;
 
 /**
@@ -206,28 +208,32 @@ class BookProvider {
 	}
 
 	/**
-	 * return the content of the pictures
-	 * @param Picture[] $pictures the list of the pictures
+	 * Download image files to the temp directory, and add `tempFile` and `mimetype` attributes to each Picture object.
+	 * @param Picture[] $pictures All Pictures in the book, keyed by the thumbnail filename.
 	 * @return Picture[]
 	 */
 	protected function getPicturesData( array $pictures ) {
-		$promises = array_map(
-			function ( Picture $picture ) {
-				$cache = FileCache::singleton();
-
-				$picture->tempFile = tempnam( $cache->getDirectory(), 'pic-' );
-				$options = [ 'sink' => $picture->tempFile ];
-				return $this->api->createAsyncRequest( $picture->url, $options );
+		$cache = FileCache::singleton();
+		$client = $this->api->getClient();
+		$requests = function () use ( $client, $pictures, $cache ) {
+			foreach ( $pictures as $picture ) {
+				$url = $picture->url;
+				$tempFile = $cache->getDirectory() . '/' . uniqid( 'pic-' );
+				$picture->tempFile = $tempFile;
+				yield function () use ( $client, $url, $tempFile ) {
+					return $client->getAsync( $url, [ 'sink' => $tempFile ] );
+				};
+			}
+		};
+		$pool = new Pool( $client, $requests(), [
+			'fulfilled' => function ( Response $response, $index ) use ( $pictures ) {
+				// Store the returned mime type of the downloaded file in the Picture object.
+				$contentType = $response->getHeader( 'Content-Type' )[0];
+				$pictureIndex = array_keys( $pictures )[ $index ];
+				$pictures[$pictureIndex]->mimetype = $contentType;
 			},
-			$pictures
-		);
-
-		$results = \GuzzleHttp\Promise\unwrap( $promises );
-
-		foreach ( $results as $index => $result ) {
-			$pictures[$index]->mimetype = Util::getMimeType( $pictures[$index]->tempFile );
-		}
-
+		] );
+		$pool->promise()->wait();
 		return $pictures;
 	}
 

@@ -127,11 +127,14 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function convert( $epubFileName, $outputFileName ) {
+		global $wsexportConfig;
+
 		$command = array_merge(
 			[ $this->getEbookConvertCommand(), $epubFileName, $outputFileName ],
 			explode( ' ', self::$CONFIG[$this->format]['parameters'] )
 		);
 		$process = new Process( $command );
+		$process->setTimeout( $wsexportConfig['exec-timeout'] ?? 120 );
 		$process->mustRun();
 	}
 

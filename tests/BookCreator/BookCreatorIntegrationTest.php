@@ -122,6 +122,7 @@ class BookCreatorIntegrationTest extends TestCase {
 
 	private function isJavaInstalled() {
 		$process = new Process( [ 'java', '-version' ] );
+		$process->run();
 		return $process->isSuccessful();
 	}
 }

@@ -227,8 +227,13 @@ class BookProvider {
 		};
 		$pool = new Pool( $client, $requests(), [
 			'fulfilled' => function ( Response $response, $index ) use ( $pictures ) {
-				// Store the returned mime type of the downloaded file in the Picture object.
+				// Get the media type, and strip everything apart from the main type and subtype, to extract a mime
+				// type that conforms to https://www.w3.org/publishing/epub32/epub-spec.html#sec-cmt-supported
 				$contentType = $response->getHeader( 'Content-Type' )[0];
+				if ( strpos( $contentType, ';' ) !== false ) {
+					$contentType = substr( $contentType, 0, strpos( $contentType, ';' ) );
+				}
+				// Store the returned mime type of the downloaded file in the Picture object.
 				$pictureIndex = array_keys( $pictures )[ $index ];
 				$pictures[$pictureIndex]->mimetype = $contentType;
 			},

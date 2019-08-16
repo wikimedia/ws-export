@@ -2,10 +2,15 @@
 
 return [
 	'debug' => false,
-	'stat' => PHP_SAPI !== 'cli',
+	'stat' => true,
 	'basePath' => __DIR__,
 	'tempPath' => __DIR__ . '/temp/',
-	'logDatabase' => __DIR__ . '/public/logs.sqlite',
 	'exec-timeout' => 120,
+
+	'logDatabase' => __DIR__ . '/public/logs.sqlite',
+	'dbDsn' => 'mysql:host=localhost;dbname=DBNAME;charset=utf8',
+	'dbUser' => 'DBUSERNAME',
+	'dbPass' => '',
+
 	// 'ebook-convert' => '',
 ];

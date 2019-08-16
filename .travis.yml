@@ -4,12 +4,18 @@ dist: trusty
 php:
   - '7.2'
 
+services:
+  - mysql
+
 before_install:
   - sudo apt-get update -q
   - sudo apt-get install calibre-bin default-jre -y
 
 install:
   - make install
+  - mysql -e "CREATE DATABASE wsexport_test;" -uroot
+  - sed --in-place "s/DBNAME/wsexport_test/" config.php
+  - sed --in-place "s/DBUSERNAME/travis/" config.php
 
 before_script:
   - make composer-test

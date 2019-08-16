@@ -7,30 +7,33 @@ Wikisource export is a tool for exporting Wikisource page in many formats like
 epub or xhtml. The documentation can be found here:
 https://wikisource.org/wiki/Wikisource:WSexport
 
+Requirements
+============
+* PHP 7.2
+* [Composer](http://getcomposer.org/)
+
 Installation
 ============
 
-1. First you need download the files and use it with PHP 5.5 or more.
+1. Get the source code:
 
-2. You should create a temp folder in the root of directories.
+       git clone https://github.com/wsexport/tool.git
+       cd tool
 
-3. Install dependencies
+2. Install dependencies:
 
-This tool depends on [Composer](http://getcomposer.org/) to install some dependencies. The easiest way to use it is to run `make` from the Wsexport Tool main directory:
+       composer install --no-dev
 
-```bash
-make install
-```
+   This will create a `config.php` file that you can edit.
 
-Or, to install and run composer manually:
+   In order to export to PDF, plain text, RTF, or Mobi formats
+   you should also install [Calibre](https://calibre-ebook.com)
+   so that the tool can use the `ebook-convert` command.
 
-```bash
-curl -sS https://getcomposer.org/installer | php
-php composer.phar install
-```
+3. Create a database and database user
+   and add these details to `config.php`.
 
-In order to use pdf, txt, rtf and mobi formats you should install Calibre in
-order to allow the tool to use the `ebook-convert` command.
+4. Run `./bin/install.php` to initialize the database.
 
 Composition
 ===========

@@ -2,12 +2,18 @@
 
 namespace App\Tests;
 
+use App\CreationLog;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers BookCreator
  */
 class BookTest extends TestCase {
+
+	public function setUp(): void {
+		CreationLog::singleton()->createTable();
+	}
+
 	public function bookProvider() {
 		return [
 			[ 'The_Kiss_and_its_History', 'en' ],

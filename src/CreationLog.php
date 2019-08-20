@@ -58,20 +58,22 @@ class CreationLog {
 		] );
 	}
 
+	/**
+	 * Get total counts of exports by type and language.
+	 * @param string $month The month number.
+	 * @param string $year The year.
+	 * @return int[][] Total counts, keyed by format and then language code.
+	 */
 	public function getTypeAndLangStats( $month, $year ) {
-		$month = ( $month < 10 ) ? '0' . $month : $month;
-		$stats = [];
-
 		$cursor = $this->pdo->prepare(
 			'SELECT `format`, `lang`, count(1) AS `number` FROM `' . $this->getTableName() . '`'
-			. ' WHERE `time` BETWEEN :from AND :to GROUP BY `format`, `lang`'
+			. ' WHERE YEAR(`time`) = :year AND MONTH(`time`) = :month GROUP BY `format`, `lang`'
 		);
-		$cursor->execute( [
-			'from' => $year . '-' . $month . '-00', 'to' => $year . '-' . $month . '-31'
-		] );
+		$cursor->execute( [ 'year' => $year, 'month' => $month ] );
 
+		$stats = [];
 		foreach ( $cursor as $row ) {
-			$stats[$row['format']][$row['lang']] = $row['number'];
+			$stats[$row['format']][$row['lang']] = (int)$row['number'];
 		}
 
 		return $stats;

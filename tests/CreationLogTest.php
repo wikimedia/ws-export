@@ -89,6 +89,7 @@ class CreationLogTest extends TestCase {
 
 		// Insert some test data into the file database.
 		$fileDb = $this->log->getPdo( 'file' );
+		$fileDb->exec( 'DROP TABLE IF EXISTS `creation`' );
 		$fileDb->exec( 'CREATE TABLE IF NOT EXISTS `creation` (
 			`lang` VARCHAR(40) NOT NULL,
 			`title` VARCHAR(200) NOT NULL,
@@ -97,8 +98,12 @@ class CreationLogTest extends TestCase {
 		);' );
 		$fileDb->exec( 'INSERT INTO `creation` (`lang`, `title`, `format`, `time`) VALUES '
 			. "( 'en', 'Test 1', 'epub', '2019-06-14 01:00:00' ),"
+			. "( 'en', 'Test 1', 'epub', '2019-06-14 01:00:00' ),"
+			. "( 'en', 'Test 1', 'epub', '2019-06-14 01:00:00' ),"
 			. "( 'en', 'Test 2 Iñtërnâtiônàlizætiøn', 'pdf', '2019-06-15 02:00:00' ),"
-			. "( 'fr', 'Test &quot;3 &amp; 4&quot;', 'epub', '2019-06-16 03:00:00' )"
+			. "( 'fr', 'Test &quot;3 &amp; 4&quot;', 'epub', '2019-06-16 03:00:00' ),"
+			. "( 'pt', 'Test 5', 'epub', '2019-07-14 01:00:00' ),"
+			. "( 'pt', 'Test 5', 'epub', '2019-07-14 01:00:00' )"
 		);
 
 		// Check initial state of destination database.
@@ -106,10 +111,10 @@ class CreationLogTest extends TestCase {
 		// Run import.
 		$this->log->import();
 		// Check results.
-		static::assertEquals( [ 'epub' => [ 'en' => 1, 'fr' => 1 ], 'pdf' => [ 'en' => 1 ] ], $this->log->getTypeAndLangStats( '6', '2019' ) );
+		static::assertEquals( [ 'epub' => [ 'en' => 3, 'fr' => 1 ], 'pdf' => [ 'en' => 1 ] ], $this->log->getTypeAndLangStats( '6', '2019' ) );
 		$selectSql = 'SELECT title FROM ' . $this->log->getTableName();
 		static::assertEquals(
-			[ [ 'Test 1' ], [ 'Test 2 Iñtërnâtiônàlizætiøn' ], [ 'Test "3 & 4"' ] ],
+			[ [ 'Test 1' ], [ 'Test 1' ], [ 'Test 1' ], [ 'Test 2 Iñtërnâtiônàlizætiøn' ], [ 'Test "3 & 4"' ], [ 'Test 5' ], [ 'Test 5' ] ],
 			$this->log->getPdo()->query( $selectSql )->fetchAll( PDO::FETCH_NUM )
 		);
 

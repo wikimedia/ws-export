@@ -26,9 +26,14 @@ Installation
 
    This will create a `config.php` file that you can edit.
 
-   In order to export to PDF, plain text, RTF, or Mobi formats
-   you should also install [Calibre](https://calibre-ebook.com)
-   so that the tool can use the `ebook-convert` command.
+   * In order to export to PDF, plain text, RTF, or Mobi formats
+     you should also install [Calibre](https://calibre-ebook.com)
+     so that the tool can use the `ebook-convert` command.
+   * To run the integration tests (or just to validate exported ebooks)
+     you should also install
+     [epubcheck](https://github.com/w3c/epubcheck).
+     If it's not installed at `/usr/bin/epubcheck` then
+     set the `EPUBCHECK_JAR` environment variable.
 
 3. Create a database and database user
    and add these details to `config.php`.
@@ -53,8 +58,8 @@ Tests
 Tests are located in the `tests/` directory, to run them:
 
 ```bash
-$ make test
-$ make integration-test # runs integration tests (slow)
+$ ./vendor/bin/phpunit --exclude-group integration
+$ ./vendor/bin/phpunit --group integration # runs integration tests (slow)
 ```
 
 Licence

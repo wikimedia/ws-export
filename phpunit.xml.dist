@@ -7,6 +7,10 @@
          colors="true"
          bootstrap="bootstrap.php">
 
+    <php>
+        <env name="EPUBCHECK_JAR" value="/usr/bin/epubcheck" />
+    </php>
+
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>

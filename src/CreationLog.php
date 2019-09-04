@@ -85,7 +85,8 @@ class CreationLog {
 	 */
 	public function import(): void {
 		$fileDb = $this->getPdo( 'file' );
-		$all = $fileDb->query( 'SELECT * FROM `creation`' );
+		// Log entries can be duplicated where there was more than one request for the same ebook within the same second.
+		$all = $fileDb->query( 'SELECT *, COUNT(*) AS `total` FROM `creation` GROUP BY `lang`, `title`, `format`, `time`' );
 		// phpcs:ignore
 		while ( $row = $all->fetch() ) {
 			$params = [
@@ -95,23 +96,26 @@ class CreationLog {
 				'format' => $row['format'],
 				'time' => $row['time'],
 			];
-			// Find any existing row.
-			$selectSql = 'SELECT * FROM `' . $this->getTableName() . '` WHERE'
+			// Count the existing rows in the target database.
+			$selectSql = 'SELECT *, COUNT(*) AS `total` FROM `' . $this->getTableName() . '` WHERE'
 				. ' `lang` = :lang'
 				. ' AND `title` = :title'
 				. ' AND `format` = :format'
 				. ' AND `time` = :time';
 			$findStmt = $this->pdo->prepare( $selectSql );
 			$findStmt->execute( $params );
-			if ( $findStmt->rowCount() ) {
-				// If the row already exists, continue to the next.
+			$found = $findStmt->fetch();
+			if ( $found['total'] === $row['total'] ) {
+				// If all of the rows already exist, continue to the next.
 				continue;
 			}
-			// Insert the new row.
-			$insertSql = 'INSERT INTO `' . $this->getTableName() . '`'
-				. ' (`lang`, `title`, `format`, `time`)'
-				. ' VALUES (:lang, :title, :format, :time);';
-			$this->pdo->prepare( $insertSql )->execute( $params );
+			// Insert the new rows.
+			for ( $i = 0; $i < $row['total']; $i++ ) {
+				$insertSql = 'INSERT INTO `' . $this->getTableName() . '`'
+					. ' (`lang`, `title`, `format`, `time`)'
+					. ' VALUES (:lang, :title, :format, :time);';
+				$this->pdo->prepare( $insertSql )->execute( $params );
+			}
 		}
 	}
 

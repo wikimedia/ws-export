@@ -59,6 +59,19 @@ class CreationLog {
 	}
 
 	/**
+	 * Get top 20 popular books in the last 3 months.
+	 */
+	public function getRecentPopular() {
+		$sql = 'SELECT `lang`, `title`, COUNT(*) AS `total`'
+			. ' FROM `' . $this->getTableName() . '`'
+			. ' WHERE `time` > DATE_SUB( CURRENT_DATE, INTERVAL 3 month)'
+			. ' GROUP BY `lang`, `title`'
+			. ' ORDER BY `total` DESC'
+			. ' LIMIT 20';
+		return $this->pdo->query( $sql )->fetchAll();
+	}
+
+	/**
 	 * Get total counts of exports by type and language.
 	 * @param string $month The month number.
 	 * @param string $year The year.

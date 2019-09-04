@@ -1,4 +1,10 @@
 <?php include 'header.php'; ?>
+
+<ol class="breadcrumb">
+	<li><a href="book.php">Home</a></li>
+	<li class="active">Statistics</li>
+</ol>
+
 <table class="table table-striped">
 	<caption>Stats for <?php echo $month, '/', $year ?></caption>
 	<thead>

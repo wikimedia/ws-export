@@ -24,7 +24,7 @@ class BookTest extends TestCase {
 	 * @runInSeparateProcess
 	 */
 	public function testGetEmptyPage() {
-		$this->expectOutputRegex( '/' . preg_quote( 'Export tool of Wikisource books in many file formats.' ) . '/' );
+		$this->expectOutputRegex( '/' . preg_quote( 'Export books from Wikisource in many different file formats.' ) . '/' );
 		include __DIR__ . '/../../public/book.php';
 		$headers = xdebug_get_headers();
 		$this->assertContains( 'Content-type: text/html; charset=UTF-8', $headers );

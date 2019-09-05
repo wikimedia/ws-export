@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8"/>
-	<title>WSexport</title>
+	<title>Wikisource Export</title>
 	<link type="text/css" href="//tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<style type="text/css">
@@ -33,7 +33,8 @@
 <div class="container">
 	<div class="content">
 		<div class="page-header">
-			<h1>Export tool of Wikisource books in many file formats.</h1>
+			<h1>Wikisource Export</h1>
+			<p>Export books from Wikisource in many different file formats.</p>
 		</div>
 		<?php if ( isset( $success ) ) {
 			echo '<div class="alert alert-success">' . $success . '</div>' . "\n";

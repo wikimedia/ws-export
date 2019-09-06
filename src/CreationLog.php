@@ -62,7 +62,7 @@ class CreationLog {
 	 * Get top 20 popular books in the last 3 months.
 	 */
 	public function getRecentPopular() {
-		$sql = 'SELECT `lang`, `title`, COUNT(*) AS `total`'
+		$sql = 'SELECT IF (`lang` = "", "www", `lang`) AS `lang`, `title`, COUNT(*) AS `total`'
 			. ' FROM `' . $this->getTableName() . '`'
 			. ' WHERE `time` > DATE_SUB( CURRENT_DATE, INTERVAL 3 month)'
 			. ' GROUP BY `lang`, `title`'

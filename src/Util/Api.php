@@ -22,6 +22,9 @@ use Psr\Log\LoggerInterface;
  */
 class Api {
 	const USER_AGENT = 'Wikisource Export/0.1';
+	const CONNECT_TIMEOUT = 10; // in seconds
+	const REQUEST_TIMEOUT = 60; // in seconds
+
 	public $lang = '';
 	public $domainName = '';
 
@@ -242,7 +245,11 @@ class Api {
 		$handler = HandlerStack::create();
 		$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
 		return new Client( [
-			'defaults' => [ 'headers' => [ 'User-Agent' => self::USER_AGENT ] ],
+			'defaults' => [
+				'connect_timeout' => self::CONNECT_TIMEOUT,
+				'headers' => [ 'User-Agent' => self::USER_AGENT ],
+				'timeout' => self::REQUEST_TIMEOUT
+			],
 			'handler' => $handler
 		] );
 	}

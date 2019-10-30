@@ -85,18 +85,20 @@ include 'header.php';
 	<aside class="col-md-3">
 		<h2>Recently popular</h2>
 		<ol>
-			<?php foreach ( CreationLog::singleton()->getRecentPopular() as $book ) { ?>
-				<li value="<?php echo $book['total'] ?>">
-					<a href="book.php?lang=<?php echo $book['lang'] ?>&page=<?php echo urlencode( $book['title'] ) ?>" title="Download epub">
-						<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/EPUB_silk_icon.svg/20px-EPUB_silk_icon.svg.png"
-							alt="The epub logo."
-						/>
-					</a>
-					<a href="https://<?php echo $book['lang'] ?>.wikisource.org/wiki/<?php echo urlencode( $book['title'] ) ?>" title="View on Wikisource">
-						<?php echo str_replace( '_', ' ', $book['title'] ) ?>
-					</a>
-				</li>
-			<?php } ?>
+			<?php try {
+				foreach ( CreationLog::singleton()->getRecentPopular() as $book ) { ?>
+					<li value="<?php echo $book['total'] ?>">
+						<a href="book.php?lang=<?php echo $book['lang'] ?>&page=<?php echo urlencode( $book['title'] ) ?>" title="Download epub">
+							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/EPUB_silk_icon.svg/20px-EPUB_silk_icon.svg.png" alt="The epub logo."/>
+						</a>
+						<a href="https://<?php echo $book['lang'] ?>.wikisource.org/wiki/<?php echo urlencode( $book['title'] ) ?>" title="View on Wikisource">
+							<?php echo str_replace( '_', ' ', $book['title'] ) ?>
+						</a>
+					</li>
+				<?php }
+			} catch ( Exception $e ) {
+				echo '<div class="alert alert-danger">Internal error: ' . htmlspecialchars( $e->getMessage() ) . '</div>' . "\n";
+			} ?>
 		</ol>
 		<p><a href="stat.php">More stats&hellip;</a></p>
 	</aside>

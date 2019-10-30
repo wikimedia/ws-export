@@ -14,7 +14,13 @@ $date = getdate();
 $month = isset( $_GET['month'] ) ? (int)$_GET['month'] : $date['mon'];
 $year = isset( $_GET['year'] ) ? (int)$_GET['year'] : $date['year'];
 
-$stat = CreationLog::singleton()->getTypeAndLangStats( $month, $year );
+try {
+	$stat = CreationLog::singleton()->getTypeAndLangStats( $month, $year );
+} catch ( Exception $e ) {
+	$error = 'Internal error: ' . $e->getMessage();
+	$stat = [];
+}
+
 $val = [];
 $total = [];
 foreach ( $stat as $format => $temp ) {

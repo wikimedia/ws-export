@@ -34,7 +34,7 @@
 	},
 	"require-dev": {
 		"ext-xdebug": "*",
-		"mediawiki/mediawiki-codesniffer": "~26.0",
+		"mediawiki/mediawiki-codesniffer": "~28.0",
 		"mediawiki/minus-x": "^0.3",
 		"phpunit/phpunit": "~8.0"
 	},

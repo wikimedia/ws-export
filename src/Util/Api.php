@@ -21,9 +21,9 @@ use Psr\Log\LoggerInterface;
  * a base class for communications with Wikisource
  */
 class Api {
-	const USER_AGENT = 'Wikisource Export/0.1';
-	const CONNECT_TIMEOUT = 10; // in seconds
-	const REQUEST_TIMEOUT = 60; // in seconds
+	private const USER_AGENT = 'Wikisource Export/0.1';
+	private const CONNECT_TIMEOUT = 10; // in seconds
+	private const REQUEST_TIMEOUT = 60; // in seconds
 
 	public $lang = '';
 	public $domainName = '';

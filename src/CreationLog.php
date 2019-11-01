@@ -12,6 +12,12 @@ use PDO;
 class CreationLog {
 
 	/**
+	 * @var int PDO timeout in seconds
+	 * For sqlite, it is the time to get a file lock, so it should not block the import operation.
+	 */
+	private const PDO_TIMEOUT = 2;
+
+	/**
 	 * @var PDO
 	 */
 	private $pdo;
@@ -146,6 +152,7 @@ class CreationLog {
 			$pdo = new PDO( 'sqlite::memory:' );
 		}
 		$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		$pdo->setAttribute( PDO::ATTR_TIMEOUT, self::PDO_TIMEOUT );
 		return $pdo;
 	}
 

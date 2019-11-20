@@ -35,7 +35,7 @@ Installation
      If it's not installed at `/usr/bin/epubcheck` then
      set the `EPUBCHECK_JAR` environment variable.
 
-3. Create a database and database user
+3. Create a mysql database and database user
    and add these details to `config.php`.
 
 4. Run `./bin/install.php` to initialize the database.
@@ -55,6 +55,7 @@ The tools can be used in two ways:
 Tests
 =====
 
+Run `composer install --dev` to install dependencies required for testing.
 Tests are located in the `tests/` directory, to run them:
 
 ```bash

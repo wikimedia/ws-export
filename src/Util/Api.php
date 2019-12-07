@@ -212,7 +212,7 @@ class Api {
 	public static function getHttpLang() {
 		$lang = '';
 		if ( isset( $_GET['lang'] ) ) {
-			$lang = $_GET['lang'];
+			$lang = htmlspecialchars( $_GET['lang'] );
 		} else {
 			if ( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
 				$langs = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );

@@ -92,8 +92,9 @@ class BookCleanerEpub {
 		$curParent = $curFile;
 		$curSize = 0;
 
-		$body = $chapter->content->getElementsByTagName( "body" );
-		$node = $body->item( 0 )->firstChild;
+		$head = $chapter->content->getElementsByTagName( 'head' )->item( 0 );
+		$body = $chapter->content->getElementsByTagName( 'body' )->item( 0 );
+		$node = $body->firstChild;
 		do {
 			$nodeData = $chapter->content->saveXML( $node );
 			$nodeLen = strlen( $nodeData );
@@ -144,8 +145,15 @@ class BookCleanerEpub {
 
 		foreach ( $files as $idx => $file ) {
 			$xml = $this->getEmptyDom();
-			$body = $xml->getElementsByTagName( "body" )->item( 0 );
-			$body->appendChild( $xml->importNode( $file, true ) );
+			$newHead = $xml->getElementsByTagName( 'head' )->item( 0 );
+			foreach ( $head->childNodes as $childNode ) {
+				$newHead->appendChild( $xml->importNode( $childNode, true ) );
+			}
+			$newBody = $xml->getElementsByTagName( 'body' )->item( 0 );
+			$newBody->appendChild( $xml->importNode( $file, true ) );
+			foreach ( $body->attributes as $attribute ) {
+				$newBody->setAttribute( $attribute->nodeName, $attribute->nodeValue );
+			}
 			$page = new Page();
 			if ( $idx == 0 ) {
 				$page->title = $chapter->title;

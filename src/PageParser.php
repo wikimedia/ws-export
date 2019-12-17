@@ -8,7 +8,7 @@ use DOMElement;
 use DOMXPath;
 
 class PageParser {
-	protected $xPath = null;
+	protected $xPath;
 
 	/**
 	 * @param DOMDocument $doc The page to parse
@@ -228,6 +228,7 @@ class PageParser {
 
 		$this->cleanIds();
 		$this->cleanRedLinks();
+		$this->moveStyleToHead();
 
 		return $this->xPath->document;
 	}
@@ -309,6 +310,17 @@ class PageParser {
 				}
 			}
 			$node->parentNode->removeChild( $node );
+		}
+	}
+
+	private function moveStyleToHead() {
+		/** @var DOMElement $head */
+		foreach ( $this->xPath->query( '//head' ) as $head ) {
+			/** @var DOMElement $style */
+			foreach ( $this->xPath->query( '//body//style' ) as $style ) {
+				$style->parentNode->removeChild( $style );
+				$head->appendChild( $style );
+			}
 		}
 	}
 }

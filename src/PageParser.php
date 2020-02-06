@@ -320,7 +320,17 @@ class PageParser {
 			foreach ( $this->xPath->query( '//body//style' ) as $style ) {
 				$style->parentNode->removeChild( $style );
 				$head->appendChild( $style );
+				// Also remove unsed data-mw-deduplicate attribute (see below for why).
+				$style->removeAttribute( 'data-mw-deduplicate' );
 			}
+		}
+
+		// Remove TemplateStyles link elements from the body. T244448.
+		// These are now not required as the styles are present in the head of the chapter.
+		// For example: <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r9031029"/>
+		/** @var DOMElement $link */
+		foreach ( $this->xPath->query( '//link[@rel="mw-deduplicated-inline-style"]' ) as $link ) {
+			$link->parentNode->removeChild( $link );
 		}
 	}
 }

@@ -208,21 +208,18 @@ abstract class EpubGenerator implements FormatGenerator {
 			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '" dir="' . Util::getLanguageDirection( $book->lang ) . '">
 				<head>
 					<title>' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</title>
-					<meta http-equiv="default-style" content="application/xhtml+xml; charset=utf-8" />
-					<link type="text/css" rel="stylesheet" href="main.css" />
 				</head>
-				<body style="background-color:ghostwhite;"><div style="text-align:center; margin-right: auto; margin-left:auto; text-indent : 0px;">
-					<h1 id="heading_id_2">' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</h1>
-					<h2>' . htmlspecialchars( $book->author, ENT_QUOTES ) . '</h2>
-					<br />
+				<body style="background-color: ghostwhite; text-align: center; margin-right: auto; margin-left: auto; text-indent: 0;">
+					<h2>' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</h2>
+					<h3>' . htmlspecialchars( $book->author, ENT_QUOTES ) . '</h3>
 					<br />
 					<img alt="" src="images/Accueil_scribe.png" />
 					<br />
-					<h4>' . implode( $footerElements, ', ' ) . '</h4>
-					<br style="margin-top: 3em; margin-bottom: 3em; border: none; background: black; width: 8em; height: 1px; display: block;" />
-					<h5>' . str_replace( '%d', strftime( '%x' ), htmlspecialchars( $this->i18n['exported_from_wikisource_the'], ENT_QUOTES ) ) . '</h5>
-				</div></body>
-			</html>'; // TODO: Use somthing better than strftime
+					<h5>' . implode( $footerElements, ', ' ) . '</h5>
+					<br />
+					<h6>' . str_replace( '%d', strftime( '%x' ), htmlspecialchars( $this->i18n['exported_from_wikisource_the'], ENT_QUOTES ) ) . '</h6>
+				</body>
+			</html>'; // TODO: Use something better than strftime
 		return $content;
 	}
 

@@ -32,22 +32,22 @@ class ConvertGenerator implements FormatGenerator {
 		'pdf-a4' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--page-breaks-before / --paper-size a4 --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size a4 --pdf-page-margin-bottom 48 --pdf-page-margin-top 60 --pdf-page-margin-left 36 --pdf-page-margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'pdf-a5' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--page-breaks-before / --paper-size a5 --margin-bottom 32 --margin-top 40 --margin-left 24 --margin-right 24 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size a5 --pdf-page-margin-bottom 32 --pdf-page-margin-top 40 --pdf-page-margin-left 24 --pdf-page-margin-right 24 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'pdf-a6' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--page-breaks-before / --paper-size a6 --margin-bottom 16 --margin-top 20 --margin-left 12 --margin-right 12 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size a6 --pdf-page-margin-bottom 16 --pdf-page-margin-top 20 --pdf-page-margin-left 12 --pdf-page-margin-right 12 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'pdf-letter' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--page-breaks-before / --paper-size letter --margin-bottom 48 --margin-top 60 --margin-left 36 --margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size letter --pdf-page-margin-bottom 48 --pdf-page-margin-top 60 --pdf-page-margin-left 36 --pdf-page-margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
 		],
 		'rtf' => [
 			'extension' => 'rtf',

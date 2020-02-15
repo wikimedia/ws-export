@@ -2,11 +2,11 @@
 
 namespace App\Tests;
 
+use App\Exception\WSExportInvalidArgumentException;
 use App\Generator\ConvertGenerator;
 use App\Generator\Epub2Generator;
 use App\Generator\Epub3Generator;
 use App\GeneratorSelector;
-use App\Exception\WSExportInvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**

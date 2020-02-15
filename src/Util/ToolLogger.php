@@ -2,9 +2,9 @@
 
 namespace App\Util;
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Monolog\Handler\NullHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 class ToolLogger {
 	public static function get( $name ) {

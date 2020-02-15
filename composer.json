@@ -27,16 +27,16 @@
 		"ext-pdo": "*",
 		"ext-sqlite3": "*",
 		"ext-zip": "*",
-		"guzzlehttp/guzzle": "~6.0",
-		"monolog/monolog": "^1.18",
+		"guzzlehttp/guzzle": "^6.0",
+		"monolog/monolog": "^2.0",
 		"symfony/process": "^4.3",
 		"wikimedia/html-formatter": "^1.0"
 	},
 	"require-dev": {
 		"ext-xdebug": "*",
-		"mediawiki/mediawiki-codesniffer": "~28.0",
-		"mediawiki/minus-x": "^0.3",
-		"phpunit/phpunit": "~8.0"
+		"mediawiki/mediawiki-codesniffer": "^29.0",
+		"mediawiki/minus-x": "^1.0",
+		"phpunit/phpunit": "^8.0"
 	},
 	"scripts": {
 		"test": [

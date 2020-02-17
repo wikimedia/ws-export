@@ -64,9 +64,6 @@ abstract class EpubGenerator implements FormatGenerator {
 		$zip->addFromString( 'META-INF/container.xml', $this->getXmlContainer() );
 		$zip->addFromString( 'OPS/content.opf', $this->getOpfContent( $book, $wsUrl ) );
 		$zip->addFromString( 'OPS/toc.ncx', $this->getNcxToc( $book, $wsUrl ) );
-		if ( $book->cover != '' ) {
-			$zip->addFromString( 'OPS/cover.xhtml', $this->getXhtmlCover( $book ) );
-		}
 		$zip->addFromString( 'OPS/title.xhtml', $this->getXhtmlTitle( $book ) );
 		$zip->addFromString( 'OPS/about.xhtml', $this->getXhtmlAbout( $book, $wsUrl ) );
 		$dir = dirname( __DIR__, 2 ) . '/resources';
@@ -180,12 +177,13 @@ abstract class EpubGenerator implements FormatGenerator {
 		return $content;
 	}
 
-	protected function getXhtmlCover( Book $book ) {
-		$content = '<div style="text-align: center; page-break-after: always;">
-				    <img src="images/' . $book->pictures[$book->cover]->title . '" alt="Cover" style="height: 100%; max-width: 100%;" />
-			    </div>';
-
-		return Util::getXhtmlFromContent( $book->lang, $content, $book->name );
+	protected function getCover( Book $book ) {
+		foreach ( $book->pictures as $pictureId => $picture ) {
+			if ( $book->cover === $pictureId ) {
+				return $picture;
+			}
+		}
+		return null;
 	}
 
 	protected function getXhtmlTitle( Book $book ) {

@@ -13,14 +13,9 @@ use DOMXPath;
  * Clean and modify book content in order to epub generation
  */
 class BookCleanerEpub {
-	protected $book;
-	protected $linksList = [];
-	protected $version;
-	protected $baseUrl;
-
-	public function __construct( $version ) {
-		$this->version = $version;
-	}
+	private $book;
+	private $linksList = [];
+	private $baseUrl;
 
 	/**
 	 * @param Book $book
@@ -265,10 +260,6 @@ class BookCleanerEpub {
 	}
 
 	protected function addEpubTypeTags( DOMXPath $xPath ) {
-		if ( $this->version < 3 ) {
-			return;
-		}
-
 		$this->addTypeWithXPath( $xPath, '//*[contains(@class, "reference")]/a', 'noteref' );
 		$this->addTypeWithXPath( $xPath, '//*[contains(@class, "references")]/li', 'footnote' );
 	}

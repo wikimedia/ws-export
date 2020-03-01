@@ -5,8 +5,7 @@ namespace App;
 use App\Exception\WSExportInvalidArgumentException;
 use App\Generator\AtomGenerator;
 use App\Generator\ConvertGenerator;
-use App\Generator\Epub2Generator;
-use App\Generator\Epub3Generator;
+use App\Generator\EpubGenerator;
 
 class GeneratorSelector {
 
@@ -28,10 +27,8 @@ class GeneratorSelector {
 			$format = 'rtf'; // TODO: bad hack in order to don't break urls
 		}
 
-		if ( $format === 'epub-2' ) {
-			return new Epub2Generator();
-		} elseif ( $format === 'epub-3' || $format === 'epub' ) {
-			return new Epub3Generator();
+		if ( $format === 'epub-3' || $format === 'epub' ) {
+			return new EpubGenerator();
 		} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 			return new ConvertGenerator( $format );
 		} elseif ( $format === 'atom' ) {

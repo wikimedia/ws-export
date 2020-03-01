@@ -4,8 +4,7 @@ namespace App\Tests;
 
 use App\Exception\WSExportInvalidArgumentException;
 use App\Generator\ConvertGenerator;
-use App\Generator\Epub2Generator;
-use App\Generator\Epub3Generator;
+use App\Generator\EpubGenerator;
 use App\GeneratorSelector;
 use PHPUnit\Framework\TestCase;
 
@@ -20,14 +19,20 @@ class GeneratorSelectorTest extends TestCase {
 		GeneratorSelector::select( "unknown" );
 	}
 
-	public function testGetGeneratorEpub2() {
-		$generator = GeneratorSelector::select( 'epub-2' );
-		$this->assertInstanceOf( Epub2Generator::class, $generator );
+	public function testGetGeneratorEpub() {
+		$generator = GeneratorSelector::select( 'epub' );
+		$this->assertInstanceOf( EpubGenerator::class, $generator );
 	}
 
 	public function testGetGeneratorEpub3() {
 		$generator = GeneratorSelector::select( 'epub-3' );
-		$this->assertInstanceOf( Epub3Generator::class, $generator );
+		$this->assertInstanceOf( EpubGenerator::class, $generator );
+	}
+
+	public function testGetGeneratorEpub2() {
+		$generator = GeneratorSelector::select( 'epub-2' );
+		$this->assertInstanceOf( ConvertGenerator::class, $generator );
+		$this->assertEquals( 'application/epub+zip', $generator->getMimeType() );
 	}
 
 	public function testGetGeneratorMobi() {

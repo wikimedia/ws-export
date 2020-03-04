@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DirectoryIterator;
 use Exception;
 
 /**
@@ -85,9 +86,12 @@ class FileCache {
 	/**
 	 * Cleans up file cache, deleting old files
 	 */
-	private function cleanup(): void {
-		foreach ( glob( $this->dir . '/*.*' ) as $fileName ) {
-			$this->checkFile( $fileName );
+	protected function cleanup(): void {
+		$di = new DirectoryIterator( $this->dir );
+		foreach ( $di as $file ) {
+			if ( $file->isFile() && !$file->isDot() ) {
+				$this->checkFile( $file->getPathname() );
+			}
 		}
 	}
 

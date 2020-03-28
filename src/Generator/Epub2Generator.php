@@ -52,18 +52,12 @@ class Epub2Generator extends EpubGenerator {
 		if ( $book->year != '' ) {
 			$content .= '<dc:date opf:event="original-publication">' . htmlspecialchars( $book->year, ENT_QUOTES ) . '</dc:date>';
 		}
-		if ( $book->cover != '' ) {
-			$content .= '<meta name="cover" content="cover" />';
-		} else {
-			$content .= '<meta name="cover" content="title" />';
-		}
+		$cover = $this->getCover( $book );
+		$content .= '<meta name="cover" content="' . ( $cover ? $cover->title : 'title' ) . '" />';
 		$content .= '</metadata>
 				<manifest>
-					<item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>';
-		if ( $book->cover != '' ) {
-			$content .= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />';
-		}
-		$content .= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
+					<item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+					<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
 					<item id="mainCss" href="main.css" media-type="text/css" />
 					<item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
 		$font = FontProvider::getData( $book->options['fonts'] );
@@ -86,11 +80,8 @@ class Epub2Generator extends EpubGenerator {
 		}
 		$content .= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
 				</manifest>
-				<spine toc="ncx">';
-		if ( $book->cover != '' ) {
-			$content .= '<itemref idref="cover" linear="no" />';
-		}
-		$content .= '<itemref idref="title" linear="yes" />';
+				<spine toc="ncx">
+				<itemref idref="title" linear="yes" />';
 		if ( $book->content ) {
 			$content .= '<itemref idref="' . $book->title . '" linear="yes" />';
 		}
@@ -105,11 +96,6 @@ class Epub2Generator extends EpubGenerator {
 		$content .= '<itemref idref="about" linear="yes" />
 				</spine>
 				<guide>';
-		if ( $book->cover != '' ) {
-			$content .= '<reference type="cover" title="' . htmlspecialchars( $this->i18n['cover'], ENT_QUOTES ) . '" href="cover.xhtml" />';
-		} else {
-			$content .= '<reference type="cover" title="' . htmlspecialchars( $this->i18n['cover'], ENT_QUOTES ) . '" href="title.xhtml" />';
-		}
 		$content .= '<reference type="title-page" title="' . htmlspecialchars( $this->i18n['title_page'], ENT_QUOTES ) . '" href="title.xhtml" />';
 		if ( $book->content ) {
 			$content .= '<reference type="text" title="' . htmlspecialchars( $book->name, ENT_QUOTES ) . '" href="' . $book->title . '.xhtml" />';

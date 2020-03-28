@@ -61,18 +61,12 @@ class Epub3Generator extends EpubGenerator {
 		if ( $book->year != '' ) {
 			$content .= '<dc:date>' . htmlspecialchars( $book->year, ENT_QUOTES ) . '</dc:date>';
 		}
-		if ( $book->cover != '' ) {
-			$content .= '<meta name="cover" content="cover" />';
-		} else {
-			$content .= '<meta name="cover" content="title" />';
-		}
+		$cover = $this->getCover( $book );
+		$content .= '<meta name="cover" content="' . ( $cover ? $cover->title : 'title' ) . '" />';
 		$content .= '</metadata>
 			     <manifest>
 				    <item href="nav.xhtml" id="nav" media-type="application/xhtml+xml" properties="nav" />
 				    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>'; // deprecated
-		if ( $book->cover != '' ) { // TODO use image ?
-			$content .= '<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" />';
-		}
 		$content .= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
 				    <item id="mainCss" href="main.css" media-type="text/css" />
 				    <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
@@ -101,9 +95,6 @@ class Epub3Generator extends EpubGenerator {
 		$content .= '<item id="about" href="about.xhtml" media-type="application/xhtml+xml" />
 			     </manifest>
 			     <spine toc="ncx">';
-		if ( $book->cover != '' ) {
-			$content .= '<itemref idref="cover" linear="no" />';
-		}
 		$content .= '<itemref idref="title" linear="yes" />';
 		if ( $book->content ) {
 			$content .= '<itemref idref="' . $book->title . '" linear="yes" />';

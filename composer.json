@@ -21,6 +21,7 @@
 		"php": ">=7.2",
 		"ext-dom": "*",
 		"ext-fileinfo": "*",
+		"ext-imagick": "*",
 		"ext-json": "*",
 		"ext-libxml": "*",
 		"ext-mbstring": "*",

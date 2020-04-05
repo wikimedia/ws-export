@@ -2,24 +2,21 @@
 
 namespace App\Cleaner;
 
+use Imagick;
+
 class FileCleaner {
-
-	/**
-	 * @param string $mimetype
-	 * @return bool whether files with the given MIME type need cleaning up
-	 */
-	public static function needsCleaning( string $mimetype ): bool {
-		return $mimetype === 'image/svg+xml';
-	}
-
-	public static function cleanFile( string $content, string $mimetype ): string {
-		if ( self::needsCleaning( $mimetype ) ) {
-			return self::cleanSVG( $content );
+	public static function cleanFile( string $fileName, string $mimetype ) {
+		if ( $mimetype === 'image/jpeg' ) {
+			 self::cleanJPG( $fileName );
 		}
-		return $content;
 	}
 
-	private static function cleanSVG( string $content ): string {
-		return preg_replace( '/<!DOCTYPE[^>[]*(\[[^]]*\])?>/', '', $content );
+	private static function cleanJPG( string $fileName ) {
+		$imagic = new Imagick( $fileName );
+		if ( $imagic->getImageDepth() === 8 ) {
+			// Some PDF readers do not like 8bits images
+			$imagic->setImageDepth( 32 );
+		}
+		$imagic->writeImage( $fileName );
 	}
 }

@@ -24,6 +24,11 @@ class ConvertGenerator implements FormatGenerator {
 			'mime' => 'application/zip',
 			'parameters' => '--page-breaks-before /'
 		],
+		'epub-2' => [
+			'extension' => 'epub',
+			'mime' => 'application/epub+zip',
+			'parameters' => '--epub-version 2'
+		],
 		'mobi' => [
 			'extension' => 'mobi',
 			'mime' => 'application/x-mobipocket-ebook',
@@ -122,7 +127,7 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function createEpub( Book $book ) {
-		$epubGenerator = new Epub3Generator();
+		$epubGenerator = new EpubGenerator();
 		return $epubGenerator->create( $book );
 	}
 

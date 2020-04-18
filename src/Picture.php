@@ -55,13 +55,8 @@ class Picture {
 	 * @param string $localName
 	 */
 	public function saveToZip( ZipArchive $zip, string $localName ) {
-		if ( FileCleaner::needsCleaning( $this->mimetype ) ) {
-			$content = file_get_contents( $this->tempFile );
-			$content = FileCleaner::cleanFile( $content, $this->mimetype );
-			$zip->addFromString( $localName, $content );
-		} else {
-			$zip->addFile( $this->tempFile, $localName );
-		}
+		FileCleaner::cleanFile( $this->tempFile, $this->mimetype );
+		$zip->addFile( $this->tempFile, $localName );
 	}
 
 	/**

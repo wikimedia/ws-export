@@ -7,7 +7,6 @@ use App\Refresh;
 use DOMElement;
 use DOMXPath;
 use Exception;
-use finfo;
 use HtmlFormatter\HtmlFormatter;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -69,27 +68,6 @@ class Util {
 		}
 
 		return $content;
-	}
-
-	/**
-	 * Get mimetype of a file, using finfo if its available, or mime_magic.
-	 *
-	 * @param string $filename
-	 * @return string|false mime type on success or false on failure
-	 */
-	public static function getMimeType( string $filename ) {
-		if ( class_exists( 'finfo', false ) ) {
-			$finfoOpt = defined( 'FILEINFO_MIME_TYPE' ) ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
-			$info = new finfo( $finfoOpt );
-			if ( $info ) {
-				return $info->file( $filename );
-			}
-		}
-		if ( ini_get( 'mime_magic.magicfile' ) && function_exists( 'mime_content_type' ) ) {
-			return mime_content_type( $filename );
-		}
-
-		return false;
 	}
 
 	/**

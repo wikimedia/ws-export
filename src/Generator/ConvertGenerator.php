@@ -3,6 +3,7 @@
 namespace App\Generator;
 
 use App\Book;
+use App\FileCache;
 use App\Util\Util;
 use InvalidArgumentException;
 use Symfony\Component\Process\Process;
@@ -139,6 +140,16 @@ class ConvertGenerator implements FormatGenerator {
 			explode( ' ', self::$CONFIG[$this->format]['parameters'] )
 		);
 		$process = new Process( $command );
+		$cache = FileCache::singleton();
+		// Calibre environment variables are documented at https://manual.calibre-ebook.com/customize.html
+		$process->setEnv( [
+			// Sets the directory where configuration files are stored/read.
+			'CALIBRE_CONFIG_DIRECTORY' => $cache->getSubdirectory( 'calibre-config' ),
+			// Sets the temporary directory used by Calibre.
+			'CALIBRE_TEMP_DIR' => $cache->getSubdirectory( 'calibre-temp' ),
+			// Sets the directory Calibre uses to cache persistent data between sessions
+			'CALIBRE_CACHE_DIRECTORY' => $cache->getSubdirectory( 'calibre-cache' ),
+		] );
 		$process->setTimeout( $wsexportConfig['exec-timeout'] ?? 120 );
 		$process->mustRun();
 	}

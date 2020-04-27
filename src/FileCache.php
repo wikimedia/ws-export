@@ -50,10 +50,21 @@ class FileCache {
 	}
 
 	/**
-	 * @return string Directory for temporary files
+	 * @return string Directory for temporary files, with no trailing slash.
 	 */
 	public function getDirectory(): string {
 		return $this->dir;
+	}
+
+	/**
+	 * Get a directory within the cache directory. It will be created if required.
+	 * @param string $sub The name of the subdirectory.
+	 * @return string The directory path, with no trailing slash.
+	 */
+	public function getSubdirectory( $sub ): string {
+		$subdir = $this->getDirectory() . '/' . rtrim( $sub, '/' );
+		$this->mkdir( $subdir );
+		return $subdir;
 	}
 
 	/**
@@ -74,19 +85,23 @@ class FileCache {
 		// Guard against realpth() returning false sometimes
 		$dir = realpath( $dir ) ?: $dir;
 
+		$this->mkdir( $dir );
+
+		return $dir;
+	}
+
+	private function mkdir( $dir ) {
 		if ( !is_dir( $dir ) ) {
 			if ( !mkdir( $dir, 0755 ) ) {
 				throw new Exception( "Couldn't create temporary directory $dir" );
 			}
 		}
-
-		return $dir;
 	}
 
 	/**
 	 * Cleans up file cache, deleting old files
 	 */
-	protected function cleanup(): void {
+	public function cleanup(): void {
 		$di = new DirectoryIterator( $this->dir );
 		foreach ( $di as $file ) {
 			if ( $file->isFile() && !$file->isDot() ) {

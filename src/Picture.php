@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Cleaner\FileCleaner;
 use ZipArchive;
 
 /**
@@ -55,7 +54,6 @@ class Picture {
 	 * @param string $localName
 	 */
 	public function saveToZip( ZipArchive $zip, string $localName ) {
-		FileCleaner::cleanFile( $this->tempFile, $this->mimetype );
 		$zip->addFile( $this->tempFile, $localName );
 	}
 

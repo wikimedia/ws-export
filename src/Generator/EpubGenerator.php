@@ -67,8 +67,8 @@ class EpubGenerator implements FormatGenerator {
 
 		$font = FontProvider::getData( $book->options['fonts'] );
 		if ( $font !== null ) {
-			foreach ( $font['otf'] as $name => $path ) {
-				$zip->addFile( $dir . '/fonts/' . $font['name'] . '/' . $path, 'OPS/fonts/' . $font['name'] . $name . '.otf' );
+			foreach ( $font as $path ) {
+				$zip->addFile( $path, 'OPS/fonts/' . basename( $path ) );
 			}
 		}
 
@@ -143,8 +143,13 @@ class EpubGenerator implements FormatGenerator {
 				    <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
 		$font = FontProvider::getData( $book->options['fonts'] );
 		if ( $font !== null ) {
-			foreach ( $font['otf'] as $name => $path ) {
-				$content .= '<item id="' . $font['name'] . $name . '" href="fonts/' . $font['name'] . $name . '.otf" media-type="font/opentype" />' . "\n";
+			foreach ( $font as $style => $path ) {
+				// Font mime types are listed at https://www.w3.org/publishing/epub32/epub-spec.html#cmt-grp-font
+				// They conveniently align with file extensions.
+				$mime = pathinfo( $path, PATHINFO_EXTENSION );
+				$content .= '<item id="fonts-' . basename( $path ) . '"'
+					. ' href="fonts/' . basename( $path ) . '"'
+					. ' media-type="font/' . $mime . '" />' . "\n";
 			}
 		}
 		if ( $book->content ) {
@@ -384,7 +389,7 @@ class EpubGenerator implements FormatGenerator {
 	}
 
 	private function getCss( Book $book ) {
-		$css = FontProvider::getCss( $book->options['fonts'], 'fonts/' );
+		$css = FontProvider::getCss( $book->options['fonts'] );
 		$css .= Util::getTempFile( $book->lang, 'epub.css' );
 
 		return $css;

@@ -6,6 +6,7 @@ use App\BookCreator;
 use App\CreationLog;
 use App\Exception\HttpException;
 use App\Exception\WSExportInvalidArgumentException;
+use App\FontProvider;
 use App\Refresh;
 use App\Util\Api;
 use App\Util\Util;
@@ -16,14 +17,17 @@ $title = isset( $_GET['page'] ) ? trim( htmlspecialchars( urldecode( $_GET['page
 $format = isset( $_GET['format'] ) ? htmlspecialchars( urldecode( $_GET['format'] ) ) : 'epub';
 $options = [];
 $options['images'] = isset( $_GET['images'] ) ? filter_var( $_GET['images'], FILTER_VALIDATE_BOOLEAN ) : true;
-if ( in_array( $api->lang, [ 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ] ) ) {
-	$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : '';
-} else {
-	$options['fonts'] = isset( $_GET['fonts'] ) ? strtolower( htmlspecialchars( urldecode( $_GET['fonts'] ) ) ) : 'freeserif';
-	if ( filter_var( $options['fonts'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE ) === false ) {
-		$options['fonts'] = '';
-	}
+
+$fonts = $_GET['fonts'] ?? '';
+if ( !in_array( $fonts, FontProvider::getList() ) ) {
+	// Ignore invalid fonts.
+	$fonts = '';
 }
+if ( !$fonts && !in_array( $api->lang, [ 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ] ) ) {
+	// Default for non-latin scripts.
+	$fonts = 'FreeSerif';
+}
+$options['fonts'] = $fonts;
 
 try {
 	if ( isset( $_GET['refresh'] ) ) {

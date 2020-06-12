@@ -103,7 +103,6 @@ class Refresh {
 
 	protected function getTempFileName( $name ) {
 		$cache = FileCache::singleton();
-
 		return $cache->getDirectory() . '/' . $this->api->lang . '/' . $name;
 	}
 }

@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Symfony\Component\Process\Process;
+
 /**
  * @author Thomas Pellissier Tanon
  * @copyright 2017-2019 Thomas Pellissier Tanon
@@ -13,96 +15,112 @@ namespace App;
  */
 class FontProvider {
 
-	/**
-	 * array key/value that contain data about fonts
-	 */
-	protected static $data = [
-		'freeserif' => [
-			'name' => 'FreeSerif', 'label' => 'Free Serif', 'css_name' => 'wse_FreeSerif', 'otf' => [
-				'R' => 'FreeSerif.otf', 'RB' => 'FreeSerifBold.otf', 'RBI' => 'FreeSerifBoldItalic.otf', 'RI' => 'FreeSerifItalic.otf'
-			]
-		],
-		'linuxlibertine' => [
-			'name' => 'LinuxLibertine', 'label' => 'Linux Libertine', 'css_name' => 'wse_LinuxLibertine', 'otf' => [
-				'R' => 'LinLibertine_R.otf', 'RB' => 'LinLibertine_RB.otf', 'RBI' => 'LinLibertine_RBI.otf', 'RI' => 'LinLibertine_RI.otf'
-			]
-		],
-		'libertinus' => [
-			'name' => 'Libertinus', 'label' => 'Libertinus', 'css_name' => 'wse_Libertinus', 'otf' => [
-				'R' => 'libertinusserif-regular.otf', 'RB' => 'libertinusserif-bold.otf', 'RBI' => 'libertinusserif-bolditalic.otf', 'RI' => 'libertinusserif-italic.otf'
-			]
-		],
-		'mukta' => [
-			'name' => 'Mukta', 'label' => 'Mukta (Devanagari)', 'css_name' => 'wse_Mukta', 'otf' => [
-				'R' => 'Mukta-Regular.otf', 'RB' => 'Mukta-Bold.otf'
-			]
-		],
-		'mukta-mahee' => [
-			'name' => 'Mukta', 'label' => 'Mukta Mahee (Gurmukhi)', 'css_name' => 'wse_MuktaMahee', 'otf' => [
-				'R' => 'MuktaMahee-Regular.otf', 'RB' => 'MuktaMahee-Bold.otf'
-			]
-		],
-		'mukta-malar' => [
-			'name' => 'Mukta', 'label' => 'Mukta Malar (Tamil)', 'css_name' => 'wse_MuktaMalar', 'otf' => [
-				'R' => 'MuktaMalar-Regular.otf', 'RB' => 'MuktaMalar-Bold.otf'
-			]
-		],
-		'mukta-vaani' => [
-			'name' => 'Mukta', 'label' => 'Mukta Vaani (Gujarati)', 'css_name' => 'wse_MuktaVaani', 'otf' => [
-				'R' => 'MuktaVaani-Regular.otf', 'RB' => 'MuktaVaani-Bold.otf'
-			]
-		]
-	];
+	/** @var mixed[]|null */
+	protected static $fontData;
+
+	protected static function getCacheFilename(): string {
+		return FileCache::singleton()->getDirectory() . '/fonts.sphp';
+	}
 
 	/**
-	 * return data about a font
-	 * @param string $id Font id
-	 * @return array
+	 * Return data about a font.
+	 * @param string $id Font family name.
+	 * @return string[]|null Array of style names (e.g. Bold) to font filenames. Or null if no info found.
 	 */
 	public static function getData( string $id ) {
-		if ( isset( self::$data[$id] ) ) {
-			return self::$data[$id];
-		} else {
+		if ( $id === '' ) {
 			return null;
 		}
+		$cacheFilename = static::getCacheFilename();
+		if ( !file_exists( $cacheFilename ) ) {
+			static::buildFontData();
+		}
+		if ( static::$fontData === null ) {
+			static::$fontData = unserialize( file_get_contents( $cacheFilename ) );
+		}
+		return static::$fontData[$id] ?? null;
 	}
 
 	/**
-	 * return list of fonts
-	 * @return array
+	 * Cache a list of locally installed fonts.
 	 */
-	public static function getList() {
-		$list = [];
-		foreach ( self::$data as $key => $font ) {
-			$list[$key] = $font['label'];
+	protected static function buildFontData(): void {
+		global $wsexportConfig;
+		if ( !isset( $wsexportConfig['fonts'] ) ) {
+			return;
 		}
 
-		return $list;
+		$fontData = [];
+		foreach ( $wsexportConfig['fonts'] as $font => $label ) {
+			if ( !trim( $font ) ) {
+				// Skip empty font label.
+				continue;
+			}
+			// Get semicolon-separated parts of font information.
+			$cmd = 'fc-list :family="' . $font . '" --format "%{file};%{family};%{style}\n"';
+			$process = Process::fromShellCommandline( $cmd );
+			$process->mustRun();
+			$output = $process->getOutput();
+
+			// Format the output into a single array.
+			$lines = array_filter( explode( "\n", $output ) );
+			foreach ( $lines as $line ) {
+				$parts = str_getcsv( $line, ';' );
+				if ( count( $parts ) !== 3 ) {
+					// Guard against malformed results.
+					continue;
+				}
+				$file = $parts[0];
+				$family = $parts[1];
+				$style = $parts[2];
+				if ( !isset( $fontData[$family] ) ) {
+					$fontData[$family] = [];
+				}
+				$fontData[$family][$style] = $file;
+			}
+		}
+
+		// Save the font data. This will be unserialized in Util::getFontData().
+		// Only save if there is any, in case something went wrong with getting the data.
+		if ( count( $fontData ) > 0 ) {
+			file_put_contents( static::getCacheFilename(), serialize( $fontData ) );
+		}
 	}
 
 	/**
-	 * return CSS
+	 * Get the full list of available fonts.
+	 * @return string[]
+	 */
+	public static function getList() {
+		global $wsexportConfig;
+		return $wsexportConfig['fonts'] ?? [];
+	}
+
+	/**
+	 * Get CSS for the given font.
+	 * @param string $id The font ID as defined in this class.
 	 * @return string
 	 */
-	public static function getCss( $id, $basePath ) {
-		if ( !isset( self::$data[$id] ) ) {
+	public static function getCss( string $id ): string {
+		$font = static::getData( $id );
+		if ( !$font ) {
 			return '';
 		}
 		$css = '';
-		$font = self::$data[$id];
-		if ( isset( $font['otf']['R'] ) ) {
-			$css .= '@font-face { font-family: "' . $font['css_name'] . '"; font-weight: normal; font-style: normal; src: url("' . $basePath . $font['name'] . 'R.otf"); }' . "\n";
+		foreach ( $font as $style => $file ) {
+			// @todo These checks for bold and italic might need to be improved,
+			// because $style can contain the style names in multiple langauges
+			// and there might be one that has one of these strings but where it doesn't mean what it does in English.
+			$fontWeight = stripos( $style, 'bold' ) !== false ? 'bold' : 'normal';
+			$fontStyle = stripos( $style, 'italic' ) !== false ? 'italic' : 'normal';
+			$css .= "@font-face {"
+				. '  font-family: "' . $id . '";'
+				. '  font-weight: ' . $fontWeight . ';'
+				. '  font-style: ' . $fontStyle . ';'
+				. '  src: url("fonts/' . basename( $file ) . '");'
+				. "}\n";
 		}
-		if ( isset( $font['otf']['RB'] ) ) {
-			$css .= '@font-face { font-family: "' . $font['css_name'] . '"; font-weight: bold; font-style: normal; src: url("' . $basePath . $font['name'] . 'RB.otf"); }' . "\n";
-		}
-		if ( isset( $font['otf']['RI'] ) ) {
-			$css .= '@font-face { font-family: "' . $font['css_name'] . '"; font-weight: normal; font-style: italic; src: url("' . $basePath . $font['name'] . 'RI.otf"); }' . "\n";
-		}
-		if ( isset( $font['otf']['RBI'] ) ) {
-			$css .= '@font-face { font-family: "' . $font['css_name'] . '"; font-weight: bold; font-style: italic; src: url("' . $basePath . $font['name'] . 'RBI.otf"); }' . "\n";
-		}
-
+		$css .= 'body { font-family: "' . $id . '" }' . "\n";
 		return $css;
 	}
 }

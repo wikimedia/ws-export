@@ -48,7 +48,7 @@ include 'header.php';
 
 			<div class="col-lg-10">
 				<select id="fonts" name="fonts" class="form-control">
-					<option value="">None</option><?php
+					<?php
 					$list = FontProvider::getList();
 					foreach ( $list as $key => $label ) {
 						echo '<option value="' . $key . '"';

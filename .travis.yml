@@ -10,7 +10,7 @@ services:
 
 before_install:
   - sudo apt-get update -q
-  - sudo apt-get install calibre epubcheck -y
+  - sudo apt-get install calibre epubcheck php-imagick -y
 
 install:
   - composer install

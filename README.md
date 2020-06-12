@@ -11,6 +11,7 @@ Requirements
 ============
 * PHP 7.2
 * [Composer](http://getcomposer.org/)
+* The `fc-list` command
 
 Installation
 ============

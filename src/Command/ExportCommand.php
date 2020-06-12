@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\BookCreator;
+use App\FontProvider;
 use App\GeneratorSelector;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,6 +15,14 @@ class ExportCommand extends Command {
 
 	/** @var string */
 	protected static $defaultName = 'app:export';
+
+	/** @var FontProvider */
+	private $fontProvider;
+
+	public function __construct( FontProvider $fontProvider ) {
+		parent::__construct();
+		$this->fontProvider = $fontProvider;
+	}
 
 	protected function configure() {
 		$formatDesc = 'Export format. One of: ' . implode( ', ', array_keys( GeneratorSelector::$formats ) );
@@ -43,7 +52,7 @@ class ExportCommand extends Command {
 			'images' => true,
 			'credits' => !$input->getOption( 'nocredits' ),
 		];
-		$creator = BookCreator::forLanguage( $input->getOption( 'lang' ), $input->getOption( 'format' ), $options );
+		$creator = BookCreator::forLanguage( $input->getOption( 'lang' ), $input->getOption( 'format' ), $options, $this->fontProvider );
 		$creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
 
 		$io->success( "The ebook has been created: " . $creator->getFilePath() );

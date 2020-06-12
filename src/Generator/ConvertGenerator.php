@@ -3,6 +3,7 @@
 namespace App\Generator;
 
 use App\Book;
+use App\FontProvider;
 use App\Util\Util;
 use InvalidArgumentException;
 use Symfony\Component\Process\Process;
@@ -78,14 +79,18 @@ class ConvertGenerator implements FormatGenerator {
 	 */
 	private $format;
 
+	/** @var FontProvider */
+	private $fontProvider;
+
 	/**
 	 * @param string $format
 	 */
-	public function __construct( $format ) {
+	public function __construct( $format, FontProvider $fontProvider ) {
 		if ( !array_key_exists( $format, self::$CONFIG ) ) {
 			throw new InvalidArgumentException( 'Invalid format: ' . $format );
 		}
 		$this->format = $format;
+		$this->fontProvider = $fontProvider;
 	}
 
 	/**
@@ -127,7 +132,7 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function createEpub( Book $book ) {
-		$epubGenerator = new EpubGenerator();
+		$epubGenerator = new EpubGenerator( $this->fontProvider );
 		return $epubGenerator->create( $book );
 	}
 

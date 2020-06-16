@@ -1,0 +1,52 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_DATABASE: wsexport_test
+          MYSQL_ROOT_PASSWORD: testpwd
+        ports:
+          - '3306:3306'
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        php: [ '7.2' ]
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{matrix.php}}
+        extensions: pdo, imagick
+
+    - name: Install Calibre and epubcheck
+      run: |
+        sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
+        sudo apt-get update -q
+        sudo apt-get install epubcheck -y
+
+    - name: Install WSExport
+      run: |
+        sudo mysql --host 127.0.0.1 -uroot -ptestpwd -e 'CREATE DATABASE IF NOT EXISTS wsexport_test;'
+        composer install
+        sed --in-place "s/DBNAME/wsexport_test/" config.php
+        sed --in-place "s/DBUSERNAME/root/" config.php
+        sed --in-place "s/DBPASSWORD/testpwd/" config.php
+
+    - name: Test
+      run: |
+        composer test
+        ./vendor/bin/phpunit

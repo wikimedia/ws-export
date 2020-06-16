@@ -1,0 +1,48 @@
+name: CI
+
+on: [push, pull_request]
+
+services:
+  mysql:
+    image: mysql:5.7
+    env:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: wsexport_test
+    ports:
+      - 3306
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        php: [ '7.2', '7.3', '7.4' ]
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{matrix.php}}
+        extensions: pdo, imagick
+
+    - name: Install Calibre etc.
+      run:
+        - sudo apt-get update -q
+        - sudo apt-get install calibre epubcheck -y
+
+    - name: Install
+      run:
+        - composer install
+        - sed --in-place "s/DBNAME/wsexport_test/" config.php
+        - sed --in-place "s/DBUSERNAME/root/" config.php
+
+    - name: Test
+      run:
+        - composer test
+        - ./vendor/bin/phpunit

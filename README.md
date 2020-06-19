@@ -1,7 +1,7 @@
 What is Wikisource Export?
 ==========================
 
-[![Build Status](https://travis-ci.org/wsexport/tool.svg?branch=master)](https://travis-ci.org/wsexport/tool)
+![CI](https://github.com/wsexport/tool/workflows/CI/badge.svg)
 
 Wikisource export is a tool for exporting Wikisource page in many formats like
 epub or xhtml. The documentation can be found here:

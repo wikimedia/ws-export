@@ -8,9 +8,9 @@ return [
 	'exec-timeout' => 120,
 
 	'logDatabase' => __DIR__ . '/public/logs.sqlite',
-	'dbDsn' => 'mysql:host=localhost;dbname=DBNAME;charset=utf8',
+	'dbDsn' => 'mysql:host=127.0.0.1;dbname=DBNAME;charset=utf8',
 	'dbUser' => 'DBUSERNAME',
-	'dbPass' => '',
+	'dbPass' => 'DBPASSWORD',
 
 	// 'ebook-convert' => '',
 ];

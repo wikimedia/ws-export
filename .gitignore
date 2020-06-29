@@ -5,3 +5,4 @@ composer.phar
 config.php
 *.sqlite
 phpunit.xml
+.env

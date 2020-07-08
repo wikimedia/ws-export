@@ -15,7 +15,7 @@ use App\Util\Api;
 $lang = 'fr';
 $category = 'Catégorie:Bon_pour_export';
 $outputFile = $argv[1];
-$exportPath = 'https://tools.wmflabs.org/wsexport/tool/book.php';
+$exportPath = 'https://wsexport.toolforge.org/tool/book.php';
 
 try {
 	date_default_timezone_set( 'UTC' );

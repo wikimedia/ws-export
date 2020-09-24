@@ -116,7 +116,7 @@ Modify config.php accordingly
 docker-compose exec wsexport php ./bin/install.php
 ```
 
-Wikisource export should be up at http://localhost:8888/public/book.php
+Wikisource export should be up at http://localhost:8888
 
 
 Licence

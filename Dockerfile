@@ -15,6 +15,8 @@ RUN apt-get update -q && apt-get install -y \
         libzip-dev \
         unzip \
         wget \
+        xdg-utils \
+        xz-utils \
       && rm -rf /var/lib/apt/lists/* \
       && pecl install xdebug zip \
       && docker-php-ext-enable xdebug zip \

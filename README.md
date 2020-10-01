@@ -63,6 +63,62 @@ $ ./vendor/bin/phpunit --exclude-group integration
 $ ./vendor/bin/phpunit --group integration # runs integration tests (slow)
 ```
 
+
+Docker Developer Environment
+============================
+
+Wikisource export can also be run for development using Docker Compose. _(beta, only tested on linux)_
+
+The default environment provides PHP, Apache, Calibre, Epubcheck and a MariaDB database.
+
+### Requirements
+
+You'll need a locally running Docker and Docker Compose:
+
+  - [Docker installation instructions][docker-install]
+  - [Docker Compose installation instructions][docker-compose]
+
+[docker-install]: https://docs.docker.com/install/
+[docker-compose]: https://docs.docker.com/compose/install/
+
+---
+
+### Quickstart
+
+Run the following command to add your user ID and group ID to your `.env` file:
+
+```bash
+echo "WS_DOCKER_PORT=8888
+WS_DOCKER_UID=$(id -u)
+WS_DOCKER_GID=$(id -g)" >> .env
+```
+
+#### Start environment and install
+
+```bash
+# -d is detached mode - runs containers in the background:
+docker-compose up -d
+```
+
+```bash
+# This will create a `config.php` file that you can edit.
+docker-compose exec wsexport composer install
+```
+
+Modify config.php accordingly
+```php
+'dbDsn' => 'mysql:host=database;dbname=wsexport;charset=utf8',
+'dbUser' => 'root',
+'dbPass' => '',
+  ```
+
+```bash
+docker-compose exec wsexport php ./bin/install.php
+```
+
+Wikisource export should be up at http://localhost:8888
+
+
 Licence
 =======
 

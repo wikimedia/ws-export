@@ -15,6 +15,10 @@ jobs:
           - '3306:3306'
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
+    env:
+      APP_ENV: test
+      DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=5.7
+
     strategy:
       matrix:
         os: [ ubuntu-latest ]
@@ -40,13 +44,9 @@ jobs:
 
     - name: Install WSExport
       run: |
-        sudo mysql --host 127.0.0.1 -uroot -ptestpwd -e 'CREATE DATABASE IF NOT EXISTS wsexport_test;'
         composer install
-        sed --in-place "s/DBNAME/wsexport_test/" config.php
-        sed --in-place "s/DBUSERNAME/root/" config.php
-        sed --in-place "s/DBPASSWORD/testpwd/" config.php
 
     - name: Test
       run: |
         composer test
-        ./vendor/bin/phpunit
+        ./bin/phpunit --exclude-group=exclude-from-ci

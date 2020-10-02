@@ -3,21 +3,24 @@
 namespace App\Tests;
 
 use App\CreationLog;
-use PHPUnit\Framework\TestCase;
+use Doctrine\DBAL\Connection;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @covers CreationLog
  */
-class StatTest extends TestCase {
+class StatTest extends WebTestCase {
 	/**
 	 * @runInSeparateProcess
 	 */
 	public function testGet() {
-		$this->expectOutputRegex( '/' . preg_quote( 'Stats for ' ) . '/' );
-		$log = CreationLog::singleton();
-		$log->createTable();
-		include __DIR__ . '/../../public/stat.php';
-		// Clean up.
-		$log->getPdo()->exec( 'DROP TABLE IF EXISTS ' . $log->getTableName() );
+		$client = static::createClient();
+
+		/** @var Connection $db */
+		$db = self::$container->get( 'doctrine.dbal.default_connection' );
+		( new CreationLog( $db ) )->createTable();
+
+		$client->request( 'GET', '/stat.php' );
+		$this->assertStringContainsString( 'Stats for ', $client->getResponse()->getContent() );
 	}
 }

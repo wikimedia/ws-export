@@ -17,10 +17,12 @@ RUN apt-get update -q && apt-get install -y \
         wget \
         xdg-utils \
         xz-utils \
+        libicu-dev \
       && rm -rf /var/lib/apt/lists/* \
       && pecl install xdebug zip \
       && docker-php-ext-enable xdebug zip \
-      && docker-php-ext-install pdo_mysql \
+      && docker-php-ext-install pdo_mysql intl \
+      && a2enmod rewrite \
       && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sh /dev/stdin \
       && wget -nv -O- https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer 
 

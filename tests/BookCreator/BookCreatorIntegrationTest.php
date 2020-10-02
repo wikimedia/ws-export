@@ -9,6 +9,7 @@ use Symfony\Component\Process\Process;
 
 /**
  * @covers BookCreator
+ * @group exclude-from-ci
  */
 class BookCreatorIntegrationTest extends TestCase {
 	private $epubCheckJar = null;

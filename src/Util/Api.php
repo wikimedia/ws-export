@@ -33,6 +33,16 @@ class Api {
 	 */
 	private $client;
 
+	/** @var LoggerInterface */
+	private $logger;
+
+	/**
+	 * @param LoggerInterface $logger
+	 */
+	public function setLogger( LoggerInterface $logger ): void {
+		$this->logger = $logger;
+	}
+
 	/**
 	 * @param string $lang the language code of the Wikisource like 'en' or 'fr'
 	 * @param string $domainName
@@ -59,7 +69,7 @@ class Api {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}
 		if ( $client === null ) {
-			$client = static::createClient( ToolLogger::get( __CLASS__ ) );
+			$client = static::createClient( $this->logger );
 		}
 		$this->client = $client;
 	}
@@ -241,9 +251,11 @@ class Api {
 	 * @param LoggerInterface $logger
 	 * @return ClientInterface
 	 */
-	private static function createClient( LoggerInterface $logger ) {
+	private static function createClient( ?LoggerInterface $logger ): ClientInterface {
 		$handler = HandlerStack::create();
-		$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
+		if ( $logger ) {
+			$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
+		}
 		return new Client( [
 			'defaults' => [
 				'connect_timeout' => self::CONNECT_TIMEOUT,

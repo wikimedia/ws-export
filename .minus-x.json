@@ -1,0 +1,6 @@
+{ 
+    "ignore": [
+        "./bin/.phpunit/phpunit-7.5-0/phpunit",
+        "./bin/.phpunit/phpunit-8.3-0/phpunit"
+    ]
+}

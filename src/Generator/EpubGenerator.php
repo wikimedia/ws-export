@@ -63,7 +63,9 @@ class EpubGenerator implements FormatGenerator {
 		$zip->addFromString( 'OPS/title.xhtml', $this->getXhtmlTitle( $book ) );
 		$zip->addFromString( 'OPS/about.xhtml', $this->getXhtmlAbout( $book, $wsUrl ) );
 		$dir = dirname( __DIR__, 2 ) . '/resources';
-		$zip->addFile( $dir . '/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png' );
+		if ( $book->options['images'] ) {
+			$zip->addFile( $dir . '/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png' );
+		}
 
 		$font = FontProvider::getData( $book->options['fonts'] );
 		if ( $font !== null ) {
@@ -132,15 +134,17 @@ class EpubGenerator implements FormatGenerator {
 		if ( $book->year != '' ) {
 			$content .= '<dc:date>' . htmlspecialchars( $book->year, ENT_QUOTES ) . '</dc:date>';
 		}
-		$cover = $this->getCover( $book );
+		$cover = $book->options['images'] ? $this->getCover( $book ) : null;
 		$content .= '<meta name="cover" content="' . ( $cover ? $cover->title : 'title' ) . '" />';
 		$content .= '</metadata>
 			     <manifest>
 				    <item href="nav.xhtml" id="nav" media-type="application/xhtml+xml" properties="nav" />
 				    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>'; // deprecated
 		$content .= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
-				    <item id="mainCss" href="main.css" media-type="text/css" />
-				    <item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
+				    <item id="mainCss" href="main.css" media-type="text/css" />';
+		if ( $book->options['images'] ) {
+			$content .= '<item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
+		}
 		$font = FontProvider::getData( $book->options['fonts'] );
 		if ( $font !== null ) {
 			foreach ( $font['otf'] as $name => $path ) {
@@ -348,9 +352,11 @@ class EpubGenerator implements FormatGenerator {
 				<body style="background-color: ghostwhite; text-align: center; margin-right: auto; margin-left: auto; text-indent: 0;">
 					<h2>' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</h2>
 					<h3>' . htmlspecialchars( $book->author, ENT_QUOTES ) . '</h3>
-					<br />
-					<img alt="" src="images/Accueil_scribe.png" />
-					<br />
+					<br />';
+		if ( $book->options['images'] ) {
+			$content .= '<img alt="" src="images/Accueil_scribe.png" />';
+		}
+		$content .= '<br />
 					<h5>' . implode( $footerElements, ', ' ) . '</h5>
 					<br />
 					<h6>' . str_replace( '%d', strftime( '%x' ), htmlspecialchars( $this->i18n['exported_from_wikisource_the'], ENT_QUOTES ) ) . '</h6>

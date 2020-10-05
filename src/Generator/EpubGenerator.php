@@ -7,6 +7,7 @@ use App\Cleaner\BookCleanerEpub;
 use App\FontProvider;
 use App\Util\Util;
 use Exception;
+use IntlDateFormatter;
 use ZipArchive;
 
 /**
@@ -50,7 +51,6 @@ class EpubGenerator implements FormatGenerator {
 		$oldBookTitle = $book->title;
 		$css = $this->getCss( $book );
 		$this->i18n = Util::getI18n( $book->lang );
-		setlocale( LC_TIME, $book->lang . '_' . strtoupper( $book->lang ) . '.utf8' );
 		$wsUrl = Util::wikisourceUrl( $book->lang, $book->title );
 		$cleaner = new BookCleanerEpub();
 		$cleaner->clean( $book, Util::wikisourceUrl( $book->lang ) );
@@ -343,6 +343,7 @@ class EpubGenerator implements FormatGenerator {
 			$footerElements[] = $book->year;
 		}
 
+		$formatter = new IntlDateFormatter( $book->lang, IntlDateFormatter::LONG, IntlDateFormatter::NONE );
 		$content = '<?xml version="1.0" encoding="UTF-8" ?>
 			<!DOCTYPE html>
 			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '" dir="' . Util::getLanguageDirection( $book->lang ) . '">
@@ -359,9 +360,9 @@ class EpubGenerator implements FormatGenerator {
 		$content .= '<br />
 					<h5>' . implode( $footerElements, ', ' ) . '</h5>
 					<br />
-					<h6>' . str_replace( '%d', strftime( '%x' ), htmlspecialchars( $this->i18n['exported_from_wikisource_the'], ENT_QUOTES ) ) . '</h6>
+					<h6>' . str_replace( '%d', $formatter->format( time() ), htmlspecialchars( $this->i18n['exported_from_wikisource_the'], ENT_QUOTES ) ) . '</h6>
 				</body>
-			</html>'; // TODO: Use something better than strftime
+			</html>';
 		return $content;
 	}
 

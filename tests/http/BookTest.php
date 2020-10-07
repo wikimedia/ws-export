@@ -3,16 +3,14 @@
 namespace App\Tests;
 
 use App\CreationLog;
-use PHPUnit\Framework\TestCase;
+use Doctrine\DBAL\Connection;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @covers BookCreator
+ * @group integration
  */
-class BookTest extends TestCase {
-
-	public function setUp(): void {
-		CreationLog::singleton()->createTable();
-	}
+class BookTest extends WebTestCase {
 
 	public function bookProvider() {
 		return [
@@ -20,50 +18,42 @@ class BookTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 */
 	public function testGetEmptyPage() {
-		$this->expectOutputRegex( '/' . preg_quote( 'Export books from Wikisource in many different file formats.' ) . '/' );
-		include __DIR__ . '/../../public/book.php';
-		$headers = xdebug_get_headers();
-		$this->assertContains( 'Content-type: text/html; charset=UTF-8', $headers );
+		$client = static::createClient();
+		$client->request( 'GET', '/book.php' );
+		$contentTypeHeader = $client->getResponse()->headers->get( 'Content-Type' );
+		$this->assertSame( 'text/html; charset=UTF-8', $contentTypeHeader );
+		$this->assertStringContainsString( 'Export books from Wikisource in many different file formats.', $client->getResponse()->getContent() );
 	}
 
 	/**
 	 * @dataProvider bookProvider
-	 * @runInSeparateProcess
-	 * @group integration
 	 */
 	public function testGetPage( $title, $language ) {
-		$_GET['page'] = $title;
-		$_GET['lang'] = $language;
-		$this->expectOutputRegex( '/^PK/' ); // ZIP header
-		include __DIR__ . '/../../public/book.php';
-		$headers = xdebug_get_headers();
-		$this->assertContains( 'Content-Description: File Transfer', $headers );
-		$this->assertContains( 'Content-Type: application/epub+zip', $headers );
-		$this->assertContains( 'Content-Disposition: attachment; filename="The_Kiss_and_its_History.epub"', $headers );
+		$client = static::createClient();
+		/** @var Connection $db */
+		$db = self::$container->get( 'doctrine.dbal.default_connection' );
+		( new CreationLog( $db ) )->createTable();
+
+		$client->request( 'GET', '/book.php', [ 'page' => $title, 'lang' => $language ] );
+		$headers = $client->getResponse()->headers;
+		$this->assertSame( 'File Transfer', $headers->get( 'Content-Description' ) );
+		$this->assertSame( 'application/epub+zip', $headers->get( 'Content-Type' ) );
+		$this->assertSame( 'attachment; filename=The_Kiss_and_its_History.epub', $headers->get( 'Content-Disposition' ) );
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 * @group integration
-	 */
 	public function testGetNonExistingTitleDisplaysError() {
-		$_GET['page'] = 'xxx';
-		$this->expectOutputRegex( '/' . preg_quote( 'Page revision not found' ) . '/' );
-		include __DIR__ . '/../../public/book.php';
+		$client = static::createClient();
+		$client->request( 'GET', '/book.php', [ 'page' => 'xxx' ] );
+		$this->assertStringContainsString( 'Page revision not found', $client->getResponse()->getContent() );
+		$this->assertSame( 404, $client->getResponse()->getStatusCode() );
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 */
 	public function testGetInvalidFormatDisplaysError() {
-		define( 'IN_UNIT_TEST', true );
-		$_GET['page'] = 'xxx';
-		$_GET['format'] = 'xxx';
-		$this->expectOutputRegex( '/' . preg_quote( "The file format 'xxx' is unknown." ) . '/' );
-		include __DIR__ . '/../../public/book.php';
+		$client = static::createClient();
+		$client->request( 'GET', '/book.php', [ 'page' => 'xxx', 'format' => 'xxx' ] );
+		$this->assertStringContainsString( "The file format 'xxx' is unknown.", $client->getResponse()->getContent() );
+		$this->assertSame( 500, $client->getResponse()->getStatusCode() );
 	}
 }

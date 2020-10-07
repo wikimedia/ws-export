@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+<ol class="breadcrumb">
+	<li><a href="{{ path('home') }}">Home</a></li>
+	<li class="active">Statistics</li>
+</ol>
+<div class="row">
+	<aside class="col-md-3">
+		<h2>Recently Popular</h2>
+		<ol>
+			{% for book in recently_popular %}
+				<li value="{{ book.total }}">
+					<a href="{{ path('home', { lang: book.lang, page: book.title } ) }}" title="Download epub">
+						<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/EPUB_silk_icon.svg/20px-EPUB_silk_icon.svg.png" alt="The epub logo."/>
+					</a>
+					<a href="https://{{ book.lang }}.wikisource.org/wiki/{{ book.title }}" title="View on Wikisource">
+						{{ book.title|replace({'_': ' '}) }}
+					</a>
+				</li>
+			{% endfor %}
+		</ol>
+	</aside>
+	<div class="col-md-9">
+		<table class="table table-striped">
+			<caption>Stats for {{ month }}/{{ year }}</caption>
+			<thead>
+			<tr>
+				<th scope="col">Lang</th>
+				{% for format,value in total %}
+					<th scope="col">{{ format }}</th>
+				{% endfor %}
+			</tr>
+			</thead>
+			<tbody>
+				{% for lang,temp in val %}
+					<tr>
+						<th scope="row">{{ lang }}</th>
+						{% for format,value in total %}
+							<td>
+								{% if attribute(temp, format) is defined %}
+									{{ attribute(temp, format) }}
+								{% else %}
+									0
+								{% endif %}
+							</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</tbody>
+			<tfoot>
+				<tr>
+					<th scope="row">Total</th>
+					{% for format,value in total %}
+						<td>{{ value }}</td>
+					{% endfor %}
+				</tr>
+			</tfoot>
+		</table>
+		<form class="form-inline" role="form">
+			<label>Change month:</label>
+
+			<div class="form-group">
+				<input name="month" id="month" type="number" placeholder="month" size="2" maxlength="2" min="1" max="12"
+					required="required" value="{{ month }}" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<input name="year" id="year" type="number" placeholder="year" size="4" maxlength="4" min="2012"
+					required="required" value="{{ year }}" class="form-control"/>
+			</div>
+			<button class="btn" type="btn btn-default">Go</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

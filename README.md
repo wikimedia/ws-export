@@ -24,7 +24,7 @@ Installation
 
        composer install --no-dev
 
-   This will create a `config.php` file that you can edit.
+   Then create a `.env.local` file.
 
    * In order to export to PDF, plain text, RTF, or Mobi formats
      you should also install [Calibre](https://calibre-ebook.com)
@@ -36,33 +36,22 @@ Installation
      set the `EPUBCHECK_JAR` environment variable.
 
 3. Create a mysql database and database user
-   and add these details to `config.php`.
+   and add these details to `.env.local`.
 
-4. Run `./bin/install.php` to initialize the database.
-
-Composition
-===========
-
-This tool is split into independent parts:
-* `utils` : api to interact with Wikisource and others things
-* `book` : export tool in many formats like epub.
-
-The tools can be used in two ways:
-* http in the `http` folder
-* command line in the `cli` folder (run `./cli/book.php`)
-
+4. Run `./bin/compose app:install` to initialize the database.
 
 Tests
 =====
 
-Run `composer install --dev` to install dependencies required for testing.
+Run `composer install` to install dependencies required for testing.
 Tests are located in the `tests/` directory, to run them:
 
 ```bash
-$ ./vendor/bin/phpunit --exclude-group integration
-$ ./vendor/bin/phpunit --group integration # runs integration tests (slow)
+$ ./bin/phpunit --exclude-group integration
+$ ./bin/phpunit --group integration # runs integration tests (slow)
 ```
 
+You can also run code linting etc. with `composer test`.
 
 Docker Developer Environment
 ============================
@@ -90,33 +79,31 @@ Run the following command to add your user ID and group ID to your `.env` file:
 ```bash
 echo "WS_DOCKER_PORT=8888
 WS_DOCKER_UID=$(id -u)
-WS_DOCKER_GID=$(id -g)" >> .env
+WS_DOCKER_GID=$(id -g)" >> .env.local
 ```
 
 #### Start environment and install
 
 ```bash
 # -d is detached mode - runs containers in the background:
-docker-compose up -d
+docker-compose --env-file=.env.local up -d
 ```
 
 ```bash
-# This will create a `config.php` file that you can edit.
-docker-compose exec wsexport composer install
+docker-compose --env-file=.env.local exec wsexport composer install
 ```
 
-Modify config.php accordingly
-```php
-'dbDsn' => 'mysql:host=database;dbname=wsexport;charset=utf8',
-'dbUser' => 'root',
-'dbPass' => '',
-  ```
+Modify `.env.local` accordingly
+```
+APP_ENV=dev
+DATABASE_URL=mysql://root:@database:3306/wsexport?serverVersion=5.7
+```
 
 ```bash
-docker-compose exec wsexport php ./bin/install.php
+docker-compose --env-file=.env.local exec wsexport ./bin/console app:install
 ```
 
-Wikisource export should be up at http://localhost:8888
+Wikisource Export should be up at http://localhost:8888/
 
 
 Licence

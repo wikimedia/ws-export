@@ -1,12 +1,8 @@
-<?php
+{% extends 'base.html.twig' %}
 
-use App\FontProvider;
-use App\GeneratorSelector;
-use App\Util\Api;
+{% block main %}
 
-include 'header.php';
-?>
-<form method="get" action="book.php" role="form" class="form-horizontal">
+<form method="get" action="{{ path('home') }}" role="form" class="form-horizontal">
 	<fieldset>
 		<legend>Export a file</legend>
 		<div class="form-group">
@@ -14,7 +10,7 @@ include 'header.php';
 
 			<div class="col-lg-10">
 				<input name="lang" id="lang" type="text" size="3" maxlength="20" required="required"
-					value="<?php echo Api::getHttpLang(); ?>" class="form-control input-mini"/>
+					value="{{ lang }}" class="form-control input-mini"/>
 				<span class="help-block">Language code of Wikisource domain, like en or fr</span>
 			</div>
 		</div>
@@ -22,8 +18,8 @@ include 'header.php';
 			<label for="page" class="col-lg-2 control-label">Title of the page</label>
 
 			<div class="col-lg-10">
-				<input name="page" id="page" type="text" size="30" required="required" class="form-control" 
-					value="<?php echo $title; ?>"/>
+				<input name="page" id="page" type="text" size="30" required="required" class="form-control"
+					value="{{ title|e('html_attr') }}" />
 				<span class="help-block">Name of the mainpage of the book in Wikisource</span>
 			</div>
 		</div>
@@ -32,13 +28,11 @@ include 'header.php';
 
 			<div class="col-lg-10">
 				<select id="format" name="format" class="form-control">
-					<?php foreach ( GeneratorSelector::$formats as $key => $label ) {
-						echo '<option value="' . $key . '"';
-						if ( $format === $key ) {
-							echo ' selected="selected"';
-						}
-						echo '>' . $label . '</option>';
-					} ?>
+					{% for key,label in formats %}
+						<option value="{{ key|e('html_attr') }}"
+						{% if key == format %}selected="selected"{% endif %}
+						>{{ label }}</option>
+					{% endfor %}
 				</select>
 				<span class="help-inline"></span>
 			</div>
@@ -48,16 +42,13 @@ include 'header.php';
 
 			<div class="col-lg-10">
 				<select id="fonts" name="fonts" class="form-control">
-					<option value="">None</option><?php
-					$list = FontProvider::getList();
-					foreach ( $list as $key => $label ) {
-						echo '<option value="' . $key . '"';
-						if ( $options['fonts'] == $key ) {
-							echo ' selected="selected"';
-						}
-						echo '>' . $label . '</option>' . "\n";
-					}
-					?></select>
+					<option value="">None</option>
+					{% for key,label in fonts %}
+						<option value="{{ key|e('html_attr') }}" {% if key == font %}selected="selected"{% endif %}>
+							{{ label }}
+						</option>
+					{% endfor %}
+				</select>
 			</div>
 		</div>
 		<div class="form-group">
@@ -65,10 +56,7 @@ include 'header.php';
 
 			<div class="col-lg-10">
 				<label class="checkbox-inline">
-					<input type="checkbox" value="false" <?php
-					if ( !$options['images'] ) {
-						echo 'checked="checked"';
-					} ?> name="images"/>
+					<input type="checkbox" value="false" {% if not images %}checked="checked"{% endif %} name="images" />
 					Do not include images
 				</label>
 			</div>
@@ -81,4 +69,4 @@ include 'header.php';
 	</fieldset>
 </form>
 
-<?php include 'footer.html';
+{% endblock %}

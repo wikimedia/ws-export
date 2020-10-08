@@ -1,16 +1,21 @@
 version: '3.7'
 services:
   wsexport:
-    build: ./
-    user: "${WS_DOCKER_UID}:${WS_DOCKER_GID}"
+    build:
+      context: .
+      args:
+        USER_ID: ${WS_DOCKER_UID}
+        GROUP_ID: ${WS_DOCKER_GID}
     ports:
-      - "${WS_DOCKER_PORT}:8080"
+      - "8888:8080"
     volumes:
-      - ./:/var/www/html:cached
+      - ../:/var/www/html:cached
     links:
       - database:database
     environment:
       APACHE_RUN_USER: daemon
+    depends_on:
+      - database
   database:
     image: mariadb
     restart: always

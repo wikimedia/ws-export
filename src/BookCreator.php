@@ -2,16 +2,20 @@
 
 namespace App;
 
-use App\Generator\FormatGenerator;
 use App\Util\Api;
 use Exception;
+use Psr\Log\LoggerInterface;
 
-/**
- * @license GPL-2.0-or-later
- */
 class BookCreator {
-	private $bookProvider;
-	private $bookGenerator;
+
+	/** @var FontProvider */
+	private $fontProvider;
+
+	/** @var Api */
+	private $api;
+
+	/** @var LoggerInterface */
+	private $logger;
 
 	/** @var Book */
 	private $book;
@@ -19,56 +23,120 @@ class BookCreator {
 	/** @var string Full filesystem path to the created book. */
 	private $filePath;
 
-	public static function forApi( Api $api, $format, $options, FontProvider $fontProvider ) {
-		return new BookCreator(
-			new BookProvider( $api, $options ),
-			GeneratorSelector::select( $format, $fontProvider )
-		);
-	}
+	/** @var string */
+	private $title;
 
-	public static function forLanguage( $language, $format, $options, FontProvider $fontProvider ) {
-		$api = new Api();
-		$api->setLang( $language );
-		return new BookCreator(
-			new BookProvider( $api, $options ),
-			GeneratorSelector::select( $format, $fontProvider )
-		);
-	}
+	/** @var string */
+	private $outputDir;
 
-	public function __construct( BookProvider $bookProvider, FormatGenerator $bookGenerator ) {
-		$this->bookProvider = $bookProvider;
-		$this->bookGenerator = $bookGenerator;
-	}
+	/** @var string */
+	private $mimeType;
 
-	/**
-	 * Create the book.
-	 * @param string $title
-	 * @param string|null $outputPath
-	 */
-	public function create( $title, $outputPath = null ): void {
-		date_default_timezone_set( 'UTC' );
+	/** @var string */
+	private $fileExtension = 'epub';
 
-		$this->book = $this->bookProvider->get( $title );
-		$this->filePath = $this->bookGenerator->create( $this->book );
-		if ( $outputPath ) {
-			$this->renameFile( $outputPath );
-		}
+	/** @var string */
+	private $format = 'epub';
+
+	/** @var string */
+	private $font;
+
+	/** @var bool */
+	private $includeImages = true;
+
+	/** @var bool */
+	private $includeCredits = true;
+
+	public function __construct( Api $api, LoggerInterface $logger, FontProvider $fontProvider ) {
+		$this->api = $api;
+		$this->logger = $logger;
+		$this->api->setLogger( $this->logger );
+		$this->fontProvider = $fontProvider;
 	}
 
 	public function getBook(): Book {
 		return $this->book;
 	}
 
-	public function getMimeType() {
-		return $this->bookGenerator->getMimeType();
+	public function getTitle(): ?string {
+		return $this->title;
 	}
 
-	public function getExtension() {
-		return $this->bookGenerator->getExtension();
+	public function setTitle( ?string $title ): void {
+		if ( $title ) {
+			$this->title = $title;
+		}
+	}
+
+	public function getFont(): ?string {
+		return $this->font;
+	}
+
+	public function setFont( ?string $font ): void {
+		// Default font for non-latin languages.
+		$latinLangs = [ 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ];
+		if ( !$font && !in_array( $this->getLang(), $latinLangs ) ) {
+			$font = 'freeserif';
+		}
+		$this->font = $font;
+	}
+
+	public function getFormat(): ?string {
+		return $this->format;
+	}
+
+	public function setFormat( ?string $format ): void {
+		if ( !$format ) {
+			return;
+		}
+		$this->format = $format;
+	}
+
+	public function getIncludeImages(): bool {
+		return $this->includeImages;
+	}
+
+	public function setIncludeImages( bool $includeImages ): void {
+		$this->includeImages = $includeImages;
+	}
+
+	public function getIncludeCredits(): bool {
+		return $this->includeCredits;
+	}
+
+	public function setIncludeCredits( bool $includeCredits ): void {
+		$this->includeCredits = $includeCredits;
+	}
+
+	public function setLang( ?string $lang ): void {
+		if ( !$lang ) {
+			return;
+		}
+		$this->api->setLang( $lang );
+	}
+
+	public function getLang(): string {
+		return $this->api->getLang();
+	}
+
+	public function setOutputDir( string $dir ): void {
+		$this->outputDir = $dir;
+	}
+
+	public function getMimeType(): string {
+		return $this->mimeType;
+	}
+
+	public function getFileExtension(): string {
+		return $this->fileExtension;
 	}
 
 	public function getFilePath(): string {
 		return $this->filePath;
+	}
+
+	public function setFilePath( string $filePath ) {
+		$this->filePath = realpath( $filePath );
 	}
 
 	/**
@@ -76,7 +144,25 @@ class BookCreator {
 	 * @return string
 	 */
 	public function getFilename(): string {
-		return str_replace( [ '/', '\\' ], '_', trim( $this->book->title ) ) . '.' . $this->getExtension();
+		return str_replace( [ '/', '\\' ], '_', trim( $this->book->title ) ) . '.' . $this->getFileExtension();
+	}
+
+	public function create(): void {
+		date_default_timezone_set( 'UTC' );
+
+		$options = [
+			'images' => $this->includeImages,
+			'credits' => $this->includeCredits,
+		];
+		$bookProvider = new BookProvider( $this->api, $options );
+		$bookGenerator = GeneratorSelector::select( $this->getFormat(), $this->fontProvider );
+		$this->book = $bookProvider->get( $this->getTitle() );
+		$this->filePath = $bookGenerator->create( $this->getBook() );
+		if ( $this->outputDir ) {
+			$this->renameFile( $this->outputDir );
+		}
+		$this->mimeType = $bookGenerator->getMimeType();
+		$this->fileExtension = $bookGenerator->getExtension();
 	}
 
 	/**

@@ -4,38 +4,40 @@ namespace App\Tests\BookCreator;
 
 use App\Book;
 use App\BookCreator;
-use App\BookProvider;
-use App\Generator\FormatGenerator;
+use App\FontProvider;
+use App\Util\Api;
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise\Promise;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
-/**
- * @covers BookCreator
- */
 class BookCreatorTest extends TestCase {
-	private $bookCreator;
-	private $bookProvider;
-	private $bookGenerator;
 
-	public function setUp(): void {
-		$this->bookProvider = $observer = $this->getMockBuilder( BookProvider::class )->disableOriginalConstructor()->getMock();
-		$this->bookGenerator = $observer = $this->getMockBuilder( FormatGenerator::class )->getMock();
-		$this->bookCreator = new BookCreator( $this->bookProvider, $this->bookGenerator );
-	}
-
+	/**
+	 * @covers \App\BookCreator::create()
+	 */
 	public function testCreate() {
-		$book = new Book();
-		$this->bookProvider->expects( $this->once() )
-			->method( 'get' )
-			->with( $this->equalTo( 'Test' ) )
-			->will( $this->returnValue( $book ) );
+		$mockApi = $this->createMock( Api::class );
+		$promise = $this->createMock( Promise::class );
+		$promise->method( 'wait' )->willReturn( 'Page content' );
+		$mockApi->method( 'getPageAsync' )
+			->with( 'Test_title' )
+			->willReturn( $promise );
+		$mockApi->method( 'query' )
+			->willReturn( [ 'query' => [ 'pages' => [] ] ] );
+		$mockApi->method( 'getClient' )
+			->willReturn( new Client() );
+		$mockApi->lang = 'fr';
 
-		$this->bookGenerator->expects( $this->once() )
-			->method( 'create' )
-			->with( $this->equalTo( $book ) )
-			->will( $this->returnValue( 'path' ) );
+		$cache = new NullAdapter();
+		$logger = new NullLogger();
+		$bookCreator = new BookCreator( $mockApi, $logger, new FontProvider( $cache ) );
+		$bookCreator->setIncludeCredits( false );
 
-		$this->bookCreator->create( 'Test' );
-		$this->assertEquals( 'path', $this->bookCreator->getFilePath() );
-		$this->assertSame( $book, $this->bookCreator->getBook() );
+		$this->assertEquals( 'fr', $bookCreator->getLang() );
+
+		$bookCreator->setTitle( 'Test title' );
+		$bookCreator->create();
 	}
 }

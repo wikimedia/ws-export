@@ -19,9 +19,13 @@ class ExportCommand extends Command {
 	/** @var FontProvider */
 	private $fontProvider;
 
-	public function __construct( FontProvider $fontProvider ) {
+	/** @var BookCreator */
+	private $bookCreator;
+
+	public function __construct( FontProvider $fontProvider, BookCreator $bookCreator ) {
 		parent::__construct();
 		$this->fontProvider = $fontProvider;
+		$this->bookCreator = $bookCreator;
 	}
 
 	protected function configure() {
@@ -48,14 +52,16 @@ class ExportCommand extends Command {
 		}
 
 		$input->validate();
-		$options = [
-			'images' => true,
-			'credits' => !$input->getOption( 'nocredits' ),
-		];
-		$creator = BookCreator::forLanguage( $input->getOption( 'lang' ), $input->getOption( 'format' ), $options, $this->fontProvider );
-		$creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
 
-		$io->success( "The ebook has been created: " . $creator->getFilePath() );
+		$this->bookCreator->setTitle( $input->getOption( 'title' ) );
+		$this->bookCreator->setLang( $input->getOption( 'lang' ) );
+		$this->bookCreator->setOutputDir( $input->getOption( 'path' ) );
+		$this->bookCreator->setFormat( $input->getOption( 'format' ) );
+		$this->bookCreator->setIncludeCredits( !$input->getOption( 'nocredits' ) );
+
+		$this->bookCreator->create();
+
+		$io->success( "The ebook has been created: " . $this->bookCreator->getFilePath() );
 
 		return Command::SUCCESS;
 	}

@@ -12,7 +12,6 @@ use App\Util\Util;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Locale;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,82 +44,56 @@ class ExportController extends AbstractController {
 	public function home(
 		Request $request,
 		CreationLog $creationLog,
-		Api $api,
-		LoggerInterface $logger,
-		FontProvider $fontProvider
+		FontProvider $fontProvider,
+		BookCreator $bookCreator
 	) {
 		// Handle ?refresh=1 for backwards compatibility.
 		if ( $request->get( 'refresh', false ) !== false ) {
 			return $this->redirectToRoute( 'refresh' );
 		}
 
-		$api->setLang( $this->getLang( $request ) );
-		$api->setLogger( $logger );
+		$bookCreator->setTitle( $request->get( 'page' ) );
+		$bookCreator->setFormat( $request->get( 'format' ) );
+		$bookCreator->setFont( $request->get( 'font' ) );
+		$bookCreator->setLang( $request->get( 'lang' ) );
+
+		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
+		$images = filter_var( $request->get( 'images', true ), FILTER_VALIDATE_BOOL );
+		$bookCreator->setIncludeImages( $images );
 
 		// If the book title is specified, export it now.
 		if ( $request->get( 'page' ) ) {
-			return $this->export( $request, $creationLog, $api, $fontProvider );
+			return $this->export( $bookCreator, $creationLog );
 		}
 
-		$title = $request->get( 'page' );
-		$format = $request->get( 'format', 'epub' );
-		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
-		$images = (bool)$request->get( 'images', true );
 		return $this->render( 'export.html.twig', [
-			'fonts' => $fontProvider->getPreferred( $font ),
-			'font' => $font,
+			'fonts' => $fontProvider->getPreferred( $request->get( 'fonts' ) ),
+			'font' => $bookCreator->getFont(),
 			'formats' => GeneratorSelector::$formats,
-			'format' => $format,
-			'title' => $title,
-			'lang' => $api->getLang(),
-			'images' => $images,
+			'format' => $bookCreator->getFormat(),
+			'title' => $bookCreator->getTitle(),
+			'lang' => $bookCreator->getLang(),
+			'images' => $bookCreator->getIncludeImages(),
 		] );
 	}
 
-	private function export( Request $request, CreationLog $creationLog, Api $api, FontProvider $fontProvider ) {
-		// Get params.
-		$title = $request->get( 'page' );
-		$format = $request->get( 'format', 'epub' );
-		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
-		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
-		$images = filter_var( $request->get( 'images', true ), FILTER_VALIDATE_BOOL );
+	private function export( BookCreator $bookCreator, CreationLog $creationLog ) {
+		// Create the book.
+		$bookCreator->create();
 
-		// Generate ebook.
-		$options = [ 'images' => $images, 'fonts' => $font ];
-		$creator = BookCreator::forApi( $api, $format, $options, $fontProvider );
-		$creator->create( $title );
-
-		// Send file.
-		$response = new BinaryFileResponse( $creator->getFilePath() );
-		$response->headers->set( 'X-Robots-Tag', 'none' );
-		$response->headers->set( 'Content-Description', 'File Transfer' );
-		$response->headers->set( 'Content-Type', $creator->getMimeType() );
-		$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $creator->getFilename() );
-		$response->deleteFileAfterSend();
+		// Prepare the file response.
+		$fileResponse = new BinaryFileResponse( $bookCreator->getFilePath() );
+		$fileResponse->headers->set( 'X-Robots-Tag', 'none' );
+		$fileResponse->headers->set( 'Content-Description', 'File Transfer' );
+		$fileResponse->headers->set( 'Content-Type', $bookCreator->getMimeType() );
+		$filename = $bookCreator->getTitle() . '.' . $bookCreator->getFileExtension();
+		$fileResponse->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename );
+		$fileResponse->deleteFileAfterSend();
 
 		// Log book generation.
-		$creationLog->add( $creator->getBook(), $format );
+		$creationLog->add( $bookCreator->getBook(), $bookCreator->getFormat() );
 
-		return $response;
-	}
-
-	/**
-	 * Get a font name from the given request, falling back to the default (which depends on the language).
-	 *
-	 * @param Request $request The current request.
-	 * @param string $lang A language code.
-	 * @return string
-	 */
-	private function getFont( Request $request, $lang, FontProvider $fontProvider ): ?string {
-		// Default font for non-latin languages.
-		$font = $fontProvider->resolveName( $request->get( 'fonts' ) );
-		if ( !$font && !in_array( $lang, [ 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ] ) ) {
-			$font = 'FreeSerif';
-		}
-		if ( !$fontProvider->getOne( $font ) ) {
-			$font = '';
-		}
-		return $font;
+		return $fileResponse;
 	}
 
 	/**
@@ -155,7 +128,7 @@ class ExportController extends AbstractController {
 			}
 		}
 		return $this->render( 'export.html.twig', [
-			'fonts' => $fontProvider->getPreferred( $this->getFont( $request, $api->getLang(), $fontProvider ) ),
+			'fonts' => $fontProvider->getPreferred( $request->get( 'fonts' ) ),
 			'font' => $request->get( 'fonts' ),
 			'formats' => GeneratorSelector::$formats,
 			'format' => $request->get( 'format' ),

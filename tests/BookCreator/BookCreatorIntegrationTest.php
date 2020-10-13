@@ -4,9 +4,12 @@ namespace App\Tests\BookCreator;
 
 use App\BookCreator;
 use App\FontProvider;
+use App\Util\Api;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestResult;
+use Psr\Log\NullLogger;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Process\Process;
 
 /**
@@ -67,8 +70,11 @@ class BookCreatorIntegrationTest extends TestCase {
 	 }
 
 	private function createBook( $title, $language, $format ) {
-		$creator = BookCreator::forLanguage( $language, $format, [ 'credits' => false ], $this->fontProvider );
-		$creator->create( $title );
+		$creator = new BookCreator( new Api( $language ), new NullLogger(), new FontProvider( new NullAdapter() ) );
+		$creator->setTitle( $title );
+		$creator->setFormat( $format );
+		$creator->setIncludeCredits( false );
+		$creator->create();
 		$this->assertFileExists( $creator->getFilePath() );
 		$this->assertNotNull( $creator->getBook() );
 		return $creator->getFilePath();

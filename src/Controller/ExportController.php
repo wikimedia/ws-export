@@ -34,9 +34,10 @@ class ExportController extends AbstractController {
 
 	/**
 	 * The main export form.
-	 * This route should support the following query string parameters: page, format, images, fonts.
+	 * This route should support the following query string parameters: page, format, images, fonts, refresh.
 	 * @Route("/", name="home")
 	 * @Route("book.php")
+	 * @Route("tool/book.php")
 	 */
 	public function home( Request $request, CreationLog $creationLog, Api $api, LoggerInterface $logger ) {
 		// Handle ?refresh=1 for backwards compatibility.

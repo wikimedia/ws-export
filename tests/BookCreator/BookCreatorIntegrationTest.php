@@ -97,8 +97,9 @@ class BookCreatorIntegrationTest extends TestCase {
 				return null;
 			}
 		};
-		return array_filter( array_map( $mapper, $data ), function ( $location ) { return $location != null;
-	 } );
+		return array_filter( array_map( $mapper, $data ), function ( $location ) {
+			return $location != null;
+		} );
 	}
 
 	private function mapResults( $data ) {

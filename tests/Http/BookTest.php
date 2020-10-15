@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Http;
 
 use App\CreationLog;
 use Doctrine\DBAL\Connection;

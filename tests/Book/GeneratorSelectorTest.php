@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Book;
 
 use App\Exception\WSExportInvalidArgumentException;
 use App\Generator\ConvertGenerator;

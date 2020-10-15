@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\BookCreator;
 
 use App\Book;
 use App\BookCreator;

@@ -3,6 +3,8 @@ temp/*
 composer.phar
 config.php
 *.sqlite
+docker/.env
+docker-compose.override.yml
 
 ###> symfony/framework-bundle ###
 /.env.local

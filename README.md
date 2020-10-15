@@ -74,33 +74,39 @@ You'll need a locally running Docker and Docker Compose:
 
 ### Quickstart
 
-Run the following command to add your user ID and group ID to your `.env` file:
-
-```bash
-echo "WS_DOCKER_PORT=8888
-WS_DOCKER_UID=$(id -u)
-WS_DOCKER_GID=$(id -g)" >> .env.local
+Modify or create `.env.local`. This config uses the database container defaults.
 ```
-
-#### Start environment and install
-
-```bash
-# -d is detached mode - runs containers in the background:
-docker-compose --env-file=.env.local up -d
-```
-
-```bash
-docker-compose --env-file=.env.local exec wsexport composer install
-```
-
-Modify `.env.local` accordingly
-```
-APP_ENV=dev
 DATABASE_URL=mysql://root:@database:3306/wsexport?serverVersion=5.7
 ```
 
+Make sure you cd into `./docker`
+
 ```bash
-docker-compose --env-file=.env.local exec wsexport ./bin/console app:install
+cd ./docker 
+```
+
+Run the following command to add your user ID and group ID to your `.env` file:
+
+```bash
+echo "WS_DOCKER_UID=$(id -u)
+WS_DOCKER_GID=$(id -g)" >> ./.env
+```
+
+Start the environment and install
+
+```bash
+# -d is detached mode - runs containers in the background:
+docker-compose build && docker-compose up -d
+```
+
+```bash
+docker-compose exec wsexport composer install
+```
+
+
+
+```bash
+docker-compose exec wsexport ./bin/console app:install
 ```
 
 Wikisource Export should be up at http://localhost:8888/

@@ -10,9 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * @covers CreationLog
  */
 class StatTest extends WebTestCase {
-	/**
-	 * @runInSeparateProcess
-	 */
+
 	public function testGet() {
 		$client = static::createClient();
 

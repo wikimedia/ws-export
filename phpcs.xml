@@ -9,7 +9,6 @@
 		<exclude name="MediaWiki.Commenting.FunctionComment.MissingReturn" />
 		<exclude name="MediaWiki.Commenting.FunctionComment.Missing.Protected" />
 		<exclude name="MediaWiki.Commenting.FunctionComment.Missing.Public" />
-		<exclude name="MediaWiki.Commenting.PhpunitAnnotations" />
 		<exclude name="MediaWiki.NamingConventions.PrefixedGlobalFunctions.wfPrefix" />
 		<exclude name="MediaWiki.NamingConventions.ValidGlobalName" />
 		<exclude name="MediaWiki.Usage.SuperGlobalsUsage.SuperGlobals" />

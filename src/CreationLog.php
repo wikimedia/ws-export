@@ -11,6 +11,9 @@ use Doctrine\DBAL\Connection;
  */
 class CreationLog {
 
+	/** @var bool */
+	private $enableStats;
+
 	/**
 	 * @var Connection
 	 */
@@ -19,8 +22,9 @@ class CreationLog {
 	/** @var string The name of the database table. */
 	protected $tableName = 'books_generated';
 
-	public function __construct( Connection $connection ) {
+	public function __construct( bool $enableStats, Connection $connection ) {
 		$this->db = $connection;
+		$this->enableStats = $enableStats;
 	}
 
 	/**
@@ -47,8 +51,7 @@ class CreationLog {
 	}
 
 	public function add( Book $book, $format ) {
-		global $wsexportConfig;
-		if ( !$wsexportConfig['stat'] ) {
+		if ( !$this->enableStats ) {
 			return;
 		}
 		$this->db->prepare(

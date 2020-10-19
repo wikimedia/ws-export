@@ -31,9 +31,8 @@ class BookTest extends WebTestCase {
 	 */
 	public function testGetPage( $title, $language ) {
 		$client = static::createClient();
-		/** @var Connection $db */
-		$db = self::$container->get( 'doctrine.dbal.default_connection' );
-		( new CreationLog( $db ) )->createTable();
+		$creationLog = self::$container->get( CreationLog::class );
+		$creationLog->createTable();
 
 		$client->request( 'GET', '/book.php', [ 'page' => $title, 'lang' => $language ] );
 		$headers = $client->getResponse()->headers;

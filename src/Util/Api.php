@@ -8,7 +8,6 @@ namespace App\Util;
  * @license GPL-2.0-or-later
  */
 
-use App\Exception\HttpException;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -16,6 +15,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * a base class for communications with Wikisource
@@ -95,7 +96,7 @@ class Api {
 		)->then(
 			function ( ResponseInterface $response ) {
 				if ( $response->getStatusCode() !== 200 ) {
-					throw new HttpException( 'HTTP error ' . $response->getStatusCode(), $response->getStatusCode() );
+					throw new HttpException( $response->getStatusCode() );
 				}
 				return $response->getBody()->getContents();
 			}
@@ -203,9 +204,9 @@ class Api {
 			}
 		}
 		if ( !isset( $title ) ) {
-			throw new HttpException( 'No page information found in response', 500 );
+			throw new HttpException( 500, 'No page information found in response' );
 		}
-		throw new HttpException( "Page revision not found for: $title", 404 );
+		throw new NotFoundHttpException( "Page revision not found for: $title" );
 	}
 
 	/**

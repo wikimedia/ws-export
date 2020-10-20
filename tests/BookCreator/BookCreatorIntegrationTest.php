@@ -59,10 +59,10 @@ class BookCreatorIntegrationTest extends TestCase {
 
 	private function createBook( $title, $language, $format ) {
 		$creator = BookCreator::forLanguage( $language, $format, [ 'credits' => false ] );
-		list( $book, $file ) = $creator->create( $title );
-		$this->assertFileExists( $file );
-		$this->assertNotNull( $book );
-		return $file;
+		$creator->create( $title );
+		$this->assertFileExists( $creator->getFilePath() );
+		$this->assertNotNull( $creator->getBook() );
+		return $creator->getFilePath();
 	}
 
 	private function epubCheck( $file ) {

@@ -106,18 +106,18 @@ class ExportController extends AbstractController {
 		// Generate ebook.
 		$options = [ 'images' => $images, 'fonts' => $font ];
 		$creator = BookCreator::forApi( $api, $format, $options );
-		list( $book, $file ) = $creator->create( $title );
+		$creator->create( $title );
 
 		// Send file.
-		$response = new BinaryFileResponse( $file );
+		$response = new BinaryFileResponse( $creator->getFilePath() );
 		$response->headers->set( 'X-Robots-Tag', 'none' );
 		$response->headers->set( 'Content-Description', 'File Transfer' );
 		$response->headers->set( 'Content-Type', $creator->getMimeType() );
-		$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT,  $title . '.' . $creator->getExtension() );
+		$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $creator->getFilename() );
 		$response->deleteFileAfterSend();
 
 		// Log book generation.
-		$creationLog->add( $book, $format );
+		$creationLog->add( $creator->getBook(), $format );
 
 		return $response;
 	}

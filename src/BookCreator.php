@@ -13,6 +13,12 @@ class BookCreator {
 	private $bookProvider;
 	private $bookGenerator;
 
+	/** @var Book */
+	private $book;
+
+	/** @var string Full filesystem path to the created book. */
+	private $filePath;
+
 	public static function forApi( Api $api, $format, $options ) {
 		return new BookCreator(
 			new BookProvider( $api, $options ),
@@ -32,16 +38,23 @@ class BookCreator {
 		$this->bookGenerator = $bookGenerator;
 	}
 
-	public function create( $title, $outputPath = null ) {
+	/**
+	 * Create the book.
+	 * @param string $title
+	 * @param string|null $outputPath
+	 */
+	public function create( $title, $outputPath = null ): void {
 		date_default_timezone_set( 'UTC' );
 
-		$book = $this->bookProvider->get( $title );
-		$file = $this->bookGenerator->create( $book );
+		$this->book = $this->bookProvider->get( $title );
+		$this->filePath = $this->bookGenerator->create( $this->book );
 		if ( $outputPath ) {
-			return [ $book, $this->renameFile( $book->title, $file, $outputPath ) ];
-		} else {
-			return [ $book, $file ];
+			$this->renameFile( $outputPath );
 		}
+	}
+
+	public function getBook(): Book {
+		return $this->book;
 	}
 
 	public function getMimeType() {
@@ -52,14 +65,34 @@ class BookCreator {
 		return $this->bookGenerator->getExtension();
 	}
 
-	private function renameFile( $title, $file, $outputPath ) {
-		$output = $outputPath . '/' . $title . '.' . $this->getExtension();
-		if ( !is_dir( dirname( $output ) ) ) {
-			mkdir( dirname( $output ), 0755, true );
+	public function getFilePath(): string {
+		return $this->filePath;
+	}
+
+	/**
+	 * Get a sanitized filename for the created book.
+	 * @return string
+	 */
+	public function getFilename(): string {
+		return str_replace( [ '/', '\\' ], '_', trim( $this->book->title ) ) . '.' . $this->getExtension();
+	}
+
+	/**
+	 * Move the created book to a new directory.
+	 * @param string $dest The destination directory.
+	 * @throws Exception If the file could not be renamed.
+	 */
+	private function renameFile( string $dest ): void {
+		if ( !is_dir( $dest ) ) {
+			throw new Exception( 'Not a directory: ' . $dest );
 		}
-		if ( !rename( $file, $output ) ) {
-			throw new Exception( 'Unable to create output file: ' . $output );
+		$newFilePath = $dest . '/' . $this->getFilename();
+		if ( !is_dir( dirname( $newFilePath ) ) ) {
+			mkdir( dirname( $newFilePath ), 0755, true );
 		}
-		return $output;
+		if ( !rename( $this->getFilePath(), $newFilePath ) ) {
+			throw new Exception( 'Unable to create output file: ' . $newFilePath );
+		}
+		$this->filePath = $newFilePath;
 	}
 }

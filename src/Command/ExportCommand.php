@@ -44,9 +44,9 @@ class ExportCommand extends Command {
 			'credits' => !$input->getOption( 'nocredits' ),
 		];
 		$creator = BookCreator::forLanguage( $input->getOption( 'lang' ), $input->getOption( 'format' ), $options );
-		list( $book, $file ) = $creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
+		$creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
 
-		$io->success( "The ebook has been created: $file" );
+		$io->success( "The ebook has been created: " . $creator->getFilePath() );
 
 		return Command::SUCCESS;
 	}

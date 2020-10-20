@@ -14,9 +14,9 @@ class StatTest extends WebTestCase {
 	public function testGet() {
 		$client = static::createClient();
 
-		/** @var Connection $db */
-		$db = self::$container->get( 'doctrine.dbal.default_connection' );
-		( new CreationLog( $db ) )->createTable();
+		/** @var CreationLog $creationLog */
+		$creationLog = self::$container->get( CreationLog::class );
+		$creationLog->createTable();
 
 		$client->request( 'GET', '/stat.php' );
 		$this->assertStringContainsString( 'Stats for ', $client->getResponse()->getContent() );

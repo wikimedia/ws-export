@@ -19,7 +19,7 @@ class CreationLogTest extends KernelTestCase {
 		parent::setUp();
 		self::bootKernel();
 		$this->db = self::$container->get( 'doctrine.dbal.default_connection' );
-		$this->log = new CreationLog( $this->db );
+		$this->log = self::$container->get( CreationLog::class );
 		$this->dropTable();
 	}
 

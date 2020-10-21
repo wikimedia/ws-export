@@ -358,7 +358,7 @@ class EpubGenerator implements FormatGenerator {
 			$content .= '<img alt="" src="images/Accueil_scribe.png" />';
 		}
 		$content .= '<br />
-					<h5>' . implode( $footerElements, ', ' ) . '</h5>
+					<h5>' . implode( ', ', $footerElements ) . '</h5>
 					<br />
 					<h6>' . str_replace( '%d', $formatter->format( time() ), htmlspecialchars( $this->i18n['exported_from_wikisource_the'], ENT_QUOTES ) ) . '</h6>
 				</body>

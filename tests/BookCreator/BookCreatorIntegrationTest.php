@@ -3,8 +3,10 @@
 namespace App\Tests\BookCreator;
 
 use App\BookCreator;
+use App\FontProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestResult;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Process\Process;
 
 /**
@@ -15,10 +17,17 @@ class BookCreatorIntegrationTest extends TestCase {
 	private $epubCheckJar = null;
 	private $testResult = null;
 
+	/** @var FontProvider */
+	private $fontProvider;
+
 	public function run( TestResult $result = null ): TestResult {
 		$this->epubCheckJar = $this->epubCheckJar();
 		$this->testResult = $result;
 		return parent::run( $result );
+	}
+
+	public function setUp(): void {
+		$this->fontProvider = new FontProvider( new ArrayAdapter() );
 	}
 
 	public function bookProvider() {
@@ -58,7 +67,7 @@ class BookCreatorIntegrationTest extends TestCase {
 	 }
 
 	private function createBook( $title, $language, $format ) {
-		$creator = BookCreator::forLanguage( $language, $format, [ 'credits' => false ] );
+		$creator = BookCreator::forLanguage( $language, $format, [ 'credits' => false ], $this->fontProvider );
 		$creator->create( $title );
 		$this->assertFileExists( $creator->getFilePath() );
 		$this->assertNotNull( $creator->getBook() );

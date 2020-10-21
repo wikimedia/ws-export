@@ -39,7 +39,13 @@ class ExportController extends AbstractController {
 	 * @Route("book.php")
 	 * @Route("tool/book.php")
 	 */
-	public function home( Request $request, CreationLog $creationLog, Api $api, LoggerInterface $logger ) {
+	public function home(
+		Request $request,
+		CreationLog $creationLog,
+		Api $api,
+		LoggerInterface $logger,
+		FontProvider $fontProvider
+	) {
 		// Handle ?refresh=1 for backwards compatibility.
 		if ( $request->get( 'refresh', false ) !== false ) {
 			return $this->redirectToRoute( 'refresh' );
@@ -50,7 +56,7 @@ class ExportController extends AbstractController {
 		$response = new Response();
 		if ( $request->get( 'page' ) ) {
 			try {
-				return $this->export( $request, $creationLog, $logger );
+				return $this->export( $request, $creationLog, $logger, $fontProvider );
 			} catch ( Exception $exception ) {
 				$code = 500;
 				$message = 'Internal Server Error';
@@ -79,10 +85,10 @@ class ExportController extends AbstractController {
 
 		$title = $request->get( 'page' );
 		$format = $request->get( 'format', 'epub' );
-		$font = $this->getFont( $request, $api->lang );
+		$font = $this->getFont( $request, $api->lang, $fontProvider );
 		$images = (bool)$request->get( 'images', true );
 		return $this->render( 'export.html.twig', [
-			'fonts' => FontProvider::getList(),
+			'fonts' => $fontProvider->getPreferred( $font ),
 			'font' => $font,
 			'formats' => GeneratorSelector::$formats,
 			'format' => $format,
@@ -93,19 +99,19 @@ class ExportController extends AbstractController {
 		], $response );
 	}
 
-	private function export( Request $request, CreationLog $creationLog, LoggerInterface $logger ) {
+	private function export( Request $request, CreationLog $creationLog, LoggerInterface $logger, FontProvider $fontProvider ) {
 		// Get params.
 		$api = new Api( $request->get( 'lang' ) );
 		$api->setLogger( $logger );
 		$title = $request->get( 'page' );
 		$format = $request->get( 'format', 'epub' );
-		$font = $this->getFont( $request, $api->lang );
+		$font = $this->getFont( $request, $api->lang, $fontProvider );
 		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
 		$images = filter_var( $request->get( 'images', true ), FILTER_VALIDATE_BOOL );
 
 		// Generate ebook.
 		$options = [ 'images' => $images, 'fonts' => $font ];
-		$creator = BookCreator::forApi( $api, $format, $options );
+		$creator = BookCreator::forApi( $api, $format, $options, $fontProvider );
 		$creator->create( $title );
 
 		// Send file.
@@ -129,11 +135,14 @@ class ExportController extends AbstractController {
 	 * @param string $lang A language code.
 	 * @return string
 	 */
-	private function getFont( Request $request, $lang ): ?string {
+	private function getFont( Request $request, $lang, FontProvider $fontProvider ): ?string {
 		// Default font for non-latin languages.
-		$font = $request->get( 'fonts', '' );
+		$font = $fontProvider->resolveName( $request->get( 'fonts' ) );
 		if ( !$font && !in_array( $lang, [ 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ] ) ) {
-			$font = 'freeserif';
+			$font = 'FreeSerif';
+		}
+		if ( !$fontProvider->getOne( $font ) ) {
+			$font = '';
 		}
 		return $font;
 	}

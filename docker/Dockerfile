@@ -24,6 +24,11 @@ RUN apt-get update -q && apt-get install -y \
         xdg-utils \
         xz-utils \
         libicu-dev \
+        fontconfig \
+        fonts-freefont-ttf \
+        fonts-linuxlibertine \
+        fonts-dejavu-core \
+        fonts-gubbi \
       && rm -rf /var/lib/apt/lists/* \
       && pecl install xdebug zip \
       && docker-php-ext-enable xdebug zip \

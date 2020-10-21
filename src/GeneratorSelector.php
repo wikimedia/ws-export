@@ -22,15 +22,15 @@ class GeneratorSelector {
 		'txt'		=> 'txt (in beta)'
 	];
 
-	public static function select( $format ) {
+	public static function select( $format, FontProvider $fontProvider ) {
 		if ( $format === 'odt' ) {
 			$format = 'rtf'; // TODO: bad hack in order to don't break urls
 		}
 
 		if ( $format === 'epub-3' || $format === 'epub' ) {
-			return new EpubGenerator();
+			return new EpubGenerator( $fontProvider );
 		} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
-			return new ConvertGenerator( $format );
+			return new ConvertGenerator( $format, $fontProvider );
 		} elseif ( $format === 'atom' ) {
 			return new AtomGenerator();
 		} else {

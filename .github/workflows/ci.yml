@@ -36,11 +36,12 @@ jobs:
         php-version: ${{matrix.php}}
         extensions: pdo, imagick
 
-    - name: Install Calibre and epubcheck
+    - name: Install Calibre, epubcheck, and fonts
       run: |
+        sudo mkdir /usr/share/desktop-directories/
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
         sudo apt-get update -q
-        sudo apt-get install epubcheck -y
+        sudo apt-get install epubcheck fonts-freefont-ttf fonts-linuxlibertine fonts-dejavu-core fonts-gubbi -y
 
     - name: Install WSExport
       run: |

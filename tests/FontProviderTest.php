@@ -37,7 +37,7 @@ class FontProviderTest extends TestCase {
 	 */
 	public function testGetOne() {
 		// Non-existing font.
-		$this->assertSame( null, $this->fontProvider->getOne( 'Foo' )['styles'] );
+		$this->assertSame( null, $this->fontProvider->getOne( 'Foo' ) );
 		// Common font with four variants.
 		$this->assertCount( 4, $this->fontProvider->getOne( 'FreeSerif' )['styles'] );
 		// Font with one variant.

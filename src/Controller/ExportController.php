@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\BookCreator;
 use App\CreationLog;
-use App\Exception\HttpException;
 use App\FontProvider;
 use App\GeneratorSelector;
 use App\Refresh;
@@ -18,7 +17,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 class ExportController extends AbstractController {
 
@@ -52,35 +53,8 @@ class ExportController extends AbstractController {
 		}
 
 		// If the book title is specified, export it now.
-		$messages = [];
-		$response = new Response();
 		if ( $request->get( 'page' ) ) {
-			try {
-				return $this->export( $request, $creationLog, $logger, $fontProvider );
-			} catch ( Exception $exception ) {
-				$code = 500;
-				$message = 'Internal Server Error';
-				$error = $exception->getMessage();
-				$doLog = true;
-				if ( $exception instanceof HttpException ) {
-					$parts = preg_split( '/[\r\n]+/', $exception->getMessage(), 2 );
-					$code = $exception->getCode();
-					$message = $parts[ 0 ];
-					// 404's are quite popular, not logging them
-					$doLog = $exception->getCode() !== 404;
-				} elseif ( $exception instanceof RequestException ) {
-					$exceptionResponse = $exception->getResponse();
-					if ( $exceptionResponse ) {
-						$error = Util::extractErrorMessage( $exceptionResponse, $exception->getRequest() ) ?: $error;
-					}
-				}
-				if ( $doLog ) {
-					$logger->error( Util::formatException( $exception ) );
-				}
-				$response->setStatusCode( $code, $message );
-				$error = nl2br( htmlspecialchars( $error ) );
-				$messages['danger'] = [ $error ];
-			}
+			return $this->export( $request, $creationLog, $logger, $fontProvider );
 		}
 
 		$title = $request->get( 'page' );
@@ -95,8 +69,7 @@ class ExportController extends AbstractController {
 			'title' => $title,
 			'lang' => $api->lang,
 			'images' => $images,
-			'messages' => $messages,
-		], $response );
+		] );
 	}
 
 	private function export( Request $request, CreationLog $creationLog, LoggerInterface $logger, FontProvider $fontProvider ) {
@@ -145,5 +118,38 @@ class ExportController extends AbstractController {
 			$font = '';
 		}
 		return $font;
+	}
+
+	/**
+	 * Error page handler, to always show the export form with any HTTP error message.
+	 *
+	 * @param Api $api
+	 * @param Exception $exception
+	 * @return Response
+	 */
+	public function error( Request $request, Throwable $exception, Api $api, FontProvider $fontProvider ) {
+		// Only handle HTTP and Request exceptions.
+		if ( !( $exception instanceof HttpException || $exception instanceof RequestException ) ) {
+			throw $exception;
+		}
+		$message = $exception->getMessage();
+		if ( $exception instanceof RequestException ) {
+			$exceptionResponse = $exception->getResponse();
+			if ( $exceptionResponse ) {
+				$message = Util::extractErrorMessage( $exceptionResponse, $exception->getRequest() );
+			}
+		}
+		return $this->render( 'export.html.twig', [
+			'fonts' => $fontProvider->getPreferred( $this->getFont( $request, $api->lang, $fontProvider ) ),
+			'font' => $request->get( 'fonts' ),
+			'formats' => GeneratorSelector::$formats,
+			'format' => $request->get( 'format' ),
+			'title' => $request->get( 'page' ),
+			'lang' => $api->lang,
+			'images' => true,
+			'messages' => [
+				'danger' => [ $message ],
+			]
+		] );
 	}
 }

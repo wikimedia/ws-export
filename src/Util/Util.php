@@ -175,19 +175,6 @@ class Util {
 	}
 
 	/**
-	 * Returns a string representation of an exception useful for logging
-	 *
-	 * @param Exception $ex
-	 * @return string
-	 */
-	public static function formatException( Exception $ex ): string {
-		$date = date( DATE_RFC3339 );
-		$class = get_class( $ex );
-
-		return "$date: $class {$ex->getMessage()}\n{$ex->getTraceAsString()}\n";
-	}
-
-	/**
 	 * Attempts to extract a string error message from the error response returned by the remote server
 	 *
 	 * @param ResponseInterface|null $resp

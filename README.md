@@ -113,6 +113,33 @@ docker-compose exec wsexport ./bin/console app:install
 Wikisource Export should be up at http://localhost:8888/
 
 
+### Setup Xdebug
+
+#### Visual Studio Code
+
+Add the following configuration to your `launch.json`
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for XDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9000,
+            "pathMappings": {
+                "/var/www/html": "${workspaceFolder}"
+            }
+        }
+    ]
+}
+```
+
+You need to install the [php-xdebug-ext]
+
+[php-xdebug-ext]: https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug
+
+
 Licence
 =======
 

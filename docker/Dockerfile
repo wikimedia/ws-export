@@ -7,6 +7,7 @@ WORKDIR /var/www/html
 
 COPY ./apache/000-default.conf /etc/apache2/sites-available/
 COPY ./apache/ports.conf /etc/apache2/
+COPY ./php.ini /usr/local/etc/php/php.ini
 
 EXPOSE 8080
 

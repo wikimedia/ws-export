@@ -74,7 +74,7 @@ class Refresh {
 			// Add https to protocol-relative links.
 			$aboutHtml = str_replace( 'href="//', 'href="https://', $document->saveXML() );
 			// Fully qualify unqualified links.
-			$aboutHtml = str_replace( 'href="/', 'href="https://' . $this->api->domainName . '/', $aboutHtml );
+			$aboutHtml = str_replace( 'href="/', 'href="https://' . $this->api->getDomainName() . '/', $aboutHtml );
 			$this->setTempFileContent( 'about.xhtml', $aboutHtml );
 		}
 	}

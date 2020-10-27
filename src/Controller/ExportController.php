@@ -11,6 +11,7 @@ use App\Util\Api;
 use App\Util\Util;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
+use Locale;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -27,9 +28,10 @@ class ExportController extends AbstractController {
 	 * @Route("/refresh", name="refresh")
 	 */
 	public function refresh( Request $request, Api $api ) {
+		$api->setLang( $this->getLang( $request ) );
 		$refresh = new Refresh( $api );
 		$refresh->refresh();
-		$this->addFlash( 'success', 'The cache is updated for ' . $api->lang . ' language.' );
+		$this->addFlash( 'success', 'The cache is updated for ' . $api->getLang() . ' language.' );
 		return $this->redirectToRoute( 'home' );
 	}
 
@@ -52,14 +54,17 @@ class ExportController extends AbstractController {
 			return $this->redirectToRoute( 'refresh' );
 		}
 
+		$api->setLang( $this->getLang( $request ) );
+		$api->setLogger( $logger );
+
 		// If the book title is specified, export it now.
 		if ( $request->get( 'page' ) ) {
-			return $this->export( $request, $creationLog, $logger, $fontProvider );
+			return $this->export( $request, $creationLog, $api, $fontProvider );
 		}
 
 		$title = $request->get( 'page' );
 		$format = $request->get( 'format', 'epub' );
-		$font = $this->getFont( $request, $api->lang, $fontProvider );
+		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
 		$images = (bool)$request->get( 'images', true );
 		return $this->render( 'export.html.twig', [
 			'fonts' => $fontProvider->getPreferred( $font ),
@@ -67,18 +72,16 @@ class ExportController extends AbstractController {
 			'formats' => GeneratorSelector::$formats,
 			'format' => $format,
 			'title' => $title,
-			'lang' => $api->lang,
+			'lang' => $api->getLang(),
 			'images' => $images,
 		] );
 	}
 
-	private function export( Request $request, CreationLog $creationLog, LoggerInterface $logger, FontProvider $fontProvider ) {
+	private function export( Request $request, CreationLog $creationLog, Api $api, FontProvider $fontProvider ) {
 		// Get params.
-		$api = new Api( $request->get( 'lang' ) );
-		$api->setLogger( $logger );
 		$title = $request->get( 'page' );
 		$format = $request->get( 'format', 'epub' );
-		$font = $this->getFont( $request, $api->lang, $fontProvider );
+		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
 		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
 		$images = filter_var( $request->get( 'images', true ), FILTER_VALIDATE_BOOL );
 
@@ -121,6 +124,18 @@ class ExportController extends AbstractController {
 	}
 
 	/**
+	 * Get the Wikisource language from the URL or based on the user's Accept header.
+	 */
+	private function getLang( Request $request ): string {
+		$lang = $request->get( 'lang' );
+		if ( !$lang ) {
+			$localInfo = Locale::parseLocale( $request->getPreferredLanguage() );
+			$lang = $localInfo['language'] ?? '';
+		}
+		return strtolower( $lang );
+	}
+
+	/**
 	 * Error page handler, to always show the export form with any HTTP error message.
 	 *
 	 * @param Api $api
@@ -140,12 +155,12 @@ class ExportController extends AbstractController {
 			}
 		}
 		return $this->render( 'export.html.twig', [
-			'fonts' => $fontProvider->getPreferred( $this->getFont( $request, $api->lang, $fontProvider ) ),
+			'fonts' => $fontProvider->getPreferred( $this->getFont( $request, $api->getLang(), $fontProvider ) ),
 			'font' => $request->get( 'fonts' ),
 			'formats' => GeneratorSelector::$formats,
 			'format' => $request->get( 'format' ),
 			'title' => $request->get( 'page' ),
-			'lang' => $api->lang,
+			'lang' => $api->getLang(),
 			'images' => true,
 			'messages' => [
 				'danger' => [ $message ],

@@ -46,7 +46,8 @@ class RefreshTest extends TestCase {
 	}
 
 	private function refresh( $lang ) {
-		$api = new Api( $lang, '', $this->mockClient( $this->defaultResponses() ) );
+		$api = new Api( $this->mockClient( $this->defaultResponses() ) );
+		$api->setLang( $lang );
 		$refresh = new Refresh( $api );
 		$refresh->refresh();
 	}

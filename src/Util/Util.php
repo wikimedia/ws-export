@@ -93,7 +93,9 @@ class Util {
 		$cache = FileCache::singleton();
 		$path = $cache->getDirectory() . '/' . $lang . '/' . $name;
 		if ( !file_exists( $path ) ) {
-			$refresh = new Refresh( new Api( $lang ) );
+			$api = new Api();
+			$api->setLang( $lang );
+			$refresh = new Refresh( $api );
 			$refresh->refresh();
 		}
 		return file_get_contents( $path );

@@ -29,7 +29,7 @@ class Api {
 	/** @var string */
 	private $lang = '';
 
-	public $domainName = '';
+	private $domainName = '';
 
 	/**
 	 * @var ClientInterface
@@ -73,6 +73,13 @@ class Api {
 		} else {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}
+	}
+
+	/**
+	 * @return string the domain name of the wiki being used
+	 */
+	public function getDomainName(): string {
+		return $this->domainName;
 	}
 
 	public function getLang(): string {
@@ -143,7 +150,7 @@ class Api {
 		$params += [ 'action' => 'query', 'format' => 'json' ];
 
 		return $this->getAsync(
-			'https://' . $this->domainName . '/w/api.php',
+			'https://' . $this->getDomainName() . '/w/api.php',
 			[ 'query' => $params ]
 		)->then(
 			function ( $result ) {

@@ -143,7 +143,6 @@ class Api {
 	 */
 	public function queryAsync( $params ) {
 		$params += [ 'action' => 'query', 'format' => 'json' ];
-
 		return $this->getAsync(
 			'https://' . $this->getDomainName() . '/w/api.php',
 			[ 'query' => $params ]
@@ -189,30 +188,16 @@ class Api {
 	 * @return PromiseInterface promise with the content of a page
 	 */
 	public function getPageAsync( $title ) {
-		return $this->queryAsync( [
-			'titles' => $title,
-			'prop' => 'revisions',
-			'rvprop' => 'content',
-			'rvparse' => true
-		] )->then( function ( array $result ) {
-			return $this->parseGetPageResponse( $result );
-		} );
-	}
-
-	private function parseGetPageResponse( $response ) {
-		$pages = $response['query']['pages'] ?? [];
-		foreach ( $pages as $page ) {
-			$title = $page['title'];
-			if ( isset( $page['revisions'] ) ) {
-				foreach ( $page['revisions'] as $revision ) {
-					return Util::getXhtmlFromContent( $this->getLang(), $revision['*'], $title );
-				}
-			}
-		}
-		if ( !isset( $title ) ) {
-			throw new HttpException( 500, 'No page information found in response' );
-		}
-		throw new NotFoundHttpException( "Page revision not found for: $title" );
+		$url = 'https://' . $this->getDomainName() . '/api/rest_v1/page/html/' . urlencode( $title );
+		return $this->getAsync( $url )
+				->then(
+					function ( string $result ) use ( $title ) {
+						return Util::getXhtmlFromContent( $this->getLang(), $result, $title );
+					},
+					function ( $reason ) use ( $title ) {
+						throw new NotFoundHttpException( "Page not found for: $title" );
+					}
+				);
 	}
 
 	/**
@@ -221,17 +206,6 @@ class Api {
 	 */
 	public function get( $url ) {
 		return $this->client->get( $url )->getBody()->getContents();
-	}
-
-	/**
-	 * @param string $url
-	 * @return string the url encoded like mediawiki does.
-	 */
-	public static function mediawikiUrlEncode( string $url ): string {
-		$search = [ '%21', '%24', '%28', '%29', '%2A', '%2C', '%2D', '%2E', '%2F', '%3A', '%3B', '%40' ];
-		$replace = [ '!', '$', '(', ')', '*', ',', '-', '.', '/', ':', ';', '@' ];
-
-		return str_replace( $search, $replace, urlencode( str_replace( ' ', '_', $url ) ) );
 	}
 
 	/**

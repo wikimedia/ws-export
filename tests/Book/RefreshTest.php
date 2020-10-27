@@ -84,16 +84,17 @@ class RefreshTest extends KernelTestCase {
 	}
 
 	private function mockAboutWikisourceResponse( $title, $content ) {
-		return new Response( 200, [ 'Content' => 'application/json' ], json_encode( [
-			'query' => [
-				'pages' => [
-					[
-						'title' => $title,
-						'revisions' => [ [ '*' => $content ] ]
-					],
-				]
-			]
-		] ) );
+		return new Response( 200, [ 'Content' => 'application/json' ],
+				'<!DOCTYPE html>
+				<html prefix="dc: http://purl.org/dc/terms/ mw: http://mediawiki.org/rdf/" about="https://en.wikisource.org/wiki/Special:Redirect/revision/2952249">
+				<head prefix="mwr: https://en.wikisource.org/wiki/Special:Redirect/"><meta property="mw:TimeUuid" content="27feca60-13e5-11eb-ae2c-cd9b7fbfbfd2"/>
+				<meta charset="utf-8"/><meta property="mw:pageId" content="791503"/><meta property="mw:pageNamespace" content="0"/>
+				<link rel="dc:replaces" resource="mwr:revision/2952206"/><meta property="mw:revisionSHA1" content="3b67a798e367dda2bebc6a7a6f272ffd7cd7bfcf"/>
+				<meta property="dc:modified" content="2011-06-11T09:02:29.000Z"/><meta property="mw:html:version" content="2.1.0"/>
+				<link rel="dc:isVersionOf" href="//en.wikisource.org/wiki/' . urlencode( $title ) . '"/><title>' . $title . '</title>
+				<base href="//en.wikisource.org/wiki/"/><link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=mediawiki.skinning.content.parsoid%7Cmediawiki.skinning.interface%7Csite.styles%7Cmediawiki.page.gallery.styles%7Cext.cite.style%7Cext.cite.styles&amp;only=styles&amp;skin=vector"/><meta http-equiv="content-language" content="en"/><meta http-equiv="vary" content="Accept"/></head>
+				<body>' . $content . '</body></html>'
+			);
 	}
 
 	private function mockNamespacesListResponse( $namespaces ) {

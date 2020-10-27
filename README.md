@@ -112,6 +112,8 @@ docker-compose exec wsexport ./bin/console app:install
 
 Wikisource Export should be up at http://localhost:8888/
 
+### Cache
+Go to `/refresh` to clear the cache
 
 ### Setup Xdebug
 

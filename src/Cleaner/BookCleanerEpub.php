@@ -255,6 +255,8 @@ class BookCleanerEpub {
 				$node->setAttribute( 'href', 'http:' . $href );
 			} elseif ( substr( $href, 0, 1 ) === '/' ) {
 				$node->setAttribute( 'href', $this->baseUrl . $href );
+			} elseif ( substr( $href, 0, 2 ) === './' ) {
+				$node->setAttribute( 'href', $this->baseUrl . '/wiki/' . substr( $href, 2 ) );
 			}
 		}
 	}

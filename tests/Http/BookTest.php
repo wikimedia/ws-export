@@ -45,7 +45,7 @@ class BookTest extends WebTestCase {
 	public function testGetNonExistingTitleDisplaysError() {
 		$client = static::createClient();
 		$client->request( 'GET', '/book.php', [ 'page' => 'xxx' ] );
-		$this->assertStringContainsString( 'Page revision not found', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'Page not found', $client->getResponse()->getContent() );
 		$this->assertSame( 404, $client->getResponse()->getStatusCode() );
 	}
 

@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Util\Api;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
@@ -51,7 +50,17 @@ class PageParser {
 	 * @return Page[]
 	 */
 	public function getChaptersList( $pageList, $namespaces ) {
-		$list = $this->xPath->query( '//*[@id="ws-summary" or contains(@class,"ws-summary")]/descendant::a[not(contains(@href,"action=edit") or contains(@class,"extiw") or contains(@class,"external") or contains(@class,"internal") or contains(@class,"image"))]' );
+		$list = $this->xPath->query( '//*[
+			@id="ws-summary" or
+			contains(@class,"ws-summary")]/descendant::a[
+				not(
+					contains(@class,"new") or
+					contains(@href,"action=edit") or
+					contains(@class,"extiw") or contains(@class,"external") or
+					contains(@class,"internal") or
+					contains(@class,"image")
+				)
+			]' );
 		$chapters = [];
 		/** @var DOMElement $link */
 		foreach ( $list as $link ) {
@@ -61,7 +70,14 @@ class PageParser {
 				// If there's no path component, it can't be a link to a chapter.
 				continue;
 			}
-			$title = urldecode( substr( $urlParts['path'], strlen( '/wiki/' ) ) );
+
+			// Remove string "/wiki/" if it's found in $urlParts['path']
+			if ( substr( $urlParts['path'], 0, strlen( '/wiki/' ) ) === "/wiki/" ) {
+				$title = urldecode( substr( $urlParts['path'], strlen( '/wiki/' ) ) );
+			} else {
+				$title = urldecode( substr( $urlParts['path'], strlen( '/' ) ) );
+			}
+
 			$parts = explode( ':', $title );
 			// Include the chapter if it's not already present and is a main-namespace page.
 			if ( $title != '' && !in_array( $title, $pageList ) && !in_array( $parts[0], $namespaces ) ) {
@@ -83,7 +99,17 @@ class PageParser {
 	public function getFullChaptersList( $title, $pageList, $namespaces ) {
 		$chapters = $this->getChaptersList( $pageList, $namespaces );
 		if ( empty( $chapters ) ) {
-			$list = $this->xPath->query( '//a[contains(@href,"' . Api::mediawikiUrlEncode( $title ) . '") and not(contains(@class,"extiw") or contains(@class,"external") or contains(@href,"#") or contains(@class,"internal") or contains(@href,"action=edit") or contains(@title,"/Texte entier") or contains(@class,"image"))]' );
+			$list = $this->xPath->query( '//a[contains(@href,"' . $title . '") and 
+				not(
+					contains(@class,"new") or
+					contains(@class,"extiw") or
+					contains(@class,"external") or
+					contains(@href,"#") or
+					contains(@class,"internal") or
+					contains(@href,"action=edit") or
+					contains(@title,"/Texte entier") or
+					contains(@class,"image")
+				)]' );
 			/** @var DOMElement $link */
 			foreach ( $list as $link ) {
 				$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
@@ -126,7 +152,11 @@ class PageParser {
 
 		}
 
-		$list = $this->xPath->query( '//a[contains(@class,"image")]' );
+		$list = $this->xPath->query( '
+			//a[contains(@class,"image")] |
+			//figure[contains(@typeof,"mw:Image")] |
+			//figure-inline[contains(@typeof,"mw:Image")]'
+		);
 		/** @var DOMElement $node */
 		foreach ( $list as $node ) {
 			/** @var DOMElement $img */
@@ -203,6 +233,7 @@ class PageParser {
 		$this->removeNodesWithXpath( '//span[@class="editsection" or @class="mw-editsection"]' );
 		$this->removeNodesWithXpath( '//a[@class="mw-headline-anchor"]' );
 		$this->removeNodesWithXpath( '//div[@class="mediaContainer"]' );
+		$this->removeNodesWithXpath( '//link[@rel="mw:PageProp/Category"]' );
 		$this->deprecatedNodes( 'big', 'span', 'font-size:large;' );
 		$this->deprecatedNodes( 'center', 'div', 'text-align:center;' );
 		$this->deprecatedNodes( 'strike', 'span', 'text-decoration:line-through;' );
@@ -229,6 +260,7 @@ class PageParser {
 
 		$this->cleanIds();
 		$this->cleanRedLinks();
+		$this->cleanReferenceLinks();
 		$this->moveStyleToHead();
 
 		return $this->xPath->document;
@@ -311,6 +343,23 @@ class PageParser {
 				}
 			}
 			$node->parentNode->removeChild( $node );
+		}
+	}
+
+	private function cleanReferenceLinks() {
+		// Get all links that contain the "style" value "mw-Ref"
+		$links = $this->xPath->query( '//html:a[contains(@style, "mw-Ref")]' );
+		foreach ( $links as $link ) {
+			$href = $link->getAttribute( 'href' );
+			$pos = strpos( $href, '#' );
+			$link->setAttribute( 'href', substr( $href, $pos ) );
+		}
+		// Get all links that have the "rel" attribute equals to "mw-Ref"
+		$links = $this->xPath->query( '//html:a[@rel="mw:referencedBy"]' );
+		foreach ( $links as $link ) {
+			$href = $link->getAttribute( 'href' );
+			$pos = strpos( $href, '#' );
+			$link->setAttribute( 'href', substr( $href, $pos ) );
 		}
 	}
 

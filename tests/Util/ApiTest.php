@@ -11,6 +11,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @covers \App\Util\Api
@@ -41,7 +42,7 @@ class ApiTest extends TestCase {
 	}
 
 	private function apiWithResponse( $status, $header, $body ) {
-		$api = new Api( new NullLogger(), $this->mockClient( [ new Response( $status, $header, $body ) ] ) );
+		$api = new Api( new NullLogger(), new NullAdapter(), $this->mockClient( [ new Response( $status, $header, $body ) ] ) );
 		$api->setLang( 'en' );
 		return $api;
 	}

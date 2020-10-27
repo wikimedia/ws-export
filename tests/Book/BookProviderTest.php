@@ -11,6 +11,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @covers BookProvider
@@ -35,7 +36,7 @@ class BookProviderTest extends TestCase {
 		];
 		$this->mockHandler = new MockHandler( $responses );
 		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
-		$api = new Api( new NullLogger(), $client );
+		$api = new Api( new NullLogger(), new NullAdapter(), $client );
 		$api->setLang( 'en' );
 		$this->bookProvider = new BookProvider( $api, [ 'categories' => false, 'credits' => true ] );
 	}

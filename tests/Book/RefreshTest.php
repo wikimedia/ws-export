@@ -11,6 +11,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @covers Refresh
@@ -56,7 +57,7 @@ class RefreshTest extends KernelTestCase {
 	}
 
 	private function refresh( $lang ) {
-		$api = new Api( new NullLogger(), $this->mockClient( $this->defaultResponses() ) );
+		$api = new Api( new NullLogger(), new NullAdapter(), $this->mockClient( $this->defaultResponses() ) );
 		$api->setLang( $lang );
 		$refresh = new Refresh( $api );
 		$refresh->refresh();

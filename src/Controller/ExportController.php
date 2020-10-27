@@ -58,6 +58,11 @@ class ExportController extends AbstractController {
 
 		$api->setLang( $this->getLang( $request ) );
 
+		$nocache = (bool)$request->get( 'nocache' );
+		if ( $nocache ) {
+			$api->disableCache();
+		}
+
 		// If the book title is specified, export it now.
 		if ( $request->get( 'page' ) ) {
 			return $this->export( $request, $creationLog, $api, $fontProvider, $generatorSelector );
@@ -75,6 +80,7 @@ class ExportController extends AbstractController {
 			'title' => $title,
 			'lang' => $api->getLang(),
 			'images' => $images,
+			'nocache' => $nocache,
 		] );
 	}
 
@@ -165,7 +171,8 @@ class ExportController extends AbstractController {
 			'images' => true,
 			'messages' => [
 				'danger' => [ $message ],
-			]
+			],
+			'nocache' => (bool)$request->get( 'nocache' ),
 		] );
 	}
 }

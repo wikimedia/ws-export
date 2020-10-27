@@ -71,6 +71,9 @@
     "guzzlehttp/psr7": {
         "version": "1.7.0"
     },
+    "kevinrob/guzzle-cache-middleware": {
+        "version": "v3.3.1"
+    },
     "krinkle/intuition": {
         "version": "v1.2.0"
     },

@@ -35,6 +35,7 @@ class ExportCommand extends Command {
 			->addOption( 'title', 't', InputOption::VALUE_REQUIRED, 'Wiki page name of the work to export. Required' )
 			->addOption( 'format', 'f', InputOption::VALUE_REQUIRED, $formatDesc, 'epub-3' )
 			->addOption( 'path', 'p', InputOption::VALUE_REQUIRED, 'Filesystem path to export to.', dirname( __DIR__, 2 ) )
+			->addOption( 'nocache', null, InputOption::VALUE_NONE, 'Do not cache anything (re-fetch all data).' )
 			->addOption( 'nocredits', null, InputOption::VALUE_NONE, 'Do not include the credits list in the exported ebook.' );
 	}
 
@@ -58,6 +59,9 @@ class ExportCommand extends Command {
 			'credits' => !$input->getOption( 'nocredits' ),
 		];
 		$this->api->setLang( $input->getOption( 'lang' ) );
+		if ( $input->getOption( 'nocache' ) ) {
+			$this->api->disableCache();
+		}
 		$creator = BookCreator::forApi( $this->api, $input->getOption( 'format' ), $options, $this->generatorSelector );
 		$creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
 

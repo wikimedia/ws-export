@@ -57,3 +57,4 @@ jobs:
       run: |
         composer test
         ./bin/phpunit --exclude-group=exclude-from-ci
+        git status | grep "nothing to commit, working tree clean"

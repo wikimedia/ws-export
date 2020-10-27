@@ -26,7 +26,9 @@ class Api {
 	private const CONNECT_TIMEOUT = 10; // in seconds
 	private const REQUEST_TIMEOUT = 60; // in seconds
 
-	public $lang = '';
+	/** @var string */
+	private $lang = '';
+
 	public $domainName = '';
 
 	/**
@@ -45,19 +47,21 @@ class Api {
 	}
 
 	/**
-	 * @param string $lang the language code of the Wikisource like 'en' or 'fr'
-	 * @param string $domainName
 	 * @param ClientInterface $client
 	 */
-	public function __construct( $lang = '', $domainName = '', ClientInterface $client = null ) {
-		if ( $lang == '' ) {
-			$lang = self::getHttpLang();
+	public function __construct( ClientInterface $client = null ) {
+		if ( $client === null ) {
+			$client = static::createClient( $this->logger );
 		}
-		$this->lang = $lang;
+		$this->client = $client;
+	}
 
-		if ( $domainName != '' ) {
-			$this->domainName = $domainName;
-		} elseif ( $this->lang == 'www' || $this->lang == '' ) {
+	/**
+	 * Set the Wikisource language code.
+	 */
+	public function setLang( string $lang ): void {
+		$this->lang = $lang;
+		if ( $this->lang == 'www' || $this->lang == '' ) {
 			$this->domainName = 'wikisource.org';
 			$this->lang = '';
 		} elseif ( $this->lang == 'wl' || $this->lang == 'wikilivres' ) {
@@ -69,10 +73,10 @@ class Api {
 		} else {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}
-		if ( $client === null ) {
-			$client = static::createClient( $this->logger );
-		}
-		$this->client = $client;
+	}
+
+	public function getLang(): string {
+		return $this->lang;
 	}
 
 	/**
@@ -199,7 +203,7 @@ class Api {
 			$title = $page['title'];
 			if ( isset( $page['revisions'] ) ) {
 				foreach ( $page['revisions'] as $revision ) {
-					return Util::getXhtmlFromContent( $this->lang, $revision['*'], $title );
+					return Util::getXhtmlFromContent( $this->getLang(), $revision['*'], $title );
 				}
 			}
 		}
@@ -215,26 +219,6 @@ class Api {
 	 */
 	public function get( $url ) {
 		return $this->client->get( $url )->getBody()->getContents();
-	}
-
-	/**
-	 * @return string the lang of the Wikisource used
-	 */
-	public static function getHttpLang() {
-		$lang = '';
-		if ( isset( $_GET['lang'] ) ) {
-			$lang = htmlspecialchars( $_GET['lang'] );
-		} else {
-			if ( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
-				$langs = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
-				if ( isset( $langs[0] ) ) {
-					$langs = explode( '-', $langs[0] );
-					$lang = $langs[0];
-				}
-			}
-		}
-
-		return strtolower( $lang );
 	}
 
 	/**

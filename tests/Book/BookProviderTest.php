@@ -67,7 +67,9 @@ class BookProviderTest extends TestCase {
 		$responses = [ new Response( $status, $header, $body ) ];
 		$this->mockHandler = new MockHandler( $responses );
 		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
-		return new Api( 'en', '', $client );
+		$api = new Api( $client );
+		$api->setLang( 'en' );
+		return $api;
 	}
 
 	private function parseDocument( $filename ) {

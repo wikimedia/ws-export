@@ -47,7 +47,8 @@ class OpdsBuilder {
 	}
 
 	public function buildFromCategory( $categoryTitle ) {
-		$api = new Api( $this->lang );
+		$api = new Api();
+		$api->setLang( $this->lang );
 		$response = $api->completeQuery( [ 'generator' => 'categorymembers', 'gcmtitle' => $categoryTitle, 'gcmnamespace' => '0', 'prop' => 'info', 'gcmlimit' => '100' ] );
 		if ( !array_key_exists( 'query', $response ) ) {
 			throw new NotFoundHttpException();

@@ -27,8 +27,10 @@ class BookCreator {
 	}
 
 	public static function forLanguage( $language, $format, $options, FontProvider $fontProvider ) {
+		$api = new Api();
+		$api->setLang( $language );
 		return new BookCreator(
-			new BookProvider( new Api( $language ), $options ),
+			new BookProvider( $api, $options ),
 			GeneratorSelector::select( $format, $fontProvider )
 		);
 	}

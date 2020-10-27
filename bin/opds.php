@@ -19,7 +19,8 @@ $exportPath = 'https://wsexport.toolforge.org/tool/book.php';
 
 try {
 	date_default_timezone_set( 'UTC' );
-	$api = new Api( $lang );
+	$api = new Api();
+	$api->setLang( $lang );
 	$provider = new BookProvider( $api, [ 'categories' => false, 'images' => false ] );
 
 	$atomGenerator = new OpdsBuilder( $provider, $lang, $exportPath );

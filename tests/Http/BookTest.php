@@ -57,4 +57,23 @@ class BookTest extends WebTestCase {
 		$this->assertStringContainsString( "The file format 'xxx' is unknown.", $client->getResponse()->getContent() );
 		$this->assertSame( 500, $client->getResponse()->getStatusCode() );
 	}
+
+	/**
+	 * @dataProvider provideGetLang()
+	 */
+	public function testGetLang( $query, $accept, $lang ) {
+		$client = static::createClient();
+		$client->request( 'GET', '/', [ 'lang' => $query ], [], [ 'HTTP_ACCEPT_LANGUAGE' => $accept ] );
+		$this->assertStringContainsString( '<input name="lang" id="lang" type="text" size="3" maxlength="20" required="required"
+					value="' . $lang . '" class="form-control input-mini"/>', $client->getResponse()->getContent() );
+	}
+
+	public function provideGetLang() {
+		return [
+			[ '', 'fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5', 'fr' ],
+			[ '', 'en-US', 'en' ],
+			[ '', 'qq, en-fr', 'qq' ],
+			[ 'bn', 'en-AU', 'bn' ],
+		];
+	}
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Process\Process;
 
 /**
  * @covers BookCreator
- * @group exclude-from-ci
+ * @group integration
  */
 class BookCreatorIntegrationTest extends TestCase {
 	private $epubCheckJar = null;
@@ -39,8 +39,7 @@ class BookCreatorIntegrationTest extends TestCase {
 
 	/**
 	 * @dataProvider bookProvider
-	 * @group integration
-	 * @group epub2
+	 * @group exclude-from-ci
 	 */
 	public function testCreateBookEpub2( $title, $language ) {
 		$epubFile = $this->createBook( $title, $language, 'epub-2' );
@@ -49,8 +48,7 @@ class BookCreatorIntegrationTest extends TestCase {
 
 	 /**
 	  * @dataProvider bookProvider
-	  * @group integration
-	  * @group epub3
+	  * @group exclude-from-ci
 	  */
 	 public function testCreateBookEpub3( $title, $language ) {
 		 $epubFile = $this->createBook( $title, $language, 'epub-3' );
@@ -59,8 +57,6 @@ class BookCreatorIntegrationTest extends TestCase {
 
 	 /**
 	  * @dataProvider bookProvider
-	  * @group integration
-	  * @group mobi
 	  */
 	 public function testCreateBookMobi( $title, $language ) {
 		 $this->createBook( $title, $language, 'mobi' );

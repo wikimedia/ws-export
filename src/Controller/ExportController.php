@@ -68,7 +68,7 @@ class ExportController extends AbstractController {
 		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
 		$images = (bool)$request->get( 'images', true );
 		return $this->render( 'export.html.twig', [
-			'fonts' => $fontProvider->getPreferred( $font ),
+			'fonts' => $fontProvider->getAll(),
 			'font' => $font,
 			'formats' => GeneratorSelector::$formats,
 			'format' => $format,
@@ -156,7 +156,7 @@ class ExportController extends AbstractController {
 			}
 		}
 		return $this->render( 'export.html.twig', [
-			'fonts' => $fontProvider->getPreferred( $this->getFont( $request, $api->getLang(), $fontProvider ) ),
+			'fonts' => $fontProvider->getAll(),
 			'font' => $request->get( 'fonts' ),
 			'formats' => GeneratorSelector::$formats,
 			'format' => $request->get( 'format' ),

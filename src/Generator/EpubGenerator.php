@@ -76,8 +76,8 @@ class EpubGenerator implements FormatGenerator {
 
 		$font = $this->fontProvider->getOne( $book->options['fonts'] );
 		if ( $font !== null ) {
-			foreach ( $font['styles'] as $path ) {
-				$zip->addFile( $path, 'OPS/fonts/' . basename( $path ) );
+			foreach ( $font['styles'] as $styleInfo ) {
+				$zip->addFile( $styleInfo['file'], 'OPS/fonts/' . basename( $styleInfo['file'] ) );
 			}
 		}
 
@@ -154,7 +154,8 @@ class EpubGenerator implements FormatGenerator {
 		}
 		$font = $this->fontProvider->getOne( $book->options['fonts'] );
 		if ( $font !== null ) {
-			foreach ( $font['styles'] as $style => $path ) {
+			foreach ( $font['styles'] as $style => $styleInfo ) {
+				$path = $styleInfo['file'];
 				// Font mime types are listed at https://www.w3.org/publishing/epub32/epub-spec.html#cmt-grp-font
 				// They conveniently align with file extensions.
 				$mime = pathinfo( $path, PATHINFO_EXTENSION );

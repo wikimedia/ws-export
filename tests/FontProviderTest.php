@@ -48,19 +48,18 @@ class FontProviderTest extends TestCase {
 	 * @covers FontProvider::getCss()
 	 */
 	public function testGetCss() {
-		$this->assertSame( '@font-face {  font-family: "FreeSerif";  font-weight: bold;  font-style: italic;  src: url("fonts/FreeSerifBoldItalic.ttf");}
-@font-face {  font-family: "FreeSerif";  font-weight: bold;  font-style: normal;  src: url("fonts/FreeSerifBold.ttf");}
-@font-face {  font-family: "FreeSerif";  font-weight: normal;  font-style: normal;  src: url("fonts/FreeSerif.ttf");}
+		$this->assertSame( '@font-face {  font-family: "FreeSerif";  font-weight: normal;  font-style: normal;  src: url("fonts/FreeSerif.ttf");}
+@font-face {  font-family: "FreeSerif";  font-weight: 800;  font-style: normal;  src: url("fonts/FreeSerifBold.ttf");}
 @font-face {  font-family: "FreeSerif";  font-weight: normal;  font-style: italic;  src: url("fonts/FreeSerifItalic.ttf");}
+@font-face {  font-family: "FreeSerif";  font-weight: 800;  font-style: italic;  src: url("fonts/FreeSerifBoldItalic.ttf");}
 body { font-family: "FreeSerif" }
 ', $this->fontProvider->getCss( 'FreeSerif' ) );
-
-		$this->assertSame( '@font-face {  font-family: "Linux Libertine O";  font-weight: normal;  font-style: italic;  src: url("fonts/LinLibertine_RI.otf");}
-@font-face {  font-family: "Linux Libertine O";  font-weight: bold;  font-style: italic;  src: url("fonts/LinLibertine_RBI.otf");}
-@font-face {  font-family: "Linux Libertine O";  font-weight: 500;  font-style: italic;  src: url("fonts/LinLibertine_RZI.otf");}
-@font-face {  font-family: "Linux Libertine O";  font-weight: bold;  font-style: normal;  src: url("fonts/LinLibertine_RB.otf");}
-@font-face {  font-family: "Linux Libertine O";  font-weight: normal;  font-style: normal;  src: url("fonts/LinLibertine_R.otf");}
-@font-face {  font-family: "Linux Libertine O";  font-weight: 500;  font-style: normal;  src: url("fonts/LinLibertine_RZ.otf");}
+		$this->assertSame( '@font-face {  font-family: "Linux Libertine O";  font-weight: normal;  font-style: normal;  src: url("fonts/LinLibertine_R.otf");}
+@font-face {  font-family: "Linux Libertine O";  font-weight: bold;  font-style: normal;  src: url("fonts/LinLibertine_RZ.otf");}
+@font-face {  font-family: "Linux Libertine O";  font-weight: 800;  font-style: normal;  src: url("fonts/LinLibertine_RB.otf");}
+@font-face {  font-family: "Linux Libertine O";  font-weight: normal;  font-style: italic;  src: url("fonts/LinLibertine_RI.otf");}
+@font-face {  font-family: "Linux Libertine O";  font-weight: bold;  font-style: italic;  src: url("fonts/LinLibertine_RZI.otf");}
+@font-face {  font-family: "Linux Libertine O";  font-weight: 800;  font-style: italic;  src: url("fonts/LinLibertine_RBI.otf");}
 body { font-family: "Linux Libertine O" }
 ', $this->fontProvider->getCss( 'linuxlibertine' ) );
 

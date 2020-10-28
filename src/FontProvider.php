@@ -35,7 +35,7 @@ class FontProvider {
 	/**
 	 * Return data about a font.
 	 * @param string|null $name Font family name.
-	 * @return string[][]|null Array with 'styles' and 'langs' keys, the former containing style names (e.g. Bold) to
+	 * @return string[][][]|null Array with 'styles' and 'langs' keys, the former containing style names (e.g. Bold) to
 	 * font filenames and the latter an array of language codes supported by the font. Or null if no info found.
 	 */
 	public function getOne( ?string $name ): ?array {
@@ -56,37 +56,59 @@ class FontProvider {
 
 	/**
 	 * Get a list of all locally installed fonts.
-	 * @return string[][][] Key is the font name, value is an array with 'styles' and 'langs' keys.
+	 * @return string[][][][] Key is the font name, value is an array with 'styles' and 'langs' keys.
 	 */
-	private function getAll(): array {
+	public function getAll(): array {
 		return $this->cache->get( 'fonts', function ( ItemInterface $item ) {
 			$item->expiresAfter( new DateInterval( 'P7D' ) );
 			$fontData = [];
 			// Get semicolon-separated parts of font information.
-			$cmd = 'fc-list --format "%{file};%{family};%{style};%{lang}\n"';
+			$cmd = 'fc-list --format "%{file};%{family};%{slant};%{weight};%{lang};%{fontformat}\n"';
 			$process = Process::fromShellCommandline( $cmd );
 			$process->mustRun();
 			$output = $process->getOutput();
 			// Format the output into a single array.
 			$lines = array_filter( explode( "\n", $output ) );
+			$formats = [];
 			foreach ( $lines as $line ) {
 				$parts = str_getcsv( $line, ';' );
-				if ( count( $parts ) !== 4 ) {
+				if ( count( $parts ) !== 6 ) {
 					// Guard against malformed results.
 					continue;
 				}
-				$file = $parts[ 0 ];
-				$family = $parts[ 1 ];
-				$style = $parts[ 2 ];
-				$langs = explode( '|', $parts[3] );
+				$file = $parts[0];
+				$family = $parts[1];
+				// Get the family name up to the first comma (after that is alternate names).
+				$commaPos = strpos( $family, ',' );
+				if ( $commaPos !== false ) {
+					$family = substr( $family, 0, $commaPos );
+				}
+				$slant = $parts[2];
+				$weight = $parts[3];
+				$langs = explode( '|', $parts[4] );
+				$format = $parts[5];
 				if ( !isset( $fontData[ $family ] ) ) {
 					$fontData[ $family ] = [
 						'styles' => [],
 						'langs' => $langs,
 					];
 				}
-				$fontData[ $family ]['styles'][ $style ] = $file;
+
+				// Some fonts have both ttf/TrueType and otf/OpenType formats; remove the latter if there are both.
+				if ( !isset( $formats[ $family . $slant . $weight ] ) || $formats[ $family . $slant . $weight ] === 'CFF' ) {
+					$formats[ $family . $slant . $weight ] = $format;
+				} else {
+					continue;
+				}
+
+				$fontData[ $family ]['styles'][ $slant . $weight ] = [
+					'file' => $file,
+					'slant' => $slant,
+					'weight' => $weight,
+				];
+				ksort( $fontData[ $family ]['styles'] );
 			}
+			ksort( $fontData );
 			return $fontData;
 		} );
 	}
@@ -102,34 +124,6 @@ class FontProvider {
 			if ( array_search( $lang, $font['langs'] ) !== false ) {
 				$out[] = $font;
 			}
-		}
-		return $out;
-	}
-
-	/**
-	 * Get the full list of preferred fonts.
-	 * @return string[]
-	 */
-	public function getPreferred( ?string $additional ): array {
-		$fonts = [
-			// Font family name => English label
-			'FreeSerif' => 'FreeSerif', // Hard-coded default for non-latin scripts.
-			'Linux Libertine O' => 'Linux Libertine',
-			'Libertinus' => 'Libertinus',
-			'Mukta' => 'Mukta (Devanagari)',
-			'Mukta Mahee' => 'Mukta Mahee (Gurmukhi)',
-			'Mukta Malar' => 'Mukta Malar (Tamil)',
-			'Gubbi' => 'Gubbi (Kannada)',
-		];
-		$out = [];
-		foreach ( $fonts as $name => $label ) {
-			if ( $this->getOne( $name ) ) {
-				$out[$name] = $label;
-			}
-		}
-		$additionalFont = $this->resolveName( $additional );
-		if ( $additionalFont ) {
-			$out[$additionalFont] = $additionalFont;
 		}
 		return $out;
 	}
@@ -179,32 +173,49 @@ class FontProvider {
 		}
 		$font = $this->getOne( $name );
 		$css = [];
-		foreach ( $font['styles'] as $style => $file ) {
+		foreach ( $font['styles'] as $style => $styleInfo ) {
+			// Information about the weight and slant values is in /usr/share/doc/fontconfig/fontconfig-user.html
+			// and matching font-weight values at https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight#Common_weight_name_mapping
+			// Note that normal and bold are defined a bit differently.
 			// Set font weight.
-			// Normal is usually 400 weight.
 			$fontWeight = 'normal';
-			if ( stripos( $style, 'semibold' ) !== false ) {
+			$weight = $styleInfo['weight'];
+			if ( $weight < 50 ) {
+				$fontWeight = '100';
+			} elseif ( $weight >= 50 && $weight < 55 ) {
+				$fontWeight = '200';
+			} elseif ( $weight >= 55 && $weight < 75 ) {
+				$fontWeight = '300';
+			} elseif ( $weight >= 75 && $weight <= 80 ) {
+				$fontWeight = 'normal';
+			} elseif ( $weight > 80 && $weight < 100 ) {
 				$fontWeight = '500';
-			} elseif ( stripos( $style, 'bold' ) !== false ) {
-				// Bold is 700 weight.
+			} elseif ( $weight >= 100 && $weight < 180 ) {
+				$fontWeight = '600';
+			} elseif ( $weight >= 180 && $weight < 200 ) {
 				$fontWeight = 'bold';
+			} elseif ( $weight >= 200 && $weight < 205 ) {
+				$fontWeight = '800';
+			} elseif ( $weight >= 205 ) {
+				$fontWeight = '900';
 			}
 			// Set font style.
 			$fontStyle = 'normal';
-			if ( stripos( $style, 'italic' ) !== false ) {
+			if ( $styleInfo['slant'] === '100' ) {
 				$fontStyle = 'italic';
-			} elseif ( stripos( $style, 'oblique' ) !== false ) {
+			} elseif ( $styleInfo['slant'] === '110' ) {
 				$fontStyle = 'oblique';
 			}
-			if ( isset( $css[$name . $fontWeight . $fontStyle] ) ) {
+			$key = "name-$name-weight-$fontWeight-style-$fontStyle";
+			if ( isset( $css[ $key ] ) ) {
 				// Some font styles have multiples, so we only include the first one.
 				continue;
 			}
-			$css[$name . $fontWeight . $fontStyle] = "@font-face {"
+			$css[ $key ] = "@font-face {"
 				. '  font-family: "' . $name . '";'
 				. '  font-weight: ' . $fontWeight . ';'
 				. '  font-style: ' . $fontStyle . ';'
-				. '  src: url("fonts/' . basename( $file ) . '");'
+				. '  src: url("fonts/' . basename( $styleInfo['file'] ) . '");'
 				. '}';
 		}
 		$css[] = 'body { font-family: "' . $name . '" }';

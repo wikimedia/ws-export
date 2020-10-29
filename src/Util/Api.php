@@ -65,11 +65,11 @@ class Api {
 			$this->domainName = 'wikisource.org';
 			$this->lang = '';
 		} elseif ( $this->lang == 'wl' || $this->lang == 'wikilivres' ) {
-			$this->domainName = 'wikilivres.ca';
+			$this->domainName = 'wikilivres.org';
 			$this->lang = '';
-		} elseif ( preg_match( '/^([a-z_]{2,})-?wikibooks$/', $this->lang, $m ) ) {
-			$this->domainName = $m[1] . '.wikibooks.org';
-			$this->lang = $m[1];
+		} elseif ( $this->lang === 'beta' ) {
+			$this->domainName = 'en.wikisource.beta.wmflabs.org';
+			$this->lang = '';
 		} else {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}

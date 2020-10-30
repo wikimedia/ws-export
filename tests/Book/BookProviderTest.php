@@ -10,6 +10,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 /**
  * @covers BookProvider
@@ -24,8 +25,18 @@ class BookProviderTest extends TestCase {
 			'Bot User' => [ 'count' => 5, 'flags' => [ 'bot' ] ],
 			'User A' => [ 'count' => 20, 'flags' => [ 'autoreview', 'editor', 'reviewer', 'sysop' ] ]
 		];
-
-		$api = $this->apiWithResponse( 200, [ 'Content-Type' => 'application/json' ], json_encode( $creditResponse ) );
+		$responses = [
+			new Response( 200, [ 'Content-Type' => 'application/json' ], json_encode( $creditResponse ) ),
+			// The rest of these responses are required for mocking the Refresh process (namespaces, 'about' page, etc.)
+			new Response( 200, [], '' ),
+			new Response( 200, [], '' ),
+			new Response( 200, [], '' ),
+			new Response( 200, [], json_encode( [ 'query' => [ 'namespaces' => [ [ '*' => 'test' ] ], 'namespacealiases' => [] ] ] ) ),
+		];
+		$this->mockHandler = new MockHandler( $responses );
+		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
+		$api = new Api( new NullLogger(), $client );
+		$api->setLang( 'en' );
 		$this->bookProvider = new BookProvider( $api, [ 'categories' => false, 'credits' => true ] );
 	}
 
@@ -61,15 +72,6 @@ class BookProviderTest extends TestCase {
 		$this->assertEquals(
 			'https://tools.wmflabs.org/phetools/credits.py?lang=en&format=json&page=test',
 			$this->mockHandler->getLastRequest()->getUri()->__toString() );
-	}
-
-	private function apiWithResponse( $status, $header, $body ) {
-		$responses = [ new Response( $status, $header, $body ) ];
-		$this->mockHandler = new MockHandler( $responses );
-		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
-		$api = new Api( $client );
-		$api->setLang( 'en' );
-		return $api;
 	}
 
 	private function parseDocument( $filename ) {

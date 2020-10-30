@@ -6,6 +6,7 @@ use App\Exception\WSExportInvalidArgumentException;
 use App\Generator\AtomGenerator;
 use App\Generator\ConvertGenerator;
 use App\Generator\EpubGenerator;
+use App\Util\Api;
 
 class GeneratorSelector {
 
@@ -22,15 +23,26 @@ class GeneratorSelector {
 		'txt'		=> 'txt (in beta)'
 	];
 
-	public static function select( $format, FontProvider $fontProvider ) {
+	/** @var FontProvider */
+	private $fontProvider;
+
+	/** @var Api */
+	private $api;
+
+	public function __construct( FontProvider $fontProvider, Api $api ) {
+		$this->fontProvider = $fontProvider;
+		$this->api = $api;
+	}
+
+	public function getGenerator( $format ) {
 		if ( $format === 'odt' ) {
 			$format = 'rtf'; // TODO: bad hack in order to don't break urls
 		}
 
 		if ( $format === 'epub-3' || $format === 'epub' ) {
-			return new EpubGenerator( $fontProvider );
+			return new EpubGenerator( $this->fontProvider, $this->api );
 		} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
-			return new ConvertGenerator( $format, $fontProvider );
+			return new ConvertGenerator( $format, $this->fontProvider, $this->api );
 		} elseif ( $format === 'atom' ) {
 			return new AtomGenerator();
 		} else {

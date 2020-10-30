@@ -48,7 +48,8 @@ class ExportController extends AbstractController {
 		CreationLog $creationLog,
 		Api $api,
 		LoggerInterface $logger,
-		FontProvider $fontProvider
+		FontProvider $fontProvider,
+		GeneratorSelector $generatorSelector
 	) {
 		// Handle ?refresh=1 for backwards compatibility.
 		if ( $request->get( 'refresh', false ) !== false ) {
@@ -56,11 +57,10 @@ class ExportController extends AbstractController {
 		}
 
 		$api->setLang( $this->getLang( $request ) );
-		$api->setLogger( $logger );
 
 		// If the book title is specified, export it now.
 		if ( $request->get( 'page' ) ) {
-			return $this->export( $request, $creationLog, $api, $fontProvider );
+			return $this->export( $request, $creationLog, $api, $fontProvider, $generatorSelector );
 		}
 
 		$title = $request->get( 'page' );
@@ -78,7 +78,7 @@ class ExportController extends AbstractController {
 		] );
 	}
 
-	private function export( Request $request, CreationLog $creationLog, Api $api, FontProvider $fontProvider ) {
+	private function export( Request $request, CreationLog $creationLog, Api $api, FontProvider $fontProvider, GeneratorSelector $generatorSelector ) {
 		// Get params.
 		$title = $request->get( 'page' );
 		$format = $request->get( 'format', 'epub' );
@@ -88,7 +88,7 @@ class ExportController extends AbstractController {
 
 		// Generate ebook.
 		$options = [ 'images' => $images, 'fonts' => $font ];
-		$creator = BookCreator::forApi( $api, $format, $options, $fontProvider );
+		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector );
 		$creator->create( $title );
 
 		// Send file.

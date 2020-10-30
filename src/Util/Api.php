@@ -41,16 +41,10 @@ class Api {
 	private $logger;
 
 	/**
-	 * @param LoggerInterface $logger
-	 */
-	public function setLogger( LoggerInterface $logger ): void {
-		$this->logger = $logger;
-	}
-
-	/**
 	 * @param ClientInterface $client
 	 */
-	public function __construct( ClientInterface $client = null ) {
+	public function __construct( LoggerInterface $logger, ClientInterface $client = null ) {
+		$this->logger = $logger;
 		if ( $client === null ) {
 			$client = static::createClient( $this->logger );
 		}

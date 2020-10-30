@@ -389,7 +389,7 @@ class BookProvider {
 	 * @return string[]
 	 */
 	public function getNamespaces() {
-		$namespaces = unserialize( Util::getTempFile( $this->api->getLang(), 'namespaces.sphp' ) );
+		$namespaces = unserialize( Util::getTempFile( $this->api, $this->api->getLang(), 'namespaces.sphp' ) );
 		if ( is_array( $namespaces ) ) {
 			return $namespaces;
 		} else {

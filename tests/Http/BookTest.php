@@ -4,7 +4,6 @@ namespace App\Tests\Http;
 
 use App\CreationLog;
 use App\Exception\WSExportInvalidArgumentException;
-use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**

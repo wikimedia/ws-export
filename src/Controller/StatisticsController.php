@@ -7,6 +7,7 @@ use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+// phpcs:ignore
 use Symfony\Component\Routing\Annotation\Route;
 
 class StatisticsController extends AbstractController {

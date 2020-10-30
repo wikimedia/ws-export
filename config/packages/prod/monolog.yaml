@@ -28,6 +28,6 @@ monolog:
             to_email:
                 - '%env(APP_LOG_RECIPIENT_1)%'
                 - '%env(APP_LOG_RECIPIENT_2)%'
-            subject: '[tools.wsexport] Fatal error: %%message%%'
+            subject: '%env(APP_LOG_SUBJECT)% %%message%%'
             formatter: monolog.formatter.html
             content_type: text/html

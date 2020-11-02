@@ -35,6 +35,7 @@ class ExportCommand extends Command {
 	}
 
 	protected function execute( InputInterface $input, OutputInterface $output ): int {
+		$timeStart = microtime( true );
 		$io = new SymfonyStyle( $input, $output );
 
 		if ( !$input->getOption( 'title' ) ) {
@@ -55,7 +56,11 @@ class ExportCommand extends Command {
 		$creator = BookCreator::forLanguage( $input->getOption( 'lang' ), $input->getOption( 'format' ), $options, $this->fontProvider );
 		$creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
 
-		$io->success( "The ebook has been created: " . $creator->getFilePath() );
+		$io->success( [
+			'The ebook has been created: ' . $creator->getFilePath(),
+			'Memory usage: ' . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . ' MiB',
+			'Total time: ' . round( microtime( true ) - $timeStart, 1 ) . ' seconds',
+		] );
 
 		return Command::SUCCESS;
 	}

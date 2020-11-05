@@ -4969,16 +4969,16 @@
         },
         {
             "name": "wikimedia/toolforge-bundle",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/ToolforgeBundle.git",
-                "reference": "6036bb2fc2078228827ccfdba22cf60ca1b0870b"
+                "reference": "355969c6006803d414e05826ce265010e1bf57f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/6036bb2fc2078228827ccfdba22cf60ca1b0870b",
-                "reference": "6036bb2fc2078228827ccfdba22cf60ca1b0870b",
+                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/355969c6006803d414e05826ce265010e1bf57f4",
+                "reference": "355969c6006803d414e05826ce265010e1bf57f4",
                 "shasum": ""
             },
             "require": {
@@ -5019,7 +5019,7 @@
                 "issues": "https://github.com/wikimedia/toolforgebundle/issues",
                 "source": "https://github.com/wikimedia/toolforgebundle"
             },
-            "time": "2020-10-30T00:09:47+00:00"
+            "time": "2020-11-05T22:02:05+00:00"
         }
     ],
     "packages-dev": [

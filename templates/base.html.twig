@@ -39,7 +39,7 @@
 		{% for type, msgs in app.flashes|merge(messages ?? {}) %}
 			<div class="alerts">
 				{% for msg in msgs %}
-					<div class="alert alert-{{ type }}">{{ msg|raw }}</div>
+					<div class="alert alert-{{ type }}">{{ msg }}</div>
 				{% endfor %}
 			</div>
 		{% endfor %}

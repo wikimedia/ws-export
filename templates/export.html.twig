@@ -38,17 +38,17 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="fonts" class="col-lg-2 control-label">Include fonts</label>
-
+			<label for="fonts" class="col-lg-2 control-label">Font:</label>
 			<div class="col-lg-10">
 				<select id="fonts" name="fonts" class="form-control">
 					<option value="">None</option>
 					{% for key,label in fonts %}
 						<option value="{{ key|e('html_attr') }}" {% if key == font %}selected="selected"{% endif %}>
-							{{ label }}
+							{{ key }}
 						</option>
 					{% endfor %}
 				</select>
+				<p class="help-block">Choose from {{ fonts|length }} available fonts.</p>
 			</div>
 		</div>
 		<div class="form-group">

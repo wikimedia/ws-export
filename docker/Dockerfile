@@ -26,6 +26,7 @@ RUN apt-get update -q && apt-get install -y \
         xz-utils \
         libicu-dev \
         fontconfig \
+        fonts-gujr-extra \
         fonts-freefont-ttf \
         fonts-linuxlibertine \
         fonts-dejavu-core \

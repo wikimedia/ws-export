@@ -77,12 +77,7 @@ class FontProvider {
 					continue;
 				}
 				$file = $parts[0];
-				$family = $parts[1];
-				// Get the family name up to the first comma (after that is alternate names).
-				$commaPos = strpos( $family, ',' );
-				if ( $commaPos !== false ) {
-					$family = substr( $family, 0, $commaPos );
-				}
+				$family = $this->getFamilyName( $parts[1] );
 				$slant = $parts[2];
 				$weight = $parts[3];
 				$langs = explode( '|', $parts[4] );
@@ -111,6 +106,18 @@ class FontProvider {
 			ksort( $fontData );
 			return $fontData;
 		} );
+	}
+
+	/**
+	 * Get the family name. For fonts with alternative
+	 * names return the first one after sorting alphabetically
+	 * @param string $family
+	 * @return string
+	 */
+	private function getFamilyName( string $family ): string {
+		$family = explode( ',', $family );
+		sort( $family );
+		return $family[0];
 	}
 
 	/**

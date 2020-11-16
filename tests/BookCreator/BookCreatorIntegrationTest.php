@@ -3,21 +3,31 @@
 namespace App\Tests\BookCreator;
 
 use App\BookCreator;
+use App\FontProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestResult;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Process\Process;
 
 /**
  * @covers BookCreator
+ * @group integration
  */
 class BookCreatorIntegrationTest extends TestCase {
 	private $epubCheckJar = null;
 	private $testResult = null;
 
+	/** @var FontProvider */
+	private $fontProvider;
+
 	public function run( TestResult $result = null ): TestResult {
 		$this->epubCheckJar = $this->epubCheckJar();
 		$this->testResult = $result;
 		return parent::run( $result );
+	}
+
+	public function setUp(): void {
+		$this->fontProvider = new FontProvider( new ArrayAdapter() );
 	}
 
 	public function bookProvider() {
@@ -29,8 +39,7 @@ class BookCreatorIntegrationTest extends TestCase {
 
 	/**
 	 * @dataProvider bookProvider
-	 * @group integration
-	 * @group epub2
+	 * @group exclude-from-ci
 	 */
 	public function testCreateBookEpub2( $title, $language ) {
 		$epubFile = $this->createBook( $title, $language, 'epub-2' );
@@ -39,8 +48,7 @@ class BookCreatorIntegrationTest extends TestCase {
 
 	 /**
 	  * @dataProvider bookProvider
-	  * @group integration
-	  * @group epub3
+	  * @group exclude-from-ci
 	  */
 	 public function testCreateBookEpub3( $title, $language ) {
 		 $epubFile = $this->createBook( $title, $language, 'epub-3' );
@@ -49,19 +57,17 @@ class BookCreatorIntegrationTest extends TestCase {
 
 	 /**
 	  * @dataProvider bookProvider
-	  * @group integration
-	  * @group mobi
 	  */
 	 public function testCreateBookMobi( $title, $language ) {
 		 $this->createBook( $title, $language, 'mobi' );
 	 }
 
 	private function createBook( $title, $language, $format ) {
-		$creator = BookCreator::forLanguage( $language, $format, [ 'credits' => false ] );
-		list( $book, $file ) = $creator->create( $title );
-		$this->assertFileExists( $file );
-		$this->assertNotNull( $book );
-		return $file;
+		$creator = BookCreator::forLanguage( $language, $format, [ 'credits' => false ], $this->fontProvider );
+		$creator->create( $title );
+		$this->assertFileExists( $creator->getFilePath() );
+		$this->assertNotNull( $creator->getBook() );
+		return $creator->getFilePath();
 	}
 
 	private function epubCheck( $file ) {
@@ -96,8 +102,9 @@ class BookCreatorIntegrationTest extends TestCase {
 				return null;
 			}
 		};
-		return array_filter( array_map( $mapper, $data ), function ( $location ) { return $location != null;
-	 } );
+		return array_filter( array_map( $mapper, $data ), function ( $location ) {
+			return $location != null;
+		} );
 	}
 
 	private function mapResults( $data ) {

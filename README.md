@@ -11,6 +11,7 @@ Requirements
 ============
 * PHP 7.2
 * [Composer](http://getcomposer.org/)
+* The `fc-list` command
 
 Installation
 ============
@@ -24,7 +25,7 @@ Installation
 
        composer install --no-dev
 
-   This will create a `config.php` file that you can edit.
+   Then create a `.env.local` file.
 
    * In order to export to PDF, plain text, RTF, or Mobi formats
      you should also install [Calibre](https://calibre-ebook.com)
@@ -36,33 +37,22 @@ Installation
      set the `EPUBCHECK_JAR` environment variable.
 
 3. Create a mysql database and database user
-   and add these details to `config.php`.
+   and add these details to `.env.local`.
 
-4. Run `./bin/install.php` to initialize the database.
-
-Composition
-===========
-
-This tool is split into independent parts:
-* `utils` : api to interact with Wikisource and others things
-* `book` : export tool in many formats like epub.
-
-The tools can be used in two ways:
-* http in the `http` folder
-* command line in the `cli` folder (run `./cli/book.php`)
-
+4. Run `./bin/compose app:install` to initialize the database.
 
 Tests
 =====
 
-Run `composer install --dev` to install dependencies required for testing.
+Run `composer install` to install dependencies required for testing.
 Tests are located in the `tests/` directory, to run them:
 
 ```bash
-$ ./vendor/bin/phpunit --exclude-group integration
-$ ./vendor/bin/phpunit --group integration # runs integration tests (slow)
+$ ./bin/phpunit --exclude-group integration
+$ ./bin/phpunit --group integration # runs integration tests (slow)
 ```
 
+You can also run code linting etc. with `composer test`.
 
 Docker Developer Environment
 ============================
@@ -85,38 +75,69 @@ You'll need a locally running Docker and Docker Compose:
 
 ### Quickstart
 
+Modify or create `.env.local`. This config uses the database container defaults.
+```
+DATABASE_URL=mysql://root:@database:3306/wsexport?serverVersion=5.7
+```
+
+Make sure you cd into `./docker`
+
+```bash
+cd ./docker 
+```
+
 Run the following command to add your user ID and group ID to your `.env` file:
 
 ```bash
-echo "WS_DOCKER_PORT=8888
-WS_DOCKER_UID=$(id -u)
-WS_DOCKER_GID=$(id -g)" >> .env
+echo "WS_DOCKER_UID=$(id -u)
+WS_DOCKER_GID=$(id -g)" >> ./.env
 ```
 
-#### Start environment and install
+Start the environment and install
 
 ```bash
 # -d is detached mode - runs containers in the background:
-docker-compose up -d
+docker-compose build && docker-compose up -d
 ```
 
 ```bash
-# This will create a `config.php` file that you can edit.
 docker-compose exec wsexport composer install
 ```
 
-Modify config.php accordingly
-```php
-'dbDsn' => 'mysql:host=database;dbname=wsexport;charset=utf8',
-'dbUser' => 'root',
-'dbPass' => '',
-  ```
+
 
 ```bash
-docker-compose exec wsexport php ./bin/install.php
+docker-compose exec wsexport ./bin/console app:install
 ```
 
-Wikisource export should be up at http://localhost:8888
+Wikisource Export should be up at http://localhost:8888/
+
+
+### Setup Xdebug
+
+#### Visual Studio Code
+
+Add the following configuration to your `launch.json`
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for XDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9000,
+            "pathMappings": {
+                "/var/www/html": "${workspaceFolder}"
+            }
+        }
+    ]
+}
+```
+
+You need to install the [php-xdebug-ext]
+
+[php-xdebug-ext]: https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug
 
 
 Licence

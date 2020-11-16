@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\BookCreator;
 
 use App\Book;
 use App\BookCreator;
@@ -34,8 +34,8 @@ class BookCreatorTest extends TestCase {
 			->with( $this->equalTo( $book ) )
 			->will( $this->returnValue( 'path' ) );
 
-		list( $returnedBook, $file ) = $this->bookCreator->create( 'Test' );
-		$this->assertEquals( 'path', $file );
-		$this->assertSame( $book, $returnedBook );
+		$this->bookCreator->create( 'Test' );
+		$this->assertEquals( 'path', $this->bookCreator->getFilePath() );
+		$this->assertSame( $book, $this->bookCreator->getBook() );
 	}
 }

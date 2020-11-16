@@ -1,8 +1,24 @@
 temp/*
 !temp/.gitkeep
-vendor/*
 composer.phar
 config.php
 *.sqlite
-phpunit.xml
-.env
+docker/.env
+docker-compose.override.yml
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/src/.preload.php
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

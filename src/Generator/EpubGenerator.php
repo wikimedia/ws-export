@@ -26,6 +26,13 @@ class EpubGenerator implements FormatGenerator {
 	 */
 	protected $i18n = [];
 
+	/** @var FontProvider */
+	protected $fontProvider;
+
+	public function __construct( FontProvider $fontProvider ) {
+		$this->fontProvider = $fontProvider;
+	}
+
 	/**
 	 * return the extension of the generated file
 	 * @return string
@@ -67,10 +74,10 @@ class EpubGenerator implements FormatGenerator {
 			$zip->addFile( $dir . '/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png' );
 		}
 
-		$font = FontProvider::getData( $book->options['fonts'] );
+		$font = $this->fontProvider->getOne( $book->options['fonts'] );
 		if ( $font !== null ) {
-			foreach ( $font['otf'] as $name => $path ) {
-				$zip->addFile( $dir . '/fonts/' . $font['name'] . '/' . $path, 'OPS/fonts/' . $font['name'] . $name . '.otf' );
+			foreach ( $font['styles'] as $styleInfo ) {
+				$zip->addFile( $styleInfo['file'], 'OPS/fonts/' . basename( $styleInfo['file'] ) );
 			}
 		}
 
@@ -145,10 +152,16 @@ class EpubGenerator implements FormatGenerator {
 		if ( $book->options['images'] ) {
 			$content .= '<item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
 		}
-		$font = FontProvider::getData( $book->options['fonts'] );
+		$font = $this->fontProvider->getOne( $book->options['fonts'] );
 		if ( $font !== null ) {
-			foreach ( $font['otf'] as $name => $path ) {
-				$content .= '<item id="' . $font['name'] . $name . '" href="fonts/' . $font['name'] . $name . '.otf" media-type="font/opentype" />' . "\n";
+			foreach ( $font['styles'] as $style => $styleInfo ) {
+				$path = $styleInfo['file'];
+				// Font mime types are listed at https://www.w3.org/publishing/epub32/epub-spec.html#cmt-grp-font
+				// They conveniently align with file extensions.
+				$mime = pathinfo( $path, PATHINFO_EXTENSION );
+				$content .= '<item id="fonts-' . basename( $path ) . '"'
+					. ' href="fonts/' . basename( $path ) . '"'
+					. ' media-type="font/' . $mime . '" />' . "\n";
 			}
 		}
 		if ( $book->content ) {
@@ -358,7 +371,7 @@ class EpubGenerator implements FormatGenerator {
 			$content .= '<img alt="" src="images/Accueil_scribe.png" />';
 		}
 		$content .= '<br />
-					<h5>' . implode( $footerElements, ', ' ) . '</h5>
+					<h5>' . implode( ', ', $footerElements ) . '</h5>
 					<br />
 					<h6>' . str_replace( '%d', $formatter->format( time() ), htmlspecialchars( $this->i18n['exported_from_wikisource_the'], ENT_QUOTES ) ) . '</h6>
 				</body>
@@ -391,7 +404,7 @@ class EpubGenerator implements FormatGenerator {
 	}
 
 	private function getCss( Book $book ) {
-		$css = FontProvider::getCss( $book->options['fonts'], 'fonts/' );
+		$css = $this->fontProvider->getCss( $book->options['fonts'] );
 		$css .= Util::getTempFile( $book->lang, 'epub.css' );
 
 		return $css;

@@ -2,12 +2,12 @@
 
 namespace App;
 
-use App\Exception\HttpException;
 use App\Generator\AtomGenerator;
 use App\Util\Api;
 use App\Util\Util;
 use DOMDocument;
 use DOMElement;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author Thomas Pellissier Tanon
@@ -47,10 +47,11 @@ class OpdsBuilder {
 	}
 
 	public function buildFromCategory( $categoryTitle ) {
-		$api = new Api( $this->lang );
+		$api = new Api();
+		$api->setLang( $this->lang );
 		$response = $api->completeQuery( [ 'generator' => 'categorymembers', 'gcmtitle' => $categoryTitle, 'gcmnamespace' => '0', 'prop' => 'info', 'gcmlimit' => '100' ] );
 		if ( !array_key_exists( 'query', $response ) ) {
-			throw new HttpException( 'Not Found', 404 );
+			throw new NotFoundHttpException();
 		}
 
 		$pages = $response['query']['pages'];

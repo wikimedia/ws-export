@@ -1,7 +1,13 @@
 name: CI
 
-on: [push, pull_request]
-
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - '**'
 jobs:
   build:
 
@@ -15,10 +21,14 @@ jobs:
           - '3306:3306'
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
+    env:
+      APP_ENV: test
+      DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=5.7
+
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        php: [ '7.2' ]
+        php: [ '7.3', '7.4' ]
 
     runs-on: ${{matrix.os}}
 
@@ -32,21 +42,18 @@ jobs:
         php-version: ${{matrix.php}}
         extensions: pdo, imagick
 
-    - name: Install Calibre and epubcheck
+    - name: Install Calibre, epubcheck, and fonts
       run: |
+        sudo mkdir /usr/share/desktop-directories/
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
         sudo apt-get update -q
-        sudo apt-get install epubcheck -y
+        sudo apt-get install epubcheck fonts-freefont-ttf fonts-linuxlibertine fonts-dejavu-core fonts-gubbi -y
 
     - name: Install WSExport
       run: |
-        sudo mysql --host 127.0.0.1 -uroot -ptestpwd -e 'CREATE DATABASE IF NOT EXISTS wsexport_test;'
         composer install
-        sed --in-place "s/DBNAME/wsexport_test/" config.php
-        sed --in-place "s/DBUSERNAME/root/" config.php
-        sed --in-place "s/DBPASSWORD/testpwd/" config.php
 
     - name: Test
       run: |
         composer test
-        ./vendor/bin/phpunit
+        ./bin/phpunit --exclude-group=exclude-from-ci

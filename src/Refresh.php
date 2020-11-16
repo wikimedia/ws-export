@@ -33,7 +33,7 @@ class Refresh {
 	protected function getI18n() {
 		$ini = parse_ini_file( dirname( __DIR__ ) . '/resources/i18n.ini' );
 		try {
-			$response = $this->api->get( 'https://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain' );
+			$response = $this->api->get( 'https://' . $this->api->getLang() . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain' );
 			$temp = parse_ini_string( $response );
 			if ( $ini != false ) {
 				$ini = array_merge( $ini, $temp );
@@ -46,7 +46,7 @@ class Refresh {
 	protected function getEpubCssWikisource() {
 		$content = file_get_contents( dirname( __DIR__ ) . '/resources/styles/mediawiki.css' );
 		try {
-			$content .= "\n" . $this->api->get( 'https://' . $this->api->lang . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css' );
+			$content .= "\n" . $this->api->get( 'https://' . $this->api->getLang() . '.wikisource.org/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css' );
 		} catch ( Exception $e ) {
 		}
 		$this->setTempFileContent( 'epub.css', $content );
@@ -57,7 +57,8 @@ class Refresh {
 			$content = $this->api->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 		} catch ( Exception $e ) {
 			try {
-				$oldWikisourceApi = new Api( 'www' );
+				$oldWikisourceApi = new Api();
+				$oldWikisourceApi->setLang( 'www' );
 				$content = $oldWikisourceApi->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 			} catch ( Exception $e ) {
 				$content = '';
@@ -73,7 +74,7 @@ class Refresh {
 			// Add https to protocol-relative links.
 			$aboutHtml = str_replace( 'href="//', 'href="https://', $document->saveXML() );
 			// Fully qualify unqualified links.
-			$aboutHtml = str_replace( 'href="/', 'href="https://' . $this->api->domainName . '/', $aboutHtml );
+			$aboutHtml = str_replace( 'href="/', 'href="https://' . $this->api->getDomainName() . '/', $aboutHtml );
 			$this->setTempFileContent( 'about.xhtml', $aboutHtml );
 		}
 	}
@@ -104,6 +105,6 @@ class Refresh {
 	protected function getTempFileName( $name ) {
 		$cache = FileCache::singleton();
 
-		return $cache->getDirectory() . '/' . $this->api->lang . '/' . $name;
+		return $cache->getDirectory() . '/' . $this->api->getLang() . '/' . $name;
 	}
 }

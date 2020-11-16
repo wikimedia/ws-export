@@ -4,18 +4,22 @@ namespace App\Tests;
 
 use App\Book;
 use App\CreationLog;
-use PDO;
-use PHPUnit\Framework\TestCase;
+use Doctrine\DBAL\Connection;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CreationLogTest extends TestCase {
+class CreationLogTest extends KernelTestCase {
 
 	/** @var CreationLog */
 	protected $log;
 
-	public function setUp(): void {
+	/** @var Connection */
+	protected $db;
+
+	protected function setUp(): void {
 		parent::setUp();
-		$this->log = CreationLog::singleton();
-		// Drop table on setup because of annoying interaction from tests such as StatTest which recreate it.
+		self::bootKernel();
+		$this->db = self::$container->get( 'doctrine.dbal.default_connection' );
+		$this->log = self::$container->get( CreationLog::class );
 		$this->dropTable();
 	}
 
@@ -26,7 +30,7 @@ class CreationLogTest extends TestCase {
 
 	protected function dropTable() {
 		$dropTableSql = "DROP TABLE IF EXISTS `" . $this->log->getTableName() . "`";
-		$this->log->getPdo()->exec( $dropTableSql );
+		$this->db->query( $dropTableSql );
 	}
 
 	/**
@@ -36,14 +40,14 @@ class CreationLogTest extends TestCase {
 	public function testCreation() {
 		// Make sure there's no tables in the database.
 		$showTableSql = 'SHOW TABLES LIKE "' . $this->log->getTableName() . '"';
-		$tableList = $this->log->getPdo()->query( $showTableSql )->fetch();
-		static::assertFalse( $tableList );
+		$tableList = $this->db->query( $showTableSql )->fetchAll();
+		static::assertEmpty( $tableList );
 
 		// Create the table, and check that it's there.
 		$createTable = $this->log->createTable();
 		static::assertSame( 0, $createTable );
-		$tableList = $this->log->getPdo()->query( $showTableSql )->fetch();
-		static::assertCount( 2, $tableList );
+		$tableList = $this->db->query( $showTableSql )->fetchAll();
+		static::assertCount( 1, $tableList );
 
 		// Make sure it's empty.
 		static::assertEquals( [], $this->log->getTypeAndLangStats( date( 'n' ), date( 'Y' ) ) );
@@ -77,48 +81,7 @@ class CreationLogTest extends TestCase {
 		// Test data.
 		static::assertEquals(
 			'Test "Book"',
-			$this->log->getPdo()->query( 'SELECT title FROM ' . $this->log->getTableName() . ' LIMIT 1' )->fetch()['title']
+			$this->db->query( 'SELECT title FROM ' . $this->log->getTableName() . ' LIMIT 1' )->fetch()['title']
 		);
-	}
-
-	/**
-	 * @covers \App\CreationLog::import
-	 */
-	public function testImport() {
-		$this->log->createTable();
-
-		// Insert some test data into the file database.
-		$fileDb = $this->log->getPdo( 'file' );
-		$fileDb->exec( 'DROP TABLE IF EXISTS `creation`' );
-		$fileDb->exec( 'CREATE TABLE IF NOT EXISTS `creation` (
-			`lang` VARCHAR(40) NOT NULL,
-			`title` VARCHAR(200) NOT NULL,
-			`format` VARCHAR(10) NOT NULL,
-			`time` DATETIME  NOT NULL
-		);' );
-		$fileDb->exec( 'INSERT INTO `creation` (`lang`, `title`, `format`, `time`) VALUES '
-			. "( 'en', 'Test 1', 'epub', '2019-06-14 01:00:00' ),"
-			. "( 'en', 'Test 1', 'epub', '2019-06-14 01:00:00' ),"
-			. "( 'en', 'Test 1', 'epub', '2019-06-14 01:00:00' ),"
-			. "( 'en', 'Test 2 Iñtërnâtiônàlizætiøn', 'pdf', '2019-06-15 02:00:00' ),"
-			. "( 'fr', 'Test &quot;3 &amp; 4&quot;', 'epub', '2019-06-16 03:00:00' ),"
-			. "( 'pt', 'Test 5', 'epub', '2019-07-14 01:00:00' ),"
-			. "( 'pt', 'Test 5', 'epub', '2019-07-14 01:00:00' )"
-		);
-
-		// Check initial state of destination database.
-		static::assertEquals( [], $this->log->getTypeAndLangStats( '6', '2019' ) );
-		// Run import.
-		$this->log->import();
-		// Check results.
-		static::assertEquals( [ 'epub' => [ 'en' => 3, 'fr' => 1 ], 'pdf' => [ 'en' => 1 ] ], $this->log->getTypeAndLangStats( '6', '2019' ) );
-		$selectSql = 'SELECT title FROM ' . $this->log->getTableName();
-		static::assertEquals(
-			[ [ 'Test 1' ], [ 'Test 1' ], [ 'Test 1' ], [ 'Test 2 Iñtërnâtiônàlizætiøn' ], [ 'Test "3 & 4"' ], [ 'Test 5' ], [ 'Test 5' ] ],
-			$this->log->getPdo()->query( $selectSql )->fetchAll( PDO::FETCH_NUM )
-		);
-
-		// Clean up.
-		$fileDb->exec( 'DROP TABLE `creation`' );
 	}
 }

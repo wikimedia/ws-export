@@ -1,0 +1,24 @@
+version: '3.7'
+services:
+  wsexport:
+    build:
+      context: .
+      args:
+        USER_ID: ${WS_DOCKER_UID}
+        GROUP_ID: ${WS_DOCKER_GID}
+    ports:
+      - "8888:8080"
+    volumes:
+      - ../:/var/www/html:cached
+    links:
+      - database:database
+    environment:
+      APACHE_RUN_USER: daemon
+    depends_on:
+      - database
+  database:
+    image: mariadb
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_DATABASE=wsexport

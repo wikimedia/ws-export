@@ -21,21 +21,6 @@ use Symfony\Component\Process\Process;
 class Util {
 
 	/**
-	 * @param string $prefix a prefix for the uuid
-	 * @return string an UUID
-	 */
-	public static function uuid( $prefix = '' ) {
-		$chars = md5( uniqid( mt_rand(), true ) );
-		$uuid = substr( $chars, 0, 8 ) . '-';
-		$uuid .= substr( $chars, 8, 4 ) . '-';
-		$uuid .= substr( $chars, 12, 4 ) . '-';
-		$uuid .= substr( $chars, 16, 4 ) . '-';
-		$uuid .= substr( $chars, 20, 12 );
-
-		return $prefix . $uuid;
-	}
-
-	/**
 	 * @param string $lang the language of the wiki
 	 * @param string $page the name of the page
 	 * @return string an url to a page of Wikisource
@@ -93,7 +78,9 @@ class Util {
 		$cache = FileCache::singleton();
 		$path = $cache->getDirectory() . '/' . $lang . '/' . $name;
 		if ( !file_exists( $path ) ) {
-			$refresh = new Refresh( new Api( $lang ) );
+			$api = new Api();
+			$api->setLang( $lang );
+			$refresh = new Refresh( $api );
 			$refresh->refresh();
 		}
 		return file_get_contents( $path );
@@ -172,19 +159,6 @@ class Util {
 	public static function removeFile( $fileName ) {
 		$process = new Process( [ 'rm', realpath( $fileName ) ] );
 		$process->mustRun();
-	}
-
-	/**
-	 * Returns a string representation of an exception useful for logging
-	 *
-	 * @param Exception $ex
-	 * @return string
-	 */
-	public static function formatException( Exception $ex ): string {
-		$date = date( DATE_RFC3339 );
-		$class = get_class( $ex );
-
-		return "$date: $class {$ex->getMessage()}\n{$ex->getTraceAsString()}\n";
 	}
 
 	/**

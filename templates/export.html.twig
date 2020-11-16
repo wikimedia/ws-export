@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+<form method="get" action="{{ path('home') }}" role="form" class="form-horizontal">
+	<fieldset>
+		<legend>Export a file</legend>
+		<div class="form-group">
+			<label for="lang" class="col-lg-2 control-label">Language code</label>
+
+			<div class="col-lg-10">
+				<input name="lang" id="lang" type="text" size="3" maxlength="20" required="required"
+					value="{{ lang }}" class="form-control input-mini"/>
+				<span class="help-block">Language code of Wikisource domain, like en or fr</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="page" class="col-lg-2 control-label">Title of the page</label>
+
+			<div class="col-lg-10">
+				<input name="page" id="page" type="text" size="30" required="required" class="form-control"
+					value="{{ title|e('html_attr') }}" />
+				<span class="help-block">Name of the mainpage of the book in Wikisource</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="format" class="col-lg-2 control-label">File format</label>
+
+			<div class="col-lg-10">
+				<select id="format" name="format" class="form-control">
+					{% for key,label in formats %}
+						<option value="{{ key|e('html_attr') }}"
+						{% if key == format %}selected="selected"{% endif %}
+						>{{ label }}</option>
+					{% endfor %}
+				</select>
+				<span class="help-inline"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="fonts" class="col-lg-2 control-label">Font:</label>
+			<div class="col-lg-10">
+				<select id="fonts" name="fonts" class="form-control">
+					<option value="">None</option>
+					{% for key,label in fonts %}
+						<option value="{{ key|e('html_attr') }}" {% if key == font %}selected="selected"{% endif %}>
+							{{ key }}
+						</option>
+					{% endfor %}
+				</select>
+				<p class="help-block">Choose from {{ fonts|length }} available fonts.</p>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-lg-2 control-label">Options</label>
+
+			<div class="col-lg-10">
+				<label class="checkbox-inline">
+					<input type="checkbox" value="false" {% if not images %}checked="checked"{% endif %} name="images" />
+					Do not include images
+				</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-lg-offset-2 col-lg-10">
+				<input class="btn btn-primary" type="submit" value="Export"/>
+			</div>
+		</div>
+	</fieldset>
+</form>
+
+{% endblock %}

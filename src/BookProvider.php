@@ -71,7 +71,7 @@ class BookProvider {
 		$book = new Book();
 		$book->options = $this->options;
 		$book->title = $title;
-		$book->lang = $this->api->lang;
+		$book->lang = $this->api->getLang();
 
 		$metadataSrc = $parser->getMetadata( 'ws-metadata' );
 		if ( $metadataSrc == '' ) {
@@ -389,7 +389,7 @@ class BookProvider {
 	 * @return string[]
 	 */
 	public function getNamespaces() {
-		$namespaces = unserialize( Util::getTempFile( $this->api->lang, 'namespaces.sphp' ) );
+		$namespaces = unserialize( Util::getTempFile( $this->api->getLang(), 'namespaces.sphp' ) );
 		if ( is_array( $namespaces ) ) {
 			return $namespaces;
 		} else {

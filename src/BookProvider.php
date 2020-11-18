@@ -24,7 +24,7 @@ class BookProvider {
 	protected $options = [
 		'images' => true, 'fonts' => false, 'categories' => true, 'credits' => true
 	];
-	private $creditUrl = 'https://tools.wmflabs.org/phetools/credits.py';
+	private $creditUrl = 'https://phetools.toolforge.org/credits.py';
 
 	/**
 	 * @param $api Api

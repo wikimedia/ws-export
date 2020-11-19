@@ -59,7 +59,7 @@ class BookProviderTest extends TestCase {
 		$this->bookProvider->getMetadata( 'test', false, new DOMDocument() );
 
 		$this->assertEquals(
-			'https://tools.wmflabs.org/phetools/credits.py?lang=en&format=json&page=test',
+			'https://phetools.toolforge.org/credits.py?lang=en&format=json&page=test',
 			$this->mockHandler->getLastRequest()->getUri()->__toString() );
 	}
 

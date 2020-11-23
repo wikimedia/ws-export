@@ -6,6 +6,9 @@ config.php
 docker/.env
 docker-compose.override.yml
 
+public/opds/*
+!public/opds/.gitkeep
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php

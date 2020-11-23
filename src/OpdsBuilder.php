@@ -35,21 +35,27 @@ class OpdsBuilder {
 
 	/**
 	 * @param BookProvider $bookProvider
+	 * @param Api $api
 	 * @param string $lang
 	 * @param string $exportBasePath
 	 */
-	public function __construct( BookProvider $bookProvider, $lang, $exportBasePath = '' ) {
+	public function __construct( BookProvider $bookProvider, Api $api, string $lang, $exportBasePath = '' ) {
 		$this->bookProvider = $bookProvider;
+		$this->api = $api;
 		$this->lang = $lang;
 		$this->exportBasePath = $exportBasePath;
 	}
 
 	public function buildFromCategory( $categoryTitle ) {
-		$api = new Api();
-		$api->setLang( $this->lang );
-		$response = $api->completeQuery( [ 'generator' => 'categorymembers', 'gcmtitle' => $categoryTitle, 'gcmnamespace' => '0', 'prop' => 'info', 'gcmlimit' => '100' ] );
+		$response = $this->api->completeQuery( [
+			'generator' => 'categorymembers',
+			'gcmtitle' => $categoryTitle,
+			'gcmnamespace' => '0',
+			'prop' => 'info',
+			'gcmlimit' => '100',
+		] );
 		if ( !array_key_exists( 'query', $response ) ) {
-			throw new NotFoundHttpException();
+			throw new NotFoundHttpException( "Category not found: $categoryTitle" );
 		}
 
 		$pages = $response['query']['pages'];

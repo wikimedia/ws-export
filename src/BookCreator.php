@@ -19,19 +19,10 @@ class BookCreator {
 	/** @var string Full filesystem path to the created book. */
 	private $filePath;
 
-	public static function forApi( Api $api, $format, $options, FontProvider $fontProvider ) {
+	public static function forApi( Api $api, $format, $options, GeneratorSelector $generatorSelector ) {
 		return new BookCreator(
 			new BookProvider( $api, $options ),
-			GeneratorSelector::select( $format, $fontProvider )
-		);
-	}
-
-	public static function forLanguage( $language, $format, $options, FontProvider $fontProvider ) {
-		$api = new Api();
-		$api->setLang( $language );
-		return new BookCreator(
-			new BookProvider( $api, $options ),
-			GeneratorSelector::select( $format, $fontProvider )
+			$generatorSelector->getGenerator( $format )
 		);
 	}
 

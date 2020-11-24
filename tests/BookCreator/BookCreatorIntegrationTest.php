@@ -4,8 +4,10 @@ namespace App\Tests\BookCreator;
 
 use App\BookCreator;
 use App\FontProvider;
-use PHPUnit\Framework\TestCase;
+use App\GeneratorSelector;
+use App\Util\Api;
 use PHPUnit\Framework\TestResult;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Process\Process;
 
@@ -13,12 +15,18 @@ use Symfony\Component\Process\Process;
  * @covers BookCreator
  * @group integration
  */
-class BookCreatorIntegrationTest extends TestCase {
+class BookCreatorIntegrationTest extends KernelTestCase {
 	private $epubCheckJar = null;
 	private $testResult = null;
 
 	/** @var FontProvider */
 	private $fontProvider;
+
+	/** @var Api */
+	private $api;
+
+	/** @var GeneratorSelector */
+	private $generatorSelector;
 
 	public function run( TestResult $result = null ): TestResult {
 		$this->epubCheckJar = $this->epubCheckJar();
@@ -27,7 +35,10 @@ class BookCreatorIntegrationTest extends TestCase {
 	}
 
 	public function setUp(): void {
+		self::bootKernel();
 		$this->fontProvider = new FontProvider( new ArrayAdapter() );
+		$this->api = self::$container->get( Api::class );
+		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api );
 	}
 
 	public function bookProvider() {
@@ -63,7 +74,8 @@ class BookCreatorIntegrationTest extends TestCase {
 	 }
 
 	private function createBook( $title, $language, $format ) {
-		$creator = BookCreator::forLanguage( $language, $format, [ 'credits' => false ], $this->fontProvider );
+		$this->api->setLang( $language );
+		$creator = BookCreator::forApi( $this->api, $format, [ 'credits' => false ], $this->generatorSelector );
 		$creator->create( $title );
 		$this->assertFileExists( $creator->getFilePath() );
 		$this->assertNotNull( $creator->getBook() );

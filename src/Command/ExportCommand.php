@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use App\BookCreator;
-use App\FontProvider;
 use App\GeneratorSelector;
+use App\Util\Api;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,12 +16,16 @@ class ExportCommand extends Command {
 	/** @var string */
 	protected static $defaultName = 'app:export';
 
-	/** @var FontProvider */
-	private $fontProvider;
+	/** @var GeneratorSelector */
+	private $generatorSelector;
 
-	public function __construct( FontProvider $fontProvider ) {
+	/** @var Api */
+	private $api;
+
+	public function __construct( GeneratorSelector $generatorSelector, Api $api ) {
 		parent::__construct();
-		$this->fontProvider = $fontProvider;
+		$this->generatorSelector = $generatorSelector;
+		$this->api = $api;
 	}
 
 	protected function configure() {
@@ -53,7 +57,8 @@ class ExportCommand extends Command {
 			'images' => true,
 			'credits' => !$input->getOption( 'nocredits' ),
 		];
-		$creator = BookCreator::forLanguage( $input->getOption( 'lang' ), $input->getOption( 'format' ), $options, $this->fontProvider );
+		$this->api->setLang( $input->getOption( 'lang' ) );
+		$creator = BookCreator::forApi( $this->api, $input->getOption( 'format' ), $options, $this->generatorSelector );
 		$creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
 
 		$io->success( [

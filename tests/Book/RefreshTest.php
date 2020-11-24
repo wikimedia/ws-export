@@ -9,17 +9,27 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @covers Refresh
  */
-class RefreshTest extends TestCase {
+class RefreshTest extends KernelTestCase {
+
+	/** @var Api */
+	private $api;
+
+	public function setUp(): void {
+		parent::setUp();
+		self::bootKernel();
+		$this->api = self::$container->get( Api::class );
+	}
 
 	public function testRefreshUpdatesI18N() {
 		$this->refresh( 'en' );
 
-		$i18n = unserialize( Util::getTempFile( 'en', 'i18n.sphp' ) );
+		$i18n = unserialize( Util::getTempFile( $this->api, 'en', 'i18n.sphp' ) );
 		$this->assertIsArray( $i18n );
 		$this->assertEquals( 'Test-Title', $i18n[ 'title_page' ] );
 	}
@@ -27,26 +37,26 @@ class RefreshTest extends TestCase {
 	public function testRefreshUpdatesEpubCssWikisource() {
 		$this->refresh( 'en' );
 
-		$css = Util::getTempFile( 'en', 'epub.css' );
+		$css = Util::getTempFile( $this->api, 'en', 'epub.css' );
 		$this->assertStringEndsWith( '#TEST-CSS', $css );
 	}
 
 	public function testRefreshUpdatesAboutXhtmlWikisource() {
 		$this->refresh( 'en' );
 
-		$about = Util::getTempFile( 'en', 'about.xhtml' );
+		$about = Util::getTempFile( $this->api, 'en', 'about.xhtml' );
 		$this->assertStringContainsString( 'Test-About-Content', $about );
 	}
 
 	public function testRefreshUpdatesNamespacesList() {
 		$this->refresh( 'en' );
 
-		$namespaces = unserialize( Util::getTempFile( 'en', 'namespaces.sphp' ) );
+		$namespaces = unserialize( Util::getTempFile( $this->api, 'en', 'namespaces.sphp' ) );
 		$this->assertEquals( [ '0' => 'test' ], $namespaces );
 	}
 
 	private function refresh( $lang ) {
-		$api = new Api( $this->mockClient( $this->defaultResponses() ) );
+		$api = new Api( new NullLogger(), $this->mockClient( $this->defaultResponses() ) );
 		$api->setLang( $lang );
 		$refresh = new Refresh( $api );
 		$refresh->refresh();

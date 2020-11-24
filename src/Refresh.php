@@ -57,7 +57,7 @@ class Refresh {
 			$content = $this->api->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 		} catch ( Exception $e ) {
 			try {
-				$oldWikisourceApi = new Api();
+				$oldWikisourceApi = clone $this->api;
 				$oldWikisourceApi->setLang( 'www' );
 				$content = $oldWikisourceApi->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 			} catch ( Exception $e ) {

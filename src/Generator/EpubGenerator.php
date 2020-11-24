@@ -5,6 +5,7 @@ namespace App\Generator;
 use App\Book;
 use App\Cleaner\BookCleanerEpub;
 use App\FontProvider;
+use App\Util\Api;
 use App\Util\Util;
 use Exception;
 use IntlDateFormatter;
@@ -29,8 +30,12 @@ class EpubGenerator implements FormatGenerator {
 	/** @var FontProvider */
 	protected $fontProvider;
 
-	public function __construct( FontProvider $fontProvider ) {
+	/** @var Api */
+	protected $api;
+
+	public function __construct( FontProvider $fontProvider, Api $api ) {
 		$this->fontProvider = $fontProvider;
+		$this->api = $api;
 	}
 
 	/**
@@ -57,7 +62,7 @@ class EpubGenerator implements FormatGenerator {
 	public function create( Book $book ) {
 		$oldBookTitle = $book->title;
 		$css = $this->getCss( $book );
-		$this->i18n = Util::getI18n( $book->lang );
+		$this->i18n = Util::getI18n( $this->api, $book->lang );
 		$wsUrl = Util::wikisourceUrl( $book->lang, $book->title );
 		$cleaner = new BookCleanerEpub();
 		$cleaner->clean( $book, Util::wikisourceUrl( $book->lang ) );
@@ -391,7 +396,7 @@ class EpubGenerator implements FormatGenerator {
 		}
 		$list .= '</ul>';
 		$listBot .= '</ul>';
-		$about = Util::getTempFile( $book->lang, 'about.xhtml' );
+		$about = Util::getTempFile( $this->api, $book->lang, 'about.xhtml' );
 		if ( $about == '' ) {
 			$about = Util::getXhtmlFromContent( $book->lang, $list, $this->i18n['about'] );
 		} else {
@@ -405,7 +410,7 @@ class EpubGenerator implements FormatGenerator {
 
 	private function getCss( Book $book ) {
 		$css = $this->fontProvider->getCss( $book->options['fonts'] );
-		$css .= Util::getTempFile( $book->lang, 'epub.css' );
+		$css .= Util::getTempFile( $this->api, $book->lang, 'epub.css' );
 
 		return $css;
 	}

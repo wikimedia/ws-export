@@ -29,10 +29,6 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    App\Util\Api:
-        calls:
-            - setLogger: [ '@logger' ]
-
     App\CreationLog:
         arguments:
             $enableStats: '%env(bool:APP_ENABLE_STATS)%'

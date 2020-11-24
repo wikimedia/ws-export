@@ -74,11 +74,10 @@ class Util {
 		return $html . '><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="default-style" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head><body>' . $content . '</body></html>';
 	}
 
-	public static function getTempFile( $lang, $name ) {
+	public static function getTempFile( Api $api, $lang, $name ) {
 		$cache = FileCache::singleton();
 		$path = $cache->getDirectory() . '/' . $lang . '/' . $name;
 		if ( !file_exists( $path ) ) {
-			$api = new Api();
 			$api->setLang( $lang );
 			$refresh = new Refresh( $api );
 			$refresh->refresh();
@@ -86,8 +85,8 @@ class Util {
 		return file_get_contents( $path );
 	}
 
-	public static function getI18n( $lang ) {
-		return unserialize( static::getTempFile( $lang, 'i18n.sphp' ) );
+	public static function getI18n( Api $api, $lang ) {
+		return unserialize( static::getTempFile( $api, $lang, 'i18n.sphp' ) );
 	}
 
 	public static function encodeString( $string ) {

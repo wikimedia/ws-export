@@ -30,9 +30,7 @@ class OpdsBuilder {
 	 */
 	private $bookProvider;
 
-	/**
-	 * @var
-	 */
+	/** @var string */
 	private $lang;
 
 	/**

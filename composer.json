@@ -48,7 +48,7 @@
 	},
 	"require-dev": {
 		"ext-xdebug": "*",
-		"mediawiki/mediawiki-codesniffer": "^v31.0",
+		"mediawiki/mediawiki-codesniffer": "^v33.0",
 		"mediawiki/minus-x": "^1.0",
 		"symfony/browser-kit": "5.1.*",
 		"symfony/css-selector": "5.1.*",

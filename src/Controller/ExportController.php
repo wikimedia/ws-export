@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 // phpcs:ignore
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
@@ -64,14 +65,13 @@ class ExportController extends AbstractController {
 		}
 
 		$title = $request->get( 'page' );
-		$format = $request->get( 'format', 'epub' );
 		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
 		$images = (bool)$request->get( 'images', true );
 		return $this->render( 'export.html.twig', [
 			'fonts' => $fontProvider->getAll(),
 			'font' => $font,
 			'formats' => GeneratorSelector::$formats,
-			'format' => $format,
+			'format' => $this->getFormat( $request ),
 			'title' => $title,
 			'lang' => $api->getLang(),
 			'images' => $images,
@@ -81,7 +81,7 @@ class ExportController extends AbstractController {
 	private function export( Request $request, CreationLog $creationLog, Api $api, FontProvider $fontProvider, GeneratorSelector $generatorSelector ) {
 		// Get params.
 		$title = $request->get( 'page' );
-		$format = $request->get( 'format', 'epub' );
+		$format = $this->getFormat( $request );
 		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
 		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
 		$images = filter_var( $request->get( 'images', true ), FILTER_VALIDATE_BOOL );
@@ -137,6 +137,26 @@ class ExportController extends AbstractController {
 	}
 
 	/**
+	 * Get the format from the request, defaulting to 'epub-3' if nothing is provided.
+	 */
+	private function getFormat( Request $request ): string {
+		$defaultFormat = 'epub-3';
+		$format = $request->get( 'format' );
+		if ( !$format ) {
+			$format = $defaultFormat;
+		}
+		if ( !array_key_exists( $format, GeneratorSelector::$formats ) ) {
+			$msgFormat = '"%s" is not a valid format. Valid formats are: %s';
+			$msg = sprintf( $msgFormat, $format, '"' . implode( '", "', array_keys( GeneratorSelector::$formats ) ) . '"' );
+			// Change the requested format to the default,
+			// so the exception handler (which also uses this getFormat() method) can select it.
+			$request->query->set( 'format', $defaultFormat );
+			throw new NotFoundHttpException( $msg );
+		}
+		return $format;
+	}
+
+	/**
 	 * Error page handler, to always show the export form with any HTTP error message.
 	 *
 	 * @param Api $api
@@ -159,7 +179,7 @@ class ExportController extends AbstractController {
 			'fonts' => $fontProvider->getAll(),
 			'font' => $request->get( 'fonts' ),
 			'formats' => GeneratorSelector::$formats,
-			'format' => $request->get( 'format' ),
+			'format' => $this->getFormat( $request ),
 			'title' => $request->get( 'page' ),
 			'lang' => $api->getLang(),
 			'images' => true,

@@ -3,7 +3,6 @@
 namespace App\Tests\Http;
 
 use App\CreationLog;
-use App\Exception\WSExportInvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -51,10 +50,9 @@ class BookTest extends WebTestCase {
 
 	public function testGetInvalidFormatDisplaysError() {
 		$client = static::createClient();
-		$this->expectException( WSExportInvalidArgumentException::class );
 		$client->request( 'GET', '/book.php', [ 'page' => 'xxx', 'format' => 'xxx' ] );
-		$this->assertStringContainsString( "The file format 'xxx' is unknown.", $client->getResponse()->getContent() );
-		$this->assertSame( 500, $client->getResponse()->getStatusCode() );
+		$this->assertStringContainsString( '&quot;xxx&quot; is not a valid format.', $client->getResponse()->getContent() );
+		$this->assertSame( 404, $client->getResponse()->getStatusCode() );
 	}
 
 	/**

@@ -2,11 +2,11 @@
 
 namespace App;
 
-use App\Exception\WSExportInvalidArgumentException;
 use App\Generator\AtomGenerator;
 use App\Generator\ConvertGenerator;
 use App\Generator\EpubGenerator;
 use App\Util\Api;
+use Exception;
 
 class GeneratorSelector {
 
@@ -46,7 +46,7 @@ class GeneratorSelector {
 		} elseif ( $format === 'atom' ) {
 			return new AtomGenerator();
 		} else {
-			throw new WSExportInvalidArgumentException( "The file format '$format' is unknown." );
+			throw new Exception( "The file format '$format' is unknown." );
 		}
 	}
 }

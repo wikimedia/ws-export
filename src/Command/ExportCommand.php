@@ -52,6 +52,14 @@ class ExportCommand extends Command {
 			return Command::FAILURE;
 		}
 
+		$format = $input->getOption( 'format' );
+		if ( !array_key_exists( $format, GeneratorSelector::$formats ) ) {
+			$msgFormat = '"%s" is not a valid format. Valid formats are: %s';
+			$msg = sprintf( $msgFormat, $format, '"' . implode( '", "', array_keys( GeneratorSelector::$formats ) ) . '"' );
+			$io->warning( $msg );
+			return Command::FAILURE;
+		}
+
 		$input->validate();
 		$options = [
 			'images' => true,

@@ -224,6 +224,7 @@ class PageParser {
 		$this->deprecatedAttributes( 'cellspacing', 'border-spacing' );
 		$this->deprecatedAttributes( 'data-file-height', null );
 		$this->deprecatedAttributes( 'data-file-width', null );
+		$this->deprecatedAttributes( 'data-mw', null );
 		$this->deprecatedAttributes( 'lang', 'xml:lang', false );
 
 		$this->cleanIds();

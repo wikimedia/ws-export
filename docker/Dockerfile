@@ -5,10 +5,6 @@ ARG GROUP_ID
 
 WORKDIR /var/www/html
 
-COPY ./apache/000-default.conf /etc/apache2/sites-available/
-COPY ./apache/ports.conf /etc/apache2/
-COPY ./php.ini /usr/local/etc/php/php.ini
-
 EXPOSE 8080
 
 # work around https://github.com/docker-library/openjdk/blob/0584b2804ed12dca7c5e264b5fc55fc07a3ac148/8-jre/slim/Dockerfile#L51-L54

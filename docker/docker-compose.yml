@@ -10,10 +10,14 @@ services:
       - "8888:8080"
     volumes:
       - ../:/var/www/html:cached
+      - ./apache/000-default.conf:/etc/apache2/sites-available/000-default.conf:cached
+      - ./apache/ports.conf:/etc/apache2/ports.conf:cached
+      - ./php.ini:/usr/local/etc/php/php.ini:cached
     links:
       - database:database
     environment:
-      APACHE_RUN_USER: daemon
+      - APACHE_RUN_USER=daemon
+      - XDEBUG_MODE=off
     depends_on:
       - database
   database:

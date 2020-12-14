@@ -29,8 +29,8 @@ class BookProviderTest extends TestCase {
 			new Response( 200, [ 'Content-Type' => 'application/json' ], json_encode( $creditResponse ) ),
 			// The rest of these responses are required for mocking the Refresh process (namespaces, 'about' page, etc.)
 			new Response( 200, [], '' ),
-			new Response( 200, [], '' ),
-			new Response( 200, [], '' ),
+			new Response( 404, [], '' ), // mock returning 404 in first api call in Refresh::getAboutXhtmlWikisource
+			new Response( 200, [], '' ), // mock getting content from '$oldWikisourceApi' in Refresh::getAboutXhtmlWikisource
 			new Response( 200, [], json_encode( [ 'query' => [ 'namespaces' => [ [ '*' => 'test' ] ], 'namespacealiases' => [] ] ] ) ),
 		];
 		$this->mockHandler = new MockHandler( $responses );

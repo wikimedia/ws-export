@@ -28,6 +28,8 @@ class Util {
 	public static function wikisourceUrl( $lang, $page = '' ) {
 		if ( $lang === '' ) {
 			$url = 'https://wikisource.org';
+		} elseif ( $lang === 'beta' ) {
+			$url = 'https://en.wikisource.beta.wmflabs.org';
 		} else {
 			$url = 'https://' . $lang . '.wikisource.org';
 		}
@@ -63,6 +65,10 @@ class Util {
 	 * @return string
 	 */
 	public static function getXhtmlFromContent( $lang, $content, $title = ' ' ) {
+		$bodyPosition = stripos( $content, '<body' );
+		// Remove all content before <body tag
+		$content = substr( $content, $bodyPosition );
+
 		if ( $content != '' ) {
 			$content = preg_replace( '#<\!--(.+)-->#isU', '', $content );
 		}
@@ -70,8 +76,12 @@ class Util {
 		if ( $lang != null ) {
 			$html .= ' xml:lang="' . $lang . '" dir="' . static::getLanguageDirection( $lang ) . '"';
 		}
+		$html .= '><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="default-style" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head>';
 
-		return $html . '><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="default-style" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head><body>' . $content . '</body></html>';
+		if ( $bodyPosition ) {
+			return $html . $content;
+		}
+		return $html . '<body>' . $content . '</body></html>';
 	}
 
 	public static function getTempFile( Api $api, $lang, $name ) {

@@ -112,6 +112,8 @@ docker-compose exec wsexport ./bin/console app:install
 
 Wikisource Export should be up at http://localhost:8888/
 
+### Cache
+Go to `/refresh` to clear the cache
 
 ### Setup Xdebug
 Xdebug is disabled by default. If you need to enable it you can do so via an env variable by creating a `./docker/docker-compose.override.yml` file with the following content

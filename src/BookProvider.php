@@ -38,7 +38,7 @@ class BookProvider {
 	/**
 	 * return all the data on a book needed to export it
 	 * @param $title string the title of the main page of the book in Wikisource
-	 * @param $isMetadata bool only retrive metadata on the book
+	 * @param $isMetadata bool only retrieve metadata on the book
 	 * @return Book
 	 */
 	public function get( $title, $isMetadata = false ) {
@@ -123,6 +123,8 @@ class BookProvider {
 			}
 			$chapterTitles = $parser->getFullChaptersList( $title, $pageList, $namespaces );
 			$chapters = $this->getPages( $chapterTitles );
+
+			// Generate all the chapters
 			foreach ( $chapters as $chapter_key => $chapter ) {
 				$parser = new PageParser( $chapter->content );
 				if ( $parser->metadataIsSet( 'ws-noinclude' ) ) {

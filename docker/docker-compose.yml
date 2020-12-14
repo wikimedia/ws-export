@@ -15,9 +15,10 @@ services:
       - ./php.ini:/usr/local/etc/php/php.ini:cached
     links:
       - database:database
+      - rabbitmq:rabbitmq
     environment:
       - APACHE_RUN_USER=daemon
-      - XDEBUG_MODE=off
+      - XDEBUG_MODE=off15672
     depends_on:
       - database
   database:
@@ -26,3 +27,11 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_DATABASE=wsexport
+  rabbitmq:
+    image: rabbitmq:management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=pass
+    ports:
+      - "5673:5672"
+      - "15672:15672"

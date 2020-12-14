@@ -92,6 +92,12 @@
     "php": {
         "version": "7.2"
     },
+    "php-amqplib/php-amqplib": {
+        "version": "v2.12.1"
+    },
+    "phpseclib/phpseclib": {
+        "version": "2.0.29"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },

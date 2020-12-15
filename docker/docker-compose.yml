@@ -18,7 +18,7 @@ services:
       - rabbitmq:rabbitmq
     environment:
       - APACHE_RUN_USER=daemon
-      - XDEBUG_MODE=off15672
+      - XDEBUG_MODE=off
     depends_on:
       - database
   database:

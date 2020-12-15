@@ -367,6 +367,7 @@ class EpubGenerator implements FormatGenerator {
 			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '" dir="' . Util::getLanguageDirection( $book->lang ) . '">
 				<head>
 					<title>' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</title>
+					<link type="text/css" rel="stylesheet" href="main.css" />
 				</head>
 				<body style="background-color: ghostwhite; text-align: center; margin-right: auto; margin-left: auto; text-indent: 0;">
 					<h2>' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</h2>

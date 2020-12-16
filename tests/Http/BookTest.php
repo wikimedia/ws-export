@@ -2,7 +2,6 @@
 
 namespace App\Tests\Http;
 
-use App\CreationLog;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -30,9 +29,6 @@ class BookTest extends WebTestCase {
 	 */
 	public function testGetPage( $title, $language ) {
 		$client = static::createClient();
-		$creationLog = self::$container->get( CreationLog::class );
-		$creationLog->createTable();
-
 		$client->request( 'GET', '/book.php', [ 'page' => $title, 'lang' => $language ] );
 		$headers = $client->getResponse()->headers;
 		$this->assertSame( 'File Transfer', $headers->get( 'Content-Description' ) );

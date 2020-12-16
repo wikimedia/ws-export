@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\BookCreator;
-use App\CreationLog;
+use App\Entity\GeneratedBook;
 use App\FontProvider;
 use App\GeneratorSelector;
 use App\Refresh;
 use App\Util\Api;
 use App\Util\Util;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Locale;
@@ -25,6 +27,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 class ExportController extends AbstractController {
+
+	/** @var EntityManager */
+	private $entityManager;
+
+	/** @var bool */
+	private $enableStats;
+
+	public function __construct( EntityManagerInterface $entityManager, bool $enableStats ) {
+		$this->entityManager = $entityManager;
+		$this->enableStats = $enableStats;
+	}
 
 	/**
 	 * @Route("/refresh", name="refresh")
@@ -46,7 +59,6 @@ class ExportController extends AbstractController {
 	 */
 	public function home(
 		Request $request,
-		CreationLog $creationLog,
 		Api $api,
 		LoggerInterface $logger,
 		FontProvider $fontProvider,
@@ -66,7 +78,7 @@ class ExportController extends AbstractController {
 
 		// If the book title is specified, export it now.
 		if ( $request->get( 'page' ) ) {
-			return $this->export( $request, $creationLog, $api, $fontProvider, $generatorSelector );
+			return $this->export( $request, $api, $fontProvider, $generatorSelector );
 		}
 
 		$title = $request->get( 'page' );
@@ -84,7 +96,12 @@ class ExportController extends AbstractController {
 		] );
 	}
 
-	private function export( Request $request, CreationLog $creationLog, Api $api, FontProvider $fontProvider, GeneratorSelector $generatorSelector ) {
+	private function export(
+		Request $request,
+		Api $api,
+		FontProvider $fontProvider,
+		GeneratorSelector $generatorSelector
+	) {
 		// Get params.
 		$title = $request->get( 'page' );
 		$format = $this->getFormat( $request );
@@ -106,7 +123,11 @@ class ExportController extends AbstractController {
 		$response->deleteFileAfterSend();
 
 		// Log book generation.
-		$creationLog->add( $creator->getBook(), $format );
+		if ( $this->enableStats ) {
+			$genBook = new GeneratedBook( $creator->getBook(), $format );
+			$this->entityManager->persist( $genBook );
+			$this->entityManager->flush();
+		}
 
 		return $response;
 	}

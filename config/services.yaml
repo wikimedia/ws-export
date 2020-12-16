@@ -36,7 +36,7 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    App\CreationLog:
+    App\Controller\ExportController:
         arguments:
             $enableStats: '%env(bool:APP_ENABLE_STATS)%'
 

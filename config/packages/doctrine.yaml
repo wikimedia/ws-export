@@ -1,3 +1,20 @@
 doctrine:
     dbal:
-        url: '%env(resolve:DATABASE_URL)%'
+        connections:
+            wsexport:
+                url: '%env(resolve:DATABASE_URL)%'
+                driver: pdo_mysql
+                charset: utf8mb4
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection: wsexport
+                mappings:
+                    Entity:
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: App\Entity
+                        alias: Entity
+                        is_bundle: false

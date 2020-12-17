@@ -2,17 +2,15 @@
 
 namespace App\Util;
 
-/**
- * @author Thomas Pellissier Tanon
- * @copyright 2011 Thomas Pellissier Tanon
- * @license GPL-2.0-or-later
- */
-
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise\PromiseInterface;
+use Kevinrob\GuzzleCache\CacheMiddleware;
+use Kevinrob\GuzzleCache\Storage\Psr6CacheStorage;
+use Kevinrob\GuzzleCache\Strategy\GreedyCacheStrategy;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -43,10 +41,10 @@ class Api {
 	/**
 	 * @param ClientInterface $client
 	 */
-	public function __construct( LoggerInterface $logger, ClientInterface $client = null ) {
+	public function __construct( LoggerInterface $logger, CacheItemPoolInterface $cache, ClientInterface $client = null ) {
 		$this->logger = $logger;
 		if ( $client === null ) {
-			$client = static::createClient( $this->logger );
+			$client = $this->createClient( $logger, $cache );
 		}
 		$this->client = $client;
 	}
@@ -54,7 +52,10 @@ class Api {
 	/**
 	 * Set the Wikisource language code.
 	 */
-	public function setLang( string $lang ): void {
+	public function setLang( ?string $lang ): void {
+		if ( !$lang ) {
+			return;
+		}
 		$this->lang = $lang;
 		if ( $this->lang == 'www' || $this->lang == '' ) {
 			$this->domainName = 'wikisource.org';
@@ -135,6 +136,15 @@ class Api {
 	}
 
 	/**
+	 * Disable caching.
+	 */
+	public function disableCache(): void {
+		/** @var HandlerStack */
+		$stack = $this->client->getConfig( 'handler' );
+		$stack->remove( 'cache' );
+	}
+
+	/**
 	 * API query
 	 *
 	 * @param array $params an associative array for params send to the api
@@ -212,11 +222,17 @@ class Api {
 	 * @param LoggerInterface $logger
 	 * @return ClientInterface
 	 */
-	private static function createClient( ?LoggerInterface $logger ): ClientInterface {
+	private function createClient( LoggerInterface $logger, CacheItemPoolInterface $cache ): ClientInterface {
 		$handler = HandlerStack::create();
-		if ( $logger ) {
-			$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
-		}
+
+		// Logger.
+		$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
+
+		// Cache.
+		$ttl = 12 * 60 * 60;
+		$cacheStrategy = new GreedyCacheStrategy( new Psr6CacheStorage( $cache ), $ttl );
+		$handler->push( new CacheMiddleware( $cacheStrategy ), 'cache' );
+
 		return new Client( [
 			'defaults' => [
 				'connect_timeout' => self::CONNECT_TIMEOUT,

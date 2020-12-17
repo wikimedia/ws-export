@@ -2,12 +2,12 @@
 
 namespace App\Tests\Book;
 
-use App\Exception\WSExportInvalidArgumentException;
 use App\FontProvider;
 use App\Generator\ConvertGenerator;
 use App\Generator\EpubGenerator;
 use App\GeneratorSelector;
 use App\Util\Api;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -34,7 +34,7 @@ class GeneratorSelectorTest extends KernelTestCase {
 	}
 
 	public function testGetUnknownGeneratorRaisesException() {
-		$this->expectException( WSExportInvalidArgumentException::class );
+		$this->expectException( Exception::class );
 		$this->expectExceptionMessage( "The file format 'unknown' is unknown." );
 		$this->generatorSelector->getGenerator( "unknown" );
 	}

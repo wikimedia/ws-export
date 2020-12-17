@@ -48,8 +48,7 @@
 		"wikimedia/toolforge-bundle": "^1.0"
 	},
 	"require-dev": {
-		"ext-xdebug": "*",
-		"mediawiki/mediawiki-codesniffer": "^v33.0",
+		"mediawiki/mediawiki-codesniffer": "^v34.0",
 		"mediawiki/minus-x": "^1.0",
 		"symfony/browser-kit": "5.1.*",
 		"symfony/css-selector": "5.1.*",
@@ -62,6 +61,9 @@
 		"optimize-autoloader": true,
 		"preferred-install": {
 			"*": "dist"
+		},
+		"platform": {
+			"php": "7.3"
 		},
 		"sort-packages": true
 	},

@@ -93,7 +93,7 @@
         "version": "v4.10.2"
     },
     "php": {
-        "version": "7.2"
+        "version": "7.3"
     },
     "psr/cache": {
         "version": "1.0.1"

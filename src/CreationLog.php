@@ -87,10 +87,10 @@ class CreationLog {
 		);
 		$cursor->bindParam( 'year', $year );
 		$cursor->bindParam( 'month', $month );
-		$cursor->execute();
+		$result = $cursor->execute();
 
 		$stats = [];
-		foreach ( $cursor as $row ) {
+		foreach ( $result->fetchAllAssociative() as $row ) {
 			$stats[$row['format']][$row['lang']] = (int)$row['number'];
 		}
 

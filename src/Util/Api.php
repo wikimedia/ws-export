@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use DateInterval;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -10,11 +11,14 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 use Kevinrob\GuzzleCache\Storage\Psr6CacheStorage;
 use Kevinrob\GuzzleCache\Strategy\GreedyCacheStrategy;
+use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * a base class for communications with Wikisource
@@ -38,13 +42,17 @@ class Api {
 	/** @var LoggerInterface */
 	private $logger;
 
-	/**
-	 * @param ClientInterface $client
-	 */
-	public function __construct( LoggerInterface $logger, CacheItemPoolInterface $cache, ClientInterface $client = null ) {
+	/** @var CacheItemPoolInterface */
+	private $cache;
+
+	/** @var string[][] */
+	private $namespaces = [];
+
+	public function __construct( LoggerInterface $logger, CacheItemPoolInterface $cacheItemPool, CacheInterface $cache, ClientInterface $client = null ) {
 		$this->logger = $logger;
+		$this->cache = $cache;
 		if ( $client === null ) {
-			$client = $this->createClient( $logger, $cache );
+			$client = $this->createClient( $logger, $cacheItemPool );
 		}
 		$this->client = $client;
 	}
@@ -80,6 +88,38 @@ class Api {
 
 	public function getLang(): string {
 		return $this->lang;
+	}
+
+	/**
+	 * Get the localized namespace names of the current Wikisource. Cached for one month.
+	 * @return string[]
+	 */
+	public function getNamespaces(): array {
+		if ( isset( $this->namespaces[ $this->getLang() ] ) ) {
+			return $this->namespaces[ $this->getLang() ];
+		}
+		$this->namespaces[ $this->getLang() ] = $this->cache->get( 'namespaces_' . $this->getLang(), function ( CacheItemInterface $cacheItem ) {
+			$this->logger->notice( 'Fetching namespace names for ' . $this->getLang() );
+			$cacheItem->expiresAfter( new DateInterval( 'P1M' ) );
+			$response = $this->queryAsync( [ 'meta' => 'siteinfo', 'siprop' => 'namespaces|namespacealiases' ] )
+				->wait();
+			$namespaces = [];
+			foreach ( $response[ 'query' ][ 'namespaces' ] as $namespace ) {
+				if ( array_key_exists( '*', $namespace ) && $namespace[ '*' ] ) {
+					$namespaces[] = $namespace[ '*' ];
+				}
+				if ( array_key_exists( 'canonical', $namespace ) && $namespace[ 'canonical' ] ) {
+					$namespaces[] = $namespace[ 'canonical' ];
+				}
+			}
+			foreach ( $response[ 'query' ][ 'namespacealiases' ] as $namespaceAlias ) {
+				if ( array_key_exists( '*', $namespaceAlias ) ) {
+					$namespaces[] = $namespaceAlias[ '*' ];
+				}
+			}
+			return $namespaces;
+		} );
+		return $this->namespaces[ $this->getLang() ];
 	}
 
 	/**
@@ -139,6 +179,10 @@ class Api {
 	 * Disable caching.
 	 */
 	public function disableCache(): void {
+		// Disable Symfony cache.
+		$this->cache = new NullAdapter();
+
+		// Disable cache for Guzzle.
 		/** @var HandlerStack */
 		$stack = $this->client->getConfig( 'handler' );
 		$stack->remove( 'cache' );

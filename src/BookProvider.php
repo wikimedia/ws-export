@@ -2,14 +2,7 @@
 
 namespace App;
 
-/**
- * @author Thomas Pellissier Tanon
- * @copyright 2011 Thomas Pellissier Tanon
- * @license GPL-2.0-or-later
- */
-
 use App\Util\Api;
-use App\Util\Util;
 use DOMDocument;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -113,7 +106,7 @@ class BookProvider {
 			$book->categories = $this->getCategories( $metadataSrc );
 		}
 		$pageTitles = $parser->getPagesList();
-		$namespaces = $this->getNamespaces();
+		$namespaces = $this->api->getNamespaces();
 		if ( !$isMetadata ) {
 			if ( !$parser->metadataIsSet( 'ws-noinclude' ) ) {
 				$book->content = $parser->getContent( true );
@@ -387,19 +380,6 @@ class BookProvider {
 	}
 
 	/**
-	 * return the list of the namespaces for the current wiki.
-	 * @return string[]
-	 */
-	public function getNamespaces() {
-		$namespaces = unserialize( Util::getTempFile( $this->api, $this->api->getLang(), 'namespaces.sphp' ) );
-		if ( is_array( $namespaces ) ) {
-			return $namespaces;
-		} else {
-			return [];
-		}
-	}
-
-	/**
 	 * Splits an array of strings into multiple arrays small enough to fit into a Toolforge URL
 	 *
 	 * @param string[] $array
@@ -421,7 +401,7 @@ class BookProvider {
 	}
 
 	private function removeNamespacesFromTitle( $title ) {
-		foreach ( $this->getNamespaces() as $namespace ) {
+		foreach ( $this->api->getNamespaces() as $namespace ) {
 			if ( strpos( $title, $namespace . ':' ) === 0 ) {
 				return substr( $title, strlen( $namespace ) + 1 );
 			}

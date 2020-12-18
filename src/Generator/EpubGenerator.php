@@ -69,6 +69,7 @@ class EpubGenerator implements FormatGenerator {
 		$fileName = Util::buildTemporaryFileName( $book->title, 'epub' );
 		$zip = $this->createZipFile( $fileName );
 		$zip->addFromString( 'META-INF/container.xml', $this->getXmlContainer() );
+		$zip->addFromString( 'META-INF/com.apple.ibooks.display-options.xml', $this->getAppleIBooksDisplayOptionsXml() );
 		$zip->addFromString( 'OPS/content.opf', $this->getOpfContent( $book, $wsUrl ) );
 		$zip->addFromString( 'OPS/toc.ncx', $this->getNcxToc( $book, $wsUrl ) );
 		$zip->addFromString( 'OPS/nav.xhtml', $this->getXhtmlNav( $book ) );
@@ -214,6 +215,17 @@ class EpubGenerator implements FormatGenerator {
 					<rootfile full-path="OPS/content.opf" media-type="application/oebps-package+xml" />
 				</rootfiles>
 			</container>';
+
+		return $content;
+	}
+
+	private function getAppleIBooksDisplayOptionsXml() {
+		$content = '<?xml version="1.0" encoding="UTF-8" ?>
+			<display_options>
+				<platform name="*">
+					<option name="specified-fonts">true</option>
+				</platform>
+			</display_options>';
 
 		return $content;
 	}

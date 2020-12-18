@@ -13,6 +13,14 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    # Fix mysterious error https://stackoverflow.com/a/64929154/99667
+    doctrine.query_sql_command:
+        class: Doctrine\DBAL\Tools\Console\Command\RunSqlCommand
+        arguments:
+            - '@Doctrine\Bundle\DoctrineBundle\Dbal\ManagerRegistryAwareConnectionProvider'
+        tags:
+            - { name: console.command, command: doctrine:query:sql }
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:

@@ -24,6 +24,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 // phpcs:ignore
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 
 class ExportController extends AbstractController {
@@ -34,9 +35,13 @@ class ExportController extends AbstractController {
 	/** @var bool */
 	private $enableStats;
 
-	public function __construct( EntityManagerInterface $entityManager, bool $enableStats ) {
+	/** @var Stopwatch */
+	private $stopwatch;
+
+	public function __construct( EntityManagerInterface $entityManager, bool $enableStats, Stopwatch $stopwatch ) {
 		$this->entityManager = $entityManager;
 		$this->enableStats = $enableStats;
+		$this->stopwatch = $stopwatch;
 	}
 
 	/**
@@ -109,6 +114,11 @@ class ExportController extends AbstractController {
 		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
 		$images = filter_var( $request->get( 'images', true ), FILTER_VALIDATE_BOOL );
 
+		// Start timing.
+		if ( $this->enableStats ) {
+			$this->stopwatch->start( 'generate-book' );
+		}
+
 		// Generate ebook.
 		$options = [ 'images' => $images, 'fonts' => $font ];
 		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector );
@@ -124,7 +134,7 @@ class ExportController extends AbstractController {
 
 		// Log book generation.
 		if ( $this->enableStats ) {
-			$genBook = new GeneratedBook( $creator->getBook(), $format );
+			$genBook = new GeneratedBook( $creator->getBook(), $format, $this->stopwatch->stop( 'generate-book' ) );
 			$this->entityManager->persist( $genBook );
 			$this->entityManager->flush();
 		}

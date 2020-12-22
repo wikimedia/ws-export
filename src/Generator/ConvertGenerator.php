@@ -24,47 +24,47 @@ class ConvertGenerator implements FormatGenerator {
 		'htmlz' => [
 			'extension' => 'htmlz',
 			'mime' => 'application/zip',
-			'parameters' => '--page-breaks-before /'
+			'parameters' => '--page-breaks-before / --enable-heuristics'
 		],
 		'epub-2' => [
 			'extension' => 'epub',
 			'mime' => 'application/epub+zip',
-			'parameters' => '--epub-version 2'
+			'parameters' => '--epub-version 2 --enable-heuristics'
 		],
 		'mobi' => [
 			'extension' => 'mobi',
 			'mime' => 'application/x-mobipocket-ebook',
-			'parameters' => '--page-breaks-before /'
+			'parameters' => '--page-breaks-before / --enable-heuristics'
 		],
 		'pdf-a4' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--page-breaks-before / --paper-size a4 --pdf-page-margin-bottom 48 --pdf-page-margin-top 60 --pdf-page-margin-left 36 --pdf-page-margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size a4 --pdf-page-margin-bottom 48 --pdf-page-margin-top 60 --pdf-page-margin-left 36 --pdf-page-margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio --enable-heuristics'
 		],
 		'pdf-a5' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--page-breaks-before / --paper-size a5 --pdf-page-margin-bottom 32 --pdf-page-margin-top 40 --pdf-page-margin-left 24 --pdf-page-margin-right 24 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size a5 --pdf-page-margin-bottom 32 --pdf-page-margin-top 40 --pdf-page-margin-left 24 --pdf-page-margin-right 24 --pdf-page-numbers --preserve-cover-aspect-ratio --enable-heuristics'
 		],
 		'pdf-a6' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--page-breaks-before / --paper-size a6 --pdf-page-margin-bottom 16 --pdf-page-margin-top 20 --pdf-page-margin-left 12 --pdf-page-margin-right 12 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size a6 --pdf-page-margin-bottom 16 --pdf-page-margin-top 20 --pdf-page-margin-left 12 --pdf-page-margin-right 12 --pdf-page-numbers --preserve-cover-aspect-ratio --enable-heuristics'
 		],
 		'pdf-letter' => [
 			'extension' => 'pdf',
 			'mime' => 'application/pdf',
-			'parameters' => '--page-breaks-before / --paper-size letter --pdf-page-margin-bottom 48 --pdf-page-margin-top 60 --pdf-page-margin-left 36 --pdf-page-margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio'
+			'parameters' => '--page-breaks-before / --paper-size letter --pdf-page-margin-bottom 48 --pdf-page-margin-top 60 --pdf-page-margin-left 36 --pdf-page-margin-right 36 --pdf-page-numbers --preserve-cover-aspect-ratio --enable-heuristics'
 		],
 		'rtf' => [
 			'extension' => 'rtf',
 			'mime' => 'application/rtf',
-			'parameters' => '--page-breaks-before /'
+			'parameters' => '--page-breaks-before / --enable-heuristics'
 		],
 		'txt' => [
 			'extension' => 'txt',
 			'mime' => 'text/plain',
-			'parameters' => '--page-breaks-before /'
+			'parameters' => '--page-breaks-before / --enable-heuristics'
 		]
 	];
 

@@ -39,12 +39,18 @@ Installation
 3. Create a mysql database and database user
    and add these details to `.env.local`.
 
-4. Run `./bin/compose app:install` to initialize the database.
+4. Run `./bin/console doctrine:database:create` to initialize the database.
 
 Tests
 =====
 
 Run `composer install` to install dependencies required for testing.
+
+Make sure to create the test database:
+```bash
+$ ./bin/console doctrine:database:create --env=test
+```
+
 Tests are located in the `tests/` directory, to run them:
 
 ```bash
@@ -77,7 +83,12 @@ You'll need a locally running Docker and Docker Compose:
 
 Modify or create `.env.local`. This config uses the database container defaults.
 ```
-DATABASE_URL=mysql://root:@database:3306/wsexport?serverVersion=5.7
+DATABASE_URL=mysql://root:@database:3306/wsexport
+```
+
+Do the same for the test database at `.env.test.local`, but giving a different database name:
+```
+DATABASE_URL=mysql://root:@database:3306/wsexport_test
 ```
 
 Make sure you cd into `./docker`
@@ -104,10 +115,8 @@ docker-compose build && docker-compose up -d
 docker-compose exec wsexport composer install
 ```
 
-
-
 ```bash
-docker-compose exec wsexport ./bin/console app:install
+docker-compose exec wsexport ./bin/console doctrine:database:create
 ```
 
 Wikisource Export should be up at http://localhost:8888/

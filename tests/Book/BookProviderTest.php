@@ -27,16 +27,18 @@ class BookProviderTest extends TestCase {
 			'User A' => [ 'count' => 20, 'flags' => [ 'autoreview', 'editor', 'reviewer', 'sysop' ] ]
 		];
 		$responses = [
+			// Namespaces.
+			new Response( 200, [], json_encode( [ 'query' => [ 'namespaces' => [ [ '*' => 'test' ] ], 'namespacealiases' => [] ] ] ) ),
+			// Credits.
 			new Response( 200, [ 'Content-Type' => 'application/json' ], json_encode( $creditResponse ) ),
-			// The rest of these responses are required for mocking the Refresh process (namespaces, 'about' page, etc.)
+			// The rest of these responses are required for mocking the Refresh process ('about' page, etc.).
 			new Response( 200, [], '' ),
 			new Response( 404, [], '' ), // mock returning 404 in first api call in Refresh::getAboutXhtmlWikisource
 			new Response( 200, [], '' ), // mock getting content from '$oldWikisourceApi' in Refresh::getAboutXhtmlWikisource
-			new Response( 200, [], json_encode( [ 'query' => [ 'namespaces' => [ [ '*' => 'test' ] ], 'namespacealiases' => [] ] ] ) ),
 		];
 		$this->mockHandler = new MockHandler( $responses );
 		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
-		$api = new Api( new NullLogger(), new NullAdapter(), $client );
+		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $client );
 		$api->setLang( 'en' );
 		$this->bookProvider = new BookProvider( $api, [ 'categories' => false, 'credits' => true ] );
 	}

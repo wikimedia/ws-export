@@ -42,7 +42,7 @@ class ApiTest extends TestCase {
 	}
 
 	private function apiWithResponse( $status, $header, $body ) {
-		$api = new Api( new NullLogger(), new NullAdapter(), $this->mockClient( [ new Response( $status, $header, $body ) ] ) );
+		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $this->mockClient( [ new Response( $status, $header, $body ) ] ) );
 		$api->setLang( 'en' );
 		return $api;
 	}

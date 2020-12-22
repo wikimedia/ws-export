@@ -49,15 +49,8 @@ class RefreshTest extends KernelTestCase {
 		$this->assertStringContainsString( 'Test-About-Content', $about );
 	}
 
-	public function testRefreshUpdatesNamespacesList() {
-		$this->refresh( 'en' );
-
-		$namespaces = unserialize( Util::getTempFile( $this->api, 'en', 'namespaces.sphp' ) );
-		$this->assertEquals( [ '0' => 'test' ], $namespaces );
-	}
-
 	private function refresh( $lang ) {
-		$api = new Api( new NullLogger(), new NullAdapter(), $this->mockClient( $this->defaultResponses() ) );
+		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $this->mockClient( $this->defaultResponses() ) );
 		$api->setLang( $lang );
 		$refresh = new Refresh( $api );
 		$refresh->refresh();
@@ -72,7 +65,6 @@ class RefreshTest extends KernelTestCase {
 			$this->mockI18NResponse( 'title_page = "Test-Title"' ),
 			$this->mockCssWikisourceResponse( '#TEST-CSS' ),
 			$this->mockAboutWikisourceResponse( 'Test-About-Title', 'Test-About-Content' ),
-			$this->mockNamespacesListResponse( [ '*' => 'test' ] )
 		];
 	}
 
@@ -96,11 +88,5 @@ class RefreshTest extends KernelTestCase {
 				<base href="//en.wikisource.org/wiki/"/><link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=mediawiki.skinning.content.parsoid%7Cmediawiki.skinning.interface%7Csite.styles%7Cmediawiki.page.gallery.styles%7Cext.cite.style%7Cext.cite.styles&amp;only=styles&amp;skin=vector"/><meta http-equiv="content-language" content="en"/><meta http-equiv="vary" content="Accept"/></head>
 				<body>' . $content . '</body></html>'
 			);
-	}
-
-	private function mockNamespacesListResponse( $namespaces ) {
-		return new Response( 200, [ 'Content' => 'application/json' ],
-			json_encode( [ 'query' => [ 'namespaces' => [ $namespaces ], 'namespacealiases' => [] ] ] )
-		 );
 	}
 }

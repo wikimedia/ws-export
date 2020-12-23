@@ -152,7 +152,7 @@ class ExportController extends AbstractController {
 	private function getFont( Request $request, $lang, FontProvider $fontProvider ): ?string {
 		// Default font for non-latin languages.
 		$font = $fontProvider->resolveName( $request->get( 'fonts' ) );
-		if ( !$font && !in_array( $lang, [ 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar' ] ) ) {
+		if ( !$font && !in_array( $lang, [ 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar', 'zh', 'jp', 'kr' ] ) ) {
 			$font = 'FreeSerif';
 		}
 		if ( !$fontProvider->getOne( $font ) ) {

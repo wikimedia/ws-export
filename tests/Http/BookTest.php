@@ -2,6 +2,7 @@
 
 namespace App\Tests\Http;
 
+use App\Entity\GeneratedBook;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -35,6 +36,15 @@ class BookTest extends WebTestCase {
 		$this->assertSame( 'application/epub+zip', $headers->get( 'Content-Type' ) );
 		$this->assertSame( 'attachment; filename=The_Kiss_and_its_History.epub', $headers->get( 'Content-Disposition' ) );
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+
+		// Test that it took at least a second to generate.
+		/** @var GeneratedBook $genBook */
+		$genBook = self::$container
+			->get( 'doctrine' )
+			->getManager()
+			->getRepository( GeneratedBook::class )
+			->findOneBy( [ 'lang' => $language, 'title' => $title ], [ 'time' => 'DESC' ] );
+		$this->assertGreaterThanOrEqual( 1, $genBook->getDuration() );
 	}
 
 	public function testGetNonExistingTitleDisplaysError() {

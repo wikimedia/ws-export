@@ -213,15 +213,21 @@ class BookProvider {
 		$requests = function () use ( $client, $pictures, $cache ) {
 			foreach ( $pictures as $picture ) {
 				$url = $picture->url;
-				$tempFile = $cache->getDirectory() . '/' . uniqid( 'pic-' );
-				$picture->tempFile = $tempFile;
-				yield function () use ( $client, $url, $tempFile ) {
-					return $client->getAsync( $url, [ 'sink' => $tempFile ] );
+				yield function () use ( $client, $url ) {
+					// We could use the 'sink' option here, but for https://github.com/Kevinrob/guzzle-cache-middleware/issues/82
+					return $client->getAsync( $url );
 				};
 			}
 		};
 		$pool = new Pool( $client, $requests(), [
-			'fulfilled' => function ( Response $response, $index ) use ( $pictures ) {
+			'fulfilled' => function ( Response $response, $index ) use ( $cache, $pictures ) {
+				$pictureIndex = array_keys( $pictures )[ $index ];
+
+				// Write the temp file and store its path.
+				$tempFile = $cache->getDirectory() . '/' . uniqid( 'pic-' );
+				file_put_contents( $tempFile, $response->getBody()->getContents() );
+				$pictures[$pictureIndex]->tempFile = $tempFile;
+
 				// Get the media type, and strip everything apart from the main type and subtype, to extract a mime
 				// type that conforms to https://www.w3.org/publishing/epub32/epub-spec.html#sec-cmt-supported
 				$contentType = $response->getHeader( 'Content-Type' )[0];
@@ -229,7 +235,6 @@ class BookProvider {
 					$contentType = substr( $contentType, 0, strpos( $contentType, ';' ) );
 				}
 				// Store the returned mime type of the downloaded file in the Picture object.
-				$pictureIndex = array_keys( $pictures )[ $index ];
 				$pictures[$pictureIndex]->mimetype = $contentType;
 			},
 		] );

@@ -86,7 +86,7 @@ class ExportController extends AbstractController {
 			return $this->export( $request, $api, $fontProvider, $generatorSelector );
 		}
 
-		$title = $request->get( 'page' );
+		$title = $request->get( 'title' );
 		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
 		$images = (bool)$request->get( 'images', true );
 		return $this->render( 'export.html.twig', [
@@ -108,7 +108,7 @@ class ExportController extends AbstractController {
 		GeneratorSelector $generatorSelector
 	) {
 		// Get params.
-		$title = $request->get( 'page' );
+		$page = $request->get( 'page' );
 		$format = $this->getFormat( $request );
 		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
 		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
@@ -122,7 +122,7 @@ class ExportController extends AbstractController {
 		// Generate ebook.
 		$options = [ 'images' => $images, 'fonts' => $font ];
 		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector );
-		$creator->create( $title );
+		$creator->create( $page );
 
 		// Send file.
 		$response = new BinaryFileResponse( $creator->getFilePath() );
@@ -217,7 +217,7 @@ class ExportController extends AbstractController {
 			'font' => $request->get( 'fonts' ),
 			'formats' => GeneratorSelector::$formats,
 			'format' => $this->getFormat( $request ),
-			'title' => $request->get( 'page' ),
+			'title' => $request->get( 'title', $request->get( 'page' ) ),
 			'lang' => $api->getLang(),
 			'images' => true,
 			'messages' => [

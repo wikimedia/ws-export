@@ -79,4 +79,11 @@ class BookTest extends WebTestCase {
 			[ 'bn', 'en-AU', 'bn' ],
 		];
 	}
+
+	public function testTitlePrefill() {
+		$client = static::createClient();
+		$client->request( 'GET', '/', [ 'title' => 'A title' ] );
+		$this->assertStringContainsString( '<input name="page" id="page" type="text" size="30" required="required" class="form-control"
+					value="A&#x20;title" />', $client->getResponse()->getContent() );
+	}
 }

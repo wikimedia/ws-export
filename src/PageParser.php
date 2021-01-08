@@ -7,7 +7,12 @@ use DOMElement;
 use DOMXPath;
 
 class PageParser {
+
+	/** @var DOMXPath */
 	protected $xPath;
+
+	/** @var string[] Element ID values, used to fix duplicates. */
+	private static $ids = [];
 
 	/**
 	 * @param DOMDocument $doc The page to parse
@@ -16,6 +21,13 @@ class PageParser {
 		$this->xPath = new DOMXPath( $doc );
 		$this->xPath->registerNamespace( 'html', 'http://www.w3.org/1999/xhtml' );
 		$this->removeEnlargeLinks(); // Should be run before getChapterList in order to remove false links
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function getIds(): array {
+		return self::$ids;
 	}
 
 	/**
@@ -258,34 +270,48 @@ class PageParser {
 		$this->deprecatedAttributes( 'data-mw', null );
 		$this->deprecatedAttributes( 'lang', 'xml:lang', false );
 
-		$this->cleanIds();
 		$this->cleanRedLinks();
 		$this->cleanReferenceLinks();
+		$this->cleanIds();
 		$this->moveStyleToHead();
 
 		return $this->xPath->document;
 	}
 
-	protected function cleanIds() {
-		$list = $this->xPath->query( '//*[contains(@id,":")]' );
+	/**
+	 * IDs must start with a letter ([A-Za-z]) and may be followed by any number of letters, digits ([0-9]),
+	 * hyphens ("-"), underscores ("_"), colons (":"), and periods (".").
+	 * This is to ensure maximum compatibility with a wide range of devices.
+	 */
+	protected function cleanIds(): void {
+		// Get all nodes with IDs.
+		$list = $this->xPath->query( '//*[@id]' );
 		/** @var DOMElement $node */
 		foreach ( $list as $node ) {
-			$node->setAttribute( 'id', str_replace( ':', '_', $node->getAttribute( 'id' ) ) );
-		}
-
-		$list = $this->xPath->query( '//*[ starts-with(@id,".")]' );
-		/** @var DOMElement $node */
-		foreach ( $list as $node ) {
-			$node->setAttribute( 'id', preg_replace( '#^\.(.*)$#', '$1', $node->getAttribute( 'id' ) ) );
-		}
-
-		$list = $this->xPath->query( '//span[contains(@class,"pagenum") or contains(@class,"mw-headline")]' );
-		/** @var DOMElement $node */
-		foreach ( $list as $node ) {
-			$id = $node->getAttribute( 'id' );
-			if ( is_numeric( $id ) ) {
-				$node->setAttribute( 'id', '_' . $id );
+			$oldId = $node->getAttribute( 'id' );
+			$id = $oldId;
+			// Check for duplicates and fix them by appending a count.
+			if ( array_search( $id, self::$ids ) !== false ) {
+				$id .= '-n' . ( array_count_values( self::$ids )[ $id ] + 1 );
 			}
+			// Must start with a letter.
+			if ( preg_match( '/^[A-Za-z].*/', $id ) === 0 ) {
+				$id = "id-$id";
+			}
+			// Can only contain certain characters.
+			$id = preg_replace( '/[^A-Za-z0-9\-_:.]/', '_', $id );
+			// Set the value.
+			if ( $id !== $oldId ) {
+				$node->setAttribute( 'id', $id );
+				// Also find anything (in the current doc only) that points to the old ID, and update it.
+				$hrefList = $this->xPath->query( '//*[contains(@href, concat("#", "' . $oldId . '"))]' );
+				/** @var DOMElement $node */
+				foreach ( $hrefList as $hrefNode ) {
+					$newHref = str_replace( "#$oldId", "#$id", $hrefNode->getAttribute( 'href' ) );
+					$hrefNode->setAttribute( 'href', $newHref );
+				}
+			}
+			self::$ids[$id] = $oldId;
 		}
 	}
 

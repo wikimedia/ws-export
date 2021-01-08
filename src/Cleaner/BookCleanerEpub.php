@@ -4,6 +4,7 @@ namespace App\Cleaner;
 
 use App\Book;
 use App\Page;
+use App\PageParser;
 use App\Util\Util;
 use DOMDocument;
 use DOMElement;
@@ -244,11 +245,7 @@ class BookCleanerEpub {
 				$pos = strpos( $href, '#' );
 				if ( $pos !== false ) {
 					$anchor = substr( $href, $pos + 1 );
-					if ( is_numeric( $anchor ) ) {
-						$title .= '#_' . $anchor;
-					} else {
-						$title .= '#' . $anchor;
-					}
+					$title .= '#' . array_search( $anchor, PageParser::getIds() );
 				}
 				$node->setAttribute( 'href', $title );
 			} elseif ( substr( $href, 0, 2 ) === '//' ) {

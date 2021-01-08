@@ -77,6 +77,29 @@ class PageParserTest extends TestCase {
 		$this->assertInstanceOf( DOMDocument::class, $content );
 	}
 
+	public function testCleanIds() {
+		$doc1 = new DOMDocument();
+		$doc1->loadHTML( '<span id="1"></span><span id="lorem"></span><a id=".123 foo:bar" href="/foobar#1"></a>' );
+		$pageParser = new PageParser( $doc1 );
+		$doc2 = new DOMDocument();
+		$doc2->loadHTML( '<span id="1"></span><span id="lorem"></span>' );
+		$pageParser2 = new PageParser( $doc2 );
+
+		// Parse the documents.
+		$html = $pageParser->getContent( false )->saveHTML();
+		$pageParser2->getContent( false );
+
+		// Test outputs.
+		$this->assertArrayHasKey( 'id-1', PageParser::getIds() );
+		$this->assertArrayHasKey( 'id-1-n2', PageParser::getIds() );
+		$this->assertArrayHasKey( 'lorem', PageParser::getIds() );
+		$this->assertArrayHasKey( 'lorem-n2', PageParser::getIds() );
+		$this->assertArrayHasKey( 'id-.123_foo:bar', PageParser::getIds() );
+
+		$this->assertStringContainsString( '<span id="id-1"></span>', $html );
+		$this->assertStringContainsString( '<a id="id-.123_foo:bar" href="/foobar#id-1"></a>', $html );
+	}
+
 	private function parseFile( $filename ) {
 		$doc = new DOMDocument();
 		$this->assertTrue( $doc->loadHTMLFile( $filename ), 'parsing of "' . $filename . '"" failed' );

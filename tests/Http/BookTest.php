@@ -61,6 +61,12 @@ class BookTest extends WebTestCase {
 		$this->assertSame( 404, $client->getResponse()->getStatusCode() );
 	}
 
+	public function testGetFormat() {
+		$client = static::createClient();
+		$client->request( 'GET', '/', [ 'format' => 'epub' ] );
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+	}
+
 	/**
 	 * @dataProvider provideGetLang()
 	 */

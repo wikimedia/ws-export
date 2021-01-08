@@ -182,7 +182,7 @@ class ExportController extends AbstractController {
 		if ( !$format ) {
 			$format = $defaultFormat;
 		}
-		if ( !array_key_exists( $format, GeneratorSelector::$formats ) ) {
+		if ( !in_array( $format, GeneratorSelector::getAllFormats() ) ) {
 			$msgFormat = '"%s" is not a valid format. Valid formats are: %s';
 			$msg = sprintf( $msgFormat, $format, '"' . implode( '", "', array_keys( GeneratorSelector::$formats ) ) . '"' );
 			// Change the requested format to the default,

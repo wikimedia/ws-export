@@ -5,6 +5,7 @@ namespace App;
 use App\Generator\AtomGenerator;
 use App\Generator\ConvertGenerator;
 use App\Generator\EpubGenerator;
+use App\Generator\FormatGenerator;
 use App\Util\Api;
 use Exception;
 
@@ -23,6 +24,13 @@ class GeneratorSelector {
 		'txt'		=> 'txt (in beta)'
 	];
 
+	/** @var string[] Format aliases. */
+	private static $aliases = [
+		'epub' => 'epub-3',
+		// Returning RTF for ODT is a hack in order to not break existing URLs.
+		'odt' => 'rtf',
+	];
+
 	/** @var FontProvider */
 	private $fontProvider;
 
@@ -34,12 +42,19 @@ class GeneratorSelector {
 		$this->api = $api;
 	}
 
-	public function getGenerator( $format ) {
-		if ( $format === 'odt' ) {
-			$format = 'rtf'; // TODO: bad hack in order to don't break urls
-		}
+	/**
+	 * @return string[] All format names (including aliases).
+	 */
+	public static function getAllFormats(): array {
+		return array_merge( array_keys( self::$formats ), array_keys( self::$aliases ) );
+	}
 
-		if ( $format === 'epub-3' || $format === 'epub' ) {
+	public function getGenerator( $format ): FormatGenerator {
+		// Resolve alias.
+		if ( array_key_exists( $format, self::$aliases ) ) {
+			$format = self::$aliases[$format];
+		}
+		if ( $format === 'epub-3' ) {
 			return new EpubGenerator( $this->fontProvider, $this->api );
 		} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 			return new ConvertGenerator( $format, $this->fontProvider, $this->api );

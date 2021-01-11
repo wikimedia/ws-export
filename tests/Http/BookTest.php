@@ -65,6 +65,8 @@ class BookTest extends WebTestCase {
 		$client = static::createClient();
 		$client->request( 'GET', '/', [ 'format' => 'epub' ] );
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
+		$client->request( 'GET', '/', [ 'format' => 'pdf' ] );
+		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 	}
 
 	/**

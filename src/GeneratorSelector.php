@@ -29,6 +29,8 @@ class GeneratorSelector {
 		'epub' => 'epub-3',
 		// Returning RTF for ODT is a hack in order to not break existing URLs.
 		'odt' => 'rtf',
+		// A5 was more popular than A4 in 2020. T269726.
+		'pdf' => 'pdf-a5',
 	];
 
 	/** @var FontProvider */

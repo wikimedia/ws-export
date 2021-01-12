@@ -39,17 +39,23 @@ Installation
 3. Create a mysql database and database user
    and add these details to `.env.local`.
 
-4. Run `./bin/console doctrine:database:create` to initialize the database.
+4. Create the database with `./bin/console doctrine:database:create`
+
+5. Run the migrations with `./bin/console doctrine:migrations:migrate`
 
 Tests
 =====
 
 Run `composer install` to install dependencies required for testing.
 
-Make sure to create the test database:
+Make sure the test database is created and migrations are up-to-date:
 ```bash
-$ ./bin/console doctrine:database:create --env=test
+$ ./bin/console doctrine:migrations:database:create --env=test
+$ ./bin/console doctrine:migrations:migrate --env=test --no-interaction
 ```
+
+You only need to run the first command once, and the second one only
+when new migrations are created.
 
 Tests are located in the `tests/` directory, to run them:
 
@@ -109,14 +115,8 @@ Start the environment and install
 ```bash
 # -d is detached mode - runs containers in the background:
 docker-compose build && docker-compose up -d
-```
-
-```bash
 docker-compose exec wsexport composer install
-```
-
-```bash
-docker-compose exec wsexport ./bin/console doctrine:database:create
+docker-compose exec wsexport ./bin/console doctrine:migrations:migrate --no-interaction
 ```
 
 Wikisource Export should be up at http://localhost:8888/

@@ -35,12 +35,16 @@ class ExportController extends AbstractController {
 	/** @var bool */
 	private $enableStats;
 
+	/** @var bool */
+	private $enableCache;
+
 	/** @var Stopwatch */
 	private $stopwatch;
 
-	public function __construct( EntityManagerInterface $entityManager, bool $enableStats, Stopwatch $stopwatch ) {
+	public function __construct( EntityManagerInterface $entityManager, bool $enableStats, bool $enableCache, Stopwatch $stopwatch ) {
 		$this->entityManager = $entityManager;
 		$this->enableStats = $enableStats;
+		$this->enableCache = $enableCache;
 		$this->stopwatch = $stopwatch;
 	}
 
@@ -77,7 +81,7 @@ class ExportController extends AbstractController {
 		$api->setLang( $this->getLang( $request ) );
 
 		$nocache = (bool)$request->get( 'nocache' );
-		if ( $nocache ) {
+		if ( $nocache || !$this->enableCache ) {
 			$api->disableCache();
 		}
 
@@ -98,6 +102,7 @@ class ExportController extends AbstractController {
 			'lang' => $api->getLang(),
 			'images' => $images,
 			'nocache' => $nocache,
+			'enableCache' => $this->enableCache,
 		] );
 	}
 
@@ -224,6 +229,7 @@ class ExportController extends AbstractController {
 				'danger' => [ $message ],
 			],
 			'nocache' => (bool)$request->get( 'nocache' ),
+			'enableCache' => $this->enableCache,
 		] );
 	}
 }

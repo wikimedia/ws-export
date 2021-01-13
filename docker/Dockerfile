@@ -15,19 +15,19 @@ RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID docker
 
 RUN apt-get update -q && apt-get install -y \
         epubcheck \
-        libzip-dev \
-        unzip \
-        wget \
-        xdg-utils \
-        xz-utils \
-        libicu-dev \
         fontconfig \
         fonts-gujr-extra \
         fonts-freefont-ttf \
         fonts-linuxlibertine \
         fonts-dejavu-core \
         fonts-gubbi \
-      && rm -rf /var/lib/apt/lists/* \
+        git \
+        libzip-dev \
+        libicu-dev \
+        unzip \
+        wget \
+        xdg-utils \
+        xz-utils \
       && pecl install xdebug zip \
       && docker-php-ext-enable xdebug zip \
       && docker-php-ext-install pdo_mysql intl \

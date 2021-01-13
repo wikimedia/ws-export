@@ -49,8 +49,10 @@
 
 		<footer class="footer">
 			<p>
-				Wsexport is a tool under <a rel="licence" href="https://www.gnu.org/licenses/gpl.html">GNU GPLv2+
-					licence</a>.<br/>
+				This is WS Export
+				<a href="https://github.com/wsexport/tool/releases/tag/{{ git_tag() }}" title="Commit: {{ git_hash_short() }}">version {{ git_tag() }}</a>.
+				It is licensed under the
+				<a rel="licence" href="https://www.gnu.org/licenses/gpl.html">GNU GPLv2+ licence</a>.<br/>
 				The source code is available <a href="https://github.com/wsexport/tool">here</a> and a small documentation <a
 					href="https://wikisource.org/wiki/Wikisource:WSexport">here</a>.<br/>
 				Some <a href="{{ path('statistics') }}">statistics</a> are also provided.

@@ -89,7 +89,7 @@ class Util {
 		$path = $cache->getDirectory() . '/' . $lang . '/' . $name;
 		if ( !file_exists( $path ) ) {
 			$api->setLang( $lang );
-			$refresh = new Refresh( $api );
+			$refresh = new Refresh( $api, $api->getCache() );
 			$refresh->refresh();
 		}
 		return file_get_contents( $path );

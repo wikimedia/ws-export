@@ -3,20 +3,20 @@
 namespace App;
 
 use App\Util\Api;
-use DOMDocument;
 use Exception;
+use Psr\Cache\CacheItemPoolInterface;
 
-/**
- * @author Thomas Pellissier Tanon
- * @copyright 2012 Thomas Pellissier Tanon
- * @license GPL-2.0-or-later
- */
 class Refresh {
 
+	/** @var Api */
 	protected $api;
 
-	public function __construct( Api $api ) {
+	/** @var CacheItemPoolInterface */
+	private $cacheItemPool;
+
+	public function __construct( Api $api, CacheItemPoolInterface $cacheItemPool ) {
 		$this->api = $api;
+		$this->cacheItemPool = $cacheItemPool;
 	}
 
 	public function refresh() {
@@ -26,7 +26,10 @@ class Refresh {
 
 		$this->getI18n();
 		$this->getEpubCssWikisource();
-		$this->getAboutXhtmlWikisource();
+		$this->cacheItemPool->deleteItems( [
+			'namespaces_' . $this->api->getLang(),
+			'about_' . $this->api->getLang(),
+		] );
 	}
 
 	protected function getI18n() {
@@ -49,33 +52,6 @@ class Refresh {
 		} catch ( Exception $e ) {
 		}
 		$this->setTempFileContent( 'epub.css', $content );
-	}
-
-	protected function getAboutXhtmlWikisource() {
-		try {
-			$content = $this->api->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
-		} catch ( Exception $e ) {
-			try {
-				$oldWikisourceApi = clone $this->api;
-				$oldWikisourceApi->setLang( 'www' );
-				$content = $oldWikisourceApi->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
-			} catch ( Exception $e ) {
-				$content = '';
-			}
-		}
-		if ( $content === '' ) {
-			$this->setTempFileContent( 'about.xhtml', '' );
-		} else {
-			$document = new DOMDocument( '1.0', 'UTF-8' );
-			$document->loadXML( $content );
-			$parser = new PageParser( $document );
-			$document = $parser->getContent( true );
-			// Add https to protocol-relative links.
-			$aboutHtml = str_replace( 'href="//', 'href="https://', $document->saveXML() );
-			// Fully qualify unqualified links.
-			$aboutHtml = str_replace( 'href="./', 'href="https://' . $this->api->getDomainName() . '/wiki/', $aboutHtml );
-			$this->setTempFileContent( 'about.xhtml', $aboutHtml );
-		}
 	}
 
 	protected function setTempFileContent( $name, $content ) {

@@ -409,7 +409,8 @@ class EpubGenerator implements FormatGenerator {
 		}
 		$list .= '</ul>';
 		$listBot .= '</ul>';
-		$about = Util::getTempFile( $this->api, $book->lang, 'about.xhtml' );
+
+		$about = $this->api->getAboutPage();
 		if ( $about == '' ) {
 			$about = Util::getXhtmlFromContent( $book->lang, $list, $this->i18n['about'] );
 		} else {

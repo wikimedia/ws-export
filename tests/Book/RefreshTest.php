@@ -42,17 +42,10 @@ class RefreshTest extends KernelTestCase {
 		$this->assertStringEndsWith( '#TEST-CSS', $css );
 	}
 
-	public function testRefreshUpdatesAboutXhtmlWikisource() {
-		$this->refresh( 'en' );
-
-		$about = Util::getTempFile( $this->api, 'en', 'about.xhtml' );
-		$this->assertStringContainsString( 'Test-About-Content', $about );
-	}
-
 	private function refresh( $lang ) {
 		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $this->mockClient( $this->defaultResponses() ) );
 		$api->setLang( $lang );
-		$refresh = new Refresh( $api );
+		$refresh = new Refresh( $api, new NullAdapter() );
 		$refresh->refresh();
 	}
 
@@ -64,7 +57,6 @@ class RefreshTest extends KernelTestCase {
 		return [
 			$this->mockI18NResponse( 'title_page = "Test-Title"' ),
 			$this->mockCssWikisourceResponse( '#TEST-CSS' ),
-			$this->mockAboutWikisourceResponse( 'Test-About-Title', 'Test-About-Content' ),
 		];
 	}
 

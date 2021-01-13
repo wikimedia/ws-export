@@ -39,6 +39,11 @@ services:
     App\Controller\ExportController:
         arguments:
             $enableStats: '%env(bool:APP_ENABLE_STATS)%'
+            $enableCache: '%env(bool:APP_ENABLE_CACHE)%'
+
+    App\Command\ExportCommand:
+        arguments:
+            $enableCache: '%env(bool:APP_ENABLE_CACHE)%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -59,10 +59,12 @@
 					<input type="checkbox" value="false" {% if not images %}checked="checked"{% endif %} name="images" />
 					Do not include images
 				</label>
-				<label class="checkbox-inline">
-					<input type="checkbox" value="1" {% if nocache %}checked="checked"{% endif %} name="nocache" />
-					Bypass all caching (slower but useful for debugging)
-				</label>
+				{% if enableCache %}
+					<label class="checkbox-inline">
+						<input type="checkbox" value="1" {% if nocache %}checked="checked"{% endif %} name="nocache" />
+						Bypass all caching (slower but useful for debugging)
+					</label>
+				{% endif %}
 			</div>
 		</div>
 		<div class="form-group">

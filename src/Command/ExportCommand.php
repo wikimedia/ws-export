@@ -22,10 +22,14 @@ class ExportCommand extends Command {
 	/** @var Api */
 	private $api;
 
-	public function __construct( GeneratorSelector $generatorSelector, Api $api ) {
+	/** @var bool */
+	private $enableCache;
+
+	public function __construct( GeneratorSelector $generatorSelector, Api $api, bool $enableCache ) {
 		parent::__construct();
 		$this->generatorSelector = $generatorSelector;
 		$this->api = $api;
+		$this->enableCache = $enableCache;
 	}
 
 	protected function configure() {
@@ -67,7 +71,8 @@ class ExportCommand extends Command {
 			'credits' => !$input->getOption( 'nocredits' ),
 		];
 		$this->api->setLang( $input->getOption( 'lang' ) );
-		if ( $input->getOption( 'nocache' ) ) {
+		if ( $input->getOption( 'nocache' ) || !$this->enableCache ) {
+			$io->writeln( 'Caching is disabled.' );
 			$this->api->disableCache();
 		}
 		$creator = BookCreator::forApi( $this->api, $input->getOption( 'format' ), $options, $this->generatorSelector );

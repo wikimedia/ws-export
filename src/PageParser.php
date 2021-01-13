@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Util\Util;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
@@ -113,7 +114,7 @@ class PageParser {
 	public function getFullChaptersList( $title, $pageList, $namespaces ) {
 		$chapters = $this->getChaptersList( $pageList, $namespaces );
 		if ( empty( $chapters ) ) {
-			$list = $this->xPath->query( '//a[contains(@href,"' . $title . '") and 
+			$list = $this->xPath->query( '//a[contains(@href,"' . Util::wfUrlencode( $title ) . '") and
 				not(
 					contains(@class,"new") or
 					contains(@class,"extiw") or
@@ -127,11 +128,11 @@ class PageParser {
 				)]' );
 			/** @var DOMElement $link */
 			foreach ( $list as $link ) {
-				$title = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
-				$parts = explode( ':', $title );
-				if ( $title != '' && !in_array( $title, $pageList ) && !in_array( $parts[0], $namespaces ) ) {
+				$linkTitle = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
+				$parts = explode( ':', $linkTitle );
+				if ( $linkTitle != '' && !in_array( $linkTitle, $pageList ) && !in_array( $parts[0], $namespaces ) ) {
 					$chapter = new Page();
-					$chapter->title = $title;
+					$chapter->title = $linkTitle;
 					$chapter->name = $link->nodeValue;
 					$chapters[] = $chapter;
 					$pageList[] = $chapter->title;

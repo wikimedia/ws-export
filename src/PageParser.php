@@ -68,8 +68,10 @@ class PageParser {
 				not(
 					contains(@class,"new") or
 					contains(@href,"action=edit") or
-					contains(@class,"extiw") or contains(@class,"external") or
+					contains(@class,"extiw") or
+					contains(@class,"external") or
 					contains(@class,"internal") or
+					@rel = "mw:WikiLink/Interwiki" or
 					contains(@class,"image")
 				)
 			]' );
@@ -115,6 +117,7 @@ class PageParser {
 				not(
 					contains(@class,"new") or
 					contains(@class,"extiw") or
+					@rel = "mw:WikiLink/Interwiki" or
 					contains(@class,"external") or
 					contains(@href,"#") or
 					contains(@class,"internal") or

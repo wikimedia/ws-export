@@ -82,4 +82,12 @@ class BookProviderTest extends TestCase {
 		$this->assertTrue( $doc->loadHTMLFile( $filename ), 'parsing of "' . $filename . '"" failed' );
 		return $doc;
 	}
+
+	public function testTitleEntities() {
+		$doc = new DOMDocument();
+		$doc->loadHTML( '<body><p class="ws-title">Title &amp; name</p></body>' );
+		$book = $this->bookProvider->getMetadata( 'Title name', false, $doc );
+		$this->assertSame( 'Title name', $book->title );
+		$this->assertSame( 'Title & name', $book->name );
+	}
 }

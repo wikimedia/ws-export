@@ -5,34 +5,19 @@ namespace App;
 use DOMDocument;
 
 /**
- * @author Thomas Pellissier Tanon
- * @copyright 2011 Thomas Pellissier Tanon
- * @license GPL-2.0-or-later
- */
-
-/**
- * container for a page of Wikisource
+ * Container for a page of Wikisource.
  */
 class Page {
 
-	/**
-	 * title of the book in Wikisource
-	 */
+	/** @var string Wiki page name of the page on Wikisource. */
 	public $title = '';
 
-	/**
-	 * name to display
-	 */
+	/** @var string The page's actual title, e.g. a page with title 'Foo/Bar' might have a name of 'Foo, Bar'. */
 	public $name = '';
 
-	/**
-	 * content of the page
-	 * @type DOMDocument
-	 */
+	/** @var DOMDocument Content of the page. */
 	public $content = null;
 
-	/**
-	 * list of the subpages as Page object
-	 */
+	/** @var Page[] List of the subpages. */
 	public $chapters = [];
 }

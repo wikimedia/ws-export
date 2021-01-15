@@ -58,7 +58,14 @@ class BookProvider {
 		return $pages;
 	}
 
-	public function getMetadata( $title, $isMetadata, DOMDocument $doc ) {
+	/**
+	 * Get metadata etc. from a XHTML document.
+	 * @param string $title The book's titlepage's page name.
+	 * @param bool $isMetadata Whether this the book's content, chapters, credits, and pictures should also be extracted from the document.
+	 * @param DOMDocument $doc The document to read metadata from.
+	 * @return Book
+	 */
+	public function getMetadata( string $title, bool $isMetadata, DOMDocument $doc ): Book {
 		$pageList = [ $title ];
 		$parser = new PageParser( $doc );
 		$book = new Book();
@@ -76,18 +83,18 @@ class BookProvider {
 		}
 
 		$book->type = $metadataParser->getMetadata( 'ws-type' );
-		$book->name = htmlspecialchars( $metadataParser->getMetadata( 'ws-title' ) );
+		$book->name = $metadataParser->getMetadata( 'ws-title' );
 		if ( $book->name == '' ) {
 			$book->name = $this->removeNamespacesFromTitle( str_replace( '_', ' ', $metadataSrc ) );
 		}
-		$book->periodical = htmlspecialchars( $metadataParser->getMetadata( 'ws-periodical' ) );
-		$book->author = htmlspecialchars( $metadataParser->getMetadata( 'ws-author' ) );
-		$book->translator = htmlspecialchars( $metadataParser->getMetadata( 'ws-translator' ) );
-		$book->illustrator = htmlspecialchars( $metadataParser->getMetadata( 'ws-illustrator' ) );
-		$book->school = htmlspecialchars( $metadataParser->getMetadata( 'ws-school' ) );
-		$book->publisher = htmlspecialchars( $metadataParser->getMetadata( 'ws-publisher' ) );
-		$book->year = htmlspecialchars( $metadataParser->getMetadata( 'ws-year' ) );
-		$book->place = htmlspecialchars( $metadataParser->getMetadata( 'ws-place' ) );
+		$book->periodical = $metadataParser->getMetadata( 'ws-periodical' );
+		$book->author = $metadataParser->getMetadata( 'ws-author' );
+		$book->translator = $metadataParser->getMetadata( 'ws-translator' );
+		$book->illustrator = $metadataParser->getMetadata( 'ws-illustrator' );
+		$book->school = $metadataParser->getMetadata( 'ws-school' );
+		$book->publisher = $metadataParser->getMetadata( 'ws-publisher' );
+		$book->year = $metadataParser->getMetadata( 'ws-year' );
+		$book->place = $metadataParser->getMetadata( 'ws-place' );
 		$book->key = $metadataParser->getMetadata( 'ws-key' );
 		$book->progress = $metadataParser->getMetadata( 'ws-progress' );
 		$book->volume = $metadataParser->getMetadata( 'ws-volume' );

@@ -90,7 +90,6 @@ class ExportController extends AbstractController {
 			return $this->export( $request, $api, $fontProvider, $generatorSelector );
 		}
 
-		$title = $request->get( 'title' );
 		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
 		$images = (bool)$request->get( 'images', true );
 		return $this->render( 'export.html.twig', [
@@ -98,7 +97,7 @@ class ExportController extends AbstractController {
 			'font' => $font,
 			'formats' => GeneratorSelector::$formats,
 			'format' => $this->getFormat( $request ),
-			'title' => $title,
+			'title' => $this->getTitle( $request ),
 			'lang' => $api->getLang(),
 			'images' => $images,
 			'nocache' => $nocache,
@@ -199,6 +198,15 @@ class ExportController extends AbstractController {
 	}
 
 	/**
+	 * Get the page title from either the 'title' or 'page' parameters of the request.
+	 */
+	private function getTitle( Request $request ): string {
+		// It doesn't always make sense to fall back to the 'page' parameter, because that's what prompts the export,
+		// but for error pages it's useful.
+		return ucfirst( str_replace( '_', ' ', $request->get( 'title', $request->get( 'page' ) ) ) );
+	}
+
+	/**
 	 * Error page handler, to always show the export form with any HTTP error message.
 	 *
 	 * @param Api $api
@@ -222,7 +230,7 @@ class ExportController extends AbstractController {
 			'font' => $request->get( 'fonts' ),
 			'formats' => GeneratorSelector::$formats,
 			'format' => $this->getFormat( $request ),
-			'title' => $request->get( 'title', $request->get( 'page' ) ),
+			'title' => $this->getTitle( $request ),
 			'lang' => $api->getLang(),
 			'images' => true,
 			'messages' => [

@@ -90,10 +90,11 @@ class PageParserTest extends TestCase {
 		$pageParser2->getContent( false );
 
 		// Test outputs.
+		$this->assertCount( 9, PageParser::getIds() );
 		$this->assertArrayHasKey( 'id-1', PageParser::getIds() );
-		$this->assertArrayHasKey( 'id-1-n2', PageParser::getIds() );
+		$this->assertArrayHasKey( 'id-1-n8', PageParser::getIds() );
 		$this->assertArrayHasKey( 'lorem', PageParser::getIds() );
-		$this->assertArrayHasKey( 'lorem-n2', PageParser::getIds() );
+		$this->assertArrayHasKey( 'lorem-n9', PageParser::getIds() );
 		$this->assertArrayHasKey( 'id-.123_foo:bar', PageParser::getIds() );
 
 		$this->assertStringContainsString( '<span id="id-1"></span>', $html );

@@ -50,4 +50,9 @@ class ApiTest extends TestCase {
 	private function mockClient( $responses ) {
 		return new Client( [ 'handler' => HandlerStack::create( new MockHandler( $responses ) ) ] );
 	}
+
+	public function testGetAboutPage(): void {
+		$api = $this->apiWithResponse( 200, [], '<body><a href="./Foo">Foo</a></body>' );
+		$this->assertStringContainsString( '<body><a href="https://en.wikisource.org/wiki/Foo">Foo</a></body>', $api->getAboutPage() );
+	}
 }

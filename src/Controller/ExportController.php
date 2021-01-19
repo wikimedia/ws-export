@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Locale;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -51,9 +52,9 @@ class ExportController extends AbstractController {
 	/**
 	 * @Route("/refresh", name="refresh")
 	 */
-	public function refresh( Request $request, Api $api ) {
+	public function refresh( Request $request, Api $api, CacheItemPoolInterface $cacheItemPool ) {
 		$api->setLang( $this->getLang( $request ) );
-		$refresh = new Refresh( $api );
+		$refresh = new Refresh( $api, $cacheItemPool );
 		$refresh->refresh();
 		$this->addFlash( 'success', 'The cache is updated for ' . $api->getLang() . ' language.' );
 		return $this->redirectToRoute( 'home' );

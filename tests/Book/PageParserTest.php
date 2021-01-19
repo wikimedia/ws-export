@@ -105,4 +105,35 @@ class PageParserTest extends TestCase {
 		$this->assertTrue( $doc->loadHTMLFile( $filename ), 'parsing of "' . $filename . '"" failed' );
 		return new PageParser( $doc );
 	}
+
+	/**
+	 * @dataProvider provideAlignAttr()
+	 */
+	public function testAlignAttr( string $in, string $out ) {
+		$doc1 = new DOMDocument();
+		$doc1->loadHTML( $in );
+		$pageParser1 = new PageParser( $doc1 );
+		$this->assertStringContainsString( $out, $pageParser1->getContent( false )->saveHTML() );
+	}
+
+	public function provideAlignAttr() {
+		return [
+			[
+				'<table align="center"></table>',
+				'<table style="margin: auto;"></table>',
+			],
+			[
+				'<table align="right"></table>',
+				'<table style="margin-left: auto;"></table>',
+			],
+			[
+				'<div align="center" style="color: green"></div>',
+				'<div style="text-align: center; color: green"></div>',
+			],
+			[
+				'<div align="right"></div>',
+				'<div style="text-align: right;"></div>',
+			],
+		];
+	}
 }

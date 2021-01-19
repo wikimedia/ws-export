@@ -253,7 +253,7 @@ class PageParser {
 		$this->deprecatedNodes( 'u', 'span', 'text-decoration:underline;' );
 		$this->deprecatedNodes( 'font', 'span', '' );
 
-		$this->deprecatedAttributes( 'align', 'text-align' );
+		$this->convertAlignAttributes();
 		$this->deprecatedAttributes( 'background', 'background-color' );
 		$this->deprecatedAttributes( 'bgcolor', 'background-color' );
 		$this->deprecatedAttributes( 'border', 'border-width' );
@@ -356,6 +356,27 @@ class PageParser {
 				}
 			}
 			$node->removeAttribute( $name );
+		}
+	}
+
+	private function convertAlignAttributes() {
+		$nodes = $this->xPath->query( '//*[@align]' );
+		/** @var DOMElement $node */
+		foreach ( $nodes as $node ) {
+			$alignment = $node->getAttribute( 'align' );
+			// Tables have their own (deprecated) align attribute.
+			// https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableElement/align
+			if ( $node->tagName === 'table' && $alignment === 'left' ) {
+				$css = "margin-right: auto";
+			} elseif ( $node->tagName === 'table' && $alignment === 'right' ) {
+				$css = "margin-left: auto";
+			} elseif ( $node->tagName === 'table' && $alignment === 'center' ) {
+				$css = "margin: auto";
+			} else {
+				$css = 'text-align: ' . $alignment;
+			}
+			$node->setAttribute( 'style', trim( $css . '; ' . $node->getAttribute( 'style' ) ) );
+			$node->removeAttribute( 'align' );
 		}
 	}
 

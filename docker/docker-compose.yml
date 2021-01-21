@@ -8,6 +8,8 @@ services:
         GROUP_ID: ${WS_DOCKER_GID}
     ports:
       - "8888:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  
     volumes:
       - ../:/var/www/html:cached
       - ./apache/000-default.conf:/etc/apache2/sites-available/000-default.conf:cached

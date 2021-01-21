@@ -39,7 +39,7 @@ class RefreshTest extends KernelTestCase {
 		$this->refresh( 'en' );
 
 		$css = Util::getTempFile( $this->api, 'en', 'epub.css' );
-		$this->assertStringEndsWith( '#TEST-CSS', $css );
+		$this->assertStringEndsWith( '/* TEST-CSS */', $css );
 	}
 
 	private function refresh( $lang ) {
@@ -56,7 +56,7 @@ class RefreshTest extends KernelTestCase {
 	private function defaultResponses() {
 		return [
 			$this->mockI18NResponse( 'title_page = "Test-Title"' ),
-			$this->mockCssWikisourceResponse( '#TEST-CSS' ),
+			$this->mockCssWikisourceResponse( '/* TEST-CSS */' ),
 		];
 	}
 

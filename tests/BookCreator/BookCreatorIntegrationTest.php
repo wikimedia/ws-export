@@ -3,21 +3,18 @@
 namespace App\Tests\BookCreator;
 
 use App\BookCreator;
+use App\EpubCheck\EpubCheck;
 use App\FontProvider;
 use App\GeneratorSelector;
 use App\Util\Api;
-use PHPUnit\Framework\TestResult;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Component\Process\Process;
 
 /**
  * @covers BookCreator
  * @group integration
  */
 class BookCreatorIntegrationTest extends KernelTestCase {
-	private $epubCheckJar = null;
-	private $testResult = null;
 
 	/** @var FontProvider */
 	private $fontProvider;
@@ -28,23 +25,21 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 	/** @var GeneratorSelector */
 	private $generatorSelector;
 
-	public function run( TestResult $result = null ): TestResult {
-		$this->epubCheckJar = $this->epubCheckJar();
-		$this->testResult = $result;
-		return parent::run( $result );
-	}
+	/** @var EpubCheck */
+	private $epubCheck;
 
 	public function setUp(): void {
 		self::bootKernel();
 		$this->fontProvider = new FontProvider( new ArrayAdapter() );
 		$this->api = self::$container->get( Api::class );
 		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api );
+		$this->epubCheck = self::$container->get( EpubCheck::class );
 	}
 
 	public function bookProvider() {
 		return [
-			[ 'The_Kiss_and_its_History', 'en' ],
-			[ 'Les_Fleurs_du_mal', 'fr' ]
+			[ 'Around_the_Moon', 'en' ],
+			[ 'Fables_de_La_Fontaine/édition_1874/Le_Philosophe_Scythe', 'fr' ]
 		 ];
 	}
 
@@ -54,16 +49,15 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 	 */
 	public function testCreateBookEpub2( $title, $language ) {
 		$epubFile = $this->createBook( $title, $language, 'epub-2' );
-		$this->epubCheck( $epubFile );
+		$this->checkEpub( $epubFile );
 	}
 
 	 /**
 	  * @dataProvider bookProvider
-	  * @group exclude-from-ci
 	  */
 	 public function testCreateBookEpub3( $title, $language ) {
 		 $epubFile = $this->createBook( $title, $language, 'epub-3' );
-		 $this->epubCheck( $epubFile );
+		 $this->checkEpub( $epubFile );
 	 }
 
 	 /**
@@ -82,66 +76,19 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 		return $creator->getFilePath();
 	}
 
-	private function epubCheck( $file ) {
-		if ( $this->epubCheckJar == null || getenv( 'SKIP_EPUBCHECK' ) ) {
-			$this->markTestSkipped( 'EpubCheck not found. Please provide it uing the EPUBCHECK_JAR environment variable' );
-		}
-		$jsonOut = tempnam( sys_get_temp_dir(), 'results-' . $file . '.json' );
-		$process = new Process( [ 'java', '-jar', $this->epubCheckJar, '--quiet', '--json', $jsonOut, $file ] );
-		$process->run();
-
-		/** @var EpubCheckResult $checkResult */
-		foreach ( $this->parseResults( $jsonOut ) as $checkResult ) {
-			$checkResult->reportAsWarning( $this, $this->testResult );
-		}
-	}
-
-	private function parseResults( $file ) {
-		$decoded = json_decode( file_get_contents( $file ), true );
-		$this->assertNotNull( $decoded, json_last_error_msg() );
-		return $this->mapResults( $decoded['messages'] );
-	}
-
-	private function mapLocations( $data ) {
-		$mapper = function ( $location ) {
-			$path = $location['path'];
-			$line = $location['line'];
-			$column = $location['column'];
-
-			if ( $line != -1 ) {
-				return new Location( $path, $line, $column );
-			} else {
-				return null;
+	/**
+	 * Check an epub and fail if there are any errors.
+	 * @param string $file
+	 */
+	private function checkEpub( string $file ) {
+		foreach ( $this->epubCheck->check( $file ) as $result ) {
+			if ( $result->isError() ) {
+				$msg = $result->getMessage();
+				if ( $result->getLocations() ) {
+					$msg .= ' -- Location 1 of ' . count( $result->getLocations() ) . ': ' . $result->getLocations()[0];
+				}
+				$this->fail( $msg );
 			}
-		};
-		return array_filter( array_map( $mapper, $data ), function ( $location ) {
-			return $location != null;
-		} );
-	}
-
-	private function mapResults( $data ) {
-		$mapper = function ( $message ) {
-			$severity = $message['severity'];
-			$message_text = $message['message'];
-			$locations = $this->mapLocations( $message['locations'] );
-			$additionalLocations = $message['additionalLocations'];
-			return new EpubCheckResult( $severity, $message_text, $locations, $additionalLocations );
-		};
-		return array_map( $mapper, $data );
-	}
-
-	private function epubCheckJar() {
-		$epubCheckJar = getenv( 'EPUBCHECK_JAR' );
-		if ( $epubCheckJar && file_exists( $epubCheckJar ) && $this->isJavaInstalled() ) {
-			return $epubCheckJar;
-		} else {
-			return null;
 		}
-	}
-
-	private function isJavaInstalled() {
-		$process = new Process( [ 'java', '-version' ] );
-		$process->run();
-		return $process->isSuccessful();
 	}
 }

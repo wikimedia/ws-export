@@ -295,23 +295,30 @@ class PageParser {
 			$id = $oldId;
 			// Check for duplicates and fix them by appending a count.
 			if ( array_search( $id, self::$ids ) !== false ) {
-				$id .= '-n' . ( array_count_values( self::$ids )[ $id ] + 1 );
+				$id .= '-n' . ( count( self::$ids ) + 1 );
 			}
+			// Transliterate ID and ensure it contains only certain characters.
+			$idTrans = transliterator_transliterate( 'Any-Latin; Latin-ASCII; ', $id );
+			$idTransConv = iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', $idTrans );
+			$id = preg_replace( '/[^a-zA-Z0-9\-:.]/', '_', $idTransConv );
 			// Must start with a letter.
 			if ( preg_match( '/^[A-Za-z].*/', $id ) === 0 ) {
 				$id = "id-$id";
 			}
-			// Can only contain certain characters.
-			$id = preg_replace( '/[^A-Za-z0-9\-_:.]/', '_', $id );
 			// Set the value.
 			if ( $id !== $oldId ) {
 				$node->setAttribute( 'id', $id );
 				// Also find anything (in the current doc only) that points to the old ID, and update it.
-				$hrefList = $this->xPath->query( '//*[contains(@href, concat("#", "' . $oldId . '"))]' );
+				$oldIdLength = strlen( $oldId );
+				$oldFragment = "#$oldId";
+				// All hrefs that end in the old ID.
+				$hrefList = $this->xPath->query( "//a[substring(@href, string-length(@href)-$oldIdLength) = '$oldFragment']" );
 				/** @var DOMElement $node */
-				foreach ( $hrefList as $hrefNode ) {
-					$newHref = str_replace( "#$oldId", "#$id", $hrefNode->getAttribute( 'href' ) );
-					$hrefNode->setAttribute( 'href', $newHref );
+				if ( $hrefList ) {
+					foreach ( $hrefList as $hrefNode ) {
+						$newHref = str_replace( $oldFragment, "#$id", $hrefNode->getAttribute( 'href' ) );
+						$hrefNode->setAttribute( 'href', $newHref );
+					}
 				}
 			}
 			self::$ids[$id] = $oldId;

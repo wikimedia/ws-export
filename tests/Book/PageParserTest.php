@@ -147,4 +147,46 @@ class PageParserTest extends TestCase {
 		$pageParser = new PageParser( $doc );
 		$this->assertCount( 1, $pageParser->getFullChaptersList( 'F(o)o♥', [], [] ) );
 	}
+
+	/**
+	 * @dataProvider provideGetPicturesList
+	 */
+	public function testGetPicturesList( string $in, string $out, string $picTitle, string $picName ): void {
+		$doc1 = new DOMDocument();
+		$doc1->loadXML( $in );
+		$pageParser1 = new PageParser( $doc1 );
+		$pictures = $pageParser1->getPicturesList();
+		$this->assertStringContainsString( $out, $pageParser1->getContent( false )->saveXML() );
+		$this->assertSame( $picTitle, $pictures[$picTitle]->title );
+		$this->assertSame( $picName, $pictures[$picTitle]->name );
+	}
+
+	public function provideGetPicturesList(): array {
+		return [
+			'Image gets a data-title attribute'  => [
+				'<p><img src="foo/bar.jpg" /></p>',
+				'<p><img src="foo/bar.jpg" data-title="bar.jpg"/></p>',
+				'bar.jpg',
+				'bar.jpg',
+			],
+			'Figure caption is not removed' => [
+				'<figure><img src="foo/bar.jpg" /><figcaption>Lorem</figcaption></figure>',
+				'<figure><img src="foo/bar.jpg" data-title="bar.jpg"/><figcaption>Lorem</figcaption></figure>',
+				'bar.jpg',
+				'bar.jpg',
+			],
+			'Title extracted from MediaWiki non-thumb URL' => [
+				'<p><img src="//example.org/0/00/example.jpg" /></p>',
+				'<p><img src="//example.org/0/00/example.jpg" data-title="example.jpg"/></p>',
+				'example.jpg',
+				'example.jpg',
+			],
+			'Title extracted from MediaWiki thumb URL' => [
+				'<p><a class="image"><img src="//example.org/thumb/2/9A/example.jpg/500px-example.jpg" /></a></p>',
+				'<p><a class="image"><img src="//example.org/thumb/2/9A/example.jpg/500px-example.jpg" data-title="example.jpg-500px-example.jpg"/></a></p>',
+				'example.jpg-500px-example.jpg',
+				'example.jpg',
+			],
+		];
+	}
 }

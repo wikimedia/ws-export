@@ -144,14 +144,17 @@ class PageParser {
 	}
 
 	/**
-	 * return the pictures of the file, for all handled <img, the alt
-	 * attribute is set to the title of the image so the backend can
-	 * use it to retrieve the src name without relying on the src= attrib.
-	 * @return array
+	 * Get all pictures in the page, for all handled img elements.
+	 * Picture objects have their title set to a unique string, different for each size of a given image, and their name
+	 * set to the actual image file name. A data-title attribute is added, so that the BookCleanerEpub class can
+	 * retrieve the filename without parsing it from the src attribute.
+	 *
+	 * @return Picture[]
 	 */
-	public function getPicturesList() {
+	public function getPicturesList(): array {
 		$pictures = [];
 
+		// First go through all img elements that are not described as such or that are not links.
 		$list = $this->xPath->query( '//a[not(contains(@class,"image"))]/img | //img[not(parent::a)]' );
 		/** @var DOMElement $img */
 		foreach ( $list as $img ) {
@@ -163,11 +166,13 @@ class PageParser {
 			if ( strpos( $url, '/svg/' ) !== false ) {
 				$picture->title .= '.svg';
 			}
+			$picture->name = $picture->title;
 			$pictures[$picture->title] = $picture;
 			$img->setAttribute( 'data-title', $picture->title );
 
 		}
 
+		// Then go through all non-img elements that are used to contain images.
 		$list = $this->xPath->query( '
 			//a[contains(@class,"image")] |
 			//figure[contains(@typeof,"mw:Image")] |
@@ -176,7 +181,13 @@ class PageParser {
 		/** @var DOMElement $node */
 		foreach ( $list as $node ) {
 			/** @var DOMElement $img */
-			$img = $node->getElementsByTagName( 'img' )->item( 0 );
+			$imgs = $node->getElementsByTagName( 'img' );
+			if ( $imgs->count() === 0 ) {
+				// Image file doesn't exist, but MediaWiki still includes a figure, e.g.
+				// <figure-inline typeof="mw:Error mw:Image"><a href="…">File:Example.png</span></a></figure-inline>
+				continue;
+			}
+			$img = $imgs->item( 0 );
 			$picture = new Picture();
 			$url = $img->getAttribute( 'src' );
 			$segments = explode( '/', $url );
@@ -192,7 +203,10 @@ class PageParser {
 			// key, so we need only to extract the File:name. This
 			// is kludgy as we need to rely on the path format,
 			// either the 6/62 part is at pos -4/-3 or -3/-2.
-			if ( count( $segments ) >= 4 && is_numeric( "0x" . $segments[count( $segments ) - 4] ) && is_numeric( "0x" . $segments[count( $segments ) - 3] ) ) {
+			if ( count( $segments ) >= 4
+				&& ctype_xdigit( $segments[count( $segments ) - 4] )
+				&& ctype_xdigit( $segments[count( $segments ) - 3] )
+			) {
 				$picture->name = $segments[count( $segments ) - 2];
 				$picture->title = $segments[count( $segments ) - 2] . '-' . $segments[count( $segments ) - 1];
 			} else {
@@ -203,7 +217,6 @@ class PageParser {
 
 			$pictures[$picture->title] = $picture;
 			$img->setAttribute( 'data-title', $picture->title );
-			$node->parentNode->replaceChild( $img, $node );
 		}
 
 		return $pictures;

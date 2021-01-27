@@ -137,4 +137,14 @@ class PageParserTest extends TestCase {
 			],
 		];
 	}
+
+	/**
+	 * If a work doesn't include ws-summary, we want to get all of it's subpage links as the ToC.
+	 */
+	public function testSubpagesEncodedHrefs() {
+		$doc = new DOMDocument();
+		$doc->loadHTML( '<body><a href="./F(o)o%E2%99%A5/Bar" title="F(o)o♥/Bar">Bar</a></body>' );
+		$pageParser = new PageParser( $doc );
+		$this->assertCount( 1, $pageParser->getFullChaptersList( 'F(o)o♥', [], [] ) );
+	}
 }

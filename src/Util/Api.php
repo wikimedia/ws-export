@@ -76,6 +76,10 @@ class Api {
 		} elseif ( $this->lang === 'beta' ) {
 			$this->domainName = 'en.wikisource.beta.wmflabs.org';
 			$this->lang = '';
+		} elseif ( $this->lang === 'nan' ) {
+			// Hardcoded override for the only Wikisource with a subdomain that doesn't match its language code.
+			$this->domainName = 'zh-min-nan.wikisource.org';
+			$this->lang = 'zh-min-nan';
 		} else {
 			$this->domainName = $this->lang . '.wikisource.org';
 		}

@@ -52,7 +52,7 @@ class ApiTest extends TestCase {
 	}
 
 	public function testGetAboutPage(): void {
-		$api = $this->apiWithResponse( 200, [], '<body><a href="./Foo">Foo</a></body>' );
+		$api = $this->apiWithResponse( 200, [], '<html><body><a href="./Foo">Foo</a></body></html>' );
 		$this->assertStringContainsString( '<body><a href="https://en.wikisource.org/wiki/Foo">Foo</a></body>', $api->getAboutPage() );
 	}
 }

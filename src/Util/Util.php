@@ -4,6 +4,7 @@ namespace App\Util;
 
 use App\FileCache;
 use App\Refresh;
+use DOMDocument;
 use DOMElement;
 use DOMXPath;
 use Exception;
@@ -213,5 +214,20 @@ class Util {
 		}
 
 		return $text ? "$message: $text" : $message;
+	}
+
+	/**
+	 * Build base DOMDocument from a html string
+	 *
+	 * @param string $html
+	 * @return DOMDocument
+	 */
+	public static function buildDOMDocumentFromHtml( string $html ): DOMDocument {
+		$document = new DOMDocument( '1.0', 'UTF-8' );
+		libxml_use_internal_errors( true );
+		$document->loadHTML( mb_convert_encoding( str_replace( '<?xml version="1.0" encoding="UTF-8" ?>', '', $html ), 'HTML-ENTITIES', 'UTF-8' ) );
+		libxml_clear_errors();
+		$document->encoding = 'UTF-8';
+		return $document;
 	}
 }

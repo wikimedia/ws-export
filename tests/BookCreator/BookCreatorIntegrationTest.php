@@ -7,6 +7,7 @@ use App\EpubCheck\EpubCheck;
 use App\FontProvider;
 use App\Generator\ConvertGenerator;
 use App\GeneratorSelector;
+use App\Repository\CreditRepository;
 use App\Util\Api;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -26,6 +27,9 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 	/** @var GeneratorSelector */
 	private $generatorSelector;
 
+	/** @var CreditRepository */
+	private $creditRepository;
+
 	/** @var EpubCheck */
 	private $epubCheck;
 
@@ -35,6 +39,7 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 		$this->api = self::$container->get( Api::class );
 		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, 10 );
 		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator );
+		$this->creditRepository = self::$container->get( CreditRepository::class );
 		$this->epubCheck = self::$container->get( EpubCheck::class );
 	}
 
@@ -71,7 +76,7 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 
 	private function createBook( $title, $language, $format ) {
 		$this->api->setLang( $language );
-		$creator = BookCreator::forApi( $this->api, $format, [ 'credits' => false ], $this->generatorSelector );
+		$creator = BookCreator::forApi( $this->api, $format, [ 'credits' => false ], $this->generatorSelector, $this->creditRepository );
 		$creator->create( $title );
 		$this->assertFileExists( $creator->getFilePath() );
 		$this->assertNotNull( $creator->getBook() );

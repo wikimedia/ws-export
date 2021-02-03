@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\BookCreator;
 use App\GeneratorSelector;
+use App\Repository\CreditRepository;
 use App\Util\Api;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,15 +20,19 @@ class ExportCommand extends Command {
 	/** @var GeneratorSelector */
 	private $generatorSelector;
 
+	/** @var CreditRepository */
+	private $creditRepo;
+
 	/** @var Api */
 	private $api;
 
 	/** @var bool */
 	private $enableCache;
 
-	public function __construct( GeneratorSelector $generatorSelector, Api $api, bool $enableCache ) {
+	public function __construct( GeneratorSelector $generatorSelector, CreditRepository $creditRepo, Api $api, bool $enableCache ) {
 		parent::__construct();
 		$this->generatorSelector = $generatorSelector;
+		$this->creditRepo = $creditRepo;
 		$this->api = $api;
 		$this->enableCache = $enableCache;
 	}
@@ -75,7 +80,7 @@ class ExportCommand extends Command {
 			$io->writeln( 'Caching is disabled.' );
 			$this->api->disableCache();
 		}
-		$creator = BookCreator::forApi( $this->api, $input->getOption( 'format' ), $options, $this->generatorSelector );
+		$creator = BookCreator::forApi( $this->api, $input->getOption( 'format' ), $options, $this->generatorSelector, $this->creditRepo );
 		$creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
 
 		$io->success( [

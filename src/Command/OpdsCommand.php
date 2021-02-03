@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\BookProvider;
 use App\OpdsBuilder;
+use App\Repository\CreditRepository;
 use App\Util\Api;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,9 +19,13 @@ class OpdsCommand extends Command {
 	/** @var Api */
 	private $api;
 
-	public function __construct( Api $api ) {
+	/** @var CreditRepository */
+	private $creditRepo;
+
+	public function __construct( Api $api, CreditRepository $creditRepo ) {
 		parent::__construct();
 		$this->api = $api;
+		$this->creditRepo = $creditRepo;
 	}
 
 	protected function configure() {
@@ -47,7 +52,7 @@ class OpdsCommand extends Command {
 
 		date_default_timezone_set( 'UTC' );
 		$this->api->setLang( $lang );
-		$provider = new BookProvider( $this->api, [ 'categories' => false, 'images' => false ] );
+		$provider = new BookProvider( $this->api, [ 'categories' => false, 'images' => false ], $this->creditRepo );
 
 		$exportPath = 'https://ws-export.wmcloud.org/';
 		$atomGenerator = new OpdsBuilder( $provider, $this->api, $lang, $exportPath );

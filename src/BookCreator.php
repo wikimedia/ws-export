@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Generator\FormatGenerator;
+use App\Repository\CreditRepository;
 use App\Util\Api;
 use Exception;
 
@@ -19,9 +20,9 @@ class BookCreator {
 	/** @var string Full filesystem path to the created book. */
 	private $filePath;
 
-	public static function forApi( Api $api, $format, $options, GeneratorSelector $generatorSelector ) {
+	public static function forApi( Api $api, $format, $options, GeneratorSelector $generatorSelector, CreditRepository $creditRepo ) {
 		return new BookCreator(
-			new BookProvider( $api, $options ),
+			new BookProvider( $api, $options, $creditRepo ),
 			$generatorSelector->getGenerator( $format )
 		);
 	}

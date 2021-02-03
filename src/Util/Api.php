@@ -109,18 +109,19 @@ class Api {
 			$cacheItem->expiresAfter( new DateInterval( 'P1M' ) );
 			$response = $this->queryAsync( [ 'meta' => 'siteinfo', 'siprop' => 'namespaces|namespacealiases' ] )
 				->wait();
+
 			$namespaces = [];
 			foreach ( $response[ 'query' ][ 'namespaces' ] as $namespace ) {
 				if ( array_key_exists( '*', $namespace ) && $namespace[ '*' ] ) {
-					$namespaces[] = $namespace[ '*' ];
+					$namespaces[$namespace[ '*' ]] = $namespace[ 'id' ];
 				}
 				if ( array_key_exists( 'canonical', $namespace ) && $namespace[ 'canonical' ] ) {
-					$namespaces[] = $namespace[ 'canonical' ];
+					$namespaces[$namespace[ 'canonical' ] ] = $namespace[ 'id' ];
 				}
 			}
 			foreach ( $response[ 'query' ][ 'namespacealiases' ] as $namespaceAlias ) {
 				if ( array_key_exists( '*', $namespaceAlias ) ) {
-					$namespaces[] = $namespaceAlias[ '*' ];
+					$namespaces[$namespaceAlias[ '*' ]] = $namespaceAlias[ 'id' ];
 				}
 			}
 			return $namespaces;

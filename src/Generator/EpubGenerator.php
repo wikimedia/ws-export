@@ -401,7 +401,7 @@ class EpubGenerator implements FormatGenerator {
 		$list = '<ul>';
 		$listBot = '<ul>';
 		foreach ( $book->credits as $name => $value ) {
-			if ( in_array( 'bot', $value['flags'] ) ) {
+			if ( $value[ 'bot' ] !== null ) {
 				$listBot .= '<li>' . htmlspecialchars( $name, ENT_QUOTES ) . "</li>\n";
 			} else {
 				$list .= '<li>' . htmlspecialchars( $name, ENT_QUOTES ) . "</li>\n";

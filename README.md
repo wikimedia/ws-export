@@ -43,6 +43,18 @@ Installation
 
 5. Run the migrations with `./bin/console doctrine:migrations:migrate`
 
+6. This tool uses the [Toolforge Bundle](https://github.com/wikimedia/ToolforgeBundle), and it connects to [multiple databases](https://github.com/wikimedia/ToolforgeBundle#replicas-connection-manager).
+  * Set replicas credentials in the `.env.local` file.
+
+  * Establish an SSH tunnel to the replicas (only necessary on local environments)
+```bash
+$ ./php bin/console toolforge:ssh
+```
+  * Bind address for docker enviroments
+```bash
+$ php bin/console toolforge:ssh --bind-address=0.0.0.0
+```
+
 Tests
 =====
 

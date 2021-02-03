@@ -23,7 +23,7 @@ class BookCliTest extends TestCase {
 	public function testCreateBookWithCli( $title, $language ) {
 		$binPath = dirname( __DIR__, 2 ) . '/bin/console';
 		$outputPath = sys_get_temp_dir();
-		$process = new Process( [ 'php', $binPath, 'app:export', '--title', $title, '--lang', $language, '--path', $outputPath, ] );
+		$process = new Process( [ 'php', $binPath, 'app:export', '--title', $title, '--lang', $language, '--path', $outputPath, '--nocredits' ] );
 		$process->mustRun();
 		static::assertTrue( $process->isSuccessful() );
 		static::assertFileExists( $outputPath . "/$title.epub" );

@@ -133,28 +133,27 @@ class Api {
 	 * @return string The HTML.
 	 */
 	public function getAboutPage(): string {
-		return $this->cache->get( 'about_' . $this->getLang(), function ( CacheItemInterface $cacheItem ) {
+		$content = $this->cache->get( 'about_' . $this->getLang(), function ( CacheItemInterface $cacheItem ) {
 			// Cache for 1 month.
 			$cacheItem->expiresAfter( new DateInterval( 'P1M' ) );
 			// Get the HTML from either this Wikisource or multilingual Wikisource.
 			try {
-				$content = $this->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
+				return $this->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 			} catch ( Exception $exception ) {
 				$oldWikisourceApi = clone $this;
 				$oldWikisourceApi->setLang( 'www' );
-				$content = $oldWikisourceApi->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
+				return $oldWikisourceApi->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 			}
-			// Rewrite some parts of the returned HTML.
-			$document = new DOMDocument( '1.0', 'UTF-8' );
-			$document->loadXML( $content );
-			$parser = new PageParser( $document );
-			$document = $parser->getContent( true );
-			// Add https to protocol-relative links.
-			$aboutHtml = str_replace( 'href="//', 'href="https://', $document->saveXML() );
-			// Fully qualify unqualified links.
-			$content = str_replace( 'href="./', 'href="https://' . $this->getDomainName() . '/wiki/', $aboutHtml );
-			return $content;
 		} );
+		// Rewrite some parts of the returned HTML.
+		$document = new DOMDocument( '1.0', 'UTF-8' );
+		$document->loadXML( $content );
+		$parser = new PageParser( $document );
+		$document = $parser->getContent( true );
+		// Add https to protocol-relative links.
+		$aboutHtml = str_replace( 'href="//', 'href="https://', $document->saveXML() );
+		// Fully qualify unqualified links.
+		return str_replace( 'href="./', 'href="https://' . $this->getDomainName() . '/wiki/', $aboutHtml );
 	}
 
 	/**

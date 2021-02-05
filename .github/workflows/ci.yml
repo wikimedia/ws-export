@@ -54,8 +54,10 @@ jobs:
       run: |
         composer install
         ./bin/console doctrine:migrations:migrate --no-interaction
+        npm ci
 
     - name: Test
       run: |
         composer test
         ./bin/phpunit --exclude-group=exclude-from-ci
+        npm test

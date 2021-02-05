@@ -11,17 +11,18 @@ use Exception;
 
 class GeneratorSelector {
 
-	public static $formats = [
-		'epub-3' 	=> 'epub 3',
-		'epub-2'	=> 'epub 2 (deprecated, may be useful for some very old e-readers)',
-		'htmlz'		=> 'htmlz (zip archive with an html file inside, in beta)',
-		'mobi'		=> 'mobi (in beta)',
-		'pdf-a4'	=> 'pdf A4 format (in beta)',
-		'pdf-a5'	=> 'pdf A5 format (in beta)',
-		'pdf-a6'	=> 'pdf A6 format (in beta)',
-		'pdf-letter' => 'pdf US letter format (in beta)',
-		'rtf' 		=> 'rtf (in beta)',
-		'txt'		=> 'txt (in beta)'
+	/** @var string[] Format names. */
+	private static $formats = [
+		'epub-3',
+		'epub-2',
+		'htmlz',
+		'mobi',
+		'pdf-a4',
+		'pdf-a5',
+		'pdf-a6',
+		'pdf-letter',
+		'rtf',
+		'txt',
 	];
 
 	/** @var string[] Format aliases. */
@@ -48,7 +49,14 @@ class GeneratorSelector {
 	 * @return string[] All format names (including aliases).
 	 */
 	public static function getAllFormats(): array {
-		return array_merge( array_keys( self::$formats ), array_keys( self::$aliases ) );
+		return array_merge( self::getValidFormats(), array_keys( self::$aliases ) );
+	}
+
+	/**
+	 * @return string[] Valid format names (excluding aliases).
+	 */
+	public static function getValidFormats(): array {
+		return self::$formats;
 	}
 
 	public function getGenerator( $format ): FormatGenerator {

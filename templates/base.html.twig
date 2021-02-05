@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8"/>
-	<title>Wikisource Export</title>
+	<title>{{ msg('app-title') }}</title>
 	<link type="text/css" href="//tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<style type="text/css">
@@ -26,14 +26,16 @@
 			padding: 20px 20px 10px;
 			margin: -20px -20px 20px;
 		}
+
+		footer ul { list-style-type: none; }
 	</style>
 </head>
 <body>
 <div class="container">
 	<div class="content">
 		<div class="page-header">
-			<h1>Wikisource Export</h1>
-			<p>Export books from Wikisource in many different file formats.</p>
+			<h1>{{ msg( 'app-title' ) }}</h1>
+			<p>{{ msg( 'app-subtitle' ) }}</p>
 		</div>
 
 		{% for type, msgs in app.flashes|merge(messages ?? {}) %}
@@ -48,20 +50,51 @@
 		{% endblock %}
 
 		<footer class="footer">
-			<p>
-				This is WS Export
-				<a href="https://github.com/wsexport/tool/releases/tag/{{ git_tag() }}" title="Commit: {{ git_hash_short() }}">version {{ git_tag() }}</a>.
-				It is licensed under the
-				<a rel="licence" href="https://www.gnu.org/licenses/gpl.html">GNU GPLv2+ licence</a>.<br/>
-				The source code is available <a href="https://github.com/wsexport/tool">here</a> and a small documentation <a
-					href="https://wikisource.org/wiki/Wikisource:WSexport">here</a>.<br/>
-				Some <a href="{{ path('statistics') }}">statistics</a> are also provided.
-			</p>
-			<p>
-				Please report issues under the
-				<a href="https://phabricator.wikimedia.org/tag/wsexport">#wsexport</a> project on Phabricator:
-				<a href="https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=tool-wsexport" class="btn btn-default btn-xs">Create issue</a>
-			</p>
+			<ul>
+				<li>
+					{% set version_link %}
+						<a href="https://github.com/wikimedia/ws-export/releases/tag/{{ git_tag() }}" title="{{ msg( 'commit-label', [ git_hash_short() ] ) }}">
+							{{ msg( 'version', [ git_tag() ] ) }}{#
+						#}</a>{#
+					#}{% endset %}
+					{{ msg( 'footer-version', [ msg( 'app-title' ), version_link ] ) }}
+				</li>
+				<li>
+					{% set license_link %}
+						<a rel="licence" href="https://www.gnu.org/licenses/gpl.html">
+							{{ msg( 'license-link' ) }}{#
+						#}</a>{#
+					#}{% endset %}
+					{{ msg( 'licensed-under', [ license_link ] ) }}
+				</li>
+				<li>
+					{% set source_link %}
+						<a href="https://github.com/wikimedia/ws-export">
+							{{ msg( 'source-link' ) }}{#
+						#}</a>{#
+					#}{% endset %}
+					{% set docs_link %}
+						<a href="https://wikisource.org/wiki/Wikisource:WS_Export">
+						{{ msg( 'docs-link' ) }}{#
+					#}</a>{#
+					#}{% endset %}
+					{{ msg( 'source-and-docs', [ source_link, docs_link ] ) }}
+				</li>
+				<li>
+					{% set stats_link %}
+						<a href="{{ path('statistics') }}">
+						{{ msg( 'statistics-link' ) }}{#
+					#}</a>{#
+					#}{% endset %}
+					{{ msg( 'statistics', [ stats_link ] ) }}
+				</li>
+				<li>
+					{{ msg( 'issues', [ '<a href="https://phabricator.wikimedia.org/tag/ws-export">#ws-export</a>' ] ) }}
+					<a href="https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=ws-export" class="btn btn-default btn-xs">
+						{{ msg( 'issue-button' ) }}
+					</a>
+				</li>
+			</ul>
 		</footer>
 	</div>
 </div>

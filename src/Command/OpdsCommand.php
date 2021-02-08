@@ -49,7 +49,7 @@ class OpdsCommand extends Command {
 		$this->api->setLang( $lang );
 		$provider = new BookProvider( $this->api, [ 'categories' => false, 'images' => false ] );
 
-		$exportPath = 'https://wsexport.wmflabs.org/';
+		$exportPath = 'https://ws-export.wmcloud.org/';
 		$atomGenerator = new OpdsBuilder( $provider, $this->api, $lang, $exportPath );
 		$outputFile = dirname( __DIR__, 2 ) . "/public/opds/$lang/$category.xml";
 		if ( !is_dir( dirname( $outputFile ) ) ) {

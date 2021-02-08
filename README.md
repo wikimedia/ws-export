@@ -1,15 +1,15 @@
-What is Wikisource Export?
-==========================
+WS Export
+=========
 
-![CI](https://github.com/wsexport/tool/workflows/CI/badge.svg)
+![CI](https://github.com/wikimedia/ws-export/workflows/CI/badge.svg)
 
-Wikisource export is a tool for exporting Wikisource page in many formats like
-epub or xhtml. The documentation can be found here:
-https://wikisource.org/wiki/Wikisource:WSexport
+WS Export is a tool for exporting Wikisource books to many formats, such as EPUB or PDF.
+The documentation can be found here:
+https://wikisource.org/wiki/Wikisource:WS_Export
 
 Requirements
 ============
-* PHP 7.2
+* PHP 7.3 or 7.4
 * [Composer](http://getcomposer.org/)
 * The `fc-list` command
 
@@ -18,7 +18,7 @@ Installation
 
 1. Get the source code:
 
-       git clone https://github.com/wsexport/tool.git
+       git clone https://github.com/wikimedia/ws-export.git
        cd tool
 
 2. Install dependencies:

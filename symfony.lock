@@ -114,6 +114,9 @@
     "krinkle/intuition": {
         "version": "v1.2.0"
     },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.1.1"
+    },
     "mediawiki/mediawiki-codesniffer": {
         "version": "v29.0.0"
     },
@@ -249,6 +252,9 @@
             "src/Controller/.gitignore",
             "src/Kernel.php"
         ]
+    },
+    "symfony/http-client": {
+        "version": "v5.1.11"
     },
     "symfony/http-client-contracts": {
         "version": "v2.2.0"

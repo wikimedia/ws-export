@@ -2,10 +2,10 @@
 
 namespace App;
 
-use App\Util\Util;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use Wikimedia\ToolforgeBundle\Service\Util;
 
 class PageParser {
 

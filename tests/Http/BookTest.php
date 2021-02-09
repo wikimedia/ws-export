@@ -22,7 +22,7 @@ class BookTest extends WebTestCase {
 		$client->request( 'GET', '/book.php' );
 		$contentTypeHeader = $client->getResponse()->headers->get( 'Content-Type' );
 		$this->assertSame( 'text/html; charset=UTF-8', $contentTypeHeader );
-		$this->assertStringContainsString( 'Export books from Wikisource in many different file formats.', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( 'Export books from Wikisources in many different file formats.', $client->getResponse()->getContent() );
 	}
 
 	/**

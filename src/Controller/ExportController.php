@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
+use Krinkle\Intuition\Intuition;
 use Locale;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
@@ -42,11 +43,15 @@ class ExportController extends AbstractController {
 	/** @var Stopwatch */
 	private $stopwatch;
 
-	public function __construct( EntityManagerInterface $entityManager, bool $enableStats, bool $enableCache, Stopwatch $stopwatch ) {
+	/** @var Intuition */
+	private $intuition;
+
+	public function __construct( EntityManagerInterface $entityManager, bool $enableStats, bool $enableCache, Stopwatch $stopwatch, Intuition $intuition ) {
 		$this->entityManager = $entityManager;
 		$this->enableStats = $enableStats;
 		$this->enableCache = $enableCache;
 		$this->stopwatch = $stopwatch;
+		$this->intuition = $intuition;
 	}
 
 	/**
@@ -56,7 +61,7 @@ class ExportController extends AbstractController {
 		$api->setLang( $this->getLang( $request ) );
 		$refresh = new Refresh( $api, $cacheItemPool );
 		$refresh->refresh();
-		$this->addFlash( 'success', 'The cache is updated for ' . $api->getLang() . ' language.' );
+		$this->addFlash( 'success', $this->intuition->msg( 'cache-updated', [ 'variables' => [ $api->getLang() ] ] ) );
 		return $this->redirectToRoute( 'home' );
 	}
 
@@ -96,7 +101,7 @@ class ExportController extends AbstractController {
 		return $this->render( 'export.html.twig', [
 			'fonts' => $fontProvider->getAll(),
 			'font' => $font,
-			'formats' => GeneratorSelector::$formats,
+			'formats' => GeneratorSelector::getValidFormats(),
 			'format' => $this->getFormat( $request ),
 			'title' => $this->getTitle( $request ),
 			'lang' => $api->getLang(),
@@ -188,8 +193,8 @@ class ExportController extends AbstractController {
 			$format = $defaultFormat;
 		}
 		if ( !in_array( $format, GeneratorSelector::getAllFormats() ) ) {
-			$msgFormat = '"%s" is not a valid format. Valid formats are: %s';
-			$msg = sprintf( $msgFormat, $format, '"' . implode( '", "', array_keys( GeneratorSelector::$formats ) ) . '"' );
+			$list = '"' . implode( '", "', GeneratorSelector::getValidFormats() ) . '"';
+			$msg = $this->intuition->msg( 'invalid-format', [ 'variables' => [ $format, $list ] ] );
 			// Change the requested format to the default,
 			// so the exception handler (which also uses this getFormat() method) can select it.
 			$request->query->set( 'format', $defaultFormat );
@@ -229,7 +234,7 @@ class ExportController extends AbstractController {
 		return $this->render( 'export.html.twig', [
 			'fonts' => $fontProvider->getAll(),
 			'font' => $request->get( 'fonts' ),
-			'formats' => GeneratorSelector::$formats,
+			'formats' => GeneratorSelector::getValidFormats(),
 			'format' => $this->getFormat( $request ),
 			'title' => $this->getTitle( $request ),
 			'lang' => $api->getLang(),

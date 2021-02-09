@@ -33,7 +33,7 @@ class ExportCommand extends Command {
 	}
 
 	protected function configure() {
-		$formatDesc = 'Export format. One of: ' . implode( ', ', array_keys( GeneratorSelector::$formats ) );
+		$formatDesc = 'Export format. One of: ' . implode( ', ', array_keys( GeneratorSelector::getValidFormats() ) );
 		$this->setDescription( 'Export a book.' )
 			->addOption( 'lang', 'l', InputOption::VALUE_REQUIRED, 'Wikisource language code.' )
 			->addOption( 'title', 't', InputOption::VALUE_REQUIRED, 'Wiki page name of the work to export. Required' )
@@ -60,7 +60,7 @@ class ExportCommand extends Command {
 		$format = $input->getOption( 'format' );
 		if ( !in_array( $format, GeneratorSelector::getAllFormats() ) ) {
 			$msgFormat = '"%s" is not a valid format. Valid formats are: %s';
-			$msg = sprintf( $msgFormat, $format, '"' . implode( '", "', array_keys( GeneratorSelector::$formats ) ) . '"' );
+			$msg = sprintf( $msgFormat, $format, '"' . implode( '", "', array_keys( GeneratorSelector::getValidFormats() ) ) . '"' );
 			$io->warning( $msg );
 			return Command::FAILURE;
 		}

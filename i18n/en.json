@@ -12,7 +12,7 @@
 	"docs-link": "on Multilingual Wikisource",
 	"statistics": "Some $1 are also provided.",
 	"statistics-link": "statistics",
-	"issues": "Please report issues under the $1 project on Pabricator.",
+	"issues": "Please report issues under the $1 project on Phabricator.",
 	"issue-button": "Create issue",
 	"export-book": "Export a book",
 	"lang-field-label": "Language code:",

@@ -418,15 +418,9 @@ class PageParser {
 	}
 
 	private function cleanReferenceLinks() {
-		// Get all links that contain the "style" value "mw-Ref"
-		$links = $this->xPath->query( '//html:a[contains(@style, "mw-Ref")]' );
-		foreach ( $links as $link ) {
-			$href = $link->getAttribute( 'href' );
-			$pos = strpos( $href, '#' );
-			$link->setAttribute( 'href', substr( $href, $pos ) );
-		}
-		// Get all links that have the "rel" attribute equals to "mw-Ref"
-		$links = $this->xPath->query( '//html:a[@rel="mw:referencedBy"]' );
+		$links = $this->xPath->query(
+			'//*[@typeof="mw:Extension/ref"]/a | //a[@rel="mw:referencedBy"]'
+		);
 		foreach ( $links as $link ) {
 			$href = $link->getAttribute( 'href' );
 			$pos = strpos( $href, '#' );

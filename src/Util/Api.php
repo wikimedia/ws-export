@@ -4,7 +4,6 @@ namespace App\Util;
 
 use App\PageParser;
 use DateInterval;
-use DOMDocument;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -145,9 +144,7 @@ class Api {
 				return $oldWikisourceApi->getPageAsync( 'MediaWiki:Wsexport_about' )->wait();
 			}
 		} );
-		// Rewrite some parts of the returned HTML.
-		$document = new DOMDocument( '1.0', 'UTF-8' );
-		$document->loadXML( $content );
+		$document = Util::buildDOMDocumentFromHtml( $content );
 		$parser = new PageParser( $document );
 		$document = $parser->getContent( true );
 		// Add https to protocol-relative links.

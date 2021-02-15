@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Util\Api;
+use App\Util\Util;
 use DOMDocument;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -182,12 +183,7 @@ class BookProvider {
 	}
 
 	protected function domDocumentFromHtml( $html ) {
-		$document = new DOMDocument( '1.0', 'UTF-8' );
-		libxml_use_internal_errors( true );
-		$document->loadHTML( mb_convert_encoding( str_replace( '<?xml version="1.0" encoding="UTF-8" ?>', '', $html ), 'HTML-ENTITIES', 'UTF-8' ) );
-		libxml_clear_errors();
-		$document->encoding = 'UTF-8';
-		return $document;
+		return Util::buildDOMDocumentFromHtml( $html );
 	}
 
 	/**

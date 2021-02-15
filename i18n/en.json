@@ -61,5 +61,6 @@
 	"error-page-header": "An error occurred",
 	"error-page-details": "Error details: $1",
 	"error-page-issue": "If this error persists, please $1.",
-	"error-page-issue-link": "report an issue on Phabricator"
+	"error-page-issue-link": "report an issue on Phabricator",
+	"onwikiconfig-failure": "Unable to retrieve the on-wiki configuration from: $1"
 }

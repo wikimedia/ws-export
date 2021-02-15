@@ -7,6 +7,7 @@ use App\Generator\ConvertGenerator;
 use App\Generator\EpubGenerator;
 use App\GeneratorSelector;
 use App\Util\Api;
+use App\Util\OnWikiConfig;
 use Exception;
 use Krinkle\Intuition\Intuition;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -31,8 +32,8 @@ class GeneratorSelectorTest extends KernelTestCase {
 
 	public function setUp(): void {
 		parent::setUp();
-		$this->fontProvider = new FontProvider( new ArrayAdapter() );
 		self::bootKernel();
+		$this->fontProvider = new FontProvider( new ArrayAdapter(), self::$container->get( OnWikiConfig::class ) );
 		$this->api = self::$container->get( Api::class );
 		$this->intuition = self::$container->get( Intuition::class );
 		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, $this->intuition, 10 );

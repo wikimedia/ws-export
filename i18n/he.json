@@ -1,0 +1,29 @@
+{
+	"@metadata": {
+		"authors": [
+			"YaronSh"
+		]
+	},
+	"app-title": "יצוא מוויקיטקסט",
+	"app-subtitle": "יצוא ספרים מוויקיטקסטים במגוון תצורות קבצים שונות.",
+	"version": "גרסה $1",
+	"commit-label": "הגשה: $1",
+	"licensed-under": "מוגש ברישיון $1.",
+	"license-link": "GPL v2 ומעלה",
+	"source-link": "ב־Github",
+	"export-book": "לייצא ספר",
+	"lang-field-label": "קוד שפה:",
+	"title-field-label": "כותרת:",
+	"title-field-help": "כותרת העמוד הראשי של הספר.",
+	"format-field-label": "סוג קובץ:",
+	"format-pdf-a4": "PDF - גודל A4",
+	"format-pdf-a5": "PDF - גודל A5",
+	"format-pdf-a6": "PDF - גודל A6",
+	"format-txt": "טקסט רגיל",
+	"font-field-label": "גופן:",
+	"font-field-help": "לבחור מבין $1 הגופנים הזמינים.",
+	"options-label": "אפשרויות:",
+	"images-field-label": "לא לכלול תמונות",
+	"export-button": "ייצוא",
+	"cache-updated": "המטמון התרענן לשפה: $1"
+}

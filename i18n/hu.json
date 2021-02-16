@@ -1,0 +1,43 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hanna Tardos",
+			"Tacsipacsi"
+		]
+	},
+	"app-subtitle": "Könyvek exportálása Wikiforrásokból többféle formátumba",
+	"version": "$1 verzió",
+	"licensed-under": "Elérhető a $1 licenc alatt.",
+	"license-link": "GPL v2 vagy újabb",
+	"source-and-docs": "A forráskód $1, dokumentáció pedig $2 található.",
+	"source-link": "a GitHubon",
+	"docs-link": "a többnyelvű Wikiforrásban",
+	"statistics": "Van néhány $1 is.",
+	"statistics-link": "statisztika",
+	"issue-button": "Hibabejelentés",
+	"export-book": "Könyv exportálása",
+	"lang-field-label": "Nyelvkód:",
+	"lang-field-help": "Wikiforrás-nyelvkód vagy -aldomain, pl. „hu” vagy „en”.",
+	"title-field-label": "Cím:",
+	"title-field-help": "A könyv címlapjának címe.",
+	"format-field-label": "Fájlformátum:",
+	"format-epub-3": "EPUB 3 (a legtöbb e-olvasóhoz)",
+	"format-epub-2": "EPUB 2 (elavult, néhány nagyon régi e-olvasóhoz hasznos lehet)",
+	"format-htmlz": "HTML",
+	"format-mobi": "MOBI (Kindle-höz)",
+	"format-pdf-a4": "PDF – A4-es oldalméret",
+	"format-pdf-a5": "PDF – A5-ös oldalméret",
+	"format-pdf-a6": "PDF – A6-os oldalméret",
+	"format-pdf-letter": "PDF - amerikai levélméret",
+	"format-rtf": "RTF",
+	"format-txt": "Egyszerű szöveg",
+	"invalid-format": "A(z) „$1” nem egy érvényes formátum. Az érvényes formátumok a következők: $2",
+	"font-field-label": "Betűtípus:",
+	"no-font-option": "Nincs (az eszköz alapértelmezésének használata)",
+	"font-field-help": "Válassz $1 elérhető betűtípus közül.",
+	"options-label": "Opciók:",
+	"images-field-label": "Képek kihagyása",
+	"nocache-field-label": "Minden gyorsítótárazás kihagyása (lassabb, de hibakereséshez hasznos)",
+	"export-button": "Exportálás",
+	"cache-updated": "A gyorsítótár frissítve a következő nyelvhez: $1"
+}

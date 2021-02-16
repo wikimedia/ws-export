@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"Robby"
+		]
+	},
+	"footer-version": "Dëst ass d'Versioun $2 vu(n) $1.",
+	"version": "Versioun $1",
+	"licensed-under": "Et ass lizenzéiert ënner $1.",
+	"source-link": "op Github",
+	"statistics-link": "Statistiken",
+	"export-book": "E Buch exportéieren",
+	"lang-field-label": "Sproochcode:",
+	"title-field-label": "Titel:",
+	"format-field-label": "Format vum Fichier:",
+	"format-htmlz": "HTML",
+	"format-pdf-a4": "PDF - Gréisst A4",
+	"format-pdf-a5": "PDF - Gréisst A5",
+	"format-pdf-a6": "PDF - Gréisst A6",
+	"format-pdf-letter": "PDF - Gréisst US letter",
+	"format-rtf": "RTF",
+	"font-field-label": "Schrëftart:",
+	"options-label": "Optiounen:"
+}

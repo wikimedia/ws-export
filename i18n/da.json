@@ -1,0 +1,37 @@
+{
+	"@metadata": {
+		"authors": [
+			"Peter Alberti"
+		]
+	},
+	"app-title": "WS-Eksport",
+	"app-subtitle": "Eksporter bøger fra Wikisource i mange forskellige filformater",
+	"licensed-under": "Den er tilgængelig under licensen $1.",
+	"license-link": "GPL v2 eller senere",
+	"statistics": "En hvis $1 er også tilgængelig.",
+	"statistics-link": "statistik",
+	"export-book": "Eksporter en bog",
+	"lang-field-label": "Sprogkode:",
+	"lang-field-help": "Wikisource-sprogkode eller -underdomæne, som f. eks. \"da\" eller \"en\".",
+	"title-field-label": "Titel:",
+	"title-field-help": "Titlen på bogens forside.",
+	"format-field-label": "Filformat:",
+	"format-epub-3": "EPUB 3 (til de fleste e-bogslæsere)",
+	"format-epub-2": "EPUB 2 (forældet, kan være brugbar med visse, ældre e-bogslæsere)",
+	"format-htmlz": "HTML",
+	"format-mobi": "MOBI (til Kindle)",
+	"format-pdf-a4": "PDF - A4-størrelse",
+	"format-pdf-a5": "PDF - A5-størrelse",
+	"format-pdf-a6": "PDF - A6-størrelse",
+	"format-pdf-letter": "PDF - amerikansk letterstørrelse",
+	"format-rtf": "RTF",
+	"format-txt": "Uformateret tekst",
+	"invalid-format": "\"$1\" er ikke et gyldigt format. De gyldige formater er: $2",
+	"font-field-label": "Skrifttype:",
+	"no-font-option": "Ingen (anvend enhedens standard)",
+	"font-field-help": "Vælg mellem $1 tilgængelige skrifttyper.",
+	"options-label": "Valgmuligheder:",
+	"images-field-label": "Medtag ikke billeder",
+	"nocache-field-label": "Ignorer alle mellemlagre (langsommere, men brugbar ved fejlsøgning)",
+	"export-button": "Eksportér"
+}

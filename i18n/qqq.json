@@ -1,5 +1,7 @@
 {
-	"@metadata": {},
+	"@metadata": {
+		"authors": []
+	},
 	"app-title": "Application title, used in various places.",
 	"app-subtitle": "Application subtitle, at the top of every page.",
 	"footer-version": "Application name and version statement.\n\nParameters:\n* $1 - the application title.\n* $2 - a link to the current version (constructed with the 'version' message below).",
@@ -31,7 +33,7 @@
 	"format-pdf-letter": "Format label and description.",
 	"format-rtf": "Format label and description.",
 	"format-txt": "Format label and description.",
-	"invalid-format":  "Error message displayed when an invalid format is given in the URL.\n\nParameters:\n* $1 - the user-supplied format.\n* $2 - a list of valid formats (which are not translatable).",
+	"invalid-format": "Error message displayed when an invalid format is given in the URL.\n\nParameters:\n* $1 - the user-supplied format.\n* $2 - a list of valid formats (which are not translatable).",
 	"font-field-label": "Form field label for the 'Font' field.",
 	"no-font-option": "Font dropdown option to indicate that no font should be used.",
 	"font-field-help": "Help text for the 'Font' field.\n\nParameter:\n* $1 is the total number of fonts (an integer).",

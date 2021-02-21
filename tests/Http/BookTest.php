@@ -75,8 +75,7 @@ class BookTest extends WebTestCase {
 	public function testGetLang( $query, $accept, $lang ) {
 		$client = static::createClient();
 		$client->request( 'GET', '/', [ 'lang' => $query ], [], [ 'HTTP_ACCEPT_LANGUAGE' => $accept ] );
-		$this->assertStringContainsString( '<input name="lang" id="lang" type="text" size="3" maxlength="20" required="required"
-					value="' . $lang . '" class="form-control input-mini"/>', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( '<option value="' . $lang . '" selected>', $client->getResponse()->getContent() );
 	}
 
 	public function provideGetLang() {

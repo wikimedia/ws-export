@@ -1,16 +1,22 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ykhwong"
+			"Gustmd7410",
+			"Ykhwong",
+			"그냥기여자"
 		]
 	},
 	"app-title": "WS 내보내기",
+	"app-subtitle": "위키문헌의 문헌들을 다양한 형식의 파일로 내보내십시오.",
+	"footer-version": "$1의 $2 버전입니다.",
 	"version": "버전 $1",
 	"commit-label": "커밋: $1",
 	"licensed-under": "$1 라이선스로 배포됩니다.",
 	"license-link": "GPL v2 이상",
+	"source-and-docs": "$1 소스 코드를, $2 관련 문서를 확인할 수 있습니다.",
 	"source-link": "깃허브에서",
 	"docs-link": "다언어 위키문헌에서",
+	"statistics": "일부 $1도 제공합니다.",
 	"statistics-link": "통계",
 	"issues": "파브리케이터의 $1 프로젝트에서 이슈를 보고해 주십시오.",
 	"issue-button": "이슈 만들기",
@@ -38,5 +44,5 @@
 	"images-field-label": "이미지를 포함하지 않음",
 	"nocache-field-label": "모든 캐시 우회 (속도는 더 느리지만 디버깅에 유용함)",
 	"export-button": "내보내기",
-	"cache-updated": "언어에 대해 캐시를 새로 고쳤습니다: $1"
+	"cache-updated": "다음 언어에 대한 캐시를 새로 고쳤습니다: $1"
 }

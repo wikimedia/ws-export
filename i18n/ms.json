@@ -1,0 +1,21 @@
+{
+	"@metadata": {
+		"authors": [
+			"Tofeiku"
+		]
+	},
+	"version": "versi $1",
+	"statistics-link": "statistik",
+	"export-book": "Eksport buku",
+	"lang-field-label": "Kod bahasa:",
+	"title-field-label": "Tajuk:",
+	"format-field-label": "Format fail:",
+	"format-htmlz": "HTML",
+	"format-pdf-a4": "PDF - saiz A4",
+	"format-pdf-a5": "PDF - saiz A5",
+	"format-pdf-a6": "PDF - saiz A6",
+	"format-rtf": "RTF",
+	"font-field-label": "Fon:",
+	"options-label": "Pilihan:",
+	"export-button": "Eksport"
+}

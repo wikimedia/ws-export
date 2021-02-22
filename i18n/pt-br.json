@@ -1,12 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Eduardoaddad"
+			"Eduardoaddad",
+			"Mariagarbin"
 		]
 	},
 	"app-subtitle": "Exporte livros de Wikisources em muitos formatos de arquivo diferentes.",
 	"footer-version": "Esta $1 é a versão $2.",
 	"version": "versão $1",
+	"commit-label": "Comprometer: $1",
 	"licensed-under": "É licenciado sob $1.",
 	"license-link": "GPL v2 ou superior",
 	"source-and-docs": "O código-fonte está disponível no $1 e alguma documentação no $2.",

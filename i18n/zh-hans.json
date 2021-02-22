@@ -1,0 +1,28 @@
+{
+	"@metadata": {
+		"authors": [
+			"Zhang8569"
+		]
+	},
+	"app-title": "WS导出",
+	"footer-version": "这是$1版本$2",
+	"version": "版本$1",
+	"statistics-link": "统计信息",
+	"issues": "请在Phabricator上报道一个低于$1项目的错误",
+	"issue-button": "制造问题",
+	"export-book": "导出书",
+	"title-field-label": "标题：",
+	"title-field-help": "这本书主页面的标题",
+	"format-field-label": "文件格式",
+	"format-pdf-a4": "PDF-A4尺寸",
+	"format-pdf-a6": "PDF-A6尺寸",
+	"format-rtf": "RTF",
+	"format-txt": "纯文本",
+	"invalid-format": "\"$1\" 不是一个有效的格式。有效的格式为: $2",
+	"font-field-label": "字体：",
+	"font-field-help": "从$1可用的字体中选择",
+	"options-label": "选项：",
+	"images-field-label": "请不要包含图片",
+	"nocache-field-label": "越过所有隐藏物（更慢但是对于排除故障更加有效）",
+	"export-button": "导出"
+}

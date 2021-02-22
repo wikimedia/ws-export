@@ -24,6 +24,7 @@
 	"title-field-label": "Başlık:",
 	"title-field-help": "Kitabın ana sayfasının başlığı.",
 	"format-field-label": "Dosya biçimi:",
+	"format-field-help": "<!-- -->",
 	"format-epub-3": "EPUB 3 (bir çok e-okuyucu için)",
 	"format-epub-2": "EPUB 2 (eskimiş, bazı çok eski e-okuyucular için faydalı olabilir)",
 	"format-htmlz": "HTML",

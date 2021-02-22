@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"A2y4"
+		]
+	},
+	"statistics-link": "統計",
+	"title-field-label": "タイトル:",
+	"format-field-label": "ファイルフォーマット:",
+	"format-pdf-a4": "PDF - A4 サイズ",
+	"format-pdf-a5": "PDF - A5 サイズ",
+	"format-pdf-a6": "PDF - A6 サイズ",
+	"format-txt": "プレーンテキスト",
+	"invalid-format": "\"$1\" は無効なフォーマットです。有効なフォーマットは以下の通りです: $2",
+	"font-field-label": "フォント:",
+	"options-label": "オプション:",
+	"export-button": "エクスポート"
+}

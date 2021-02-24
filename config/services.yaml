@@ -45,5 +45,10 @@ services:
         arguments:
             $enableCache: '%env(bool:APP_ENABLE_CACHE)%'
 
+    App\EpubCheck\EpubCheck:
+        arguments:
+            $epubCheckPath: '%env(string:EPUBCHECK_JAR)%'
+        public: true
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

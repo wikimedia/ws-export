@@ -24,6 +24,7 @@ jobs:
     env:
       APP_ENV: test
       DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=5.7
+      EPUBCHECK_JAR: /home/runner/work/tool/tool/epubcheck-4.2.4/epubcheck.jar
 
     strategy:
       matrix:
@@ -48,7 +49,9 @@ jobs:
         sudo mkdir /usr/share/desktop-directories/
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
         sudo apt-get update -q
-        sudo apt-get install epubcheck fonts-freefont-ttf fonts-linuxlibertine fonts-dejavu-core fonts-gubbi -y
+        sudo apt-get install fonts-freefont-ttf fonts-linuxlibertine fonts-dejavu-core fonts-gubbi -y
+        wget https://github.com/w3c/epubcheck/releases/download/v4.2.4/epubcheck-4.2.4.zip
+        unzip epubcheck-4.2.4.zip
 
     - name: Install WSExport
       run: |

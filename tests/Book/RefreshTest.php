@@ -43,7 +43,7 @@ class RefreshTest extends KernelTestCase {
 	}
 
 	private function refresh( $lang ) {
-		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $this->mockClient( $this->defaultResponses() ) );
+		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $this->mockClient( $this->defaultResponses() ), 0 );
 		$api->setLang( $lang );
 		$refresh = new Refresh( $api, new NullAdapter() );
 		$refresh->refresh();

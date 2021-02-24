@@ -49,11 +49,12 @@ class Api {
 	/** @var string[][] */
 	private $namespaces = [];
 
-	public function __construct( LoggerInterface $logger, CacheItemPoolInterface $cacheItemPool, CacheInterface $cache, ClientInterface $client = null ) {
+	public function __construct( LoggerInterface $logger, CacheItemPoolInterface $cacheItemPool, CacheInterface $cache, ?ClientInterface $client, int $cacheTtl ) {
 		$this->logger = $logger;
 		$this->cache = $cache;
+
 		if ( $client === null ) {
-			$client = $this->createClient( $logger, $cacheItemPool );
+			$client = $this->createClient( $logger, $cacheItemPool, $cacheTtl );
 		}
 		$this->client = $client;
 	}
@@ -302,17 +303,18 @@ class Api {
 
 	/**
 	 * @param LoggerInterface $logger
+	 * @param CacheItemPoolInterface $cache
+	 * @param int $cacheTtl
 	 * @return ClientInterface
 	 */
-	private function createClient( LoggerInterface $logger, CacheItemPoolInterface $cache ): ClientInterface {
+	private function createClient( LoggerInterface $logger, CacheItemPoolInterface $cache, int $cacheTtl ): ClientInterface {
 		$handler = HandlerStack::create();
 
 		// Logger.
 		$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
 
 		// Cache.
-		$ttl = 12 * 60 * 60;
-		$cacheStrategy = new GreedyCacheStrategy( new Psr6CacheStorage( $cache ), $ttl );
+		$cacheStrategy = new GreedyCacheStrategy( new Psr6CacheStorage( $cache ), $cacheTtl );
 		$handler->push( new CacheMiddleware( $cacheStrategy ), 'cache' );
 
 		return new Client( [

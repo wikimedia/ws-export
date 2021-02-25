@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"FF11",
+			"Gebu"
+		]
+	},
+	"app-title": "WS-Export",
+	"footer-version": "Dies ist $1, Version $2.",
+	"version": "Version $1",
+	"license-link": "GPL v2 oder höhere Version",
+	"source-and-docs": "Der Quellcode ist hier erhältlich: $1 . Hier ist er ein wenig dokumentiert: $2 .",
+	"source-link": "auf Github",
+	"statistics-link": "Statistiken",
+	"issues": "Bitte melde Fehler unter dem Projekt $1 auf Phabricator.",
+	"issue-button": "Bug-Meldung erstellen",
+	"export-book": "Buch exportieren",
+	"lang-field-label": "Sprachcode:",
+	"title-field-label": "Titel:",
+	"title-field-help": "Titel der Hauptseite des Buches.",
+	"format-field-label": "Dateiformat:",
+	"format-epub-3": "EPUB 3 (für die meisten E-Book-Reader)",
+	"format-epub-2": "EPUB 2 (veralted, kann für einige sehr alte E-Book-Reader nüzlich sein)",
+	"format-htmlz": "HTML",
+	"format-mobi": "MOBI (für Kindles)",
+	"format-pdf-a4": "PDF - Größe A4",
+	"format-pdf-a5": "PDF - Größe A5",
+	"format-pdf-a6": "PDF - Größe A6",
+	"format-pdf-letter": "PDF - US-amerikansische Größe Letter",
+	"format-rtf": "RTF",
+	"format-txt": "Nur Text",
+	"invalid-format": "„$1“ ist kein gültiges Format. Gültige Formate sind: $2.",
+	"font-field-label": "Schriftart:",
+	"no-font-option": "Keine (Standardeinstellung des Gerätes benutzen)",
+	"font-field-help": "Wähle aus $1 Schriftarten.",
+	"options-label": "Optionen:",
+	"images-field-label": "Füge keine Bilder ein",
+	"nocache-field-label": "Jegliches Caching umgehen (langsamer, aber nützlich für Debugging)",
+	"export-button": "Exportieren",
+	"cache-updated": "Der Cache für die folgende Sprache wurde erneuert: $1"
+}

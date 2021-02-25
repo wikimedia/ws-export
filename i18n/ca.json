@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Alan Mena",
+			"Mguix"
+		]
+	},
+	"footer-version": "Això és $1 versió $2.",
+	"commit-label": "Validació $1",
+	"statistics-link": "estadístiques",
+	"issue-button": "Crea assumpte",
+	"export-book": "Exportació un llibre",
+	"lang-field-label": "Codi d'idioma",
+	"title-field-label": "Títol:",
+	"format-field-label": "Format del fitxer:",
+	"format-htmlz": "HTML",
+	"format-pdf-letter": "PDF - mida de carta USA",
+	"format-rtf": "RTF",
+	"format-txt": "Text sense format",
+	"invalid-format": "\"$1\" no és un format vàlid. Els formats vàlids són: $2",
+	"font-field-label": "Tipus de lletra:",
+	"options-label": "Opcions:",
+	"images-field-label": "No inclou imatges",
+	"export-button": "Exporta"
+}

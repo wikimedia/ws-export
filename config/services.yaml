@@ -50,5 +50,9 @@ services:
             $epubCheckPath: '%env(string:EPUBCHECK_JAR)%'
         public: true
 
+    App\Util\Api:
+        arguments:
+            $cacheTtl: '%env(int:APP_CACHE_TTL)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

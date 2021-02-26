@@ -38,7 +38,7 @@ class BookProviderTest extends TestCase {
 		];
 		$this->mockHandler = new MockHandler( $responses );
 		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
-		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $client );
+		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $client, 0 );
 		$api->setLang( 'en' );
 		$this->bookProvider = new BookProvider( $api, [ 'categories' => false, 'credits' => true ] );
 	}

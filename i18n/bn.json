@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bodhisattwa",
 			"R4356th",
 			"Yahya",
 			"আফতাবুজ্জামান"
@@ -22,12 +23,19 @@
 	"title-field-label": "শিরোনাম:",
 	"title-field-help": "বইটির মূল পাতার শিরোনাম।",
 	"format-field-label": "ফাইলের বিন্যাস:",
+	"format-epub-3": "ইপাব ৩ (বেশিরভাগ পাঠকের জন্য)",
 	"format-htmlz": "এইচটিএমএল",
+	"format-mobi": "মোবি (কিন্ডলের জন্য)",
+	"format-pdf-a4": "পিডিএফ - এ৪ মাপ",
+	"format-pdf-a5": "পিডিএফ - এ৫ মাপ",
+	"format-pdf-a6": "পিডিএফ - এ৬ মাপ",
+	"format-rtf": "আরটিএফ",
 	"format-txt": "সাধারণ লেখা",
 	"invalid-format": "\"$1\" বৈধ বিন্যাস নয়। বৈধ বিন্যাসগুলি হল: $2",
 	"font-field-label": "ফন্ট:",
 	"font-field-help": "$1টি উপলভ্য ফন্ট থেকে চয়ন করুন। বাংলার জন্য নতো সান্স বাংলা চয়ন করতে পারেন।",
 	"options-label": "বিকল্প:",
+	"images-field-label": "ছবি অন্তর্ভুক্ত করবেন না",
 	"export-button": "রপ্তানি করুন",
 	"cache-updated": "যে ভাষার জন্য ক্যাশ পুনঃসতেজ করা হয়েছে: $1"
 }

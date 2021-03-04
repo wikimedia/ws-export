@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hmonroy"
+		]
+	},
+	"footer-version": "Esto es $1 versión $2.",
+	"version": "versión $1",
+	"source-link": "en Github",
+	"statistics-link": "estadísticas",
+	"issue-button": "Crea asunto",
+	"title-field-label": "Título:",
+	"title-field-help": "Título de la página principal del libro.",
+	"format-field-label": "Formato de expediente:",
+	"format-epub-3": "EPUB 3 (para la mayoría de ereaders)",
+	"format-htmlz": "HTML",
+	"format-mobi": "MOBI (para Kindles)",
+	"format-pdf-a4": "PDF - A4 medida",
+	"format-pdf-a5": "PDF - A5 medida",
+	"format-pdf-a6": "PDF - A6 medida",
+	"format-pdf-letter": "PDF - medida carta de los EE.UU.",
+	"format-rtf": "RTF",
+	"font-field-label": "Fuente:",
+	"options-label": "Opciones:",
+	"export-button": "Exportar"
+}

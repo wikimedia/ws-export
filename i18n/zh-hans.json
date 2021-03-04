@@ -1,12 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
+			"LNDDYL",
 			"Zhang8569"
 		]
 	},
 	"app-title": "WS导出",
 	"footer-version": "这是$1版本$2",
 	"version": "版本$1",
+	"docs-link": "在多语言维基文库",
 	"statistics-link": "统计信息",
 	"issues": "请在Phabricator上报道一个低于$1项目的错误",
 	"issue-button": "制造问题",

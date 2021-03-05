@@ -8,6 +8,9 @@
     "composer/spdx-licenses": {
         "version": "1.5.2"
     },
+    "composer/xdebug-handler": {
+        "version": "1.4.5"
+    },
     "dama/doctrine-test-bundle": {
         "version": "4.0",
         "recipe": {
@@ -99,6 +102,9 @@
     "egulias/email-validator": {
         "version": "2.1.22"
     },
+    "felixfbecker/advanced-json-rpc": {
+        "version": "v3.2.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.5.5"
     },
@@ -126,8 +132,14 @@
     "mediawiki/oauthclient": {
         "version": "1.1.0"
     },
+    "microsoft/tolerant-php-parser": {
+        "version": "v0.0.23"
+    },
     "monolog/monolog": {
         "version": "2.1.1"
+    },
+    "netresearch/jsonmapper": {
+        "version": "v2.1.0"
     },
     "nikic/php-parser": {
         "version": "v4.10.3"
@@ -135,8 +147,20 @@
     "ocramius/proxy-manager": {
         "version": "2.2.3"
     },
+    "phan/phan": {
+        "version": "4.0.3"
+    },
     "php": {
         "version": "7.3"
+    },
+    "phpdocumentor/reflection-common": {
+        "version": "2.2.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "5.2.2"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.4.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -155,6 +179,9 @@
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
+    },
+    "sabre/event": {
+        "version": "5.1.2"
     },
     "squizlabs/php_codesniffer": {
         "version": "3.0",
@@ -417,6 +444,9 @@
     },
     "twig/twig": {
         "version": "v3.0.5"
+    },
+    "webmozart/assert": {
+        "version": "1.9.1"
     },
     "wikimedia/html-formatter": {
         "version": "1.0.2"

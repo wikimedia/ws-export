@@ -9,8 +9,11 @@
 			<label for="lang" class="col-lg-2 control-label">{{ msg('lang-field-label') }}</label>
 
 			<div class="col-lg-10">
-				<input name="lang" id="lang" type="text" size="3" maxlength="20" required="required"
-					value="{{ lang }}" class="form-control input-mini"/>
+				<select name="lang" class="form-control" required id="lang">
+					{% for l,n in langs %}
+						<option value="{{ l }}" {% if l == lang %}selected{% endif %}>{{ msg('lang-field-value', [n, l]) }}</option>
+					{% endfor %}
+				</select>
 				<span class="help-block">{{ msg( 'lang-field-help' ) }}</span>
 			</div>
 		</div>

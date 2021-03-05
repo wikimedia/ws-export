@@ -67,7 +67,7 @@ class Api {
 			return;
 		}
 		$this->lang = $lang;
-		if ( $this->lang == 'www' || $this->lang == '' ) {
+		if ( $lang === 'mul' || $this->lang === 'www' || $this->lang === '' ) {
 			$this->domainName = 'wikisource.org';
 			$this->lang = '';
 		} elseif ( $this->lang == 'wl' || $this->lang == 'wikilivres' ) {

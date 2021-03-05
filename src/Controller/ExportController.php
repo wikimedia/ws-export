@@ -9,6 +9,7 @@ use App\GeneratorSelector;
 use App\Refresh;
 use App\Util\Api;
 use App\Util\Util;
+use App\Wikidata;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -16,7 +17,6 @@ use GuzzleHttp\Exception\RequestException;
 use Krinkle\Intuition\Intuition;
 use Locale;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,12 +46,19 @@ class ExportController extends AbstractController {
 	/** @var Intuition */
 	private $intuition;
 
-	public function __construct( EntityManagerInterface $entityManager, bool $enableStats, bool $enableCache, Stopwatch $stopwatch, Intuition $intuition ) {
+	/** @var Wikidata */
+	private $wikidata;
+
+	public function __construct(
+		EntityManagerInterface $entityManager, bool $enableStats, bool $enableCache, Stopwatch $stopwatch, Intuition $intuition,
+		Wikidata $wikidata
+	) {
 		$this->entityManager = $entityManager;
 		$this->enableStats = $enableStats;
 		$this->enableCache = $enableCache;
 		$this->stopwatch = $stopwatch;
 		$this->intuition = $intuition;
+		$this->wikidata = $wikidata;
 	}
 
 	/**
@@ -75,7 +82,6 @@ class ExportController extends AbstractController {
 	public function home(
 		Request $request,
 		Api $api,
-		LoggerInterface $logger,
 		FontProvider $fontProvider,
 		GeneratorSelector $generatorSelector
 	) {
@@ -104,7 +110,8 @@ class ExportController extends AbstractController {
 			'formats' => GeneratorSelector::getValidFormats(),
 			'format' => $this->getFormat( $request ),
 			'title' => $this->getTitle( $request ),
-			'lang' => $api->getLang(),
+			'langs' => $this->getLangs( $request ),
+			'lang' => $this->getLang( $request ),
 			'images' => $images,
 			'nocache' => $nocache,
 			'enableCache' => $this->enableCache,
@@ -184,6 +191,18 @@ class ExportController extends AbstractController {
 	}
 
 	/**
+	 * @return string[]
+	 */
+	private function getLangs( Request $request ): array {
+		$langs = $this->wikidata->getWikisourceLangs( $this->intuition->getLang() );
+		$lang = $this->getLang( $request );
+		if ( !isset( $langs[ $lang ] ) ) {
+			$langs[ $lang ] = $lang;
+		}
+		return $langs;
+	}
+
+	/**
 	 * Get the format from the request, defaulting to 'epub-3' if nothing is provided.
 	 */
 	private function getFormat( Request $request ): string {
@@ -237,7 +256,8 @@ class ExportController extends AbstractController {
 			'formats' => GeneratorSelector::getValidFormats(),
 			'format' => $this->getFormat( $request ),
 			'title' => $this->getTitle( $request ),
-			'lang' => $api->getLang(),
+			'langs' => $this->getLangs( $request ),
+			'lang' => $this->getLang( $request ),
 			'images' => true,
 			'messages' => [
 				'danger' => [ $message ],

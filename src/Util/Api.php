@@ -70,7 +70,7 @@ class Api {
 		if ( $lang === 'mul' || $this->lang === 'www' || $this->lang === '' ) {
 			$this->domainName = 'wikisource.org';
 			$this->lang = '';
-		} elseif ( $this->lang == 'wl' || $this->lang == 'wikilivres' ) {
+		} elseif ( $this->lang === 'wl' || $this->lang === 'wikilivres' ) {
 			$this->domainName = 'wikilivres.org';
 			$this->lang = '';
 		} elseif ( $this->lang === 'beta' ) {

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"YaronSh"
 		]
 	},
@@ -14,7 +15,7 @@
 	"source-link": "ב־Github",
 	"statistics-link": "סטטיסטיקה",
 	"export-book": "לייצא ספר",
-	"lang-field-label": "קוד שפה:",
+	"lang-field-label": "ויקיטקסט:",
 	"title-field-label": "כותרת:",
 	"title-field-help": "כותרת העמוד הראשי של הספר.",
 	"format-field-label": "סוג קובץ:",

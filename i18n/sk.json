@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jaroslav.micek"
+			"Jaroslav.micek",
+			"Yardom78"
 		]
 	},
 	"app-title": "WS Export",
@@ -19,8 +20,9 @@
 	"issues": "Prosím nahláste chybu $1",
 	"issue-button": "Vytvoriť report",
 	"export-book": "Exportovať knihu",
-	"lang-field-label": "Kód jazyka:",
-	"lang-field-help": "Kód jazyka na Wikisource ako napríklad \"en\" alebo \"fr\".",
+	"lang-field-label": "Wikizdroj:",
+	"lang-field-value": "$1 ($2)",
+	"lang-field-help": "Wikizdroj z ktorého chcete exportovať knihu.",
 	"title-field-label": "Názov:",
 	"title-field-help": "Názov domovskej stránky knihy.",
 	"format-field-label": "Formát súboru:",

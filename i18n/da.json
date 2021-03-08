@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Peter Alberti"
+			"Peter Alberti",
+			"Saederup92"
 		]
 	},
 	"app-title": "WS-Eksport",
@@ -11,7 +12,7 @@
 	"statistics": "En hvis $1 er også tilgængelig.",
 	"statistics-link": "statistik",
 	"export-book": "Eksporter en bog",
-	"lang-field-label": "Sprogkode:",
+	"lang-field-label": "Wikisource:",
 	"lang-field-help": "Wikisource-sprogkode eller -underdomæne, som f. eks. \"da\" eller \"en\".",
 	"title-field-label": "Titel:",
 	"title-field-help": "Titlen på bogens forside.",

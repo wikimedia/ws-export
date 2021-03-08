@@ -9,6 +9,8 @@
 	"version": "versione $1",
 	"statistics-link": "statistiche",
 	"export-book": "Esporta un libro",
+	"lang-field-label": "Wikisource:",
+	"lang-field-help": "Wikisource da cui esportare il libro.",
 	"title-field-label": "Titolo:",
 	"format-field-label": "Formato file:",
 	"format-pdf-a5": "PDF - Formato A5",

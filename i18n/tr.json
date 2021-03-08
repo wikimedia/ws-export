@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Joseph"
+			"Joseph",
+			"SaldırganSincap"
 		]
 	},
 	"app-title": "WS Dışa Aktarım",
@@ -19,8 +20,8 @@
 	"issues": "Lütfen sorunları Pabricator'de $1 projesi altında raporlayın.",
 	"issue-button": "Sorun oluştur",
 	"export-book": "Bir kitabı dışa aktar",
-	"lang-field-label": "Dil kodu:",
-	"lang-field-help": "Vikikaynak dil kodu ya da alt alanı, 'en' ya da 'fr' gibi.",
+	"lang-field-label": "Vikikaynak:",
+	"lang-field-help": "Kitabın dışa aktarılacağı Vikikaynak.",
 	"title-field-label": "Başlık:",
 	"title-field-help": "Kitabın ana sayfasının başlığı.",
 	"format-field-label": "Dosya biçimi:",

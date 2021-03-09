@@ -12,7 +12,6 @@ use App\Util\Util;
 use App\Wikidata;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Krinkle\Intuition\Intuition;
 use Locale;
@@ -164,7 +163,7 @@ class ExportController extends AbstractController {
 	 *
 	 * @param Request $request The current request.
 	 * @param string $lang A language code.
-	 * @return string
+	 * @return string|null
 	 */
 	private function getFont( Request $request, $lang, FontProvider $fontProvider ): ?string {
 		// Default font for non-latin languages.
@@ -234,8 +233,10 @@ class ExportController extends AbstractController {
 	/**
 	 * Error page handler, to always show the export form with any HTTP error message.
 	 *
+	 * @param Request $request
+	 * @param Throwable $exception
 	 * @param Api $api
-	 * @param Exception $exception
+	 * @param FontProvider $fontProvider
 	 * @return Response
 	 */
 	public function error( Request $request, Throwable $exception, Api $api, FontProvider $fontProvider ) {

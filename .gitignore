@@ -1,7 +1,7 @@
 temp/*
 !temp/.gitkeep
 composer.phar
-config.php
+/config.php
 *.sqlite
 docker/.env
 docker-compose.override.yml

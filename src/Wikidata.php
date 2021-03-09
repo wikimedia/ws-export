@@ -30,7 +30,7 @@ class Wikidata {
 	/**
 	 * Get names of all Wikisources.
 	 * @param string $lang The language to (try to) use for the Wikisource names.
-	 * @return string[] Key is subdomain, value is the localized Wikisource name.
+	 * @return array<string> Key is subdomain, value is the localized Wikisource name.
 	 */
 	public function getWikisourceLangs( string $lang ): array {
 		return $this->cache->get( 'wikidata_wikisources_' . $lang, function ( CacheItemInterface $cacheItem ) use ( $lang ) {
@@ -64,7 +64,7 @@ class Wikidata {
 	/**
 	 * Get the results of this query.
 	 * @param string $query The Sparql query to execute.
-	 * @return string[] Array of results keyed by the names given in the Sparql query.
+	 * @return array<string,array<string,string>> Array of results keyed by the names given in the Sparql query.
 	 */
 	public function fetch( string $query ): array {
 		$out = [];
@@ -91,7 +91,7 @@ class Wikidata {
 
 	/**
 	 * Restructure the XML that comes back from the Wikidata Query Service
-	 * @return array
+	 * @return array<string,string>
 	 */
 	protected function getBindings( DOMElement $resultNode ): array {
 		$out = [];

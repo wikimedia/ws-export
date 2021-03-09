@@ -5,7 +5,7 @@ namespace App;
 use DateInterval;
 use DOMDocument;
 use DOMElement;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -18,9 +18,13 @@ class Wikidata {
 	/** @var LoggerInterface */
 	private $logger;
 
-	public function __construct( CacheInterface $cache, LoggerInterface $logger ) {
+	/** @var ClientInterface */
+	private $client;
+
+	public function __construct( CacheInterface $cache, LoggerInterface $logger, ClientInterface $client ) {
 		$this->cache = $cache;
 		$this->logger = $logger;
+		$this->client = $client;
 	}
 
 	/**
@@ -62,7 +66,7 @@ class Wikidata {
 	 * @param string $query The Sparql query to execute.
 	 * @return string[] Array of results keyed by the names given in the Sparql query.
 	 */
-	public function fetch( string $query ) {
+	public function fetch( string $query ): array {
 		$out = [];
 		$result = $this->getXml( $query );
 		foreach ( $result->getElementsByTagName( 'result' ) as $res ) {
@@ -76,10 +80,9 @@ class Wikidata {
 	 * @param string $query The Sparql query to execute.
 	 * @return DOMDocument
 	 */
-	protected function getXml( $query ) {
+	protected function getXml( string $query ): DOMDocument {
 		$url = "https://query.wikidata.org/bigdata/namespace/wdq/sparql?query=" . urlencode( $query );
-		$client = new Client();
-		$response = $client->request( 'GET', $url );
+		$response = $this->client->request( 'GET', $url );
 		$dom = new DOMDocument( '1.0', 'UTF-8' );
 		$xml = $response->getBody()->getContents();
 		$dom->loadXML( $xml );
@@ -90,7 +93,7 @@ class Wikidata {
 	 * Restructure the XML that comes back from the Wikidata Query Service
 	 * @return array
 	 */
-	protected function getBindings( DOMElement $resultNode ) {
+	protected function getBindings( DOMElement $resultNode ): array {
 		$out = [];
 		/** @var DOMElement $binding */
 		foreach ( $resultNode->getElementsByTagName( 'binding' ) as $binding ) {

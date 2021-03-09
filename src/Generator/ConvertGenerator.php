@@ -86,16 +86,23 @@ class ConvertGenerator implements FormatGenerator {
 	/** @var Api */
 	private $api;
 
+	/** @var int Command timeout in seconds. */
+	private $timeout;
+
+	public function __construct( FontProvider $fontProvider, Api $api, int $timeout ) {
+		$this->fontProvider = $fontProvider;
+		$this->api = $api;
+		$this->timeout = $timeout;
+	}
+
 	/**
 	 * @param string $format
 	 */
-	public function __construct( $format, FontProvider $fontProvider, Api $api ) {
+	public function setFormat( string $format ): void {
 		if ( !array_key_exists( $format, self::$CONFIG ) ) {
 			throw new InvalidArgumentException( 'Invalid format: ' . $format );
 		}
 		$this->format = $format;
-		$this->fontProvider = $fontProvider;
-		$this->api = $api;
 	}
 
 	/**
@@ -142,14 +149,12 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function convert( $epubFileName, $outputFileName ) {
-		global $wsexportConfig;
-
 		$command = array_merge(
 			[ $this->getEbookConvertCommand(), $epubFileName, $outputFileName ],
 			explode( ' ', self::$CONFIG[$this->format]['parameters'] )
 		);
 		$process = new Process( $command );
-		$process->setTimeout( $wsexportConfig['exec-timeout'] ?? 120 );
+		$process->setTimeout( $this->timeout ?? 120 );
 		$process->mustRun();
 	}
 

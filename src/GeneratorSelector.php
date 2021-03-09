@@ -40,9 +40,13 @@ class GeneratorSelector {
 	/** @var Api */
 	private $api;
 
-	public function __construct( FontProvider $fontProvider, Api $api ) {
+	/** @var ConvertGenerator */
+	private $convertGenerator;
+
+	public function __construct( FontProvider $fontProvider, Api $api, ConvertGenerator $convertGenerator ) {
 		$this->fontProvider = $fontProvider;
 		$this->api = $api;
+		$this->convertGenerator = $convertGenerator;
 	}
 
 	/**
@@ -67,7 +71,8 @@ class GeneratorSelector {
 		if ( $format === 'epub-3' ) {
 			return new EpubGenerator( $this->fontProvider, $this->api );
 		} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
-			return new ConvertGenerator( $format, $this->fontProvider, $this->api );
+			$this->convertGenerator->setFormat( $format );
+			return $this->convertGenerator;
 		} elseif ( $format === 'atom' ) {
 			return new AtomGenerator();
 		} else {

@@ -18,6 +18,5 @@ if ( !is_array( $wsexportConfig ) ) {
 	$container = $kernelTmp->getContainer();
 	$wsexportConfig = [
 		'tempPath' => $container->getParameter( 'app.tempPath' ) ?? dirname( __DIR__ ) . '/var/',
-		'exec-timeout' => $container->getParameter( 'app.execTimeout' ),
 	];
 }

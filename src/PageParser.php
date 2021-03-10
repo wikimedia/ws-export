@@ -114,7 +114,7 @@ class PageParser {
 	public function getFullChaptersList( $title, $pageList, $namespaces ) {
 		$chapters = $this->getChaptersList( $pageList, $namespaces );
 		if ( empty( $chapters ) ) {
-			$list = $this->xPath->query( '//a[contains(@href,"' . Util::wfUrlencode( $title ) . '") and
+			$list = $this->xPath->query( '//a[contains(@href,"/' . Util::wfUrlencode( $title ) . '/") and
 				not(
 					contains(@class,"new") or
 					contains(@class,"extiw") or
@@ -301,11 +301,17 @@ class PageParser {
 	 * This is to ensure maximum compatibility with a wide range of devices.
 	 */
 	protected function cleanIds(): void {
-		// Get all nodes with IDs.
-		$list = $this->xPath->query( '//*[@id]' );
+		// Get all nodes with IDs, and all anchors.
+		$idList = $this->xPath->query( '//*[@id]' );
+		$anchorList = $this->xPath->query( '//a[@href]' );
 		/** @var DOMElement $node */
-		foreach ( $list as $node ) {
+		foreach ( $idList as $node ) {
 			$oldId = $node->getAttribute( 'id' );
+			// Remove Parsoid-style IDs. This regex is from wikimedia/parsoid/src/Html2Wt/DOMHandlers/SpanHandler.php
+			if ( preg_match( '/^mw[\w-]{2,}$/D', $oldId ) ) {
+				$node->removeAttribute( 'id' );
+				continue;
+			}
 			$id = $oldId;
 			// Check for duplicates and fix them by appending a count.
 			if ( array_search( $id, self::$ids ) !== false ) {
@@ -323,16 +329,16 @@ class PageParser {
 			if ( $id !== $oldId ) {
 				$node->setAttribute( 'id', $id );
 				// Also find anything (in the current doc only) that points to the old ID, and update it.
-				$oldIdLength = strlen( $oldId );
 				$oldFragment = "#$oldId";
-				// All hrefs that end in the old ID.
-				$hrefList = $this->xPath->query( "//a[substring(@href, string-length(@href)-$oldIdLength) = '$oldFragment']" );
-				/** @var DOMElement $node */
-				if ( $hrefList ) {
-					foreach ( $hrefList as $hrefNode ) {
-						$newHref = str_replace( $oldFragment, "#$id", $hrefNode->getAttribute( 'href' ) );
-						$hrefNode->setAttribute( 'href', $newHref );
+				/** @var DOMElement $anchorNode */
+				foreach ( $anchorList as $anchorNode ) {
+					$aHref = $anchorNode->getAttribute( 'href' );
+					if ( substr( $aHref, -strlen( $oldFragment ) ) !== $oldFragment ) {
+						// Ignore links that don't end in the old fragment.
+						continue;
 					}
+					$newHref = str_replace( $oldFragment, "#$id", $aHref );
+					$anchorNode->setAttribute( 'href', $newHref );
 				}
 			}
 			self::$ids[$id] = $oldId;

@@ -5,7 +5,6 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.tempPath: '%env(default::APP_TEMP_PATH)%'
-    app.execTimeout: '%env(default::int:APP_TIMEOUT)%'
 
 services:
     # default configuration for services in *this* file
@@ -57,6 +56,10 @@ services:
     App\Util\Api:
         arguments:
             $cacheTtl: '%env(int:APP_CACHE_TTL)%'
+
+    App\Generator\ConvertGenerator:
+        arguments:
+            $timeout: '%env(default::int:APP_TIMEOUT)%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

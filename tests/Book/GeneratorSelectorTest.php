@@ -30,7 +30,8 @@ class GeneratorSelectorTest extends KernelTestCase {
 		$this->fontProvider = new FontProvider( new ArrayAdapter() );
 		self::bootKernel();
 		$this->api = self::$container->get( Api::class );
-		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api );
+		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, 10 );
+		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator );
 	}
 
 	public function testGetUnknownGeneratorRaisesException() {

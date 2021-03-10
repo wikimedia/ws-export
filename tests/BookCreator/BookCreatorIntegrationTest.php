@@ -5,6 +5,7 @@ namespace App\Tests\BookCreator;
 use App\BookCreator;
 use App\EpubCheck\EpubCheck;
 use App\FontProvider;
+use App\Generator\ConvertGenerator;
 use App\GeneratorSelector;
 use App\Util\Api;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -32,7 +33,8 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 		self::bootKernel();
 		$this->fontProvider = new FontProvider( new ArrayAdapter() );
 		$this->api = self::$container->get( Api::class );
-		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api );
+		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, 10 );
+		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator );
 		$this->epubCheck = self::$container->get( EpubCheck::class );
 	}
 

@@ -2,11 +2,11 @@
 
 namespace App;
 
+use App\Repository\CreditRepository;
 use App\Util\Api;
 use App\Util\Util;
 use DOMDocument;
 use GuzzleHttp\Pool;
-use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response;
 use Iterator;
 
@@ -18,15 +18,16 @@ class BookProvider {
 	protected $options = [
 		'images' => true, 'fonts' => false, 'categories' => true, 'credits' => true
 	];
-	private $creditUrl = 'https://phetools.toolforge.org/credits.py';
+	private $creditRepo;
 
 	/**
 	 * @param $api Api
 	 * @param bool[] $options
 	 */
-	public function __construct( Api $api, array $options ) {
+	public function __construct( Api $api, array $options, CreditRepository $creditRepo ) {
 		$this->api = $api;
 		$this->options = array_merge( $this->options, $options );
+		$this->creditRepo = $creditRepo;
 	}
 
 	/**
@@ -114,7 +115,9 @@ class BookProvider {
 			$book->categories = $this->getCategories( $metadataSrc );
 		}
 		$pageTitles = $parser->getPagesList();
-		$namespaces = $this->api->getNamespaces();
+		$namespacesInfo = $this->api->getNamespaces();
+		$namespaces = array_keys( $namespacesInfo );
+
 		if ( !$isMetadata ) {
 			if ( !$parser->metadataIsSet( 'ws-noinclude' ) ) {
 				$book->content = $parser->getContent( true );
@@ -159,14 +162,10 @@ class BookProvider {
 			$book->chapters = $chapters;
 
 			if ( $this->options['credits'] ) {
-				$creditPromises = $this->startCredits( $book, $chapterTitles, $pageTitles, $pictures );
+				$book->credits = $this->getBookCredits( $book, $namespacesInfo, $chapterTitles, $pageTitles, $pictures );
 			}
 
 			$pictures = $this->getPicturesData( $pictures );
-
-			if ( !empty( $creditPromises ) ) {
-				$book->credits = $this->finishCredit( $creditPromises );
-			}
 		}
 		$book->pictures = $pictures;
 
@@ -309,10 +308,10 @@ class BookProvider {
 	 * @param Page[] $chapters
 	 * @param string[] $otherPages
 	 * @param Picture[] $pictures
-	 * @return PromiseInterface[]
+	 * @return array
 	 */
-	protected function startCredits( Book $book, array $chapters, array $otherPages, array $pictures ) {
-		$promises = [];
+	protected function getBookCredits( Book $book, array $namespacesInfo, array $chapters, array $otherPages, array $pictures ) {
+		$namespaces = $this->api->getNamespaces();
 
 		$pages = [ $book->title ];
 		foreach ( $chapters as $id => $chapter ) {
@@ -321,16 +320,9 @@ class BookProvider {
 		if ( $book->scan != '' ) {
 			$pages[] = 'Index:' . $book->scan;
 		}
+
 		$pages = array_unique( array_merge( $pages, $otherPages ) );
-		foreach ( $this->splitArrayByLength( $pages, 3000 ) as $batch ) {
-			$params = [
-				'lang' => $book->lang, 'format' => 'json', 'page' => implode( '|', $batch )
-			];
-			$promises[] = $this->api->getAsync(
-				$this->creditUrl,
-				[ 'query' => $params ]
-			);
-		}
+		$pageCredits = $this->creditRepo->getPageCredits( $book->lang, $namespaces, $pages );
 
 		$imagesSet = [];
 		foreach ( $pictures as $id => $picture ) {
@@ -338,53 +330,33 @@ class BookProvider {
 				$imagesSet[$picture->name] = true;
 			}
 		}
+		$imageCredits = [];
 		if ( !empty( $imagesSet ) ) {
 			$images = array_keys( $imagesSet );
-			foreach ( $this->splitArrayByLength( $images, 3000 ) as $batch ) {
-				$params = [
-					'lang' => $book->lang,
-					'format' => 'json',
-					'image' => implode( '|', $batch ),
-				];
-				$promises[] = $this->api->getAsync( $this->creditUrl, [ 'query' => $params ] );
-			}
+			$imageCredits = $this->creditRepo->getImageCredits( $book->lang, $images );
 		}
 
-		return $promises;
-	}
+		$allCredits = array_merge( $pageCredits, $imageCredits );
+		$credits = [];
 
-	/**
-	 * @param PromiseInterface[] $promises
-	 * @return array
-	 */
-	public function finishCredit( $promises ) {
-		$credit = [];
-		foreach ( $promises as $promise ) {
-			$result = json_decode( $promise->wait(), true );
-			foreach ( $result as $name => $values ) {
-				if ( !in_array( $name, $credit ) ) {
-					$credit[$name] = [ 'count' => 0, 'flags' => [] ];
-				}
-				$credit[$name]['count'] += $values['count'];
-				foreach ( $values['flags'] as $id => $flag ) {
-					if ( !in_array( $flag, $credit[$name]['flags'] ) ) {
-						$credit[$name]['flags'][] = $flag;
-					}
-				}
+		foreach ( $allCredits as $values ) {
+			$name = $values[ 'actor_name' ];
+			if ( !in_array( $name, $credits ) ) {
+				$credits[$name] = [ 'count' => 0, 'bot' => [] ];
 			}
+			if ( isset( $values['count'] ) ) {
+				$credits[$name]['count'] += $values['count'];
+			} else {
+				$credits[$name]['count'] += 1;
+			}
+			$credits[$name]['bot'] = $values['bot'];
 		}
 
-		uasort( $credit, function ( $a, $b ) {
-			$f1 = in_array( 'bot', $a['flags'] );
-			$f2 = in_array( 'bot', $b['flags'] );
-			if ( $f1 !== $f2 ) {
-				return $f1 - $f2;
-			}
-
+		uasort( $credits, function ( $a, $b ) {
 			return $b['count'] - $a['count'];
 		} );
 
-		return $credit;
+		return $credits;
 	}
 
 	/**
@@ -409,7 +381,8 @@ class BookProvider {
 	}
 
 	private function removeNamespacesFromTitle( $title ) {
-		foreach ( $this->api->getNamespaces() as $namespace ) {
+		$namespaces = array_keys( $this->api->getNamespaces() );
+		foreach ( $namespaces as $namespace ) {
 			if ( strpos( $title, $namespace . ':' ) === 0 ) {
 				return substr( $title, strlen( $namespace ) + 1 );
 			}

@@ -7,6 +7,7 @@ use App\Entity\GeneratedBook;
 use App\FontProvider;
 use App\GeneratorSelector;
 use App\Refresh;
+use App\Repository\CreditRepository;
 use App\Util\Api;
 use App\Util\Util;
 use App\Wikidata;
@@ -82,7 +83,8 @@ class ExportController extends AbstractController {
 		Request $request,
 		Api $api,
 		FontProvider $fontProvider,
-		GeneratorSelector $generatorSelector
+		GeneratorSelector $generatorSelector,
+		CreditRepository $creditRepo
 	) {
 		// Handle ?refresh=1 for backwards compatibility.
 		if ( $request->get( 'refresh', false ) !== false ) {
@@ -98,7 +100,7 @@ class ExportController extends AbstractController {
 
 		// If the book title is specified, export it now.
 		if ( $request->get( 'page' ) ) {
-			return $this->export( $request, $api, $fontProvider, $generatorSelector );
+			return $this->export( $request, $api, $fontProvider, $generatorSelector, $creditRepo );
 		}
 
 		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
@@ -121,7 +123,8 @@ class ExportController extends AbstractController {
 		Request $request,
 		Api $api,
 		FontProvider $fontProvider,
-		GeneratorSelector $generatorSelector
+		GeneratorSelector $generatorSelector,
+		CreditRepository $creditRepo
 	) {
 		// Get params.
 		$page = $request->get( 'page' );
@@ -137,7 +140,7 @@ class ExportController extends AbstractController {
 
 		// Generate ebook.
 		$options = [ 'images' => $images, 'fonts' => $font ];
-		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector );
+		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector, $creditRepo );
 		$creator->create( $page );
 
 		// Send file.

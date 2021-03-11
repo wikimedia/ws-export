@@ -3,6 +3,7 @@
 namespace App\Tests\Http;
 
 use App\Entity\GeneratedBook;
+use App\Repository\CreditRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -10,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * @group integration
  */
 class BookTest extends WebTestCase {
-
 	public function bookProvider() {
 		return [
 			[ 'The_Kiss_and_its_History', 'en' ],
@@ -29,7 +29,14 @@ class BookTest extends WebTestCase {
 	 * @dataProvider bookProvider
 	 */
 	public function testGetPage( $title, $language ) {
+		$creditRepository = $this->getMockBuilder( CreditRepository::class )->disableOriginalConstructor()->getMock();
+		$creditRepository->method( 'getPageCredits' )
+			->will( $this->returnValue( [] ) );
+		$creditRepository->method( 'getImageCredits' )
+			->will( $this->returnValue( [] ) );
+
 		$client = static::createClient();
+		$client->getContainer()->set( CreditRepository::class, $creditRepository );
 		$client->request( 'GET', '/book.php', [ 'page' => $title, 'lang' => $language ] );
 		$headers = $client->getResponse()->headers;
 		$this->assertSame( 'File Transfer', $headers->get( 'Content-Description' ) );

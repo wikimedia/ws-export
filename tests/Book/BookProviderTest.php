@@ -3,6 +3,7 @@
 namespace App\Tests\Book;
 
 use App\BookProvider;
+use App\Repository\CreditRepository;
 use App\Util\Api;
 use DOMDocument;
 use GuzzleHttp\Client;
@@ -21,16 +22,9 @@ class BookProviderTest extends TestCase {
 	private $mockHandler;
 
 	public function setUp(): void {
-		$creditResponse = [
-			'User B' => [ 'count' => 1, 'flags' => [ 'editor', 'reviewer' ] ],
-			'Bot User' => [ 'count' => 5, 'flags' => [ 'bot' ] ],
-			'User A' => [ 'count' => 20, 'flags' => [ 'autoreview', 'editor', 'reviewer', 'sysop' ] ]
-		];
 		$responses = [
 			// Namespaces.
-			new Response( 200, [], json_encode( [ 'query' => [ 'namespaces' => [ [ '*' => 'test' ] ], 'namespacealiases' => [] ] ] ) ),
-			// Credits.
-			new Response( 200, [ 'Content-Type' => 'application/json' ], json_encode( $creditResponse ) ),
+			new Response( 200, [], json_encode( [ 'query' => [ 'namespaces' => [ [ 'id' => 5, '*' => 'test' ] ], 'namespacealiases' => [] ] ] ) ),
 			// The rest of these responses are required for mocking the Refresh process ('about' page, etc.).
 			new Response( 200, [], '' ),
 			new Response( 404, [], '' ), // mock returning 404 in first api call in Refresh::getAboutXhtmlWikisource
@@ -40,7 +34,9 @@ class BookProviderTest extends TestCase {
 		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
 		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $client, 0 );
 		$api->setLang( 'en' );
-		$this->bookProvider = new BookProvider( $api, [ 'categories' => false, 'credits' => true ] );
+		$creditRepository = $this->getMockBuilder( CreditRepository::class )->disableOriginalConstructor()->getMock();
+
+		$this->bookProvider = new BookProvider( $api, [ 'categories' => false, 'credits' => true ], $creditRepository );
 	}
 
 	public function testGetMetadata() {
@@ -55,6 +51,7 @@ class BookProviderTest extends TestCase {
 		$this->assertSame( '', $book->volume );
 		$this->assertSame( '', $book->scan );
 		$this->assertSame( '', $book->cover );
+		$this->assertEquals( [], array_keys( $book->credits ) );
 		$this->assertSame( '', $book->type );
 		$this->assertSame( '', $book->translator );
 		$this->assertSame( '', $book->illustrator );
@@ -65,16 +62,7 @@ class BookProviderTest extends TestCase {
 
 	public function testGetCreditsReturnsUsersSortedByEditCountAndsBotsLast() {
 		$book = $this->bookProvider->getMetadata( 'test', false, new DOMDocument() );
-		// sorted by edit count, bots last
-		$this->assertEquals( [ 'User A', 'User B', 'Bot User' ], array_keys( $book->credits ) );
-	}
-
-	public function testGetCreditsUsesCorrectToolServerURL() {
-		$this->bookProvider->getMetadata( 'test', false, new DOMDocument() );
-
-		$this->assertEquals(
-			'https://phetools.toolforge.org/credits.py?lang=en&format=json&page=test',
-			$this->mockHandler->getLastRequest()->getUri()->__toString() );
+		$this->assertEquals( [], array_keys( $book->credits ) );
 	}
 
 	private function parseDocument( $filename ) {

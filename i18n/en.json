@@ -37,6 +37,8 @@
 	"no-font-option": "None (use device default)",
 	"font-field-help": "Choose from $1 available fonts.",
 	"options-label": "Options:",
+	"credits-field-label": "Exclude editor credits (faster download)",
+	"credits-default-message": "[The list of contributors has been omitted as requested.]",
 	"images-field-label": "Do not include images",
 	"nocache-field-label": "Bypass all caching (slower but useful for debugging)",
 	"export-button": "Export",

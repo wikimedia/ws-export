@@ -19,7 +19,7 @@
 	"issues": "Por favor, relate problemas sob o projeto $1 no Pabricator.",
 	"issue-button": "Criar problema",
 	"export-book": "Exportar um livro",
-	"lang-field-label": "Código do idioma:",
+	"lang-field-label": "Wikisource:",
 	"lang-field-help": "Código de idioma do Wikisource ou subdomínio, como 'en' ou 'fr'.",
 	"title-field-label": "Título:",
 	"title-field-help": "Título da página principal do livro.",

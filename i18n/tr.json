@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Joseph",
+			"Mim.saitkilic",
 			"SaldırganSincap"
 		]
 	},
@@ -21,6 +22,7 @@
 	"issue-button": "Sorun oluştur",
 	"export-book": "Bir kitabı dışa aktar",
 	"lang-field-label": "Vikikaynak:",
+	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "Kitabın dışa aktarılacağı Vikikaynak.",
 	"title-field-label": "Başlık:",
 	"title-field-help": "Kitabın ana sayfasının başlığı.",

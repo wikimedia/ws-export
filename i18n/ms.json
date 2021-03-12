@@ -7,7 +7,7 @@
 	"version": "versi $1",
 	"statistics-link": "statistik",
 	"export-book": "Eksport buku",
-	"lang-field-label": "Kod bahasa:",
+	"lang-field-label": "Wikisumber:",
 	"title-field-label": "Tajuk:",
 	"format-field-label": "Format fail:",
 	"format-htmlz": "HTML",

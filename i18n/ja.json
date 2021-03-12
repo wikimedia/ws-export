@@ -2,11 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"A2y4",
-			"Likibp"
+			"Likibp",
+			"Omotecho"
 		]
 	},
 	"app-title": "WS Export",
-	"app-subtitle": "さまざまなファイル形式でWikisourcesから書籍を書き出します。",
+	"app-subtitle": "さまざまなファイル形式でウィキソースから書籍を書き出します。",
 	"footer-version": "これは$1バージョン$2です。",
 	"version": "バージョン$1",
 	"commit-label": "コミット：$1",
@@ -14,14 +15,15 @@
 	"license-link": "GPL v2以降",
 	"source-and-docs": "ソースコードは$1、いくつかのドキュメントは$2入手できます。",
 	"source-link": "Githubから",
-	"docs-link": "多言語版Wikisourceから",
+	"docs-link": "多言語版ウィキソースから",
 	"statistics": "いくつかの$1も提供しています。",
 	"statistics-link": "統計",
 	"issues": "Phabricatorの$1プロジェクトに、issuesを報告してください。",
 	"issue-button": "issueを作成",
 	"export-book": "書籍を書き出す",
-	"lang-field-label": "言語コード：",
-	"lang-field-help": "ウィキソースの言語コードまたはサブドメイン。例えば「en」や「fr」など。",
+	"lang-field-label": "ウィキソース：",
+	"lang-field-value": "$1 ($2)",
+	"lang-field-help": "書籍の書き出し元となるウィキソース。",
 	"title-field-label": "題名：",
 	"title-field-help": "書籍のメインページの題名。",
 	"format-field-label": "ファイル形式：",
@@ -43,5 +45,5 @@
 	"images-field-label": "画像を含めない",
 	"nocache-field-label": "すべてのキャッシュを無効にする（遅くなりますが、デバッグ時に便利です）",
 	"export-button": "書き出し",
-	"cache-updated": "次の言語の向けにキャッシュが更新されました：$1"
+	"cache-updated": "次の言語向けにキャッシュが更新されました：$1"
 }

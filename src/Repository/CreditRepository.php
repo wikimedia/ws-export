@@ -19,7 +19,7 @@ class CreditRepository {
 	 */
 	public function getDatabaseName( $domain, $family ) {
 		if ( $family === 'wikisource' ) {
-			if ( in_array( $domain, [ 'old', 'www', 'mul' ] ) ) {
+			if ( in_array( $domain, [ '', 'old', 'www', 'mul' ] ) ) {
 				$dbname = 'sourceswiki';
 			} elseif ( $domain === 'zh-min-nan' ) {
 				$dbname = 'zh_min_nanwikisource';

@@ -11,7 +11,6 @@ return [
     // # Issue statistics:
     // PhanUndeclaredMethod : 9 occurrences
     // PhanUnreferencedUseNormal : 7 occurrences
-    // PhanDeprecatedFunction : 3 occurrences
     // PhanTypeMismatchArgument : 3 occurrences
     // PhanTypeArraySuspiciousNullable : 2 occurrences
     // PhanTypeMismatchArgumentNullable : 2 occurrences
@@ -26,9 +25,8 @@ return [
 
     // Currently, file_suppressions and directory_suppressions are the only supported suppressions
     'file_suppressions' => [
-        'src/BookProvider.php' => ['PhanDeprecatedFunction', 'PhanTypeInvalidLeftOperandOfNumericOp', 'PhanTypeInvalidRightOperandOfNumericOp', 'PhanUndeclaredMethod'],
+        'src/BookProvider.php' => ['PhanTypeInvalidLeftOperandOfNumericOp', 'PhanTypeInvalidRightOperandOfNumericOp', 'PhanUndeclaredMethod'],
         'src/Cleaner/BookCleanerEpub.php' => ['PhanUnreferencedUseNormal'],
-        'src/Command/CheckCommand.php' => ['PhanTypeArraySuspiciousNullable'],
         'src/Controller/ExportController.php' => ['PhanUnreferencedUseNormal'],
         'src/Controller/StatisticsController.php' => ['PhanUnreferencedUseNormal'],
         'src/Entity/GeneratedBook.php' => ['PhanUnreferencedUseNormal'],
@@ -40,7 +38,7 @@ return [
         'src/OpdsBuilder.php' => ['PhanUndeclaredProperty'],
         'src/PageParser.php' => ['PhanUnreferencedUseNormal'],
         'src/Repository/GeneratedBookRepository.php' => ['PhanUndeclaredMethod'],
-        'src/Util/Api.php' => ['PhanDeprecatedFunction', 'PhanTypeMismatchProperty', 'PhanUndeclaredMethod'],
+        'src/Util/Api.php' => ['PhanTypeMismatchProperty', 'PhanUndeclaredMethod'],
         'src/Util/Util.php' => ['PhanUnreferencedUseNormal'],
     ],
     // 'directory_suppressions' => ['src/directory_name' => ['PhanIssueName1', 'PhanIssueName2']] can be manually added if needed.

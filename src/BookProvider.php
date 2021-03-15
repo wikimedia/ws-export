@@ -251,7 +251,7 @@ class BookProvider {
 	 */
 	public function getCategories( $title ) {
 		$categories = [];
-		$response = $this->api->query( [ 'titles' => $title, 'prop' => 'categories', 'clshow' => '!hidden' ] );
+		$response = $this->api->queryAsync( [ 'titles' => $title, 'prop' => 'categories', 'clshow' => '!hidden' ] )->wait();
 		foreach ( $response['query']['pages'] as $list ) {
 			if ( isset( $list['categories'] ) ) {
 				foreach ( $list['categories'] as $categorie ) {
@@ -274,7 +274,7 @@ class BookProvider {
 		$title = $id[0];
 		$picture = new Picture();
 		$picture->title = $cover;
-		$response = $this->api->query( [ 'titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'mime|url|canonicaltitle' ] );
+		$response = $this->api->queryAsync( [ 'titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'mime|url|canonicaltitle' ] )->wait();
 		$page = end( $response['query']['pages'] );
 		$picture->url = $page['imageinfo'][0]['url'];
 		$picture->mimetype = $page['imageinfo'][0]['mime'];

@@ -196,19 +196,6 @@ class Api {
 	}
 
 	/**
-	 * API query
-	 *
-	 * @deprecated Use Api::queryAsync
-	 *
-	 * @param array $params parameters sent to the api
-	 * @return array result of the api query
-	 * @throws HttpException
-	 */
-	public function query( $params ) {
-		return $this->queryAsync( $params )->wait();
-	}
-
-	/**
 	 * Disable caching.
 	 */
 	public function disableCache(): void {
@@ -262,7 +249,7 @@ class Api {
 		$data = [];
 		$continue = true;
 		do {
-			$temp = $this->query( $params );
+			$temp = $this->queryAsync( $params )->wait();
 			$data = array_merge_recursive( $data, $temp );
 
 			if ( array_key_exists( 'continue', $temp ) ) {

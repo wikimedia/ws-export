@@ -7,6 +7,7 @@ use App\GeneratorSelector;
 use App\Repository\CreditRepository;
 
 use App\Util\Api;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -130,6 +131,9 @@ class CheckCommand extends Command {
 		$process = new Process( [ 'epubcheck', $creator->getFilePath(), '--json', $jsonOutput ] );
 		$process->run();
 		$errors = json_decode( file_get_contents( $jsonOutput ), true );
+		if ( !isset( $errors['messages'] ) ) {
+			throw new Exception( 'Unable to get results of epubcheck.' );
+		}
 		$hasErrors = false;
 		foreach ( $errors['messages'] as $message ) {
 			if ( $message['severity'] === 'ERROR' ) {

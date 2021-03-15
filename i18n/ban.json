@@ -35,7 +35,7 @@
 	"format-pdf-letter": "PDF - ukuran surat AS",
 	"format-rtf": "RTF",
 	"format-txt": "Suratan polos",
-	"invalid-format": "\"$1\" nénten format sané sah. Format sané sah punika: $2",
+	"exception-invalid-format": "\"$1\" nénten format sané sah. Format sané sah punika: $2",
 	"font-field-label": "Aksara:",
 	"no-font-option": "Puyung (anggén perangkat baku)",
 	"font-field-help": "Pilih saking $1 aksara sané kasedia.",

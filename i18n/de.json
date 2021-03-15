@@ -35,7 +35,7 @@
 	"format-pdf-letter": "PDF - US-amerikansische Größe Letter",
 	"format-rtf": "RTF",
 	"format-txt": "Nur Text",
-	"invalid-format": "„$1“ ist kein gültiges Format. Gültige Formate sind: $2.",
+	"exception-invalid-format": "„$1“ ist kein gültiges Format. Gültige Formate sind: $2.",
 	"font-field-label": "Schriftart:",
 	"no-font-option": "Keine (Standardeinstellung des Gerätes benutzen)",
 	"font-field-help": "Wähle aus $1 Schriftarten.",

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Repository\GeneratedBookRepository;
 use DateTime;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 // phpcs:ignore
@@ -29,12 +28,7 @@ class StatisticsController extends AbstractController {
 		$month = $request->get( 'month', $now->format( 'm' ) );
 		$year = $request->get( 'year', $now->format( 'Y' ) );
 
-		try {
-			$stat = $generatedBookRepo->getTypeAndLangStats( $month, $year );
-		} catch ( Exception $e ) {
-			$this->addFlash( 'danger', 'Internal error: ' . $e->getMessage() );
-			$stat = [];
-		}
+		$stat = $generatedBookRepo->getTypeAndLangStats( $month, $year );
 
 		$val = [];
 		$total = [];

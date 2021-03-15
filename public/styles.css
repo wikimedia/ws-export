@@ -61,3 +61,25 @@ fieldset.options label {
 .submit {
 	margin: 25px 0 50px 0;
 }
+
+div.error {
+	display: flex;
+}
+
+div.error > .icon {
+	flex: 1;
+	font-size: 2em;
+}
+
+div.error > .icon .glyphicon {
+	top: 9px;
+}
+
+div.error > .message {
+	flex: 20;
+	padding-top: 0.4em;
+}
+
+div.error p {
+	margin: 0;
+}

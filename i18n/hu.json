@@ -31,7 +31,7 @@
 	"format-pdf-letter": "PDF - amerikai levélméret",
 	"format-rtf": "RTF",
 	"format-txt": "Egyszerű szöveg",
-	"invalid-format": "A(z) „$1” nem egy érvényes formátum. Az érvényes formátumok a következők: $2",
+	"exception-invalid-format": "A(z) „$1” nem egy érvényes formátum. Az érvényes formátumok a következők: $2",
 	"font-field-label": "Betűtípus:",
 	"no-font-option": "Nincs (az eszköz alapértelmezésének használata)",
 	"font-field-help": "Válassz $1 elérhető betűtípus közül.",

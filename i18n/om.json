@@ -35,7 +35,7 @@
 	"format-pdf-letter": "PDF - Hammamtaa qubee US",
 	"format-rtf": "RTF",
 	"format-txt": "Barquu",
-	"invalid-format": "\"$1\" bifunka fayyadu miti. Bifunki fayyadu: $2 dha.",
+	"exception-invalid-format": "\"$1\" bifunka fayyadu miti. Bifunki fayyadu: $2 dha.",
 	"font-field-label": "Hamgosa:",
 	"no-font-option": "Hinjiru (divaayisii fafmalee fayyadami)",
 	"font-field-help": "$1 keessaa hamgosa mul'ataa filadhu.",

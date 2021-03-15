@@ -37,7 +37,7 @@
 	"format-pdf-letter": "PDF - US 레터 크기",
 	"format-rtf": "RTF",
 	"format-txt": "일반 텍스트",
-	"invalid-format": "\"$1\"은(는) 유효한 포맷이 아닙니다. 유효한 포맷은 다음과 같습니다: $2",
+	"exception-invalid-format": "\"$1\"은(는) 유효한 포맷이 아닙니다. 유효한 포맷은 다음과 같습니다: $2",
 	"font-field-label": "글꼴:",
 	"no-font-option": "없음 (장치 기본값 사용)",
 	"font-field-help": "사용 가능한 $1개 글꼴에서 선택합니다.",

@@ -37,7 +37,7 @@
 	"format-pdf-letter": "PDF - US veľkosť písma",
 	"format-rtf": "RTF",
 	"format-txt": "Čistý text",
-	"invalid-format": "\"$1\" nie je platný formát. Platné formáty sú: $2",
+	"exception-invalid-format": "\"$1\" nie je platný formát. Platné formáty sú: $2",
 	"font-field-label": "Písmo:",
 	"no-font-option": "Žiadne (použiť predvolené nastavenie zariadenia)",
 	"font-field-help": "Možné dostupné písma pre výber: $1",

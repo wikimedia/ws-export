@@ -34,7 +34,7 @@
 	"format-pdf-letter": "PDF - Tamanho de carta dos EUA",
 	"format-rtf": "RTF",
 	"format-txt": "Texto simples",
-	"invalid-format": "\"$1\" não é um formato válido. Os formatos válidos são: $2",
+	"exception-invalid-format": "\"$1\" não é um formato válido. Os formatos válidos são: $2",
 	"font-field-label": "Fonte:",
 	"no-font-option": "Nenhum (usar o padrão do dispositivo)",
 	"font-field-help": "Escolha entre $1 tipos de fontes disponíveis.",

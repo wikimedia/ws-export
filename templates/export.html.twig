@@ -10,6 +10,37 @@
 	</a>
 </p>
 
+{% if exception %}
+	<div class="error alert alert-danger alert-dismissible">
+		<div class="icon">
+			<span class="glyphicon glyphicon-remove-circle"></span>
+		</div>
+		<div class="message">
+			<button type="button" class="close" data-dismiss="alert" title="{{ msg( 'alert-close' ) }}">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<p class="message-inner">
+				<strong>{{ msg( 'export-failed' ) }}</strong>
+				<span>{{ msg( exception.i18nMessage, exception.i18nParams ) }}</span>
+				<button id="learn-more-link" type="button" role="button" data-toggle="collapse" class="btn btn-link alert-link"
+						data-target="#learn-more-body" aria-expanded="false" aria-controls="learn-more-body">
+					{{ msg( 'learn-more' ) }}
+				</button>
+			</p>
+			<div id="learn-more-body" class="collapse">
+				<hr />
+				<p>{{ msg('error-fix') }}</p>
+				<ol>
+					<li>{{ msg('error-fix-again') }}</li>
+					<li>{{ msg('error-fix-epub') }}</li>
+					<li>{{ msg('error-fix-nocredits') }}</li>
+					<li>{{ msg('error-fix-noimages') }}</li>
+				</ol>
+			</div>
+		</div>
+	</div>
+{% endif %}
+
 <h2>{{ msg('export-book') }}</h2>
 <form method="get" action="{{ path('home') }}" role="form" class="form">
 

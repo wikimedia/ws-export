@@ -37,7 +37,7 @@
 	"format-pdf-letter": "PDF - USレターサイズ",
 	"format-rtf": "RTF",
 	"format-txt": "プレーンテキスト",
-	"invalid-format": "「$1」は有効なファイル形式ではありません。有効なファイル形式は次の通りです：$2",
+	"exception-invalid-format": "「$1」は有効なファイル形式ではありません。有効なファイル形式は次の通りです：$2",
 	"font-field-label": "フォント：",
 	"no-font-option": "なし（デバイスの規定のフォントを使用する）",
 	"font-field-help": "$1種類のフォントから選択できます。",

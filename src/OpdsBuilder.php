@@ -7,7 +7,7 @@ use App\Util\Api;
 use App\Util\Util;
 use DOMDocument;
 use DOMElement;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Exception;
 
 /**
  * @author Thomas Pellissier Tanon
@@ -46,6 +46,11 @@ class OpdsBuilder {
 		$this->exportBasePath = $exportBasePath;
 	}
 
+	/**
+	 * @param string $categoryTitle
+	 * @return bool|string
+	 * @throws Exception
+	 */
 	public function buildFromCategory( $categoryTitle ) {
 		$response = $this->api->completeQuery( [
 			'generator' => 'categorymembers',
@@ -55,7 +60,7 @@ class OpdsBuilder {
 			'gcmlimit' => '100',
 		] );
 		if ( !array_key_exists( 'query', $response ) ) {
-			throw new NotFoundHttpException( "Category not found: $categoryTitle" );
+			throw new Exception( "Category not found: $categoryTitle" );
 		}
 
 		$pages = $response['query']['pages'];

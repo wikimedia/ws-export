@@ -88,6 +88,8 @@ class CreditRepository {
 				GROUP BY actor_name
 				ORDER BY count DESC"
 			);
+		$connection->close();
+
 		return $results ? $results : [];
 	}
 
@@ -141,6 +143,8 @@ class CreditRepository {
 					)
 				  ) a"
 			);
+		$connection->close();
+
 		return $results ? $results : [];
 	}
 }

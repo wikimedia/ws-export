@@ -1,0 +1,3 @@
+webpack_encore:
+    # Cache the entrypoints.json (rebuild Symfony's cache when entrypoints.json changes)
+    cache: true

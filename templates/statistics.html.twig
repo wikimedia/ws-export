@@ -2,10 +2,13 @@
 
 {% block main %}
 
-<ol class="breadcrumb">
-	<li><a href="{{ path('home') }}">Home</a></li>
-	<li class="active">Statistics</li>
-</ol>
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Statistics</li>
+	</ol>
+</nav>
+
 <div class="row">
 	<aside class="col-md-3">
 		<h2>Recently Popular</h2>
@@ -58,18 +61,17 @@
 				</tr>
 			</tfoot>
 		</table>
-		<form class="form-inline" role="form">
-			<label>Change month:</label>
 
-			<div class="form-group">
-				<input name="month" id="month" type="number" placeholder="month" size="2" maxlength="2" min="1" max="12"
-					required="required" value="{{ month }}" class="form-control"/>
-			</div>
-			<div class="form-group">
-				<input name="year" id="year" type="number" placeholder="year" size="4" maxlength="4" min="2012"
-					required="required" value="{{ year }}" class="form-control"/>
-			</div>
-			<button class="btn" type="btn btn-default">Go</button>
+		<form class="form-inline">
+			<label class="m-1">Change month:</label>
+
+			<input name="month" id="month" type="number" placeholder="month" size="2" maxlength="2" min="1" max="12"
+				required="required" value="{{ month }}" class="form-control m-1" />
+
+			<input name="year" id="year" type="number" placeholder="year" size="4" maxlength="4" min="2012"
+				required="required" value="{{ year }}" class="form-control m-1" />
+
+			<input type="submit" value="Go" class="btn btn-primary mb-1" />
 		</form>
 	</div>
 </div>

@@ -1,9 +1,21 @@
 {
   "devDependencies": {
+    "@symfony/webpack-encore": "^1.1.2",
+    "bootstrap": "^4.6.0",
+    "bootstrap-v4-rtl": "^4.6.0-1",
     "grunt": "1.3.0",
-    "grunt-banana-checker": "0.9.0"
+    "grunt-banana-checker": "0.9.0",
+    "jquery": "^3.6.0",
+    "less": "^4.1.1",
+    "less-loader": "^8.0.0",
+    "popper.js": "^1.16.1",
+    "stylelint": "^13.12.0",
+    "stylelint-config-wikimedia": "^0.10.3",
+    "webpack-notifier": "^1.13.0"
   },
   "scripts": {
-    "test": "grunt banana"
+    "test": "grunt banana && stylelint assets",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
   }
 }

@@ -2,80 +2,70 @@
 
 {% block main %}
 
-<form method="get" action="{{ path('home') }}" role="form" class="form-horizontal">
-	<fieldset>
-		<legend>{{ msg('export-book') }}</legend>
-		<div class="form-group">
-			<label for="lang" class="col-lg-2 control-label">{{ msg('lang-field-label') }}</label>
+	<h3 class="border-bottom my-4">{{ msg('export-book') }}</h3>
 
-			<div class="col-lg-10">
-				<select name="lang" class="form-control" required id="lang">
-					{% for l,n in langs %}
-						<option value="{{ l }}" {% if l == lang %}selected{% endif %}>{{ msg('lang-field-value', [n, l]) }}</option>
-					{% endfor %}
-				</select>
-				<span class="help-block">{{ msg( 'lang-field-help' ) }}</span>
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="page" class="col-lg-2 control-label">{{ msg( 'title-field-label' ) }}</label>
+	<form method="get" action="{{ path('home') }}">
 
-			<div class="col-lg-10">
-				<input name="page" id="page" type="text" size="30" required="required" class="form-control"
-					value="{{ title }}" />
-				<span class="help-block">{{ msg( 'title-field-help' ) }}</span>
-			</div>
-		</div>
 		<div class="form-group">
-			<label for="format" class="col-lg-2 control-label">{{ msg( 'format-field-label' ) }}</label>
+			<label for="lang">{{ msg('lang-field-label') }}</label>
+			<select name="lang" class="form-control" required id="lang">
+				{% for l,n in langs %}
+					<option value="{{ l }}" {% if l == lang %}selected{% endif %}>{{ msg('lang-field-value', [n, l]) }}</option>
+				{% endfor %}
+			</select>
+			<span class="form-text text-muted">{{ msg( 'lang-field-help' ) }}</span>
+		</div>
 
-			<div class="col-lg-10">
-				<select id="format" name="format" class="form-control">
-					{% for f in formats %}
-						<option value="{{ f }}" {% if f == format %}selected="selected"{% endif %}>
-							{{ msg( 'format-' ~ f ) }}
-						</option>
-					{% endfor %}
-				</select>
-				<span class="help-inline">{{ msg( 'format-field-help' ) }}</span>
-			</div>
-		</div>
 		<div class="form-group">
-			<label for="fonts" class="col-lg-2 control-label">{{ msg( 'font-field-label' ) }}</label>
-			<div class="col-lg-10">
-				<select id="fonts" name="fonts" class="form-control">
-					<option value="">{{ msg( 'no-font-option' ) }}</option>
-					{% for key,label in fonts %}
-						<option value="{{ key|e('html_attr') }}" {% if key == font %}selected="selected"{% endif %}>
-							{{ key }}
-						</option>
-					{% endfor %}
-				</select>
-				<p class="help-block">{{ msg( 'font-field-help', [ fonts|length ] ) }}</p>
-			</div>
+			<label for="page">{{ msg( 'title-field-label' ) }}</label>
+			<input name="page" id="page" type="text" size="30" required="required" class="form-control"
+				value="{{ title }}" />
+			<span class="form-text text-muted">{{ msg( 'title-field-help' ) }}</span>
 		</div>
-		<div class="form-group">
-			<label class="col-lg-2 control-label">{{ msg( 'options-label' ) }}</label>
 
-			<div class="col-lg-10">
-				<label class="checkbox-inline">
-					<input type="checkbox" value="false" {% if not images %}checked="checked"{% endif %} name="images" />
-					{{ msg( 'images-field-label' ) }}
-				</label>
-				{% if enableCache %}
-					<label class="checkbox-inline">
-						<input type="checkbox" value="1" {% if nocache %}checked="checked"{% endif %} name="nocache" />
-						{{ msg( 'nocache-field-label' ) }}
-					</label>
-				{% endif %}
-			</div>
-		</div>
 		<div class="form-group">
-			<div class="col-lg-offset-2 col-lg-10">
-				<input class="btn btn-primary" type="submit" value="{{ msg( 'export-button' ) }}" />
-			</div>
+			<label for="format">{{ msg( 'format-field-label' ) }}</label>
+			<select id="format" name="format" class="form-control">
+				{% for f in formats %}
+					<option value="{{ f }}" {% if f == format %}selected="selected"{% endif %}>
+						{{ msg( 'format-' ~ f ) }}
+					</option>
+				{% endfor %}
+			</select>
+			<span class="form-text text-muted">{{ msg( 'format-field-help' ) }}</span>
 		</div>
-	</fieldset>
-</form>
+
+		<div class="form-group">
+			<label for="fonts" class="control-label">{{ msg( 'font-field-label' ) }}</label>
+			<select id="fonts" name="fonts" class="form-control">
+				<option value="">{{ msg( 'no-font-option' ) }}</option>
+				{% for key,label in fonts %}
+					<option value="{{ key|e('html_attr') }}" {% if key == font %}selected="selected"{% endif %}>
+						{{ key }}
+					</option>
+				{% endfor %}
+			</select>
+			<span class="form-text text-muted">{{ msg( 'font-field-help', [ fonts|length ] ) }}</span>
+		</div>
+
+		<fieldset>
+			<legend>{{ msg( 'options-label' ) }}</legend>
+
+			<div class="form-check">
+				<input type="checkbox" class="form-check-input" value="false" {% if not images %}checked="checked"{% endif %} name="images" id="images" />
+				<label class="form-check-label" for="images">{{ msg( 'images-field-label' ) }}</label>
+			</div>
+
+			{% if enableCache %}
+				<div class="form-check">
+					<input type="checkbox" class="form-check-input" value="1" {% if nocache %}checked="checked"{% endif %} name="nocache" id="nocache" />
+					<label class="form-check-label" for="nocache">{{ msg( 'nocache-field-label' ) }}</label>
+				</div>
+			{% endif %}
+
+		</fieldset>
+
+		<p class="mt-4"><input class="btn btn-primary" type="submit" value="{{ msg( 'export-button' ) }}" /></p>
+	</form>
 
 {% endblock %}

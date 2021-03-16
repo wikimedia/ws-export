@@ -24,12 +24,13 @@ jobs:
     env:
       APP_ENV: test
       DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=5.7
-      EPUBCHECK_JAR: /home/runner/work/tool/tool/epubcheck-4.2.4/epubcheck.jar
+      EPUBCHECK_JAR: /home/runner/work/tool/epubcheck-4.2.4/epubcheck.jar
 
     strategy:
       matrix:
         os: [ ubuntu-latest ]
         php: [ '7.3', '7.4' ]
+        node: [ 'v14.15.5' ]
 
     runs-on: ${{matrix.os}}
 
@@ -44,23 +45,32 @@ jobs:
         extensions: pdo, mysql, pdo_mysql, sqlite3, imagick, zip
         coverage: none
 
+    - name: Set up Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
     - name: Install Calibre, epubcheck, and fonts
       run: |
         sudo mkdir /usr/share/desktop-directories/
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
         sudo apt-get update -q
         sudo apt-get install fonts-freefont-ttf fonts-linuxlibertine fonts-dejavu-core fonts-gubbi -y
-        wget https://github.com/w3c/epubcheck/releases/download/v4.2.4/epubcheck-4.2.4.zip
-        unzip epubcheck-4.2.4.zip
+        wget https://github.com/w3c/epubcheck/releases/download/v4.2.4/epubcheck-4.2.4.zip --output-document=../epubcheck.zip
+        unzip -d ../ ../epubcheck.zip
 
     - name: Install WSExport
       run: |
         composer install
         ./bin/console doctrine:migrations:migrate --no-interaction
         npm ci
+        npm run build
 
     - name: Test
       run: |
         composer test
         ./bin/phpunit --exclude-group=exclude-from-ci
         npm test
+        git status
+        git diff
+        git status | grep "nothing to commit, working tree clean"

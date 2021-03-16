@@ -3,103 +3,75 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>{{ msg('app-title') }}</title>
-	<link type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-	{% if is_rtl() %}
-		<link type="text/css" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-flipped.css" rel="stylesheet"/>
-	{% endif %}
+
+	{{ encore_entry_link_tags('app') }}
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<style type="text/css">
-		html, body {
-			background-color: #eee;
-		}
-
-		.content {
-			background-color: #fff;
-			padding: 20px;
-			margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
-			-webkit-border-radius: 0 0 6px 6px;
-			-moz-border-radius: 0 0 6px 6px;
-			border-radius: 0 0 6px 6 -webkit-box-shadow : 0 1 px 2 px rgba(0, 0, 0, .15);
-			-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
-			box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
-		}
-
-		.page-header {
-			background-color: #f5f5f5;
-			padding: 20px 20px 10px;
-			margin: -20px -20px 20px;
-		}
-
-		footer ul { list-style-type: none; }
-	</style>
 </head>
-<body>
-<div class="container">
-	<div class="content">
-		<div class="page-header">
-			<h1>{{ msg( 'app-title' ) }}</h1>
-			<p>{{ msg( 'app-subtitle' ) }}</p>
-		</div>
-
-		{% for type, msgs in app.flashes|merge(messages ?? {}) %}
-			<div class="alerts">
-				{% for msg in msgs %}
-					<div class="alert alert-{{ type }}">{{ msg }}</div>
-				{% endfor %}
-			</div>
-		{% endfor %}
-
-		{% block main %}
-		{% endblock %}
-
-		<footer class="footer">
-			<ul>
-				<li>
-					{% set version_link %}
-						<a href="https://github.com/wikimedia/ws-export/releases/tag/{{ git_tag() }}" title="{{ msg( 'commit-label', [ git_hash_short() ] ) }}">
-							{{ msg( 'version', [ git_tag() ] ) }}{#
-						#}</a>{#
-					#}{% endset %}
-					{{ msg( 'footer-version', [ msg( 'app-title' ), version_link ] ) }}
-				</li>
-				<li>
-					{% set license_link %}
-						<a rel="licence" href="https://www.gnu.org/licenses/gpl.html">
-							{{ msg( 'license-link' ) }}{#
-						#}</a>{#
-					#}{% endset %}
-					{{ msg( 'licensed-under', [ license_link ] ) }}
-				</li>
-				<li>
-					{% set source_link %}
-						<a href="https://github.com/wikimedia/ws-export">
-							{{ msg( 'source-link' ) }}{#
-						#}</a>{#
-					#}{% endset %}
-					{% set docs_link %}
-						<a href="https://wikisource.org/wiki/Wikisource:WS_Export">
-						{{ msg( 'docs-link' ) }}{#
-					#}</a>{#
-					#}{% endset %}
-					{{ msg( 'source-and-docs', [ source_link, docs_link ] ) }}
-				</li>
-				<li>
-					{% set stats_link %}
-						<a href="{{ path('statistics') }}">
-						{{ msg( 'statistics-link' ) }}{#
-					#}</a>{#
-					#}{% endset %}
-					{{ msg( 'statistics', [ stats_link ] ) }}
-				</li>
-				<li>
-					{{ msg( 'issues', [ '<a href="https://phabricator.wikimedia.org/tag/ws-export">#ws-export</a>' ] ) }}
-					<a href="https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=ws-export" class="btn btn-default btn-xs">
-						{{ msg( 'issue-button' ) }}
-					</a>
-				</li>
-			</ul>
-		</footer>
+<body {% if is_rtl() %}class="rtl"{% endif %}>
+<header class="jumbotron jumbotron-fluid">
+	<div class="container">
+		<h1>{{ msg( 'app-title' ) }}</h1>
+		<p class="lead">{{ msg( 'app-subtitle' ) }}</p>
 	</div>
-</div>
+</header>
+<main class="container">
+
+	{% for type, msgs in app.flashes|merge(messages ?? {}) %}
+		<div class="alerts">
+			{% for msg in msgs %}
+				<div class="alert alert-{{ type }}">{{ msg }}</div>
+			{% endfor %}
+		</div>
+	{% endfor %}
+
+	{% block main %}
+	{% endblock %}
+
+</main>
+
+<footer class="footer small container border-top pt-3 my-5">
+	<p class="m-0">
+		{% set version_link %}
+			<a href="https://github.com/wikimedia/ws-export/releases/tag/{{ git_tag() }}" title="{{ msg( 'commit-label', [ git_hash_short() ] ) }}">
+				{{ msg( 'version', [ git_tag() ] ) }}{#
+			#}</a>{#
+		#}{% endset %}
+		{{ msg( 'footer-version', [ msg( 'app-title' ), version_link ] ) }}
+		{% set license_link %}
+			<a rel="licence" href="https://www.gnu.org/licenses/gpl.html">
+				{{ msg( 'license-link' ) }}{#
+			#}</a>{#
+		#}{% endset %}
+		{{ msg( 'licensed-under', [ license_link ] ) }}
+	</p>
+	<p class="m-0">
+		{% set source_link %}
+			<a href="https://github.com/wikimedia/ws-export">
+				{{ msg( 'source-link' ) }}{#
+			#}</a>{#
+		#}{% endset %}
+		{% set docs_link %}
+			<a href="https://wikisource.org/wiki/Wikisource:WS_Export">
+			{{ msg( 'docs-link' ) }}{#
+		#}</a>{#
+		#}{% endset %}
+		{{ msg( 'source-and-docs', [ source_link, docs_link ] ) }}
+	</p>
+	<p class="m-0">
+		{% set stats_link %}
+			<a href="{{ path('statistics') }}">
+			{{ msg( 'statistics-link' ) }}{#
+		#}</a>{#
+		#}{% endset %}
+		{{ msg( 'statistics', [ stats_link ] ) }}
+		{{ msg( 'issues', [ '<a href="https://phabricator.wikimedia.org/tag/ws-export">#ws-export</a>' ] ) }}
+		<a href="https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=ws-export" class="badge badge-pill badge-info">
+			{{ msg( 'issue-button' ) }}
+		</a>
+	</p>
+</footer>
+
+{{ encore_entry_script_tags('app') }}
 </body>
 </html>

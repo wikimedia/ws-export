@@ -43,6 +43,7 @@
 		"symfony/monolog-bundle": "^3.6",
 		"symfony/process": "5.1.*",
 		"symfony/stopwatch": "5.1.*",
+		"symfony/webpack-encore-bundle": "^1.11",
 		"symfony/yaml": "5.1.*",
 		"twig/extra-bundle": "^2.12 || ^3.0",
 		"twig/twig": "^2.12 || ^3.0",

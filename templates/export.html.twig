@@ -2,90 +2,85 @@
 
 {% block main %}
 
-<form method="get" action="{{ path('home') }}" role="form" class="form-horizontal">
-	<fieldset>
-		<legend>{{ msg('export-book') }}</legend>
-		<div class="form-group">
-			<label for="lang" class="col-lg-2 control-label">{{ msg('lang-field-label') }}</label>
+<p class="back-to-wikisource">
+	<a href="https://{% if lang %}{{ lang }}.{% endif %}wikisource.org{% if title %}/wiki/{{ title|e('url') }}{% endif %}">
+		{# Arrow is from OOUI. #}
+		<img src="/img/previous-{% if is_rtl() %}rtl{% else %}ltr{% endif %}.svg" alt="{{ msg('previous-alt-text') }}" width="20" height="20" />
+		{{ msg('back-to-wikisource') }}
+	</a>
+</p>
 
-			<div class="col-lg-10">
-				<select name="lang" class="form-control" required id="lang">
-					{% for l,n in langs %}
-						<option value="{{ l }}" {% if l == lang %}selected{% endif %}>{{ msg('lang-field-value', [n, l]) }}</option>
-					{% endfor %}
-				</select>
-				<span class="help-block">{{ msg( 'lang-field-help' ) }}</span>
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="page" class="col-lg-2 control-label">{{ msg( 'title-field-label' ) }}</label>
+<h2>{{ msg('export-book') }}</h2>
+<form method="get" action="{{ path('home') }}" role="form" class="form">
 
-			<div class="col-lg-10">
-				<input name="page" id="page" type="text" size="30" required="required" class="form-control"
-					value="{{ title }}" />
-				<span class="help-block">{{ msg( 'title-field-help' ) }}</span>
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="format" class="col-lg-2 control-label">{{ msg( 'format-field-label' ) }}</label>
+	<div class="form-group">
+		<label for="lang" class="control-label">{{ msg('lang-field-label') }}</label>
+		<select name="lang" class="form-control" required id="lang">
+			{% for l,n in langs %}
+				<option value="{{ l }}" {% if l == lang %}selected{% endif %}>{{ msg('lang-field-value', [n, l]) }}</option>
+			{% endfor %}
+		</select>
+		<span class="help-block">{{ msg( 'lang-field-help' ) }}</span>
+	</div>
 
-			<div class="col-lg-10">
-				<select id="format" name="format" class="form-control">
-					{% for f in formats %}
-						<option value="{{ f }}" {% if f == format %}selected="selected"{% endif %}>
-							{{ msg( 'format-' ~ f ) }}
-						</option>
-					{% endfor %}
-				</select>
-				<span class="help-inline">{{ msg( 'format-field-help' ) }}</span>
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="fonts" class="col-lg-2 control-label">{{ msg( 'font-field-label' ) }}</label>
-			<div class="col-lg-10">
-				<select id="fonts" name="fonts" class="form-control">
-					<option value="">{{ msg( 'no-font-option' ) }}</option>
-					{% for key,label in fonts %}
-						<option value="{{ key|e('html_attr') }}" {% if key == font %}selected="selected"{% endif %}>
-							{{ key }}
-						</option>
-					{% endfor %}
-				</select>
-				<p class="help-block">{{ msg( 'font-field-help', [ fonts|length ] ) }}</p>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-lg-2 control-label">{{ msg( 'options-label' ) }}</label>
+	<div class="form-group">
+		<label for="page" class="control-label">{{ msg( 'title-field-label' ) }}</label>
+		<input name="page" id="page" type="text" size="30" required="required" class="form-control"
+			value="{{ title }}" />
+		<span class="help-block">{{ msg( 'title-field-help' ) }}</span>
+	</div>
 
-			<div class="col-lg-10">
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" value="false" {% if not credits %}checked="checked"{% endif %} name="credits" />
-						{{ msg( 'credits-field-label' ) }}
-					</label>
-				</div>
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" value="false" {% if not images %}checked="checked"{% endif %} name="images" />
-						{{ msg( 'images-field-label' ) }}
-					</label>
-				</div>
-				{% if enableCache %}
-					<div class="checkbox">
-						<label class="checkbox">
-							<input type="checkbox" value="1" {% if nocache %}checked="checked"{% endif %} name="nocache" />
-							{{ msg( 'nocache-field-label' ) }}
-						</label>
-					</div>
-				{% endif %}
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-lg-offset-2 col-lg-10">
-				<input class="btn btn-primary" type="submit" value="{{ msg( 'export-button' ) }}" />
-			</div>
-		</div>
+	<div class="form-group">
+		<label for="format" class="control-label">{{ msg( 'format-field-label' ) }}</label>
+		<select id="format" name="format" class="form-control">
+			{% for f in formats %}
+				<option value="{{ f }}" {% if f == format %}selected="selected"{% endif %}>
+					{{ msg( 'format-' ~ f ) }}
+				</option>
+			{% endfor %}
+		</select>
+		<span class="help-inline">{{ msg( 'format-field-help' ) }}</span>
+	</div>
+
+	<div class="form-group">
+		<label for="fonts" class="control-label">{{ msg( 'font-field-label' ) }}</label>
+		<select id="fonts" name="fonts" class="form-control">
+			<option value="">{{ msg( 'no-font-option' ) }}</option>
+			{% for key,label in fonts %}
+				<option value="{{ key|e('html_attr') }}" {% if key == font %}selected="selected"{% endif %}>
+					{{ key }}
+				</option>
+			{% endfor %}
+		</select>
+		<span class="help-block">{{ msg( 'font-field-help', [ fonts|length ] ) }}</span>
+	</div>
+
+	<fieldset class="options">
+		<legend>{{ msg( 'options-label' ) }}</legend>
+
+		<p>
+			<input type="checkbox" id="credits" value="false" {% if not credits %}checked="checked"{% endif %} name="credits" />
+			<label for="credits">{{ msg( 'credits-field-label' ) }}</label>
+		</p>
+
+		<p>
+			<input type="checkbox" id="images" value="false" {% if not images %}checked="checked"{% endif %} name="images" />
+			<label for="images">{{ msg( 'images-field-label' ) }}</label>
+		</p>
+
+		{% if enableCache %}
+			<p>
+				<input type="checkbox" id="nocache" value="1" {% if nocache %}checked="checked"{% endif %} name="nocache" />
+				<label for="nocache">{{ msg( 'nocache-field-label' ) }}</label>
+			</p>
+		{% endif %}
+
 	</fieldset>
+
+	<p class="form-group submit">
+		<input class="btn btn-primary" type="submit" value="{{ msg( 'export-button' ) }}" />
+	</p>
+
 </form>
 
 {% endblock %}

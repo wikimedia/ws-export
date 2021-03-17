@@ -95,11 +95,10 @@ class CreditRepository {
 
 	/**
 	 * Get credits for given images.
-	 * @param string $lang The images's language.
 	 * @param array $images Images to get credits for.
 	 * @return array
 	 */
-	public function getImageCredits( string $lang, array $images ) : array {
+	public function getImageCredits( array $images ) : array {
 		$dbname = $this->getDatabaseName( 'commons', 'wiki' );
 
 		$connection = $this->client->getConnection( $dbname );

@@ -8,7 +8,6 @@ use App\Util\Util;
 use DOMDocument;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response;
-use Iterator;
 
 /**
  * provide all the data needed to create a book file
@@ -115,8 +114,7 @@ class BookProvider {
 			$book->categories = $this->getCategories( $metadataSrc );
 		}
 		$pageTitles = $parser->getPagesList();
-		$namespacesInfo = $this->api->getNamespaces();
-		$namespaces = array_keys( $namespacesInfo );
+		$namespaces = array_keys( $this->api->getNamespaces() );
 
 		if ( !$isMetadata ) {
 			if ( !$parser->metadataIsSet( 'ws-noinclude' ) ) {
@@ -162,7 +160,7 @@ class BookProvider {
 			$book->chapters = $chapters;
 
 			if ( $this->options['credits'] ) {
-				$book->credits = $this->getBookCredits( $book, $namespacesInfo, $chapterTitles, $pageTitles, $pictures );
+				$book->credits = $this->getBookCredits( $book, $chapterTitles, $pageTitles, $pictures );
 			}
 
 			$pictures = $this->getPicturesData( $pictures );
@@ -310,7 +308,7 @@ class BookProvider {
 	 * @param Picture[] $pictures
 	 * @return array
 	 */
-	protected function getBookCredits( Book $book, array $namespacesInfo, array $chapters, array $otherPages, array $pictures ) {
+	protected function getBookCredits( Book $book, array $chapters, array $otherPages, array $pictures ) {
 		$namespaces = $this->api->getNamespaces();
 
 		$pages = [ $book->title ];
@@ -333,7 +331,7 @@ class BookProvider {
 		$imageCredits = [];
 		if ( !empty( $imagesSet ) ) {
 			$images = array_keys( $imagesSet );
-			$imageCredits = $this->creditRepo->getImageCredits( $book->lang, $images );
+			$imageCredits = $this->creditRepo->getImageCredits( $images );
 		}
 
 		$allCredits = array_merge( $pageCredits, $imageCredits );
@@ -357,27 +355,6 @@ class BookProvider {
 		} );
 
 		return $credits;
-	}
-
-	/**
-	 * Splits an array of strings into multiple arrays small enough to fit into a Toolforge URL
-	 *
-	 * @param string[] $array
-	 * @param int $charLimit
-	 * @return Iterator
-	 */
-	private function splitArrayByLength( array $array, int $charLimit ): Iterator {
-		$batch = [];
-		foreach ( $array as $value ) {
-			$batch[] = $value;
-			if ( strlen( urlencode( implode( '|', $batch ) ) ) > $charLimit ) {
-				yield $batch;
-				$batch = [];
-			}
-		}
-		if ( $batch ) {
-			yield $batch;
-		}
 	}
 
 	private function removeNamespacesFromTitle( $title ) {

@@ -98,6 +98,6 @@ class BookTest extends WebTestCase {
 		$client = static::createClient();
 		$client->request( 'GET', '/', [ 'title' => 'A "title"' ] );
 		$this->assertStringContainsString( '<input name="page" id="page" type="text" size="30" required="required" class="form-control"
-					value="A &quot;title&quot;" />', $client->getResponse()->getContent() );
+			value="A &quot;title&quot;" />', $client->getResponse()->getContent() );
 	}
 }

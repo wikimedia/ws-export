@@ -40,6 +40,8 @@
 	"no-font-option": "Keine (Standardeinstellung des Gerätes benutzen)",
 	"font-field-help": "Wähle aus $1 Schriftarten.",
 	"options-label": "Optionen:",
+	"credits-field-label": "Nennung der Mitwirkenden ausschließen (schnellerer Download)",
+	"credits-default-message": "(Die Liste der Mitwirkenden wurde wie gewünscht weggelassen.)",
 	"images-field-label": "Füge keine Bilder ein",
 	"nocache-field-label": "Jegliches Caching umgehen (langsamer, aber nützlich für Debugging)",
 	"export-button": "Exportieren",

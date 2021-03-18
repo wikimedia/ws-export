@@ -2,12 +2,14 @@
 	"@metadata": {
 		"authors": [
 			"ACortellari",
-			"Beta16"
+			"Beta16",
+			"Toa"
 		]
 	},
 	"footer-version": "Questa è una versione di $1 $2.",
 	"version": "versione $1",
 	"statistics-link": "statistiche",
+	"back-to-wikisource": "Ritorna a Wikisource",
 	"export-book": "Esporta un libro",
 	"lang-field-label": "Wikisource:",
 	"lang-field-help": "Wikisource da cui esportare il libro.",

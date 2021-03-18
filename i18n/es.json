@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Hmonroy"
+			"Hmonroy",
+			"Rossnyev"
 		]
 	},
 	"footer-version": "Esto es $1 versión $2.",
@@ -22,5 +23,6 @@
 	"format-rtf": "RTF",
 	"font-field-label": "Fuente:",
 	"options-label": "Opciones:",
+	"credits-field-label": "Excluir créditos a los editores (para una descarga más rápida)",
 	"export-button": "Exportar"
 }

@@ -41,6 +41,8 @@
 	"no-font-option": "無（使用設備預設值）",
 	"font-field-help": "從 $1 種可用文字裡挑選。",
 	"options-label": "選項：",
+	"credits-field-label": "不提及編輯者（下載速度較快）",
+	"credits-default-message": "[貢獻者清單已依照請求省略掉。]",
 	"images-field-label": "不包含圖片",
 	"nocache-field-label": "繞過所有快取（較慢但有助於偵錯）",
 	"export-button": "匯出",

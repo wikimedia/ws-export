@@ -39,6 +39,8 @@
 	"no-font-option": "Nenhum (usar o padrão do dispositivo)",
 	"font-field-help": "Escolha entre $1 tipos de fontes disponíveis.",
 	"options-label": "Opções",
+	"credits-field-label": "Excluir créditos do editor (download mais rápido)",
+	"credits-default-message": "[A lista de colaboradores foi omitida conforme solicitado.]",
 	"images-field-label": "Não incluir imagens",
 	"nocache-field-label": "Ignorar todo o cache (mais lento, mas útil para depuração)",
 	"export-button": "Exportar",

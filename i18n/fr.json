@@ -42,6 +42,8 @@
 	"no-font-option": "Aucun (utiliser la valeur par défaut de l’appareil)",
 	"font-field-help": "Choisissez parmi les $1 polices disponibles.",
 	"options-label": "Options :",
+	"credits-field-label": "Exclure les attributions de contributeurs (pour un chargement plus rapide)",
+	"credits-default-message": "[La liste des contributeurs a été omise, comme demandé.]",
 	"images-field-label": "Ne pas inclure les images",
 	"nocache-field-label": "Outrepasser toute mise en cache (plus lent mais utile pour le débogage)",
 	"export-button": "Exporter",

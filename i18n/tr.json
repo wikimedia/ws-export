@@ -3,10 +3,11 @@
 		"authors": [
 			"Joseph",
 			"Mim.saitkilic",
-			"SaldırganSincap"
+			"SaldırganSincap",
+			"ToprakM"
 		]
 	},
-	"app-title": "WS Dışa Aktarım",
+	"app-title": "Vikikaynak Kitap Dışa Aktarımı",
 	"app-subtitle": "Wikikaynaktan kitapları farklı dosya biçimlerinde dışa aktarın",
 	"footer-version": "Bu $1 için $2 sürümü.",
 	"version": "$1 sürümü",
@@ -15,7 +16,7 @@
 	"license-link": "GPL v2 ya da daha sonraki",
 	"source-and-docs": "Kaynak kodu $1 ve bazı belgeleme $2 mevcut.",
 	"source-link": "Github'ta",
-	"docs-link": "Çok Dilli Vikikaynak'ta",
+	"docs-link": "Çok dilli Vikikaynak'ta",
 	"statistics": "Bazı $1 ayrıca sağlanmış.",
 	"statistics-link": "istatistikler",
 	"issues": "Lütfen sorunları Pabricator'de $1 projesi altında raporlayın.",
@@ -43,6 +44,8 @@
 	"no-font-option": "Yok (cihaz varsayılanını kulllan)",
 	"font-field-help": "$1 mevcut yazı tipi arasından seçin.",
 	"options-label": "Seçenekler:",
+	"credits-field-label": "Katkıda bulunanları ekleme (daha hızlı indirme)",
+	"credits-default-message": "[İstek üzerine katkıda bulunanların listesi atlandı.]",
 	"images-field-label": "Resimleri ekleme",
 	"nocache-field-label": "Tüm önbelleği atla (yavaş ancak hata ayıklama için faydalı)",
 	"export-button": "Dışa aktar",

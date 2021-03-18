@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Hmgrmb",
 			"LNDDYL",
 			"Zhang8569"
 		]
@@ -24,6 +25,8 @@
 	"font-field-label": "字体：",
 	"font-field-help": "从$1可用的字体中选择",
 	"options-label": "选项：",
+	"credits-field-label": "排除编辑者积分（更快下载）",
+	"credits-default-message": "[贡献者的名单被当作请求所忽略了。]",
 	"images-field-label": "请不要包含图片",
 	"nocache-field-label": "越过所有隐藏物（更慢但是对于排除故障更加有效）",
 	"export-button": "导出"

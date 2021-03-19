@@ -185,3 +185,10 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
+
+### The Wikisource logo
+
+The Wikisource logo is included as `public/img/Wikisource-logo.svg`,
+as an optimized form of the logo
+found at [commons.wikimedia.org/wiki/File:Wikisource-logo.svg](https://commons.wikimedia.org/wiki/File:Wikisource-logo.svg)
+and subject to the licence restrictions specified on that page.

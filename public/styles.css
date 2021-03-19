@@ -40,6 +40,7 @@ footer p {
 h2 {
 	border-bottom: 1px solid #e5e5e5;
 	margin: 25px 0;
+	font-size: 22px;
 }
 
 fieldset legend,
@@ -50,12 +51,27 @@ label {
 	margin: 0;
 }
 
+label {
+	font-size: 14px;
+	display: block;
+	margin-bottom: 7px;
+}
+
 fieldset.options p {
 	margin: 0;
+	text-indent: -25px;
+	margin-left: 25px;
+}
+
+fieldset.options input {
+	width: 25px;
+	position: relative;
+	top: 2px;
 }
 
 fieldset.options label {
 	font-weight: normal;
+	display: inline;
 }
 
 .submit {

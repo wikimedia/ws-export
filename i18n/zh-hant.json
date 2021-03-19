@@ -36,7 +36,7 @@
 	"format-pdf-letter": "PDF - 美國信封大小",
 	"format-rtf": "RTF",
 	"format-txt": "純文字",
-	"invalid-format": "「$1」不是有效格式。有效格式為：$2",
+	"exception-invalid-format": "「$1」不是有效格式。有效格式為：$2",
 	"font-field-label": "字型：",
 	"no-font-option": "無（使用設備預設值）",
 	"font-field-help": "從 $1 種可用文字裡挑選。",

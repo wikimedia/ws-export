@@ -4,16 +4,15 @@ namespace App\Controller;
 
 use App\BookCreator;
 use App\Entity\GeneratedBook;
+use App\Exception\WsExportException;
 use App\FontProvider;
 use App\GeneratorSelector;
 use App\Refresh;
 use App\Repository\CreditRepository;
 use App\Util\Api;
-use App\Util\Util;
 use App\Wikidata;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use GuzzleHttp\Exception\RequestException;
 use Krinkle\Intuition\Intuition;
 use Locale;
 use Psr\Cache\CacheItemPoolInterface;
@@ -22,12 +21,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 // phpcs:ignore
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Stopwatch\Stopwatch;
-use Throwable;
 
 class ExportController extends AbstractController {
 
@@ -99,8 +95,15 @@ class ExportController extends AbstractController {
 		}
 
 		// If the book title is specified, export it now.
+		$exception = false;
+		$response = new Response();
 		if ( $request->get( 'page' ) ) {
-			return $this->export( $request, $api, $fontProvider, $generatorSelector, $creditRepo );
+			try {
+				return $this->export( $request, $api, $fontProvider, $generatorSelector, $creditRepo );
+			} catch ( WsExportException $ex ) {
+				$exception = $ex;
+				$response->setStatusCode( $ex->getResponseCode() );
+			}
 		}
 
 		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
@@ -118,7 +121,8 @@ class ExportController extends AbstractController {
 			'images' => $images,
 			'nocache' => $nocache,
 			'enableCache' => $this->enableCache,
-		] );
+			'exception' => $exception,
+		], $response );
 	}
 
 	private function export(
@@ -217,14 +221,6 @@ class ExportController extends AbstractController {
 		if ( !$format ) {
 			$format = $defaultFormat;
 		}
-		if ( !in_array( $format, GeneratorSelector::getAllFormats() ) ) {
-			$list = '"' . implode( '", "', GeneratorSelector::getValidFormats() ) . '"';
-			$msg = $this->intuition->msg( 'invalid-format', [ 'variables' => [ $format, $list ] ] );
-			// Change the requested format to the default,
-			// so the exception handler (which also uses this getFormat() method) can select it.
-			$request->query->set( 'format', $defaultFormat );
-			throw new NotFoundHttpException( $msg );
-		}
 		return $format;
 	}
 
@@ -237,42 +233,4 @@ class ExportController extends AbstractController {
 		return ucfirst( str_replace( '_', ' ', $request->get( 'title', $request->get( 'page' ) ) ) );
 	}
 
-	/**
-	 * Error page handler, to always show the export form with any HTTP error message.
-	 *
-	 * @param Request $request
-	 * @param Throwable $exception
-	 * @param Api $api
-	 * @param FontProvider $fontProvider
-	 * @return Response
-	 */
-	public function error( Request $request, Throwable $exception, Api $api, FontProvider $fontProvider ) {
-		// Only handle HTTP and Request exceptions.
-		if ( !( $exception instanceof HttpException || $exception instanceof RequestException ) ) {
-			throw $exception;
-		}
-		$message = $exception->getMessage();
-		if ( $exception instanceof RequestException ) {
-			$exceptionResponse = $exception->getResponse();
-			if ( $exceptionResponse ) {
-				$message = Util::extractErrorMessage( $exceptionResponse, $exception->getRequest() );
-			}
-		}
-		return $this->render( 'export.html.twig', [
-			'fonts' => $fontProvider->getAll(),
-			'font' => $request->get( 'fonts' ),
-			'formats' => GeneratorSelector::getValidFormats(),
-			'format' => $this->getFormat( $request ),
-			'title' => $this->getTitle( $request ),
-			'langs' => $this->getLangs( $request ),
-			'lang' => $this->getLang( $request ),
-			'credits' => true,
-			'images' => true,
-			'messages' => [
-				'danger' => [ $message ],
-			],
-			'nocache' => (bool)$request->get( 'nocache' ),
-			'enableCache' => $this->enableCache,
-		] );
-	}
 }

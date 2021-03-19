@@ -57,15 +57,15 @@ class BookTest extends WebTestCase {
 	public function testGetNonExistingTitleDisplaysError() {
 		$client = static::createClient();
 		$client->request( 'GET', '/book.php', [ 'page' => 'xxx' ] );
-		$this->assertStringContainsString( 'Page not found', $client->getResponse()->getContent() );
+		$this->assertStringContainsString( "The book 'xxx' could not be found.", $client->getResponse()->getContent() );
 		$this->assertSame( 404, $client->getResponse()->getStatusCode() );
 	}
 
 	public function testGetInvalidFormatDisplaysError() {
 		$client = static::createClient();
 		$client->request( 'GET', '/book.php', [ 'page' => 'xxx', 'format' => 'xxx' ] );
-		$this->assertStringContainsString( '&quot;xxx&quot; is not a valid format.', $client->getResponse()->getContent() );
-		$this->assertSame( 404, $client->getResponse()->getStatusCode() );
+		$this->assertStringContainsString( '"xxx" is not a valid format.', $client->getResponse()->getContent() );
+		$this->assertSame( 400, $client->getResponse()->getStatusCode() );
 	}
 
 	public function testGetFormat() {

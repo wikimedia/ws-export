@@ -35,7 +35,7 @@
 	"format-pdf-letter": "PDF - amerikansk brevstorlek",
 	"format-rtf": "RTF",
 	"format-txt": "Oformaterad text",
-	"invalid-format": "\"$1\" är inte ett giltigt format. Giltiga format är: $2",
+	"exception-invalid-format": "\"$1\" är inte ett giltigt format. Giltiga format är: $2",
 	"font-field-label": "Typsnitt:",
 	"no-font-option": "Inget (använd enhetens standard)",
 	"font-field-help": "Välj mellan $1 tillgängliga typsnitt.",

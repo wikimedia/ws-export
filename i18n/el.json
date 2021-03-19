@@ -34,7 +34,7 @@
 	"format-pdf-letter": "PDF - μέγεθος US letter",
 	"format-rtf": "RTF",
 	"format-txt": "Απλό κείμενο",
-	"invalid-format": "«$1» δεν είναι δόκιμος τύπος. Δόκιμοι τύποι είναι: $2",
+	"exception-invalid-format": "«$1» δεν είναι δόκιμος τύπος. Δόκιμοι τύποι είναι: $2",
 	"font-field-label": "Γραμματοσειρά:",
 	"no-font-option": "Καμία (χρήση προεπιλογής συσκευής)",
 	"font-field-help": "Επιλέξτε από $1 διαθέσιμες γραμματοσειρές.",

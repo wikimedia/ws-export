@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Exception\WsExportException;
 use App\Generator\FormatGenerator;
 use App\Repository\CreditRepository;
 use App\Util\Api;
@@ -21,6 +22,11 @@ class BookCreator {
 	private $filePath;
 
 	public static function forApi( Api $api, $format, $options, GeneratorSelector $generatorSelector, CreditRepository $creditRepo ) {
+		if ( !in_array( $format, GeneratorSelector::getAllFormats() ) ) {
+			$list = '"' . implode( '", "', GeneratorSelector::getValidFormats() ) . '"';
+			throw new WsExportException( 'invalid-format', [ $format, $list ], 400 );
+		}
+
 		return new BookCreator(
 			new BookProvider( $api, $options, $creditRepo ),
 			$generatorSelector->getGenerator( $format )

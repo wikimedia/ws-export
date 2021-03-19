@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use App\Exception\WsExportException;
 use App\PageParser;
 use DateInterval;
 use Exception;
@@ -17,8 +18,6 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\NullAdapter;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -174,9 +173,9 @@ class Api {
 			$url,
 			$options
 		)->then(
-			function ( ResponseInterface $response ) {
+			function ( ResponseInterface $response ) use ( $url ) {
 				if ( $response->getStatusCode() !== 200 ) {
-					throw new HttpException( $response->getStatusCode() );
+					throw new WsExportException( 'url-fetch-error', [ $url ], 500 );
 				}
 				return $response->getBody()->getContents();
 			}
@@ -220,7 +219,7 @@ class Api {
 	 *
 	 * @param array $params an associative array for params send to the api
 	 * @return PromiseInterface a Promise with the result array
-	 * @throws HttpException
+	 * @throws Exception
 	 */
 	public function queryAsync( $params ) {
 		$params += [ 'action' => 'query', 'format' => 'json' ];
@@ -243,7 +242,6 @@ class Api {
 	 * api query. Give all pages of response
 	 * @param array $params an associative array for params send to the api
 	 * @return array an array with whe result of the api query
-	 * @throws HttpException
 	 */
 	public function completeQuery( $params ) {
 		$data = [];
@@ -276,7 +274,7 @@ class Api {
 						return Util::getXhtmlFromContent( $this->getLang(), $result, $title );
 					},
 					function ( $reason ) use ( $title ) {
-						throw new NotFoundHttpException( "Page not found for: $title" );
+						throw new WsExportException( 'rest-page-not-found', [ $title ], 404 );
 					}
 				);
 	}

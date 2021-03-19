@@ -35,7 +35,7 @@
 	"format-pdf-letter": "PDF - mida de carta USA",
 	"format-rtf": "RTF",
 	"format-txt": "Text sense format",
-	"invalid-format": "\"$1\" no és un format vàlid. Els formats vàlids són: $2",
+	"exception-invalid-format": "\"$1\" no és un format vàlid. Els formats vàlids són: $2",
 	"font-field-label": "Tipus de lletra:",
 	"no-font-option": "Cap (utilitzar el dispositiu per defecte)",
 	"font-field-help": "Escollir de $1 fonts disponibles.",

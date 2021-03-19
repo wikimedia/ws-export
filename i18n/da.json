@@ -27,7 +27,7 @@
 	"format-pdf-letter": "PDF - amerikansk letterstørrelse",
 	"format-rtf": "RTF",
 	"format-txt": "Uformateret tekst",
-	"invalid-format": "\"$1\" er ikke et gyldigt format. De gyldige formater er: $2",
+	"exception-invalid-format": "\"$1\" er ikke et gyldigt format. De gyldige formater er: $2",
 	"font-field-label": "Skrifttype:",
 	"no-font-option": "Ingen (anvend enhedens standard)",
 	"font-field-help": "Vælg mellem $1 tilgængelige skrifttyper.",

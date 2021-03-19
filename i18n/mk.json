@@ -35,7 +35,7 @@
 	"format-pdf-letter": "PDF - големина на американско писмо",
 	"format-rtf": "RTF",
 	"format-txt": "Прост текст",
-	"invalid-format": "„$1“ не претставува важечки формат. Важечки се: $2",
+	"exception-invalid-format": "„$1“ не претставува важечки формат. Важечки се: $2",
 	"font-field-label": "Фонт:",
 	"no-font-option": "ниеден (користи според уредот)",
 	"font-field-help": "Изберете од $1 достапни фонтови.",

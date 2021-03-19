@@ -39,7 +39,7 @@
 	"format-pdf-letter": "PDF - US letter boyutunda",
 	"format-rtf": "RTF",
 	"format-txt": "Düz metin",
-	"invalid-format": "\"$1\" geçerli bir biçim değil. Geçerli biçimler: $2",
+	"exception-invalid-format": "\"$1\" geçerli bir biçim değil. Geçerli biçimler: $2",
 	"font-field-label": "Yazı tipi:",
 	"no-font-option": "Yok (cihaz varsayılanını kulllan)",
 	"font-field-help": "$1 mevcut yazı tipi arasından seçin.",

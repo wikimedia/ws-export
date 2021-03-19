@@ -21,7 +21,7 @@
 	"format-pdf-a6": "PDF-A6尺寸",
 	"format-rtf": "RTF",
 	"format-txt": "纯文本",
-	"invalid-format": "\"$1\" 不是一个有效的格式。有效的格式为: $2",
+	"exception-invalid-format": "\"$1\" 不是一个有效的格式。有效的格式为: $2",
 	"font-field-label": "字体：",
 	"font-field-help": "从$1可用的字体中选择",
 	"options-label": "选项：",

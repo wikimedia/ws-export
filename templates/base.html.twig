@@ -32,14 +32,6 @@
 
 <div class="container">
 	<div class="content">
-		{% for type, msgs in app.flashes|merge(messages ?? {}) %}
-			<div class="alerts">
-				{% for msg in msgs %}
-					<div class="alert alert-{{ type }}">{{ msg }}</div>
-				{% endfor %}
-			</div>
-		{% endfor %}
-
 		{% block main %}
 		{% endblock %}
 
@@ -86,5 +78,7 @@
 		</footer>
 	</div>
 </div>
+<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </body>
 </html>

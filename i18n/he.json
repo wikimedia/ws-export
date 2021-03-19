@@ -34,7 +34,7 @@
 	"format-pdf-letter": "PDF - בגודל מכתב אמריקאי",
 	"format-rtf": "RTF",
 	"format-txt": "טקסט רגיל",
-	"invalid-format": "„$1” אינה תצורה תקינה. התצורות התקינות הן: $2",
+	"exception-invalid-format": "„$1” אינה תצורה תקינה. התצורות התקינות הן: $2",
 	"font-field-label": "גופן:",
 	"no-font-option": "אין (להשתמש בבררת המחדל של המכשיר)",
 	"font-field-help": "לבחור מבין $1 הגופנים הזמינים.",

@@ -36,7 +36,7 @@
 	"format-pdf-letter": "PDF - bi mezinahiya US letter-ê",
 	"format-rtf": "RTF",
 	"format-txt": "Nivîsa sade",
-	"invalid-format": "\"$1\" ne formateke derbasdar e. Formatên derbasdar ev in: $2",
+	"exception-invalid-format": "\"$1\" ne formateke derbasdar e. Formatên derbasdar ev in: $2",
 	"font-field-label": "Font:",
 	"no-font-option": "Tine (standarda cîhazê bi kar bîne)",
 	"font-field-help": "Ji $1 fonts berdest bibijêre.",

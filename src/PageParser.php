@@ -169,7 +169,6 @@ class PageParser {
 			$picture->name = $picture->title;
 			$pictures[$picture->title] = $picture;
 			$img->setAttribute( 'data-title', $picture->title );
-
 		}
 
 		// Then go through all non-img elements that are used to contain images.
@@ -207,12 +206,13 @@ class PageParser {
 				&& ctype_xdigit( $segments[count( $segments ) - 4] )
 				&& ctype_xdigit( $segments[count( $segments ) - 3] )
 			) {
-				$picture->name = $segments[count( $segments ) - 2];
-				$picture->title = $segments[count( $segments ) - 2] . '-' . $segments[count( $segments ) - 1];
+				$picture->name = urldecode( $segments[count( $segments ) - 2] );
+				$picture->title = urldecode( $segments[count( $segments ) - 2] . '-' . $segments[count( $segments ) - 1] );
 			} else {
-				$picture->name = $segments[count( $segments ) - 1];
-				$picture->title = $segments[count( $segments ) - 1];
+				$picture->title = urldecode( $segments[count( $segments ) - 1] );
+				$picture->name = $picture->title;
 			}
+
 			$picture->url = $this->resolveProtocolRelativeUrl( $url );
 
 			$pictures[$picture->title] = $picture;

@@ -5,8 +5,10 @@
 			"Yardom78"
 		]
 	},
-	"app-title": "WS Export",
+	"app-title": "Export kníh z Wikizdrojov",
+	"app-title-html": "Exportovanie knihy $1",
 	"app-subtitle": "Export kníh z Wikisources v rozličných formátoch.",
+	"logo-alt-text": "Logo Wikizdrojov, modrobiela ilustrácia ľadovca.",
 	"footer-version": "Toto je $1 verzia $2.",
 	"version": "verzia $1",
 	"commit-label": "Commit: $1",
@@ -19,6 +21,7 @@
 	"statistics-link": "štatistiky",
 	"issues": "Prosím nahláste chybu $1",
 	"issue-button": "Vytvoriť report",
+	"back-to-wikisource": "Späť na Wikizdroje",
 	"export-book": "Exportovať knihu",
 	"lang-field-label": "Wikizdroj:",
 	"lang-field-value": "$1 ($2)",
@@ -42,6 +45,8 @@
 	"no-font-option": "Žiadne (použiť predvolené nastavenie zariadenia)",
 	"font-field-help": "Možné dostupné písma pre výber: $1",
 	"options-label": "Možnosti:",
+	"credits-field-label": "Nezahrnúť detaily redaktorov (rýchlejšie sťahovanie)",
+	"credits-default-message": "[Zoznam prispievateľov bol vynechaný tak ako bolo požadované.]",
 	"images-field-label": "Nepridať obrázky",
 	"nocache-field-label": "Obísť cashing (pomalšie ale vhodné pre vylaďovanie)",
 	"export-button": "Export",

@@ -5,7 +5,10 @@
 			"Mariagarbin"
 		]
 	},
+	"app-title": "Exportação de livro do Wikisource",
+	"app-title-html": "Exportação de livro $1",
 	"app-subtitle": "Exporte livros de Wikisources em muitos formatos de arquivo diferentes.",
+	"logo-alt-text": "Logotipo do Wikisource, uma ilustração em azul e branco de um iceberg.",
 	"footer-version": "Esta $1 é a versão $2.",
 	"version": "versão $1",
 	"commit-label": "Comprometer: $1",
@@ -18,6 +21,7 @@
 	"statistics-link": "estatísticas",
 	"issues": "Por favor, relate problemas sob o projeto $1 no Pabricator.",
 	"issue-button": "Criar problema",
+	"back-to-wikisource": "Voltar para Wikisource",
 	"export-book": "Exportar um livro",
 	"lang-field-label": "Wikisource:",
 	"lang-field-help": "Código de idioma do Wikisource ou subdomínio, como 'en' ou 'fr'.",

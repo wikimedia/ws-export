@@ -6,7 +6,9 @@
 			"그냥기여자"
 		]
 	},
-	"app-title": "WS 내보내기",
+	"app-title": "위키문헌 책 내보내기",
+	"app-title-wikisource": "위키문헌",
+	"app-title-html": "$1 책 내보내기",
 	"app-subtitle": "위키문헌의 문헌들을 다양한 형식의 파일로 내보내십시오.",
 	"footer-version": "$1의 $2 버전입니다.",
 	"version": "버전 $1",
@@ -20,6 +22,7 @@
 	"statistics-link": "통계",
 	"issues": "파브리케이터의 $1 프로젝트에서 이슈를 보고해 주십시오.",
 	"issue-button": "이슈 만들기",
+	"back-to-wikisource": "위키문헌으로 돌아가기",
 	"export-book": "책 내보내기",
 	"lang-field-label": "위키문헌:",
 	"lang-field-value": "$1 ($2)",
@@ -42,6 +45,8 @@
 	"no-font-option": "없음 (장치 기본값 사용)",
 	"font-field-help": "사용 가능한 $1개 글꼴에서 선택합니다.",
 	"options-label": "옵션:",
+	"credits-field-label": "편집자 정보 제외 (더 빠른 다운로드)",
+	"credits-default-message": "[기여자 목록은 요청에 따라 제외되었습니다.]",
 	"images-field-label": "이미지를 포함하지 않음",
 	"nocache-field-label": "모든 캐시 우회 (속도는 더 느리지만 디버깅에 유용함)",
 	"export-button": "내보내기",

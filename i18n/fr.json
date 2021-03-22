@@ -5,8 +5,11 @@
 			"Verdy p"
 		]
 	},
-	"app-title": "Export WS",
+	"app-title": "Export de livre Wikisource",
+	"app-title-wikisource": "Wikisource",
+	"app-title-html": "Export de livre $1",
 	"app-subtitle": "Exporter des livres d’une des éditions de Wikisource en de nombreux formats de fichier différents.",
+	"logo-alt-text": "Logo de Wikisource, une illustration en bleu et blanc d’un iceberg",
 	"footer-version": "Ceci est $1 en version $2.",
 	"version": "version $1",
 	"commit-label": "Version enregistrée : $1",
@@ -19,6 +22,7 @@
 	"statistics-link": "statistiques",
 	"issues": "Veuillez signaler les anomalies dans le projet $1 sur Phabricator.",
 	"issue-button": "Créer un rapport d’anomalie",
+	"back-to-wikisource": "Retour à wikisource",
 	"export-book": "Exporter un livre",
 	"lang-field-label": "Wikisource :",
 	"lang-field-value": "$1 ($2)",

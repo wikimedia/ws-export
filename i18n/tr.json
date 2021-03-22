@@ -8,7 +8,10 @@
 		]
 	},
 	"app-title": "Vikikaynak Kitap Dışa Aktarımı",
+	"app-title-wikisource": "Vikikaynak",
+	"app-title-html": "$1 Kitap Dışa Aktarımı",
 	"app-subtitle": "Wikikaynaktan kitapları farklı dosya biçimlerinde dışa aktarın",
+	"logo-alt-text": "Vikikaynak logosu, bir buzdağının mavi ve beyaz çizimi.",
 	"footer-version": "Bu $1 için $2 sürümü.",
 	"version": "$1 sürümü",
 	"commit-label": "İşle: $1",
@@ -21,6 +24,7 @@
 	"statistics-link": "istatistikler",
 	"issues": "Lütfen sorunları Pabricator'de $1 projesi altında raporlayın.",
 	"issue-button": "Sorun oluştur",
+	"back-to-wikisource": "Vikikaynak'a geri dön",
 	"export-book": "Bir kitabı dışa aktar",
 	"lang-field-label": "Vikikaynak:",
 	"lang-field-value": "$1 ($2)",

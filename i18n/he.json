@@ -5,8 +5,10 @@
 			"YaronSh"
 		]
 	},
-	"app-title": "יצוא מוויקיטקסט",
+	"app-title": "ייצוא ספר מוויקיטקסט",
+	"app-title-html": "ייצוא הספר $1",
 	"app-subtitle": "יצוא ספרים מוויקיטקסטים במגוון תצורות קבצים שונות.",
+	"logo-alt-text": "הלוגו של ויקיטקסט, איור של קרחון בכחול ולבן.",
 	"footer-version": "זה $1 בגרסה $2.",
 	"version": "גרסה $1",
 	"commit-label": "הגשה: $1",
@@ -16,7 +18,9 @@
 	"source-link": "ב־Github",
 	"docs-link": "בוויקיטקסט רב־לשוני",
 	"statistics-link": "סטטיסטיקה",
+	"issues": "נא לדווח על תקלות תחת המיזם $1 ב־Phabricator.",
 	"issue-button": "יצירת בקשה",
+	"back-to-wikisource": "חזרה לוויקיטקסט",
 	"export-book": "לייצא ספר",
 	"lang-field-label": "ויקיטקסט:",
 	"lang-field-value": "$1 ($2)",
@@ -39,6 +43,8 @@
 	"no-font-option": "אין (להשתמש בבררת המחדל של המכשיר)",
 	"font-field-help": "לבחור מבין $1 הגופנים הזמינים.",
 	"options-label": "אפשרויות:",
+	"credits-field-label": "לוותר על הוקרה לעורכים (הורדה מהירה יותר)",
+	"credits-default-message": "[רשימת העורכים הושמטה לבקשתך.]",
 	"images-field-label": "לא לכלול תמונות",
 	"export-button": "ייצוא",
 	"cache-updated": "המטמון התרענן לשפה: $1"

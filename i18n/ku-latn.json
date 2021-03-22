@@ -4,8 +4,10 @@
 			"Bikarhêner"
 		]
 	},
-	"app-title": "WS Eksport",
+	"app-title": "Wîkîçavkanî Eksportkirina Kitêban",
+	"app-title-html": "$1 Eksportkirina Kitêban",
 	"app-subtitle": "Kitêban ji Wîkîçavkaniyê bi çendîn formatên dosyeyan derxîne.",
+	"logo-alt-text": "Logoya Wîkîçavkaniyê, temsîla çiyayeke qeşayê yê şîn û spî",
 	"footer-version": "Ev versiyona $2 yê ji bo $1 ye.",
 	"version": "versiyon $1",
 	"commit-label": "Versiyona qeydkirî: $1",
@@ -18,6 +20,7 @@
 	"statistics-link": "statîstîk",
 	"issues": "Ji kerema xwe pirsgirêkan li ser Fabrîkatorê di bin projeya $1 de ragihîne.",
 	"issue-button": "Pirsgirêkê çêke",
+	"back-to-wikisource": "Vegere Wîkîçavkaniyê",
 	"export-book": "Kitêbekî derxîne",
 	"lang-field-label": "Wîkîçavkanî:",
 	"lang-field-value": "$1 ($2)",
@@ -41,6 +44,8 @@
 	"no-font-option": "Tine (standarda cîhazê bi kar bîne)",
 	"font-field-help": "Ji $1 fonts berdest bibijêre.",
 	"options-label": "Vebijêrk:",
+	"credits-field-label": "Beşdariyên edîtoran xaric bigire (daxistina leztir)",
+	"credits-default-message": "[Wekî ku hatibû xwestin, lîsteya beşdaran hate derbaskirin.]",
 	"images-field-label": "Wêne tevlî neke",
 	"nocache-field-label": "Temamiya pêştomarakê derbas bike (hêditir e lê kêrhatîtir e ji bo sererastkirina xetayan)",
 	"export-button": "Derxîne",

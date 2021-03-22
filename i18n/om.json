@@ -4,7 +4,8 @@
 			"Ahrada2016"
 		]
 	},
-	"app-title": "WS Alergi",
+	"app-title": "Kitaaba Wikisource Alergi",
+	"app-title-html": "Kitaaba $1 Alergi",
 	"app-subtitle": "Wikisources keessaa kitaabota alergi harshama dhangiilee gosa baay'een.",
 	"footer-version": "$1 kun hiika $2 dha.",
 	"version": "Hiika $1",
@@ -18,8 +19,9 @@
 	"statistics-link": "istaatiksii",
 	"issues": "Maaloo Pabrikeeter irratti  piroojektii $1 jalatti yaadrimee gabaasi.",
 	"issue-button": "Giroo uumi",
+	"back-to-wikisource": "Gara Wikisource deebi'i",
 	"export-book": "Kitaaba alergi",
-	"lang-field-label": "Koodii Afaanii:",
+	"lang-field-label": "Maddawiki",
 	"lang-field-help": "Koodii afaan Wikisource ykn qayiqqoo, kanneen akka 'en' ykn 'fr'",
 	"title-field-label": "Matduree:",
 	"title-field-help": "Matduree kitaabota fuula haadhoo.",
@@ -36,11 +38,19 @@
 	"format-rtf": "RTF",
 	"format-txt": "Barquu",
 	"exception-invalid-format": "\"$1\" bifunka fayyadu miti. Bifunki fayyadu: $2 dha.",
-	"font-field-label": "Hamgosa:",
+	"font-field-label": "Bocquu",
 	"no-font-option": "Hinjiru (divaayisii fafmalee fayyadami)",
 	"font-field-help": "$1 keessaa hamgosa mul'ataa filadhu.",
-	"options-label": "Filannoowwan:",
+	"options-label": "Filannoolee",
 	"images-field-label": "Suuraa hin dabalatu",
 	"export-button": "Alergi",
-	"cache-updated": "Kuftaleen haaromfameera afaan: $1"
+	"cache-updated": "Kuftaleen haaromfameera afaan: $1",
+	"alert-close": "Cufi",
+	"export-failed": "Gafe'uun kufeera.",
+	"exception-rest-page-not-found": "Kitaabni '$1' as keessa hin jiru.",
+	"learn-more": "Dabalataan baradhu.",
+	"error-fix": "Maaloo gulantaalee kana yaali yoo dogoggorri si qunname.",
+	"error-fix-nocredits": "'Filannoolee' keessa dulaaba soqi suuraalee haquuf",
+	"error-fix-noimages": "'Filannoolee' keessaa dulaaba ilaali suuraawwan balleessuuf.",
+	"error-page-details": "Dogoggora gadi fageenyaan:$1"
 }

@@ -5,8 +5,11 @@
 			"Gebu"
 		]
 	},
-	"app-title": "WS-Export",
+	"app-title": "Wikisource Buch-Export",
+	"app-title-wikisource": "Wikisource",
+	"app-title-html": "$1 Buch Export",
 	"app-subtitle": "Exportiert Bücher aus Wikisources in vielen verschiedenen Dateiformaten.",
+	"logo-alt-text": "Wikisource-Logo, eine blau-weiße Illustration eines Eisbergs.",
 	"footer-version": "Dies ist $1, Version $2.",
 	"version": "Version $1",
 	"commit-label": "Commit: $1",
@@ -19,6 +22,7 @@
 	"statistics-link": "Statistiken",
 	"issues": "Bitte melde Fehler unter dem Projekt $1 auf Phabricator.",
 	"issue-button": "Bug-Meldung erstellen",
+	"back-to-wikisource": "Zurück zu Wikisource",
 	"export-book": "Buch exportieren",
 	"lang-field-label": "Wikisource:",
 	"lang-field-help": "Das Wikisource, aus der das Buch exportiert werden soll.",

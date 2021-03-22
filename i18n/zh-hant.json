@@ -4,8 +4,11 @@
 			"Kly"
 		]
 	},
-	"app-title": "WS 匯出",
+	"app-title": "維基文庫電子書匯出",
+	"app-title-wikisource": "維基文庫",
+	"app-title-html": "$1電子書匯出",
 	"app-subtitle": "從維基文庫以多種檔案格式匯出成電子書籍。",
+	"logo-alt-text": "維基文庫的標誌，為藍白色外觀的冰山圖樣。",
 	"footer-version": "此為版本 $2 的 $1。",
 	"version": "版本 $1",
 	"commit-label": "提交：$1",
@@ -18,6 +21,7 @@
 	"statistics-link": "統計",
 	"issues": "在 Pabricator 下的 $1 專案回報問題。",
 	"issue-button": "建立問題",
+	"back-to-wikisource": "返回到維基文庫",
 	"export-book": "匯出書籍",
 	"lang-field-label": "維基文庫：",
 	"lang-field-value": "$1（$2）",

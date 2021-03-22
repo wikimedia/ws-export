@@ -6,7 +6,7 @@
 			"Omotecho"
 		]
 	},
-	"app-title": "WS Export",
+	"app-title": "ウィキソースのブックをエクスポート",
 	"app-subtitle": "さまざまなファイル形式でウィキソースから書籍を書き出します。",
 	"footer-version": "これは$1バージョン$2です。",
 	"version": "バージョン$1",

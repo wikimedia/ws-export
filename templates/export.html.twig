@@ -22,10 +22,16 @@
 			<p class="message-inner">
 				<strong>{{ msg( 'export-failed' ) }}</strong>
 				<span>{{ msg( exception.i18nMessage, exception.i18nParams ) }}</span>
-				<button id="learn-more-link" type="button" role="button" data-toggle="collapse" class="btn btn-link alert-link"
-						data-target="#learn-more-body" aria-expanded="false" aria-controls="learn-more-body">
-					{{ msg( 'learn-more' ) }}
-				</button>
+				{% if exception.responseCode != 404 %}
+					{# Hide the 'Learn more' link since retrying will not help for 404s. #}
+					<button id="learn-more-link" type="button" role="button" data-toggle="collapse" class="btn btn-link alert-link"
+							data-target="#learn-more-body" aria-expanded="false" aria-controls="learn-more-body">
+						{{ msg( 'learn-more' ) }}
+					</button>
+				{% else %}
+					{# To maintain vertical spacing with X icon on the left. #}
+					<button class="btn invisible">&nbsp;</button>
+				{% endif %}
 			</p>
 			<div id="learn-more-body" class="collapse">
 				<hr />

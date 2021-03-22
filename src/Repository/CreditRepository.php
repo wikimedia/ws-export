@@ -1,6 +1,10 @@
 <?php
 namespace App\Repository;
 
+use App\Exception\WsExportException;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\DriverException;
+use Symfony\Component\HttpFoundation\Response;
 use Wikimedia\ToolforgeBundle\Service\ReplicasClient;
 
 class CreditRepository {
@@ -68,7 +72,7 @@ class CreditRepository {
 		}
 		$whereSqlString = "(" . implode( ' OR ', $whereSql ) . ")";
 
-		$results = $connection->fetchAllAssociative(
+		return $this->fetchAllAssociative( $connection,
 				"SELECT
 				actor_name,
 				COUNT(rev_id) AS count,
@@ -88,9 +92,6 @@ class CreditRepository {
 				GROUP BY actor_name
 				ORDER BY count DESC"
 			);
-		$connection->close();
-
-		return $results ? $results : [];
 	}
 
 	/**
@@ -109,7 +110,7 @@ class CreditRepository {
 		}
 		$sqlInString = "(" . implode( ',', $quotedImages ) . ")";
 
-		$results = $connection->fetchAllAssociative(
+		return $this->fetchAllAssociative( $connection,
 				"SELECT DISTINCT actor_name, bot FROM (
 					(
 					  SELECT DISTINCT actor_name,
@@ -142,8 +143,30 @@ class CreditRepository {
 					)
 				  ) a"
 			);
-		$connection->close();
+	}
 
-		return $results ? $results : [];
+	/**
+	 * Runs Connection::fetchAllAssociative() on the given SQL and closes the Connection.
+	 * Also captures common MySQL errors where we want to tell the user to re-try.
+	 * @param Connection $connection
+	 * @param string $sql
+	 * @return array
+	 * @throws WsExportException
+	 */
+	private function fetchAllAssociative( Connection $connection, string $sql ): array {
+		try {
+			$results = $connection->fetchAllAssociative( $sql );
+			$connection->close();
+		} catch ( DriverException $e ) {
+			// 1226 = the 'max_user_connections' error, all others are variants of MySQL timeouts.
+			// In all cases, we encourage re-trying and disabling credits if it continues to fail.
+			if ( in_array( $e->getErrorCode(), [ 1226, 1969, 2006, 2013 ] ) ) {
+				throw new WsExportException( 'fetching-credits', [], Response::HTTP_SERVICE_UNAVAILABLE, false );
+			}
+
+			throw $e;
+		}
+
+		return $results ?? [];
 	}
 }

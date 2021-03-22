@@ -3,11 +3,14 @@
 namespace App\Generator;
 
 use App\Book;
+use App\Exception\WsExportException;
 use App\FontProvider;
 use App\Util\Api;
 use App\Util\Util;
 use InvalidArgumentException;
 use Krinkle\Intuition\Intuition;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -128,7 +131,7 @@ class ConvertGenerator implements FormatGenerator {
 
 	/**
 	 * create the file
-	 * @param $data Book the title of the main page of the book in Wikisource
+	 * @param $book
 	 * @return string
 	 */
 	public function create( Book $book ) {
@@ -154,13 +157,17 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function convert( $epubFileName, $outputFileName ) {
-		$command = array_merge(
-			[ $this->getEbookConvertCommand(), $epubFileName, $outputFileName ],
-			explode( ' ', self::$CONFIG[$this->format]['parameters'] )
-		);
-		$process = new Process( $command );
-		$process->setTimeout( $this->timeout ?? 120 );
-		$process->mustRun();
+		try {
+			$command = array_merge(
+				[ $this->getEbookConvertCommand(), $epubFileName, $outputFileName ],
+				explode( ' ', self::$CONFIG[$this->format]['parameters'] )
+			);
+			$process = new Process( $command );
+			$process->setTimeout( $this->timeout ?? 120 );
+			$process->mustRun();
+		} catch ( ProcessTimedOutException $e ) {
+			throw new WsExportException( 'book-conversion', [], Response::HTTP_INTERNAL_SERVER_ERROR );
+		}
 	}
 
 	private function getEbookConvertCommand() {

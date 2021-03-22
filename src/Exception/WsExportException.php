@@ -15,11 +15,22 @@ class WsExportException extends Exception {
 	/** @var int */
 	private $responseCode;
 
-	public function __construct( string $i18nMessage, array $i18nParams, int $reponseCode ) {
+	/** @var bool */
+	private $friendly;
+
+	/**
+	 * WsExportException constructor.
+	 * @param string $i18nMessage
+	 * @param array $i18nParams
+	 * @param int $responseCode
+	 * @param bool $friendly `true` will mean a 'Learn more' link will be shown with troubleshooting tips.
+	 */
+	public function __construct( string $i18nMessage, array $i18nParams, int $responseCode, bool $friendly = true ) {
 		parent::__construct();
 		$this->i18nMessage = $i18nMessage;
 		$this->i18nParams = $i18nParams;
-		$this->responseCode = $reponseCode;
+		$this->responseCode = $responseCode;
+		$this->friendly = $friendly;
 	}
 
 	public function getI18nMessage(): string {
@@ -32,5 +43,13 @@ class WsExportException extends Exception {
 
 	public function getResponseCode(): int {
 		return $this->responseCode;
+	}
+
+	/**
+	 * Is this a 'friendly' error message ('Learn more' tips should be shown)?
+	 * @return bool
+	 */
+	public function isFriendly(): bool {
+		return $this->friendly;
 	}
 }

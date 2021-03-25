@@ -18,6 +18,7 @@
 	"issues": "Please report issues under the $1 project on Phabricator.",
 	"issue-button": "Create issue",
 	"back-to-wikisource": "Back to Wikisource",
+	"previous-alt-text": "Backwards-facing arrow icon that indicates that the link returns to Wikisource.",
 	"export-book": "Export a book",
 	"lang-field-label": "Wikisource",
 	"lang-field-value": "$1 ($2)",

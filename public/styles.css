@@ -37,6 +37,14 @@ footer p {
 	font-weight: bold;
 }
 
+.back-to-wikisource a:hover {
+	text-decoration: none;
+}
+
+.back-to-wikisource a:hover span {
+	text-decoration: underline;
+}
+
 h2 {
 	border-bottom: 1px solid #e5e5e5;
 	margin: 25px 0;

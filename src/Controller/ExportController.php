@@ -106,7 +106,7 @@ class ExportController extends AbstractController {
 			}
 		}
 
-		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
+		$font = $this->getFont( $request, $fontProvider );
 		$credits = (bool)$request->get( 'credits', true );
 		$images = (bool)$request->get( 'images', true );
 		return $this->render( 'export.html.twig', [
@@ -135,7 +135,7 @@ class ExportController extends AbstractController {
 		// Get params.
 		$page = $request->get( 'page' );
 		$format = $this->getFormat( $request );
-		$font = $this->getFont( $request, $api->getLang(), $fontProvider );
+		$font = $this->getFont( $request, $fontProvider );
 		// The `credits` checkbox submits as 'false' to disable, so needs extra filtering.
 		$credits = filter_var( $request->get( 'credits', true ), FILTER_VALIDATE_BOOL );
 		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
@@ -173,14 +173,14 @@ class ExportController extends AbstractController {
 	 * Get a font name from the given request, falling back to the default (which depends on the language).
 	 *
 	 * @param Request $request The current request.
-	 * @param string $lang A language code.
+	 * @param FontProvider $fontProvider
+	 * @param bool|null $getDefault Whether to try to retrieve the Wikisource's default font.
 	 * @return string|null
 	 */
-	private function getFont( Request $request, $lang, FontProvider $fontProvider ): ?string {
-		// Default font for non-latin languages.
+	private function getFont( Request $request, FontProvider $fontProvider, ?bool $getDefault = true ): ?string {
 		$font = $fontProvider->resolveName( $request->get( 'fonts' ) );
-		if ( !$font && !in_array( $lang, [ 'fr', 'en', 'de', 'it', 'es', 'pt', 'vec', 'pl', 'nl', 'fa', 'he', 'ar', 'zh', 'jp', 'kr' ] ) ) {
-			$font = 'FreeSerif';
+		if ( !$font && $getDefault ) {
+			$font = $fontProvider->getDefault( $this->getLang( $request ) );
 		}
 		if ( !$fontProvider->getOne( $font ) ) {
 			$font = '';
@@ -232,5 +232,4 @@ class ExportController extends AbstractController {
 		// but for error pages it's useful.
 		return ucfirst( str_replace( '_', ' ', $request->get( 'title', $request->get( 'page' ) ) ) );
 	}
-
 }

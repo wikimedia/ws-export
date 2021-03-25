@@ -76,7 +76,7 @@
 	<div class="form-group">
 		<label for="fonts" class="control-label">{{ msg( 'font-field-label' ) }}</label>
 		<select id="fonts" name="fonts" class="form-control">
-			<option value="">{{ msg( 'no-font-option' ) }}</option>
+			<option value=""{% if not font %} selected="selected"{% endif %}>{{ msg( 'no-font-option' ) }}</option>
 			{% for key,label in fonts %}
 				<option value="{{ key|e('html_attr') }}" {% if key == font %}selected="selected"{% endif %}>
 					{{ key }}

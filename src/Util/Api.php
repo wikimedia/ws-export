@@ -274,7 +274,7 @@ class Api {
 						return Util::getXhtmlFromContent( $this->getLang(), $result, $title );
 					},
 					function ( $reason ) use ( $title ) {
-						throw new WsExportException( 'rest-page-not-found', [ $title ], 404 );
+						throw new WsExportException( 'rest-page-not-found', [ $title ], 404, false );
 					}
 				);
 	}

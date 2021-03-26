@@ -62,5 +62,7 @@
 	"error-page-details": "Error details: $1",
 	"error-page-issue": "If this error persists, please $1.",
 	"error-page-issue-link": "report an issue on Phabricator",
-	"onwikiconfig-failure": "Unable to retrieve the on-wiki configuration from: $1"
+	"onwikiconfig-failure": "Unable to retrieve the on-wiki configuration from: $1",
+	"exception-fetching-credits": "Error fetching credits information. Please try exporting again. If this error persists, check the box in 'Options' to remove credits.",
+	"exception-book-conversion": "Error converting the format of the book."
 }

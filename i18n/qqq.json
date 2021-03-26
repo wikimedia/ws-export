@@ -64,5 +64,7 @@
 	"error-page-details": "Introduction text to the generic error page.\n\n$1 - Error description.",
 	"error-page-issue": "Call to action text.\n\n$1 - HTML link, with text from error-page-issue-link below.",
 	"error-page-issue-link": "Link text to use in the link in error-page-issue above.",
-	"onwikiconfig-failure": "Error message displayed if the on-wiki configuration fetching failed.\n\n* $1 - the URL of the config JSON page on Wikisource."
+	"onwikiconfig-failure": "Error message displayed if the on-wiki configuration fetching failed.\n\n* $1 - the URL of the config JSON page on Wikisource.",
+	"exception-fetching-credits": "Error message displayed when credits information could not be retrieved.",
+	"exception-book-conversion": "Error message displayed when a book could not be converted to another format."
 }

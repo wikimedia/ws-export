@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
+			"FF-11",
 			"FF11",
-			"Gebu"
+			"Gebu",
+			"KKCPT"
 		]
 	},
 	"app-title": "Wikisource Buch-Export",
@@ -24,11 +26,11 @@
 	"issue-button": "Bug-Meldung erstellen",
 	"back-to-wikisource": "Zurück zu Wikisource",
 	"export-book": "Buch exportieren",
-	"lang-field-label": "Wikisource:",
+	"lang-field-label": "Wikisource",
 	"lang-field-help": "Das Wikisource, aus der das Buch exportiert werden soll.",
-	"title-field-label": "Titel:",
+	"title-field-label": "Titel",
 	"title-field-help": "Titel der Hauptseite des Buches.",
-	"format-field-label": "Dateiformat:",
+	"format-field-label": "Dateiformat",
 	"format-epub-3": "EPUB 3 (für die meisten E-Book-Reader)",
 	"format-epub-2": "EPUB 2 (veralted, kann für einige sehr alte E-Book-Reader nüzlich sein)",
 	"format-htmlz": "HTML",
@@ -40,14 +42,32 @@
 	"format-rtf": "RTF",
 	"format-txt": "Nur Text",
 	"exception-invalid-format": "„$1“ ist kein gültiges Format. Gültige Formate sind: $2.",
-	"font-field-label": "Schriftart:",
+	"font-field-label": "Schriftart",
 	"no-font-option": "Keine (Standardeinstellung des Gerätes benutzen)",
 	"font-field-help": "Wähle aus $1 Schriftarten.",
-	"options-label": "Optionen:",
+	"options-label": "Optionen",
 	"credits-field-label": "Nennung der Mitwirkenden ausschließen (schnellerer Download)",
 	"credits-default-message": "(Die Liste der Mitwirkenden wurde wie gewünscht weggelassen.)",
 	"images-field-label": "Füge keine Bilder ein",
 	"nocache-field-label": "Jegliches Caching umgehen (langsamer, aber nützlich für Debugging)",
 	"export-button": "Exportieren",
-	"cache-updated": "Der Cache für die folgende Sprache wurde erneuert: $1"
+	"cache-updated": "Der Cache für die folgende Sprache wurde erneuert: $1",
+	"alert-close": "Schließen",
+	"export-failed": "Download fehlgeschlagen.",
+	"exception-url-fetch-error": "URL kann nicht abgerufen werden: $1",
+	"exception-rest-page-not-found": "Das Buch „$1“ konnte nicht gefunden werden.",
+	"learn-more": "Weitere Informationen",
+	"error-fix": "Bitte versuche diese Schritte, wenn du einen Fehler feststellst:",
+	"error-fix-again": "Versuche das Buch erneut herunterzuladen.",
+	"error-fix-epub": "Versuche das Buch als EPUB-Datei herunterzuladen.",
+	"error-fix-nocredits": "Aktiviere das Kontrollkästchen in „Optionen“, um die Autorennennung zu entfernen",
+	"error-fix-noimages": "Aktiviere das Kontrollkästchen in „Optionen“, um Bilder zu entfernen.",
+	"error-breadcrumb": "Fehler $1",
+	"error-page-header": "Es ist ein Fehler aufgetreten",
+	"error-page-details": "Fehlerdetails: $1",
+	"error-page-issue": "Wenn dieser Fehler weiterhin besteht, bitte $1.",
+	"error-page-issue-link": "ein Problem auf Phabricator melden",
+	"onwikiconfig-failure": "Kann die On-Wiki-Konfiguration nicht abrufen von: $1",
+	"exception-fetching-credits": "Fehler beim Abrufen der Kreditinformationen. Bitte versuchen Sie es erneut. Wenn dieser Fehler weiterhin besteht, aktivieren Sie das Kontrollkästchen unter \"Optionen\", um Credits zu entfernen.",
+	"exception-book-conversion": "Fehler beim Kovertieren des Formates des Buches."
 }

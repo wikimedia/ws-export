@@ -23,7 +23,7 @@
 	"export-book": "Kitaaba alergi",
 	"lang-field-label": "Maddawiki",
 	"lang-field-help": "Koodii afaan Wikisource ykn qayiqqoo, kanneen akka 'en' ykn 'fr'",
-	"title-field-label": "Matduree:",
+	"title-field-label": "Matduree",
 	"title-field-help": "Matduree kitaabota fuula haadhoo.",
 	"format-field-label": "Bifunka harshamaa",
 	"format-field-help": "GPL v2",
@@ -50,6 +50,8 @@
 	"exception-rest-page-not-found": "Kitaabni '$1' as keessa hin jiru.",
 	"learn-more": "Dabalataan baradhu.",
 	"error-fix": "Maaloo gulantaalee kana yaali yoo dogoggorri si qunname.",
+	"error-fix-again": "Kitaabicha buusuuf irradeebiin yaali.",
+	"error-fix-epub": "Harshama EPUBtiin Kitaaba gaffe'uu yaali.",
 	"error-fix-nocredits": "'Filannoolee' keessa dulaaba soqi suuraalee haquuf",
 	"error-fix-noimages": "'Filannoolee' keessaa dulaaba ilaali suuraawwan balleessuuf.",
 	"error-page-details": "Dogoggora gadi fageenyaan:$1"

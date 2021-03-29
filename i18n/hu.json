@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Hanna Tardos",
+			"Luckylukee81",
 			"Tacsipacsi"
 		]
 	},
@@ -15,12 +16,13 @@
 	"statistics": "Van néhány $1 is.",
 	"statistics-link": "statisztika",
 	"issue-button": "Hibabejelentés",
+	"back-to-wikisource": "Vissza a Wikiforráshoz",
 	"export-book": "Könyv exportálása",
-	"lang-field-label": "Nyelvkód:",
+	"lang-field-label": "Wikiforrás",
 	"lang-field-help": "Wikiforrás-nyelvkód vagy -aldomain, pl. „hu” vagy „en”.",
-	"title-field-label": "Cím:",
+	"title-field-label": "Cím",
 	"title-field-help": "A könyv címlapjának címe.",
-	"format-field-label": "Fájlformátum:",
+	"format-field-label": "Fájlformátum",
 	"format-epub-3": "EPUB 3 (a legtöbb e-olvasóhoz)",
 	"format-epub-2": "EPUB 2 (elavult, néhány nagyon régi e-olvasóhoz hasznos lehet)",
 	"format-htmlz": "HTML",
@@ -32,12 +34,16 @@
 	"format-rtf": "RTF",
 	"format-txt": "Egyszerű szöveg",
 	"exception-invalid-format": "A(z) „$1” nem egy érvényes formátum. Az érvényes formátumok a következők: $2",
-	"font-field-label": "Betűtípus:",
+	"font-field-label": "Betűtípus",
 	"no-font-option": "Nincs (az eszköz alapértelmezésének használata)",
 	"font-field-help": "Válassz $1 elérhető betűtípus közül.",
-	"options-label": "Opciók:",
+	"options-label": "Opciók",
 	"images-field-label": "Képek kihagyása",
 	"nocache-field-label": "Minden gyorsítótárazás kihagyása (lassabb, de hibakereséshez hasznos)",
 	"export-button": "Exportálás",
-	"cache-updated": "A gyorsítótár frissítve a következő nyelvhez: $1"
+	"cache-updated": "A gyorsítótár frissítve a következő nyelvhez: $1",
+	"alert-close": "Bezárás",
+	"export-failed": "Sikertelen letöltés.",
+	"learn-more": "Tudj meg többet.",
+	"error-page-header": "Hiba történt"
 }

@@ -1,0 +1,38 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kareyac",
+			"Okras",
+			"Wileyfoxyx"
+		]
+	},
+	"app-title-wikisource": "Викитека",
+	"version": "версия $1",
+	"license-link": "GPL v2 или позднее",
+	"source-link": "на Github",
+	"statistics-link": "статистика",
+	"back-to-wikisource": "Назад на Викитеку",
+	"export-book": "Экспортировать книгу",
+	"lang-field-label": "Викитека",
+	"title-field-label": "Заголовок",
+	"format-field-label": "Формат файла",
+	"format-htmlz": "HTML",
+	"format-mobi": "MOBI (для Kindle)",
+	"format-pdf-a4": "PDF — размер A4",
+	"format-pdf-a5": "PDF — размер A5",
+	"format-pdf-a6": "PDF — размер A6",
+	"format-pdf-letter": "PDF — размер письма США",
+	"format-rtf": "RTF",
+	"format-txt": "Обычный текст",
+	"exception-invalid-format": "«$1» не является допустимым форматом. Допустимые форматы: $2",
+	"font-field-label": "Шрифт",
+	"font-field-help": "Выберите из $1 доступных шрифтов.",
+	"options-label": "Настройки",
+	"images-field-label": "Не включать изображения",
+	"export-button": "Экспортировать",
+	"alert-close": "Закрыть",
+	"learn-more": "Узнать больше.",
+	"error-breadcrumb": "Ошибка $1",
+	"error-page-header": "Произошла ошибка",
+	"exception-book-conversion": "Ошибка конвертирования формата книги."
+}

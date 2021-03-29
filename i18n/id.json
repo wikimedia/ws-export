@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"Naufal06"
+		]
+	},
+	"app-title": "Ekspor Buku Wikisource",
+	"app-title-html": "$1 Ekspor Buku",
+	"app-subtitle": "Ekspor buku dari Wikisource dalam banyak format berkas yang berbeda.",
+	"logo-alt-text": "Logo Wikisource, sebuah ilustrasi biru dan putih dari sebuah gunung es.",
+	"footer-version": "Ini adalah $1 versi $2.",
+	"version": "versi $1",
+	"licensed-under": "Ini dilisensikan di bawah $1.",
+	"license-link": "GPL v2 atau setelahnya",
+	"source-link": "di Github",
+	"docs-link": "di Wikisource multi bahasa",
+	"statistics-link": "statistik",
+	"title-field-label": "Judul",
+	"title-field-help": "Judul dari halaman utama buku.",
+	"format-field-label": "Format berkas",
+	"format-htmlz": "HTML",
+	"format-pdf-a4": "PDF - ukuran A4",
+	"format-pdf-a5": "PDF - ukuran A5",
+	"format-pdf-a6": "PDF - ukuran A6",
+	"format-pdf-letter": "PDF - ukuran letter AS",
+	"format-rtf": "RTF",
+	"font-field-label": "Fon",
+	"options-label": "Opsi",
+	"export-button": "Ekspor",
+	"alert-close": "Tutup",
+	"export-failed": "Pengunduhan gagal.",
+	"learn-more": "Pelajari selengkapnya.",
+	"error-breadcrumb": "Galat $1",
+	"error-page-header": "Sebuah kesalahan terjadi",
+	"error-page-details": "Detail galat: $1"
+}

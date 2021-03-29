@@ -38,7 +38,8 @@ class OnWikiConfig {
 			return $this->data[ $lang ];
 		}
 		$this->api->setLang( $lang );
-		$this->data[ $lang ] = $this->cache->get( 'OnWikiConfig_' . $lang, function ( CacheItemInterface $cacheItem ) {
+		$cacheKey = Util::sanitizeCacheKey( 'OnWikiConfig_' . $lang );
+		$this->data[ $lang ] = $this->cache->get( $cacheKey, function ( CacheItemInterface $cacheItem ) {
 			$cacheItem->expiresAfter( new DateInterval( 'P1M' ) );
 			$configPageName = 'MediaWiki:WS_Export.json';
 			try {

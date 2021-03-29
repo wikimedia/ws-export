@@ -69,5 +69,8 @@
 	"error-page-issue-link": "signaler une anomalie sur Phabricator",
 	"onwikiconfig-failure": "Impossible de récupérer la configuration dans le wiki depuis : $1",
 	"exception-fetching-credits": "Erreur de récupération des informations d’attribution. Veuillez essayer à nouveau l’exportation. Si cette erreur persiste, cochez la case dans les « Options » pour retirer les attributions.",
-	"exception-book-conversion": "Erreur de conversion du format du livre."
+	"exception-book-conversion": "Erreur de conversion du format du livre.",
+	"epub-title-page": "Titre",
+	"epub-exported-date": "Exporté de Wikisource le $1",
+	"epub-about": "À propos"
 }

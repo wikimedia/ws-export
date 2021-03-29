@@ -42,5 +42,8 @@
 	"alert-close": "বন্ধ করুন",
 	"learn-more": "আরও জানুন।",
 	"error-breadcrumb": "ত্রুটি $1",
-	"error-page-header": "একটি ত্রুটি ঘটেছে"
+	"error-page-header": "একটি ত্রুটি ঘটেছে",
+	"epub-title-page": "শিরোনাম",
+	"epub-exported-date": "$1 তারিখে উইকিসংকলন থেকে রপ্তানিকৃত",
+	"epub-about": "সম্পর্কে"
 }

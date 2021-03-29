@@ -43,5 +43,8 @@
 	"images-field-label": "No inclou imatges",
 	"nocache-field-label": "Ignorar tota la memòria cau (més lent però útil per depurar)",
 	"export-button": "Exporta",
-	"cache-updated": "La memòria cau s'ha actualitzat per a l'idioma: $1"
+	"cache-updated": "La memòria cau s'ha actualitzat per a l'idioma: $1",
+	"epub-title-page": "Títol",
+	"epub-exported-date": "Exportat de Viquitexts el $1",
+	"epub-about": "Quant a"
 }

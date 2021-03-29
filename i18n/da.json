@@ -34,5 +34,8 @@
 	"options-label": "Valgmuligheder:",
 	"images-field-label": "Medtag ikke billeder",
 	"nocache-field-label": "Ignorer alle mellemlagre (langsommere, men brugbar ved fejlsøgning)",
-	"export-button": "Eksportér"
+	"export-button": "Eksportér",
+	"epub-title-page": "Titel",
+	"epub-exported-date": "Eksporteret fra Wikisource den $1",
+	"epub-about": "Om"
 }

@@ -96,10 +96,6 @@ class Util {
 		return file_get_contents( $path );
 	}
 
-	public static function getI18n( Api $api, $lang ) {
-		return unserialize( static::getTempFile( $api, $lang, 'i18n.sphp' ) );
-	}
-
 	public static function encodeString( $string ) {
 		static $map = [];
 		static $num = 0;

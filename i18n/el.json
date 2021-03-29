@@ -42,5 +42,8 @@
 	"images-field-label": "Να μην συμπεριληφθούν εικόνες",
 	"nocache-field-label": "Παράκαμψη όλης της cache (αργότερο αλλά χρήσιμο για εντοπισμό προβλημάτων)",
 	"export-button": "Εξαγωγή",
-	"cache-updated": "Η cache έχει ανανεωθεί για τη γλώσσα: $1"
+	"cache-updated": "Η cache έχει ανανεωθεί για τη γλώσσα: $1",
+	"epub-title-page": "Τίτλος",
+	"epub-exported-date": "εξάχθηκε από τη Βικιθήκη την $1",
+	"epub-about": "Σχετικά με"
 }

@@ -34,5 +34,8 @@
 	"learn-more": "Узнать больше.",
 	"error-breadcrumb": "Ошибка $1",
 	"error-page-header": "Произошла ошибка",
-	"exception-book-conversion": "Ошибка конвертирования формата книги."
+	"exception-book-conversion": "Ошибка конвертирования формата книги.",
+	"epub-title-page": "Заглавие",
+	"epub-exported-date": "Экспортировано из Викитеки $1",
+	"epub-about": "Информация"
 }

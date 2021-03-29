@@ -34,8 +34,8 @@ class PageParserTest extends TestCase {
 	public function testPictureList() {
 		$pictureList = $this->pageParser->getPicturesList();
 		$this->assertCount( 2, $pictureList );
-		$this->assertArrayHasKey( '18px-Wikimedia-logo.svg.png', $pictureList );
-		$this->assertArrayHasKey( '48px-PD-icon.svg.png', $pictureList );
+		$this->assertArrayHasKey( 'Wikimedia-logo.svg-18px-Wikimedia-logo.svg.png', $pictureList );
+		$this->assertArrayHasKey( 'PD-icon.svg-48px-PD-icon.svg.png', $pictureList );
 	}
 
 	public function testGetPagesListEmpty() {

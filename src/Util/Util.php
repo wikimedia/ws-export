@@ -230,4 +230,13 @@ class Util {
 		$document->encoding = 'UTF-8';
 		return $document;
 	}
+
+	/**
+	 * Remove reserved characters from a cache key.
+	 * @param string $key
+	 * @return string
+	 */
+	public static function sanitizeCacheKey( string $key ): string {
+		return preg_replace( '/[{}()\/\@\:"]/', '-', $key );
+	}
 }

@@ -103,7 +103,8 @@ class Api {
 		if ( isset( $this->namespaces[ $this->getLang() ] ) ) {
 			return $this->namespaces[ $this->getLang() ];
 		}
-		$this->namespaces[ $this->getLang() ] = $this->cache->get( 'namespaces_' . $this->getLang(), function ( CacheItemInterface $cacheItem ) {
+		$cacheKey = Util::sanitizeCacheKey( 'namespaces_' . $this->getLang() );
+		$this->namespaces[ $this->getLang() ] = $this->cache->get( $cacheKey, function ( CacheItemInterface $cacheItem ) {
 			$this->logger->notice( 'Fetching namespace names for ' . $this->getLang() );
 			$cacheItem->expiresAfter( new DateInterval( 'P1M' ) );
 			$response = $this->queryAsync( [ 'meta' => 'siteinfo', 'siprop' => 'namespaces|namespacealiases' ] )
@@ -133,7 +134,8 @@ class Api {
 	 * @return string The HTML.
 	 */
 	public function getAboutPage(): string {
-		$content = $this->cache->get( 'about_' . $this->getLang(), function ( CacheItemInterface $cacheItem ) {
+		$cacheKey = Util::sanitizeCacheKey( 'about_' . $this->getLang() );
+		$content = $this->cache->get( $cacheKey, function ( CacheItemInterface $cacheItem ) {
 			// Cache for 1 month.
 			$cacheItem->expiresAfter( new DateInterval( 'P1M' ) );
 			// Get the HTML from either this Wikisource or multilingual Wikisource.

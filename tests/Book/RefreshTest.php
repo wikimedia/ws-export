@@ -27,14 +27,6 @@ class RefreshTest extends KernelTestCase {
 		$this->api = self::$container->get( Api::class );
 	}
 
-	public function testRefreshUpdatesI18N() {
-		$this->refresh( 'en' );
-
-		$i18n = unserialize( Util::getTempFile( $this->api, 'en', 'i18n.sphp' ) );
-		$this->assertIsArray( $i18n );
-		$this->assertEquals( 'Test-Title', $i18n[ 'title_page' ] );
-	}
-
 	public function testRefreshUpdatesEpubCssWikisource() {
 		$this->refresh( 'en' );
 
@@ -55,13 +47,8 @@ class RefreshTest extends KernelTestCase {
 
 	private function defaultResponses() {
 		return [
-			$this->mockI18NResponse( 'title_page = "Test-Title"' ),
 			$this->mockCssWikisourceResponse( '/* TEST-CSS */' ),
 		];
-	}
-
-	private function mockI18NResponse( $content ) {
-		return new Response( 200, [ 'Content' => 'text/x-wiki' ], $content );
 	}
 
 	private function mockCssWikisourceResponse( $content ) {

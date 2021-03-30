@@ -27,5 +27,8 @@
 	"credits-field-label": "Excluir créditos a los editores (para una descarga más rápida)",
 	"export-button": "Exportar",
 	"exception-fetching-credits": "Error al extraer información de los créditos. Por favor intente nuevamente. Si el error persiste, marque la opción 'Opciones' para quitar los créditos.",
-	"exception-book-conversion": "Error al convertir el formato del libro."
+	"exception-book-conversion": "Error al convertir el formato del libro.",
+	"epub-title-page": "Título",
+	"epub-exported-date": "Exportado de Wikisource el $1",
+	"epub-about": "Sobre"
 }

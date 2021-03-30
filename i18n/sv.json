@@ -43,5 +43,8 @@
 	"images-field-label": "Visa inte bilder",
 	"nocache-field-label": "Ignorera all caching (långsammare men användbart för felsökning)",
 	"export-button": "Exportera",
-	"cache-updated": "Cachen har uppdaterats för språk: $1"
+	"cache-updated": "Cachen har uppdaterats för språk: $1",
+	"epub-title-page": "Titelsida",
+	"epub-exported-date": "Exporterad från Wikisource $1",
+	"epub-about": "Om"
 }

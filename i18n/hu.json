@@ -45,5 +45,8 @@
 	"alert-close": "Bezárás",
 	"export-failed": "Sikertelen letöltés.",
 	"learn-more": "Tudj meg többet.",
-	"error-page-header": "Hiba történt"
+	"error-page-header": "Hiba történt",
+	"epub-title-page": "Címlap",
+	"epub-exported-date": "Exportálva a Wikiforrásból: $1",
+	"epub-about": "Szerzőségi adatok"
 }

@@ -71,5 +71,8 @@
 	"error-page-issue-link": "Phabricator'da bir sorun bildirin",
 	"onwikiconfig-failure": "Viki üzerindeki yapılandırma alınamıyor: $1",
 	"exception-fetching-credits": "Katkıda bulunanlar bilgisi alınırken hata oluştu. Lütfen tekrar dışa aktarmayı deneyin. Eğer hata tekrarlarsa, 'Tercihler'deki kutucuğu işaretleyerek katkıda bulunanları çıkartın.",
-	"exception-book-conversion": "Kitabın biçimi çevrilirken hata oluştu."
+	"exception-book-conversion": "Kitabın biçimi çevrilirken hata oluştu.",
+	"epub-title-page": "Başlık",
+	"epub-exported-date": "$1 tarihinde oluşturuldu",
+	"epub-about": "Hakkında"
 }

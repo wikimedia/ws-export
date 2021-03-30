@@ -24,25 +24,11 @@ class Refresh {
 			mkdir( $this->getTempFileName( '' ) );
 		}
 
-		$this->getI18n();
 		$this->getEpubCssWikisource();
 		$this->cacheItemPool->deleteItems( [
 			'namespaces_' . $this->api->getLang(),
 			'about_' . $this->api->getLang(),
 		] );
-	}
-
-	protected function getI18n() {
-		$ini = parse_ini_file( dirname( __DIR__ ) . '/resources/i18n.ini' );
-		try {
-			$response = $this->api->get( 'https://' . $this->api->getLang() . '.wikisource.org/w/index.php?title=MediaWiki:Wsexport_i18n.ini&action=raw&ctype=text/plain' );
-			$temp = parse_ini_string( $response );
-			if ( $ini != false ) {
-				$ini = array_merge( $ini, $temp );
-			}
-		} catch ( Exception $e ) {
-		}
-		$this->setTempFileContent( 'i18n.sphp', serialize( $ini ) );
 	}
 
 	protected function getEpubCssWikisource() {

@@ -67,5 +67,8 @@
 	"error-page-issue-link": "Link text to use in the link in error-page-issue above.",
 	"onwikiconfig-failure": "Error message displayed if the on-wiki configuration fetching failed.\n\n* $1 - the URL of the config JSON page on Wikisource.",
 	"exception-fetching-credits": "Error message displayed when credits information could not be retrieved.",
-	"exception-book-conversion": "Error message displayed when a book could not be converted to another format."
+	"exception-book-conversion": "Error message displayed when a book could not be converted to another format.",
+	"epub-title-page": "Name of the title page in exported books (used in the table of contents).",
+	"epub-about": "Name of the 'about' page in exported books (used in the table of contents).",
+	"epub-exported-date": "Phrase used on the title page to indicate the book export date.\n\n$1 - the localized date."
 }

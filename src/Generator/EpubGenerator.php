@@ -23,11 +23,6 @@ use ZipArchive;
  */
 class EpubGenerator implements FormatGenerator {
 
-	/**
-	 * array key/value that contain translated strings
-	 */
-	protected $i18n = [];
-
 	/** @var FontProvider */
 	protected $fontProvider;
 
@@ -67,7 +62,7 @@ class EpubGenerator implements FormatGenerator {
 	public function create( Book $book ) {
 		$oldBookTitle = $book->title;
 		$css = $this->getCss( $book );
-		$this->i18n = Util::getI18n( $this->api, $book->lang );
+		$this->intuition->setLang( $book->lang );
 		$wsUrl = Util::wikisourceUrl( $book->lang, $book->title );
 		$cleaner = new BookCleanerEpub();
 		$cleaner->clean( $book, Util::wikisourceUrl( $book->lang ) );
@@ -248,7 +243,7 @@ class EpubGenerator implements FormatGenerator {
 				<docAuthor><text>' . htmlspecialchars( $book->author, ENT_QUOTES ) . '</text></docAuthor>
 				<navMap>
 					<navPoint id="title" playOrder="1">
-						<navLabel><text>' . $this->i18n['title_page'] . '</text></navLabel>
+						<navLabel><text>' . $this->intuition->msg( 'epub-title-page' ) . '</text></navLabel>
 						<content src="title.xhtml"/>
 					</navPoint>';
 		$order = 2;
@@ -281,7 +276,7 @@ class EpubGenerator implements FormatGenerator {
 		}
 		$content .= '<navPoint id="about" playOrder="' . $order . '">
 						<navLabel>
-							<text>' . htmlspecialchars( $this->i18n['about'], ENT_QUOTES ) . '</text>
+							<text>' . htmlspecialchars( $this->intuition->msg( 'epub-about' ), ENT_QUOTES ) . '</text>
 						</navLabel>
 						<content src="about.xhtml"/>
 					</navPoint>
@@ -305,7 +300,7 @@ class EpubGenerator implements FormatGenerator {
 					   <nav epub:type="toc" id="toc">
 						  <ol>
 							 <li id="toc-title">
-								<a href="title.xhtml">' . htmlspecialchars( $this->i18n['title_page'], ENT_QUOTES ) . '</a>
+								<a href="title.xhtml">' . htmlspecialchars( $this->intuition->msg( 'epub-title-page' ), ENT_QUOTES ) . '</a>
 							 </li>';
 		if ( $book->content ) {
 			$content .= '<li id="toc-' . $book->title . '">
@@ -333,7 +328,7 @@ class EpubGenerator implements FormatGenerator {
 			}
 		}
 		$content .= '<li id="toc-about">
-								<a href="about.xhtml">' . htmlspecialchars( $this->i18n['about'], ENT_QUOTES ) . '</a>
+								<a href="about.xhtml">' . htmlspecialchars( $this->intuition->msg( 'epub-about' ), ENT_QUOTES ) . '</a>
 							 </li>
 						  </ol>
 					   </nav>
@@ -343,7 +338,7 @@ class EpubGenerator implements FormatGenerator {
 								  <a epub:type="bodymatter" href="' . $book->title . '.xhtml">' . htmlspecialchars( $book->name, ENT_QUOTES ) . '</a>
 							    </li>
 							    <li>
-								  <a epub:type="copyright-page" href="about.xhtml">' . htmlspecialchars( $this->i18n['about'], ENT_QUOTES ) . '</a>
+								  <a epub:type="copyright-page" href="about.xhtml">' . htmlspecialchars( $this->intuition->msg( 'epub-about' ), ENT_QUOTES ) . '</a>
 							    </li>
 						  </ol>
 					    </nav>
@@ -379,6 +374,7 @@ class EpubGenerator implements FormatGenerator {
 		}
 
 		$formatter = new IntlDateFormatter( $book->lang, IntlDateFormatter::LONG, IntlDateFormatter::NONE );
+		$exportedDate = $this->intuition->msg( 'epub-exported-date', [ 'variables' => [ $formatter->format( time() ) ] ] );
 		$content = '<?xml version="1.0" encoding="UTF-8" ?>
 			<!DOCTYPE html>
 			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $book->lang . '" dir="' . Util::getLanguageDirection( $book->lang ) . '">
@@ -396,7 +392,7 @@ class EpubGenerator implements FormatGenerator {
 		$content .= '<br />
 					<h5>' . implode( ', ', $footerElements ) . '</h5>
 					<br />
-					<h6>' . str_replace( '%d', $formatter->format( time() ), htmlspecialchars( $this->i18n['exported_from_wikisource_the'], ENT_QUOTES ) ) . '</h6>
+					<h6>' . htmlspecialchars( $exportedDate, ENT_QUOTES ) . '</h6>
 				</body>
 			</html>';
 		return $content;
@@ -404,7 +400,6 @@ class EpubGenerator implements FormatGenerator {
 
 	private function getXhtmlAbout( Book $book, $wsUrl ) {
 		if ( !$book->options['credits'] ) {
-			$this->intuition->setLang( $book->lang );
 			// We need a fall back because Phan will complain since 'Intuition::msg' returns string|null
 			// and 'null' cannot be passed to `Util::getXhtmlFromContent` for argument 2.
 			$list = $this->intuition->msg( 'credits-default-message' ) ??
@@ -426,7 +421,7 @@ class EpubGenerator implements FormatGenerator {
 
 		$about = $this->api->getAboutPage();
 		if ( $about == '' ) {
-			$about = Util::getXhtmlFromContent( $book->lang, $list, $this->i18n['about'] );
+			$about = Util::getXhtmlFromContent( $book->lang, $list, $this->intuition->msg( 'epub-about' ) );
 		} else {
 			$about = str_replace( '{CONTRIBUTORS}', $list, $about );
 			$about = str_replace( '{BOT-CONTRIBUTORS}', $listBot, $about );

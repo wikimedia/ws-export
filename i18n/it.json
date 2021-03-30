@@ -26,5 +26,8 @@
 	"export-button": "Esporta",
 	"alert-close": "Chiudi",
 	"learn-more": "Ulteriori informazioni.",
-	"error-breadcrumb": "Errore $1"
+	"error-breadcrumb": "Errore $1",
+	"epub-title-page": "Titolo",
+	"epub-exported-date": "Esportato da Wikisource il $1. Segnala eventuali errori su it.wikisource.org/wiki/Segnala_errori",
+	"epub-about": "Informazioni"
 }

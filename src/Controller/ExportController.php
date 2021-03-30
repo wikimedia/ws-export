@@ -11,6 +11,7 @@ use App\Refresh;
 use App\Repository\CreditRepository;
 use App\Util\Api;
 use App\Wikidata;
+use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Krinkle\Intuition\Intuition;
@@ -161,9 +162,14 @@ class ExportController extends AbstractController {
 
 		// Log book generation.
 		if ( $this->enableStats ) {
-			$genBook = new GeneratedBook( $creator->getBook(), $format, $this->stopwatch->stop( 'generate-book' ) );
-			$this->entityManager->persist( $genBook );
-			$this->entityManager->flush();
+			try {
+				$genBook = new GeneratedBook( $creator->getBook(), $format, $this->stopwatch->stop( 'generate-book' ) );
+				$this->entityManager->persist( $genBook );
+				$this->entityManager->flush();
+			} catch ( DriverException $e ) {
+				// There was an error writing to tools-db.
+				// Silently ignore as this shouldn't prevent the book from being downloaded.
+			}
 		}
 
 		return $response;

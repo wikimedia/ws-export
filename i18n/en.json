@@ -24,7 +24,7 @@
 	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "The Wikisource from which to export the book.",
 	"title-field-label": "Title",
-	"title-field-help": "Title of the book's main page.",
+	"title-field-help": "Title of the book or section to export.",
 	"format-field-label": "File format",
 	"format-field-help": "",
 	"format-epub-3": "EPUB 3 (for most ereaders)",

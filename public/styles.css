@@ -3,12 +3,15 @@ header {
 	margin-bottom: 25px;
 }
 
+.container {
+	max-width: 585px;
+}
+
 header .container {
 	display: flex;
 	align-items: center;
-	max-width: 100%;
-	/* 1170 is bootstrap's widest breakpoint, and the 85 and 20 are for the logo. */
-	width: calc( 1170px + ( ( 85px + 20px ) * 2 ) );
+	/* 585 is the container width set above, and the 85 and 20 are for the logo. */
+	max-width: calc( 585px + ( ( 85px + 20px ) * 2 ) );
 }
 
 header .logo {
@@ -35,6 +38,12 @@ footer p {
 .back-to-wikisource a {
 	color: inherit;
 	font-weight: bold;
+	line-height: 20px;
+}
+
+.back-to-wikisource img {
+	/* 5px is half of half the line height, in order to center vertically but not around the baseline. */
+	vertical-align: -5px;
 }
 
 .back-to-wikisource a:hover {
@@ -53,14 +62,13 @@ h2 {
 
 fieldset legend,
 label {
-	font-size: 1.2em;
+	font-size: 14px;
 	font-weight: bold;
 	border: 0;
 	margin: 0;
 }
 
 label {
-	font-size: 14px;
 	display: block;
 	margin-bottom: 7px;
 }

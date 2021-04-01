@@ -1,5 +1,7 @@
 {
-	"@metadata": {},
+	"@metadata": {
+		"authors": []
+	},
 	"epub-title-page": "Titill",
 	"epub-exported-date": "Sótt frá Wikiheimild þann $1",
 	"epub-about": "Um bókina"

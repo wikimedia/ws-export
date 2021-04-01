@@ -22,11 +22,12 @@
 	"issues": "Por favor, relate problemas sob o projeto $1 no Pabricator.",
 	"issue-button": "Criar problema",
 	"back-to-wikisource": "Voltar para Wikisource",
+	"previous-alt-text": "Ícone de seta voltado para trás que indica que o link retorna para o Wikisource.",
 	"export-book": "Exportar um livro",
 	"lang-field-label": "Wikisource",
 	"lang-field-help": "Código de idioma do Wikisource ou subdomínio, como 'en' ou 'fr'.",
 	"title-field-label": "Título",
-	"title-field-help": "Título da página principal do livro.",
+	"title-field-help": "Título do livro ou seção a exportar.",
 	"format-field-label": "Formato de arquivo",
 	"format-epub-3": "EPUB 3 (para a maioria dos ereaders)",
 	"format-epub-2": "EPUB 2 (obsoleto, pode ser útil para alguns ereaders muito antigos)",
@@ -63,5 +64,11 @@
 	"error-page-header": "Um erro ocorreu",
 	"error-page-details": "Detalhes do erro: $1",
 	"error-page-issue": "Se este erro persistir, por favor $1",
-	"error-page-issue-link": "Reportar um problema no Phabricator"
+	"error-page-issue-link": "Reportar um problema no Phabricator",
+	"onwikiconfig-failure": "Incapaz de recuperar a configuração na wiki: $1",
+	"exception-fetching-credits": "Erro ao buscar informações de crédito. Tente exportar novamente. Se o erro persistir, marque a caixa em 'Opções' para remover os créditos.",
+	"exception-book-conversion": "Erro ao converter o formato do livro.",
+	"epub-title-page": "Título",
+	"epub-exported-date": "Conteúdo exportado da Wikisource em $1",
+	"epub-about": "Sobre"
 }

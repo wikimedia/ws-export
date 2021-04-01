@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Robby"
+		]
 	},
 	"app-title": "Application title, used in various places.",
 	"app-title-wikisource": "The 'Wikisource' part of the application title, used in app-title-html.",
@@ -50,7 +52,7 @@
 	"nocache-field-label": "Form field label for the 'disable caching' option field.",
 	"export-button": "Button text for the main export form.",
 	"cache-updated": "Message displayed after a user has requested a cache-refresh.\n\nParameter:\n$1 - the language code that was refreshed.",
-	"alert-close": "Tooltip text for the 'x' link to close an alert.",
+	"alert-close": "Tooltip text for the 'x' link to close an alert.\n{{identical|Close}}",
 	"export-failed": "Error message displayed in an alert box when a download fails.",
 	"exception-url-fetch-error": "Error message displayed when a remove URL could not be retieved.\n\n* $1 - The URL that failed.",
 	"exception-rest-page-not-found": "Error message displayed when a work could not be found on Wikisource.\n\n$1 - The book title",
@@ -69,6 +71,6 @@
 	"exception-fetching-credits": "Error message displayed when credits information could not be retrieved.",
 	"exception-book-conversion": "Error message displayed when a book could not be converted to another format.",
 	"epub-title-page": "Name of the title page in exported books (used in the table of contents).",
-	"epub-about": "Name of the 'about' page in exported books (used in the table of contents).",
-	"epub-exported-date": "Phrase used on the title page to indicate the book export date.\n\n$1 - the localized date."
+	"epub-exported-date": "Phrase used on the title page to indicate the book export date.\n\n$1 - the localized date.",
+	"epub-about": "Name of the 'about' page in exported books (used in the table of contents)."
 }

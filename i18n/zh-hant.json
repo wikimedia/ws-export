@@ -22,12 +22,13 @@
 	"issues": "在 Pabricator 下的 $1 專案回報問題。",
 	"issue-button": "建立問題",
 	"back-to-wikisource": "返回到維基文庫",
+	"previous-alt-text": "方向往後的箭頭圖標，指示該連結會返回到 Wikisource。",
 	"export-book": "匯出書籍",
 	"lang-field-label": "維基文庫",
 	"lang-field-value": "$1（$2）",
 	"lang-field-help": "要匯出成電子書的維基文庫。",
 	"title-field-label": "標題",
-	"title-field-help": "書籍標題的主頁面。",
+	"title-field-help": "要匯出的書籍或段落標題。",
 	"format-field-label": "檔案格式",
 	"format-field-help": "<!-- -->",
 	"format-epub-3": "EPUB 3（適用於多數讀者）",
@@ -66,5 +67,10 @@
 	"error-page-details": "錯誤詳細資訊：$1",
 	"error-page-issue": "如果錯誤持續發生，請$1。",
 	"error-page-issue-link": "在 Phabricator 上回報問題",
-	"onwikiconfig-failure": "無法取得來自：$1 的 wiki 上設定"
+	"onwikiconfig-failure": "無法取得來自：$1 的 wiki 上設定",
+	"exception-fetching-credits": "索取人員名單資訊錯誤。請重試匯出。如果這個錯誤持續發生，請在「選項」勾選移除名單的方框。",
+	"exception-book-conversion": "轉換電子書格式錯誤。",
+	"epub-title-page": "標題頁面",
+	"epub-exported-date": "於 $1 從維基文庫匯出",
+	"epub-about": "關於"
 }

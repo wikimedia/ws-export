@@ -1,5 +1,13 @@
 {
-	"@metadata": {},
+	"@metadata": {
+		"authors": [
+			"Meno25",
+			"محمد أحمد عبد الفتاح"
+		]
+	},
+	"source-link": "على جيتهاب",
+	"docs-link": "على ويكي مصدر متعدد اللغات",
+	"format-txt": "نص عادي",
 	"epub-title-page": "العنوان",
 	"epub-exported-date": "منقول من ويكي مصدر في $1",
 	"epub-about": "حول"

@@ -1,5 +1,7 @@
 {
-	"@metadata": {},
+	"@metadata": {
+		"authors": []
+	},
 	"epub-title-page": "Forside",
 	"epub-exported-date": "Eksportert fra Wikikilden den $1",
 	"epub-about": "Om"

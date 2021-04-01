@@ -8,6 +8,7 @@
 		]
 	},
 	"app-title": "ウィキソースの書籍の書き出し",
+	"app-title-wikisource": "ウィキソース",
 	"app-title-html": "$1の書籍の書き出し",
 	"app-subtitle": "さまざまなファイル形式でウィキソースから書籍を書き出します。",
 	"logo-alt-text": "ウィキソースのロゴ、青と白で描かれた氷山のイラスト。",
@@ -24,12 +25,13 @@
 	"issues": "Phabricatorの$1プロジェクトに、issuesを報告してください。",
 	"issue-button": "issueを作成",
 	"back-to-wikisource": "ウィキソースへ戻る",
+	"previous-alt-text": "リンクがウィキソースに戻ることを示す、後ろ向きの矢印アイコン。",
 	"export-book": "書籍を書き出す",
 	"lang-field-label": "ウィキソース",
 	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "書籍の書き出し元となるウィキソース。",
 	"title-field-label": "題名",
-	"title-field-help": "書籍のメインページの題名。",
+	"title-field-help": "書き出す書籍またはセクションの題名。",
 	"format-field-label": "ファイル形式",
 	"format-epub-3": "EPUB 3（主要な電子書籍リーダー用）",
 	"format-epub-2": "EPUB 2（非推奨、一部の非常に古い電子リーダーには役立つ場合があります）",
@@ -69,5 +71,8 @@
 	"error-page-issue-link": "Phabricatorに関する問題を報告する",
 	"onwikiconfig-failure": "次のウィキ上の設定を取得できませんでした: $1",
 	"exception-fetching-credits": "クレジット情報の取得時にエラーが発生しました。もう一度エクスポートを試してください。このエラーが解決しない場合は、「オプション」でクレジットを削除するにチェックを入れてください。",
-	"exception-book-conversion": "書籍のフォーマットの変換エラー。"
+	"exception-book-conversion": "書籍のフォーマットの変換エラー。",
+	"epub-title-page": "表題紙",
+	"epub-exported-date": "$1にウィキソースから書き出されました。",
+	"epub-about": "About"
 }

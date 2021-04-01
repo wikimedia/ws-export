@@ -24,7 +24,7 @@
 	"lang-field-label": "Maddawiki",
 	"lang-field-help": "Koodii afaan Wikisource ykn qayiqqoo, kanneen akka 'en' ykn 'fr'",
 	"title-field-label": "Matduree",
-	"title-field-help": "Matduree kitaabota fuula haadhoo.",
+	"title-field-help": "Matduree ykn kutaa kitaabaa alerguuf.",
 	"format-field-label": "Bifunka harshamaa",
 	"format-field-help": "GPL v2",
 	"format-epub-3": "EPUB 3",
@@ -54,5 +54,8 @@
 	"error-fix-epub": "Harshama EPUBtiin Kitaaba gaffe'uu yaali.",
 	"error-fix-nocredits": "'Filannoolee' keessa dulaaba soqi suuraalee haquuf",
 	"error-fix-noimages": "'Filannoolee' keessaa dulaaba ilaali suuraawwan balleessuuf.",
-	"error-page-details": "Dogoggora gadi fageenyaan:$1"
+	"error-page-details": "Dogoggora gadi fageenyaan:$1",
+	"epub-title-page": "Fuula matduree",
+	"epub-exported-date": "Wikisource irraa gara $1tti alergameera",
+	"epub-about": "Waa'ee"
 }

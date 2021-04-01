@@ -12,7 +12,7 @@
 	"export-book": "E Buch exportéieren",
 	"lang-field-label": "Wikisource:",
 	"lang-field-value": "$1 ($2)",
-	"title-field-label": "Titel:",
+	"title-field-label": "Titel",
 	"format-field-label": "Format vum Fichier:",
 	"format-htmlz": "HTML",
 	"format-pdf-a4": "PDF - Gréisst A4",
@@ -21,5 +21,9 @@
 	"format-pdf-letter": "PDF - Gréisst US letter",
 	"format-rtf": "RTF",
 	"font-field-label": "Schrëftart:",
-	"options-label": "Optiounen:"
+	"options-label": "Optiounen",
+	"alert-close": "Zoumaachen",
+	"learn-more": "Fir méi ze wëssen",
+	"error-breadcrumb": "Feeler $1",
+	"epub-about": "Iwwer"
 }

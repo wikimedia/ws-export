@@ -28,7 +28,7 @@
 	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "책을 내보낼 위키문헌입니다.",
 	"title-field-label": "제목",
-	"title-field-help": "책의 메인 페이지의 제목입니다.",
+	"title-field-help": "내보낼 책 또는 문단의 제목입니다.",
 	"format-field-label": "파일 포맷",
 	"format-epub-3": "EPUB 3 (대부분의 전자책 단말기용)",
 	"format-epub-2": "EPUB 2 (구식이지만 매우 오래된 일부 전자책 단말기에 유용할 수 있음)",
@@ -64,5 +64,6 @@
 	"error-page-header": "오류가 발생했습니다",
 	"error-page-details": "오류 상세 정보: $1",
 	"error-page-issue": "이 오류가 지속되면 $1해 주십시오.",
-	"error-page-issue-link": "파브리케이터에 이슈를 보고"
+	"error-page-issue-link": "파브리케이터에 이슈를 보고",
+	"epub-about": "정보"
 }

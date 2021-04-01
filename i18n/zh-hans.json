@@ -3,6 +3,7 @@
 		"authors": [
 			"Hmgrmb",
 			"LNDDYL",
+			"Si109",
 			"Zhang8569"
 		]
 	},
@@ -17,9 +18,9 @@
 	"issue-button": "制造问题",
 	"back-to-wikisource": "返回到维基文库",
 	"export-book": "导出书",
-	"title-field-label": "标题：",
+	"title-field-label": "标题",
 	"title-field-help": "这本书主页面的标题",
-	"format-field-label": "文件格式",
+	"format-field-label": "档案格式",
 	"format-pdf-a4": "PDF-A4尺寸",
 	"format-pdf-a6": "PDF-A6尺寸",
 	"format-rtf": "RTF",
@@ -32,5 +33,7 @@
 	"credits-default-message": "[贡献者的名单被当作请求所忽略了。]",
 	"images-field-label": "请不要包含图片",
 	"nocache-field-label": "越过所有隐藏物（更慢但是对于排除故障更加有效）",
-	"export-button": "导出"
+	"export-button": "导出",
+	"alert-close": "关闭",
+	"learn-more": "学到更多。"
 }

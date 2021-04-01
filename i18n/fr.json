@@ -23,12 +23,13 @@
 	"issues": "Veuillez signaler les anomalies dans le projet $1 sur Phabricator.",
 	"issue-button": "Créer un rapport d’anomalie",
 	"back-to-wikisource": "Retour à wikisource",
+	"previous-alt-text": "Icône de flèche en contre-sens qui indique que le lien retourne à Wikisource.",
 	"export-book": "Exporter un livre",
 	"lang-field-label": "Wikisource",
 	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "L’édition de Wikisource depuis laquelle le livre doit être exporté.",
 	"title-field-label": "Titre",
-	"title-field-help": "Titre de la page principale du livre.",
+	"title-field-help": "Titre du livre ou de la section à exporter.",
 	"format-field-label": "Format de fichier",
 	"format-field-help": "<!-- -->",
 	"format-epub-3": "EPUB 3 (pour la plupart des liseuses électroniques)",
@@ -70,7 +71,7 @@
 	"onwikiconfig-failure": "Impossible de récupérer la configuration dans le wiki depuis : $1",
 	"exception-fetching-credits": "Erreur de récupération des informations d’attribution. Veuillez essayer à nouveau l’exportation. Si cette erreur persiste, cochez la case dans les « Options » pour retirer les attributions.",
 	"exception-book-conversion": "Erreur de conversion du format du livre.",
-	"epub-title-page": "Titre",
+	"epub-title-page": "Page de couverture",
 	"epub-exported-date": "Exporté de Wikisource le $1",
 	"epub-about": "À propos"
 }

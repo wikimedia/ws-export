@@ -22,12 +22,13 @@
 	"issues": "Prosím nahláste chybu $1",
 	"issue-button": "Vytvoriť report",
 	"back-to-wikisource": "Späť na Wikizdroje",
+	"previous-alt-text": "Šípka nasmerovaná smerom vzad, ktorá oznamuje, že odkaz Vás vráti späť na Wikizdroje.",
 	"export-book": "Exportovať knihu",
 	"lang-field-label": "Wikizdroj",
 	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "Wikizdroj z ktorého chcete exportovať knihu.",
 	"title-field-label": "Názov",
-	"title-field-help": "Názov domovskej stránky knihy.",
+	"title-field-help": "Názov knihy alebo odseku na export.",
 	"format-field-label": "Formát súboru",
 	"format-field-help": "(názov formátu súboru)",
 	"format-epub-3": "EPUB 3 (pre väčšinu čítačiek elektronických kníh)",
@@ -68,5 +69,8 @@
 	"error-page-issue-link": "nahláste problém na Phabricator",
 	"onwikiconfig-failure": "Nie je možné načítať konfiguráciu z: $1",
 	"exception-fetching-credits": "Pri načítavaní informácií o zásluhách došlo k chybe. Prosím skúste exportovať znovu. Ak bude chyba pretrvávať, tak v možnostiach zaškrtnite políčko pre odstránenie týchto informácií.",
-	"exception-book-conversion": "Pri konverzii formátu knihy došlo k chybe."
+	"exception-book-conversion": "Pri konverzii formátu knihy došlo k chybe.",
+	"epub-title-page": "Titulná stránka",
+	"epub-exported-date": "Dátum exportovania z Wikizdrojov: $1",
+	"epub-about": "O aplikácii"
 }

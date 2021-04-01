@@ -1,5 +1,7 @@
 {
-	"@metadata": {},
+	"@metadata": {
+		"authors": []
+	},
 	"epub-title-page": "Bìa trong",
 	"epub-exported-date": "Được lấy từ Wikisource vào ngày $1",
 	"epub-about": "Giới thiệu"

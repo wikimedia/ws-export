@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Sabelöga"
+			"Sabelöga",
+			"WikiPhoenix"
 		]
 	},
 	"app-title": "WS-exportering",
@@ -19,12 +20,12 @@
 	"issues": "Var god rapportera problem med $1-projektet på Phabricator.",
 	"issue-button": "Skapa ärende",
 	"export-book": "Exportera en bok",
-	"lang-field-label": "Wikisource:",
+	"lang-field-label": "Wikisource",
 	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "Wikisource-versionen som boken ska exporteras från.",
-	"title-field-label": "Titel:",
-	"title-field-help": "Titeln på bokens framsida.",
-	"format-field-label": "Filformat:",
+	"title-field-label": "Titel",
+	"title-field-help": "Titeln på boken eller avsnittet att exportera.",
+	"format-field-label": "Filformat",
 	"format-epub-3": "EPUB 3 (för de flesta e-läsare)",
 	"format-epub-2": "EPUB 2 (föråldrad, kan användas för vissa äldre e-läsare)",
 	"format-htmlz": "HTML",
@@ -36,14 +37,23 @@
 	"format-rtf": "RTF",
 	"format-txt": "Oformaterad text",
 	"exception-invalid-format": "\"$1\" är inte ett giltigt format. Giltiga format är: $2",
-	"font-field-label": "Typsnitt:",
+	"font-field-label": "Typsnitt",
 	"no-font-option": "Inget (använd enhetens standard)",
 	"font-field-help": "Välj mellan $1 tillgängliga typsnitt.",
-	"options-label": "Alternativ:",
+	"options-label": "Alternativ",
 	"images-field-label": "Visa inte bilder",
 	"nocache-field-label": "Ignorera all caching (långsammare men användbart för felsökning)",
 	"export-button": "Exportera",
 	"cache-updated": "Cachen har uppdaterats för språk: $1",
+	"alert-close": "Stäng",
+	"export-failed": "Nedladdning misslyckades.",
+	"learn-more": "Läs mer.",
+	"error-fix-again": "Försök att ladda ned boken igen.",
+	"error-fix-noimages": "Markera rutan i \"Alternativ\" för att ta bort bilder.",
+	"error-breadcrumb": "Fel $1",
+	"error-page-header": "Ett fel uppstod",
+	"error-page-details": "Feldetaljer: $1",
+	"error-page-issue": "Om detta fel kvarstår, var god $1.",
 	"epub-title-page": "Titelsida",
 	"epub-exported-date": "Exporterad från Wikisource $1",
 	"epub-about": "Om"

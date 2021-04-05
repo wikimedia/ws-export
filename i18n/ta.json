@@ -1,8 +1,37 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Balajijagadesh"
+		]
 	},
-	"epub-title-page": "தலைப்பு பக்கம்",
+	"app-title": "விக்கிமூலம் நூல் ஏற்றுமதி",
+	"app-title-html": "$1 நூல் ஏற்றுமதி",
+	"version": "திருத்தம் $1",
+	"statistics-link": "புள்ளிவிவரங்கள்",
+	"back-to-wikisource": "விக்கிமூலத்திற்கு மீண்டும் செல்க",
+	"export-book": "ஒரு நூலை ஏற்றுமதி செய்க",
+	"lang-field-label": "விக்கிமூலம்",
+	"title-field-label": "தலைப்பு",
+	"title-field-help": "ஏற்றுமதி செய்யப்பட வேண்டிய நூல் அல்லது பிரிவின் தலைப்பு.",
+	"format-field-label": "கோப்பு வடிவமைப்பு",
+	"format-txt": "எளிய உரை",
+	"font-field-label": "எழுத்துரு",
+	"font-field-help": "உள்ள $1 எழுத்துருக்களில் தேர்ந்தெடுக்கவும்.",
+	"options-label": "விருப்பத்தேர்வுகள்",
+	"credits-field-label": "பங்களித்தவர் விவரங்களை விட்டுவிடுக (விரைவான பதிவிரக்கம்)",
+	"images-field-label": "படங்களை சேர்க்க வேண்டாம்",
+	"export-button": "ஏற்றுமதி செய்க",
+	"alert-close": "மூடுக",
+	"export-failed": "கோப்பு பதிவிறக்கம் தோல்வியுற்றது.",
+	"exception-rest-page-not-found": "$1 நூல் காணப்படவில்லை",
+	"learn-more": "மேலும் அறிந்துகொள்ள.",
+	"error-fix-again": "நூலை பதிவிறக்கம் செய்ய மீண்டும் முயற்சிக்கவும்.",
+	"error-breadcrumb": "பிழை $1",
+	"error-page-header": "ஒரு பிழை ஏற்பட்டது",
+	"error-page-details": "பிழை விவரங்கள்: $1",
+	"error-page-issue": "இப்பிழை தொடர்ந்தால், தயவு செய்து $1.",
+	"exception-book-conversion": "நூலின் வடிவத்தை மாற்றும் பொழுது பிழை ஏற்பட்டுள்ளது.",
+	"epub-title-page": "தலைப்புப் பக்கம்",
 	"epub-exported-date": "$1 அன்று விக்கிமூலத்தில் இருந்து பதிவிறக்கப்பட்டது",
 	"epub-about": "இம்மின்னூல் பற்றி"
 }

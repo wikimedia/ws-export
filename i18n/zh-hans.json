@@ -35,5 +35,7 @@
 	"nocache-field-label": "越过所有隐藏物（更慢但是对于排除故障更加有效）",
 	"export-button": "导出",
 	"alert-close": "关闭",
-	"learn-more": "学到更多。"
+	"learn-more": "学到更多。",
+	"epub-title-page": "封面",
+	"epub-about": "关于"
 }

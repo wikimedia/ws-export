@@ -2,7 +2,9 @@
 
 namespace App\Tests\Book;
 
+use App\Page;
 use App\PageParser;
+use App\Util\Util;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -140,12 +142,42 @@ class PageParserTest extends TestCase {
 
 	/**
 	 * If a work doesn't include ws-summary, we want to get all of it's subpage links as the ToC.
+	 * @dataProvider provideSubpageHrefs()
 	 */
-	public function testSubpagesEncodedHrefs() {
-		$doc = new DOMDocument();
-		$doc->loadHTML( '<body><a href="./F(o)o%E2%99%A5/Bar" title="F(o)o♥/Bar">Bar</a></body>' );
+	public function testSubpageHrefs( string $title, string $html, array $subpages ) {
+		$doc = Util::buildDOMDocumentFromHtml( "<body>$html</body>" );
 		$pageParser = new PageParser( $doc );
-		$this->assertCount( 1, $pageParser->getFullChaptersList( 'F(o)o♥', [], [] ) );
+		$this->assertEquals( $subpages, $pageParser->getFullChaptersList( $title, [], [] ) );
+	}
+
+	public function provideSubpageHrefs() {
+		return [
+			[
+				"The_Golden_Bowl_(New_York:_Charles_Scribner's_Sons,_1909)/Volume_1",
+				'<a rel="mw:WikiLink" href="./The_Golden_Bowl_(New_York:_Charles_Scribner\'s_Sons,_1909)/Volume_1/Book_1/Chapter_5"'
+				. ' title="The Golden Bowl (New York: Charles Scribner\'s Sons, 1909)/Volume 1/Book 1/Chapter 5">Chapter 5</a>',
+				[ Page::factory( 'Chapter 5', 'The_Golden_Bowl_(New_York:_Charles_Scribner\'s_Sons,_1909)/Volume_1/Book_1/Chapter_5' ) ]
+			],
+			[
+				'F(o)o♥',
+				'<a title="F(o)o♥/Bar baz">Bar</a>',
+				[ Page::factory( 'Bar', 'F(o)o♥/Bar_baz' ) ],
+			],
+			[
+				'西遊記',
+				'<a rel="mw:WikiLink" href="./西遊記/第014回" title="西遊記/第014回">第014回</a>',
+				[ Page::factory( '第014回', '西遊記/第014回' ) ]
+			],
+			[
+				// Link examples from https://en.wikisource.beta.wmflabs.org/w/index.php?title=Links&oldid=1753
+				'Links',
+				'<a rel="mw:WikiLink" href="./Links/Lorem" title="Links/Lorem" id="mwCg">Subpage link</a>
+				<a rel="mw:WikiLink" href="./Links#Foo" id="mwDA">Link to below</a>
+				<a rel="mw:WikiLink" href="./Links#Foo" title="Links" id="mwDg">Qualified link to below</a>
+				<a rel="mw:WikiLink" href="./Links" title="Links" id="mwEA">Plain link to self</a>',
+				[ Page::factory( 'Subpage link', 'Links/Lorem' ) ]
+			],
+		];
 	}
 
 	/**

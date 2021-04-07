@@ -5,7 +5,6 @@ namespace App;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use Wikimedia\ToolforgeBundle\Service\Util;
 
 class PageParser {
 
@@ -108,32 +107,37 @@ class PageParser {
 	}
 
 	/**
-	 * return the list of the chapters with the summary if it exist, if not find links to subpages.
+	 * Get a list of the chapters in the given work,
+	 * using the ws-summary if it exists and all linked subpages if it doesn't.
+	 * @param string $title The page title.
+	 * @param array<int,string> $pageList
+	 * @param array<int,string> $namespaces
 	 * @return Page[]
 	 */
-	public function getFullChaptersList( $title, $pageList, $namespaces ) {
+	public function getFullChaptersList( string $title, array $pageList, array $namespaces ) {
 		$chapters = $this->getChaptersList( $pageList, $namespaces );
 		if ( empty( $chapters ) ) {
-			$list = $this->xPath->query( '//a[contains(@href,"/' . Util::wfUrlencode( $title ) . '/") and
+			// If no chapters were found in the usual way, try to guess the chapters
+			// by finding all links that start with the current page's name.
+			$list = $this->xPath->query( '//a[
 				not(
 					contains(@class,"new") or
 					contains(@class,"extiw") or
 					@rel = "mw:WikiLink/Interwiki" or
 					contains(@class,"external") or
-					contains(@href,"#") or
 					contains(@class,"internal") or
 					contains(@href,"action=edit") or
 					contains(@title,"/Texte entier") or
 					contains(@class,"image")
 				)]' );
+			$spacedTitle = str_replace( '_', ' ', $title );
 			/** @var DOMElement $link */
 			foreach ( $list as $link ) {
-				$linkTitle = str_replace( ' ', '_', $link->getAttribute( 'title' ) );
-				$parts = explode( ':', $linkTitle );
-				if ( $linkTitle != '' && !in_array( $linkTitle, $pageList ) && !in_array( $parts[0], $namespaces ) ) {
-					$chapter = new Page();
-					$chapter->title = $linkTitle;
-					$chapter->name = $link->nodeValue;
+				$linkTitle = $link->getAttribute( 'title' );
+				$subpagePrefix = $spacedTitle . '/';
+				$startsWithTitle = mb_substr( $linkTitle, 0, mb_strlen( $subpagePrefix ) ) === $subpagePrefix;
+				if ( $startsWithTitle && $linkTitle !== '' && !in_array( $linkTitle, $pageList ) ) {
+					$chapter = Page::factory( $link->nodeValue, str_replace( ' ', '_', $linkTitle ) );
 					$chapters[] = $chapter;
 					$pageList[] = $chapter->title;
 				}

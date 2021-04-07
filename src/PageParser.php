@@ -273,6 +273,7 @@ class PageParser {
 		$this->removeNodesWithXpath( '//a[@class="mw-headline-anchor"]' );
 		$this->removeNodesWithXpath( '//div[@class="mediaContainer"]' );
 		$this->removeNodesWithXpath( '//link[@rel="mw:PageProp/Category"]' );
+		$this->removeNodesWithXpath( '//link[contains(@typeof, "mw:Extension")]' );
 		$this->deprecatedNodes( 'big', 'span', 'font-size:large;' );
 		$this->deprecatedNodes( 'center', 'div', 'text-align:center;' );
 		$this->deprecatedNodes( 'strike', 'span', 'text-decoration:line-through;' );

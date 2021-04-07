@@ -20,4 +20,17 @@ class Page {
 
 	/** @var Page[] List of the subpages. */
 	public $chapters = [];
+
+	/**
+	 * Convenience method to create a new page with a name and title.
+	 * @param string $name
+	 * @param string $title
+	 * @return Page
+	 */
+	public static function factory( string $name, string $title ) {
+		$page = new self();
+		$page->title = $title;
+		$page->name = $name;
+		return $page;
+	}
 }

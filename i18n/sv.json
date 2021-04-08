@@ -19,6 +19,7 @@
 	"statistics-link": "statistik",
 	"issues": "Var god rapportera problem med $1-projektet på Phabricator.",
 	"issue-button": "Skapa ärende",
+	"back-to-wikisource": "Tillbaka till Wikisource",
 	"export-book": "Exportera en bok",
 	"lang-field-label": "Wikisource",
 	"lang-field-value": "$1 ($2)",
@@ -47,6 +48,7 @@
 	"cache-updated": "Cachen har uppdaterats för språk: $1",
 	"alert-close": "Stäng",
 	"export-failed": "Nedladdning misslyckades.",
+	"exception-rest-page-not-found": "Boken \"$1\" hittades inte.",
 	"learn-more": "Läs mer.",
 	"error-fix-again": "Försök att ladda ned boken igen.",
 	"error-fix-noimages": "Markera rutan i \"Alternativ\" för att ta bort bilder.",
@@ -54,6 +56,7 @@
 	"error-page-header": "Ett fel uppstod",
 	"error-page-details": "Feldetaljer: $1",
 	"error-page-issue": "Om detta fel kvarstår, var god $1.",
+	"error-page-issue-link": "rapportera ett problem till Phabricator",
 	"epub-title-page": "Titelsida",
 	"epub-exported-date": "Exporterad från Wikisource $1",
 	"epub-about": "Om"

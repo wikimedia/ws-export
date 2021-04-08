@@ -19,7 +19,7 @@
 	"license-link": "GPL v2以降",
 	"source-and-docs": "ソースコードは$1、いくつかのドキュメントは$2入手できます。",
 	"source-link": "Githubから",
-	"docs-link": "多言語版ウィキソースから",
+	"docs-link": "多言語ウィキソースから",
 	"statistics": "いくつかの$1も提供しています。",
 	"statistics-link": "統計",
 	"issues": "Phabricatorの$1プロジェクトに、issuesを報告してください。",

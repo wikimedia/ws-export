@@ -1,0 +1,43 @@
+{
+	"@metadata": {
+		"authors": [
+			"Achiri Bitamsimli",
+			"Alhassan Peter",
+			"Anamzooya",
+			"Chirifo",
+			"Hidrash",
+			"Mo Yumzaa",
+			"Ruky Wunpini",
+			"Sir Amugi"
+		]
+	},
+	"app-title": "Wikisɔɔsi buku yɛrili",
+	"app-title-html": "$1 buku yihi tahi shɛli polo",
+	"logo-alt-text": "Wikisɔɔsi dalinli nyɛ zaɣa nɔɔso ni zaɣa pɛɣli buɣisirili",
+	"back-to-wikisource": "Labimi wikisɔɔsi",
+	"previous-alt-text": "Kpani din tuhi nyangi ŋɔ wuhirila nyan labbo",
+	"lang-field-label": "Wikisɔɔsi",
+	"title-field-label": "Yɛlizuɣu",
+	"title-field-help": "Buku yuli",
+	"format-field-label": "Faali biɛhigu",
+	"font-field-label": "Bachikoba barilim",
+	"options-label": "Piibu",
+	"credits-field-label": "Gilma malza yihiya",
+	"credits-default-message": "Yushaŋa din zaaha pahi ma yiya bi ni borili sham",
+	"alert-close": " N Kpihi bee n kpari",
+	"export-failed": "Yaa bu saɣ siya.",
+	"exception-url-fetch-error": "M-bi tooi lahi bɔ n-nya URL: $1",
+	"exception-rest-page-not-found": "$1 book laa ka ni",
+	"learn-more": "Bohimmi pam",
+	"error-fix": "Pahimi Suɣlo Ka doli soya ŋɔ diyi ŋin Ka a Mali muɣsigu",
+	"error-fix-again": "Paɣmi a maŋa n lab waa bulk maa.",
+	"error-fix-noimages": "Yulimi adaka maa ni ' di mali piibu' n-yihi anfooninima.",
+	"error-breadcrumb": "Chiriŋ $1",
+	"error-page-header": "Muɣisigu beni",
+	"error-page-details": "Chirimbu bayaana:$1",
+	"error-page-issue": "Chirimbu ŋɔ yi kuli zaɣisi, pahili suɣilo $1",
+	"exception-book-conversion": "Chiriŋ kana buku maa biɛhigu taɣibu ni.",
+	"epub-title-page": "Gbaŋ ŋmari yaɣili",
+	"epub-exported-date": "Wikisɔɔsi $1 puuuni ka di yi n-chaŋ shɛli polo",
+	"epub-about": "Din nye shem"
+}

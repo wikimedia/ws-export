@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"AJBot2",
 			"Naufal06"
 		]
 	},
@@ -10,6 +11,7 @@
 	"logo-alt-text": "Logo Wikisource, sebuah ilustrasi biru dan putih dari sebuah gunung es.",
 	"footer-version": "Ini adalah $1 versi $2.",
 	"version": "versi $1",
+	"commit-label": "Melakukan:$1",
 	"licensed-under": "Ini dilisensikan di bawah $1.",
 	"license-link": "GPL v2 atau setelahnya",
 	"source-link": "di Github",

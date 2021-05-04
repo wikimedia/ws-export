@@ -159,7 +159,7 @@ class ConvertGenerator implements FormatGenerator {
 	private function convert( $epubFileName, $outputFileName ) {
 		try {
 			$command = array_merge(
-				[ $this->getEbookConvertCommand(), $epubFileName, $outputFileName ],
+				[ 'ebook-convert', $epubFileName, $outputFileName ],
 				explode( ' ', self::$CONFIG[$this->format]['parameters'] )
 			);
 			$process = new Process( $command );
@@ -168,10 +168,5 @@ class ConvertGenerator implements FormatGenerator {
 		} catch ( ProcessTimedOutException $e ) {
 			throw new WsExportException( 'book-conversion', [], Response::HTTP_INTERNAL_SERVER_ERROR );
 		}
-	}
-
-	private function getEbookConvertCommand() {
-		global $wsexportConfig;
-		return array_key_exists( 'ebook-convert', $wsexportConfig ) ? $wsexportConfig['ebook-convert'] : 'ebook-convert';
 	}
 }

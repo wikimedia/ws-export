@@ -7,9 +7,12 @@ use App\Cleaner\BookCleanerEpub;
 use App\FontProvider;
 use App\Util\Api;
 use App\Util\Util;
+use DateInterval;
 use Exception;
 use IntlDateFormatter;
 use Krinkle\Intuition\Intuition;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use ZipArchive;
 
 /**
@@ -32,10 +35,14 @@ class EpubGenerator implements FormatGenerator {
 	/** @var Intuition */
 	private $intuition;
 
-	public function __construct( FontProvider $fontProvider, Api $api, Intuition $intuition ) {
+	/** @var CacheInterface */
+	private $cache;
+
+	public function __construct( FontProvider $fontProvider, Api $api, Intuition $intuition, CacheInterface $cache ) {
 		$this->fontProvider = $fontProvider;
 		$this->api = $api;
 		$this->intuition = $intuition;
+		$this->cache = $cache;
 	}
 
 	/**
@@ -431,11 +438,20 @@ class EpubGenerator implements FormatGenerator {
 		return $about;
 	}
 
-	private function getCss( Book $book ) {
-		$css = $this->fontProvider->getCss( $book->options['fonts'] );
-		$css .= Util::getTempFile( $this->api, $book->lang, 'epub.css' );
-
-		return $css;
+	/**
+	 * @param Book $book
+	 * @return string
+	 */
+	private function getCss( Book $book ): string {
+		return $this->cache->get( Util::sanitizeCacheKey( 'css_' . $book->lang ), function ( ItemInterface $item ) {
+			$item->expiresAfter( new DateInterval( 'P14D' ) );
+			$css = file_get_contents( dirname( __DIR__, 2 ) . '/resources/styles/mediawiki.css' );
+			try {
+				$css .= "\n" . $this->api->get( 'https://' . $this->api->getDomainName() . '/w/index.php?title=MediaWiki:Epub.css&action=raw&ctype=text/css' );
+			} catch ( Exception $e ) {
+			}
+			return $css;
+		} );
 	}
 
 	private function createZipFile( $fileName ) {

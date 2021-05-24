@@ -12,6 +12,7 @@ use Krinkle\Intuition\Intuition;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @author Thomas Pellissier Tanon
@@ -96,11 +97,15 @@ class ConvertGenerator implements FormatGenerator {
 	/** @var int Command timeout in seconds. */
 	private $timeout;
 
-	public function __construct( FontProvider $fontProvider, Api $api, Intuition $intuition, int $timeout ) {
+	/** @var CacheInterface */
+	private $cache;
+
+	public function __construct( FontProvider $fontProvider, Api $api, Intuition $intuition, int $timeout, CacheInterface $cache ) {
 		$this->fontProvider = $fontProvider;
 		$this->api = $api;
 		$this->intuition = $intuition;
 		$this->timeout = $timeout;
+		$this->cache = $cache;
 	}
 
 	/**
@@ -152,7 +157,7 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function createEpub( Book $book ) {
-		$epubGenerator = new EpubGenerator( $this->fontProvider, $this->api, $this->intuition );
+		$epubGenerator = new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $this->cache );
 		return $epubGenerator->create( $book );
 	}
 

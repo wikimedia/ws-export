@@ -9,6 +9,7 @@ use App\Generator\FormatGenerator;
 use App\Util\Api;
 use Exception;
 use Krinkle\Intuition\Intuition;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class GeneratorSelector {
 
@@ -47,11 +48,15 @@ class GeneratorSelector {
 	/** @var Intuition */
 	private $intuition;
 
-	public function __construct( FontProvider $fontProvider, Api $api, ConvertGenerator $convertGenerator, Intuition $intuition ) {
+	/** @var CacheInterface */
+	private $cache;
+
+	public function __construct( FontProvider $fontProvider, Api $api, ConvertGenerator $convertGenerator, Intuition $intuition, CacheInterface $cache ) {
 		$this->fontProvider = $fontProvider;
 		$this->api = $api;
 		$this->convertGenerator = $convertGenerator;
 		$this->intuition = $intuition;
+		$this->cache = $cache;
 	}
 
 	/**
@@ -74,7 +79,7 @@ class GeneratorSelector {
 			$format = self::$aliases[$format];
 		}
 		if ( $format === 'epub-3' ) {
-			return new EpubGenerator( $this->fontProvider, $this->api, $this->intuition );
+			return new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $this->cache );
 		} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 			$this->convertGenerator->setFormat( $format );
 			return $this->convertGenerator;

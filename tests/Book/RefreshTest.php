@@ -2,70 +2,44 @@
 
 namespace App\Tests\Book;
 
+use App\Book;
+use App\FontProvider;
+use App\Generator\EpubGenerator;
 use App\Refresh;
 use App\Util\Api;
-use App\Util\Util;
+use App\Util\OnWikiConfig;
 use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
+use Krinkle\Intuition\Intuition;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Cache\Adapter\NullAdapter;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * @covers Refresh
  */
 class RefreshTest extends KernelTestCase {
 
-	/** @var Api */
-	private $api;
+	public function testRefresh() {
+		$cache = new ArrayAdapter();
+		$api = new Api( new NullLogger(), $cache, $cache, new Client(), 0 );
+		$api->setLang( 'en' );
+		$refresh = new Refresh( $api, $cache );
+		$intuition = new Intuition();
 
-	public function setUp(): void {
-		parent::setUp();
-		self::bootKernel();
-		$this->api = self::$container->get( Api::class );
-	}
+		// Test that the cache is initially empty.
+		$this->assertFalse( $cache->hasItem( 'css_en' ) );
 
-	public function testRefreshUpdatesEpubCssWikisource() {
-		$this->refresh( 'en' );
+		// Export a book, and test that this fills the cache.
+		$epubGenerator = new EpubGenerator( new FontProvider( $cache, new OnWikiConfig( $api, $cache, $intuition ) ), $api, $intuition, $cache );
+		$book = new Book();
+		$book->lang = 'en';
+		$book->title = 'Emma';
+		$book->options = [ 'images' => false, 'fonts' => false, 'credits' => false ];
+		$epubGenerator->create( $book );
+		$this->assertTrue( $cache->hasItem( 'css_en' ) );
 
-		$css = Util::getTempFile( $this->api, 'en', 'epub.css' );
-		$this->assertStringEndsWith( '/* TEST-CSS */', $css );
-	}
-
-	private function refresh( $lang ) {
-		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $this->mockClient( $this->defaultResponses() ), 0 );
-		$api->setLang( $lang );
-		$refresh = new Refresh( $api, new NullAdapter() );
+		// Then refresh, and check again that the cache is empty.
 		$refresh->refresh();
-	}
-
-	private function mockClient( $responses ) {
-		return new Client( [ 'handler' => HandlerStack::create( new MockHandler( $responses ) ) ] );
-	}
-
-	private function defaultResponses() {
-		return [
-			$this->mockCssWikisourceResponse( '/* TEST-CSS */' ),
-		];
-	}
-
-	private function mockCssWikisourceResponse( $content ) {
-		return new Response( 200, [ 'Content' => 'text/css' ], $content );
-	}
-
-	private function mockAboutWikisourceResponse( $title, $content ) {
-		return new Response( 200, [ 'Content' => 'application/json' ],
-				'<!DOCTYPE html>
-				<html prefix="dc: http://purl.org/dc/terms/ mw: http://mediawiki.org/rdf/" about="https://en.wikisource.org/wiki/Special:Redirect/revision/2952249">
-				<head prefix="mwr: https://en.wikisource.org/wiki/Special:Redirect/"><meta property="mw:TimeUuid" content="27feca60-13e5-11eb-ae2c-cd9b7fbfbfd2"/>
-				<meta charset="utf-8"/><meta property="mw:pageId" content="791503"/><meta property="mw:pageNamespace" content="0"/>
-				<link rel="dc:replaces" resource="mwr:revision/2952206"/><meta property="mw:revisionSHA1" content="3b67a798e367dda2bebc6a7a6f272ffd7cd7bfcf"/>
-				<meta property="dc:modified" content="2011-06-11T09:02:29.000Z"/><meta property="mw:html:version" content="2.1.0"/>
-				<link rel="dc:isVersionOf" href="//en.wikisource.org/wiki/' . urlencode( $title ) . '"/><title>' . $title . '</title>
-				<base href="//en.wikisource.org/wiki/"/><link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=mediawiki.skinning.content.parsoid%7Cmediawiki.skinning.interface%7Csite.styles%7Cmediawiki.page.gallery.styles%7Cext.cite.style%7Cext.cite.styles&amp;only=styles&amp;skin=vector"/><meta http-equiv="content-language" content="en"/><meta http-equiv="vary" content="Accept"/></head>
-				<body>' . $content . '</body></html>'
-			);
+		$this->assertFalse( $cache->hasItem( 'css_en' ) );
 	}
 }

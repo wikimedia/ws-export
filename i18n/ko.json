@@ -59,6 +59,7 @@
 	"error-fix": "오류가 발생하는 경우 다음 단계를 시도해 주십시오:",
 	"error-fix-again": "책 다운로드를 다시 시도합니다.",
 	"error-fix-epub": "EPUB 파일로 책 다운로드를 시도합니다.",
+	"error-fix-nocredits": "크레딧을 제거하려면 '옵션' 내 상자에 체크하십시오.",
 	"error-fix-noimages": "이미지를 제거하려면 '옵션' 내 상자에 체크하십시오.",
 	"error-breadcrumb": "오류 $1",
 	"error-page-header": "오류가 발생했습니다",

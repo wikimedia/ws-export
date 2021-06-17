@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\BookProvider;
+use App\FileCache;
 use App\OpdsBuilder;
 use App\Repository\CreditRepository;
 use App\Util\Api;
@@ -22,10 +23,14 @@ class OpdsCommand extends Command {
 	/** @var CreditRepository */
 	private $creditRepo;
 
-	public function __construct( Api $api, CreditRepository $creditRepo ) {
+	/** @var FileCache */
+	private $fileCache;
+
+	public function __construct( Api $api, CreditRepository $creditRepo, FileCache $fileCache ) {
 		parent::__construct();
 		$this->api = $api;
 		$this->creditRepo = $creditRepo;
+		$this->fileCache = $fileCache;
 	}
 
 	protected function configure() {
@@ -52,10 +57,10 @@ class OpdsCommand extends Command {
 
 		date_default_timezone_set( 'UTC' );
 		$this->api->setLang( $lang );
-		$provider = new BookProvider( $this->api, [ 'categories' => false, 'images' => false ], $this->creditRepo );
+		$provider = new BookProvider( $this->api, [ 'categories' => false, 'images' => false ], $this->creditRepo, $this->fileCache );
 
 		$exportPath = 'https://ws-export.wmcloud.org/';
-		$atomGenerator = new OpdsBuilder( $provider, $this->api, $lang, $exportPath );
+		$atomGenerator = new OpdsBuilder( $provider, $this->api, $lang, $this->fileCache, $exportPath );
 		$outputFile = dirname( __DIR__, 2 ) . "/public/opds/$lang/$category.xml";
 		if ( !is_dir( dirname( $outputFile ) ) ) {
 			mkdir( dirname( $outputFile ), 0755, true );

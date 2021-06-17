@@ -51,12 +51,16 @@ class GeneratorSelector {
 	/** @var CacheInterface */
 	private $cache;
 
-	public function __construct( FontProvider $fontProvider, Api $api, ConvertGenerator $convertGenerator, Intuition $intuition, CacheInterface $cache ) {
+	/** @var FileCache */
+	private $fileCache;
+
+	public function __construct( FontProvider $fontProvider, Api $api, ConvertGenerator $convertGenerator, Intuition $intuition, CacheInterface $cache, FileCache $fileCache ) {
 		$this->fontProvider = $fontProvider;
 		$this->api = $api;
 		$this->convertGenerator = $convertGenerator;
 		$this->intuition = $intuition;
 		$this->cache = $cache;
+		$this->fileCache = $fileCache;
 	}
 
 	/**
@@ -79,12 +83,12 @@ class GeneratorSelector {
 			$format = self::$aliases[$format];
 		}
 		if ( $format === 'epub-3' ) {
-			return new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $this->cache );
+			return new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $this->cache, $this->fileCache );
 		} elseif ( in_array( $format, ConvertGenerator::getSupportedTypes() ) ) {
 			$this->convertGenerator->setFormat( $format );
 			return $this->convertGenerator;
 		} elseif ( $format === 'atom' ) {
-			return new AtomGenerator();
+			return new AtomGenerator( $this->fileCache );
 		} else {
 			throw new Exception( "The file format '$format' is unknown." );
 		}

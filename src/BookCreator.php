@@ -21,14 +21,14 @@ class BookCreator {
 	/** @var string Full filesystem path to the created book. */
 	private $filePath;
 
-	public static function forApi( Api $api, $format, $options, GeneratorSelector $generatorSelector, CreditRepository $creditRepo ) {
+	public static function forApi( Api $api, $format, $options, GeneratorSelector $generatorSelector, CreditRepository $creditRepo, FileCache $fileCache ) {
 		if ( !in_array( $format, GeneratorSelector::getAllFormats() ) ) {
 			$list = '"' . implode( '", "', GeneratorSelector::getValidFormats() ) . '"';
 			throw new WsExportException( 'invalid-format', [ $format, $list ], 400 );
 		}
 
 		return new BookCreator(
-			new BookProvider( $api, $options, $creditRepo ),
+			new BookProvider( $api, $options, $creditRepo, $fileCache ),
 			$generatorSelector->getGenerator( $format )
 		);
 	}

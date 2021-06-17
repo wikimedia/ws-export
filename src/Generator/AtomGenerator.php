@@ -3,6 +3,7 @@
 namespace App\Generator;
 
 use App\Book;
+use App\FileCache;
 use App\Util\Util;
 use DOMDocument;
 use DOMElement;
@@ -22,12 +23,16 @@ class AtomGenerator implements FormatGenerator {
 	/**
 	 * @var string
 	 */
-	private $exportBasePath;
+	private $exportBasePath = '';
 
-	/**
-	 * @param string $exportBasePath
-	 */
-	public function __construct( $exportBasePath = '' ) {
+	/** @var FileCache */
+	private $fileCache;
+
+	public function __construct( FileCache $fileCache ) {
+		$this->fileCache = $fileCache;
+	}
+
+	public function setExportBasePath( string $exportBasePath ) {
 		$this->exportBasePath = $exportBasePath;
 	}
 
@@ -49,7 +54,7 @@ class AtomGenerator implements FormatGenerator {
 
 	/**
 	 * create the file
-	 * @param $book Book the title of the main page of the book in Wikisource
+	 * @param Book $book The title of the main page of the book in Wikisource
 	 * @return string
 	 */
 	public function create( Book $book ) {
@@ -58,7 +63,7 @@ class AtomGenerator implements FormatGenerator {
 		$this->appendNamespaces( $entry );
 		$dom->appendChild( $entry );
 
-		$fileName = Util::buildTemporaryFileName( $book->title, 'atom' );
+		$fileName = $this->fileCache->buildTemporaryFileName( $book->title, 'atom' );
 		$dom->save( $fileName );
 		return $fileName;
 	}

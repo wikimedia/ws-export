@@ -20,6 +20,9 @@ use Exception;
  */
 class OpdsBuilder {
 
+	/** @var FileCache */
+	private $fileCache;
+
 	/**
 	 * @var string
 	 */
@@ -39,10 +42,11 @@ class OpdsBuilder {
 	 * @param string $lang
 	 * @param string $exportBasePath
 	 */
-	public function __construct( BookProvider $bookProvider, Api $api, string $lang, $exportBasePath = '' ) {
+	public function __construct( BookProvider $bookProvider, Api $api, string $lang, FileCache $fileCache, $exportBasePath = '' ) {
 		$this->bookProvider = $bookProvider;
 		$this->api = $api;
 		$this->lang = $lang;
+		$this->fileCache = $fileCache;
 		$this->exportBasePath = $exportBasePath;
 	}
 
@@ -74,7 +78,8 @@ class OpdsBuilder {
 	}
 
 	private function buildFromTitles( array $titles, $fromPage = '' ) {
-		$generator = new AtomGenerator( $this->exportBasePath );
+		$generator = new AtomGenerator( $this->fileCache );
+		$generator->setExportBasePath( $this->exportBasePath );
 
 		$dom = new DOMDocument( '1.0', 'UTF-8' );
 		$feed = $dom->createElement( 'feed' );

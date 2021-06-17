@@ -19,14 +19,18 @@ class BookProvider {
 	];
 	private $creditRepo;
 
+	/** @var FileCache */
+	private $fileCache;
+
 	/**
 	 * @param $api Api
 	 * @param bool[] $options
 	 */
-	public function __construct( Api $api, array $options, CreditRepository $creditRepo ) {
+	public function __construct( Api $api, array $options, CreditRepository $creditRepo, FileCache $fileCache ) {
 		$this->api = $api;
 		$this->options = array_merge( $this->options, $options );
 		$this->creditRepo = $creditRepo;
+		$this->fileCache = $fileCache;
 	}
 
 	/**
@@ -208,9 +212,8 @@ class BookProvider {
 	 * @return Picture[]
 	 */
 	protected function getPicturesData( array $pictures ) {
-		$cache = FileCache::singleton();
 		$client = $this->api->getClient();
-		$requests = function () use ( $client, $pictures, $cache ) {
+		$requests = function () use ( $client, $pictures ) {
 			foreach ( $pictures as $picture ) {
 				$url = $picture->url;
 				yield function () use ( $client, $url ) {
@@ -220,11 +223,11 @@ class BookProvider {
 			}
 		};
 		$pool = new Pool( $client, $requests(), [
-			'fulfilled' => function ( Response $response, $index ) use ( $cache, $pictures ) {
+			'fulfilled' => function ( Response $response, $index ) use ( $pictures ) {
 				$pictureIndex = array_keys( $pictures )[ $index ];
 
 				// Write the temp file and store its path.
-				$tempFile = $cache->getDirectory() . '/' . uniqid( 'pic-' );
+				$tempFile = $this->fileCache->getDirectory() . '/' . uniqid( 'pic-' );
 				file_put_contents( $tempFile, $response->getBody()->getContents() );
 				$pictures[$pictureIndex]->tempFile = $tempFile;
 

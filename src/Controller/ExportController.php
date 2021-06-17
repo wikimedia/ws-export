@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\BookCreator;
 use App\Entity\GeneratedBook;
 use App\Exception\WsExportException;
+use App\FileCache;
 use App\FontProvider;
 use App\GeneratorSelector;
 use App\Refresh;
@@ -81,7 +82,8 @@ class ExportController extends AbstractController {
 		Api $api,
 		FontProvider $fontProvider,
 		GeneratorSelector $generatorSelector,
-		CreditRepository $creditRepo
+		CreditRepository $creditRepo,
+		FileCache $fileCache
 	) {
 		// Handle ?refresh=1 for backwards compatibility.
 		if ( $request->get( 'refresh', false ) !== false ) {
@@ -100,7 +102,7 @@ class ExportController extends AbstractController {
 		$response = new Response();
 		if ( $request->get( 'page' ) ) {
 			try {
-				return $this->export( $request, $api, $fontProvider, $generatorSelector, $creditRepo );
+				return $this->export( $request, $api, $fontProvider, $generatorSelector, $creditRepo, $fileCache );
 			} catch ( WsExportException $ex ) {
 				$exception = $ex;
 				$response->setStatusCode( $ex->getResponseCode() );
@@ -131,7 +133,8 @@ class ExportController extends AbstractController {
 		Api $api,
 		FontProvider $fontProvider,
 		GeneratorSelector $generatorSelector,
-		CreditRepository $creditRepo
+		CreditRepository $creditRepo,
+		FileCache $fileCache
 	) {
 		// Get params.
 		$page = $request->get( 'page' );
@@ -149,7 +152,7 @@ class ExportController extends AbstractController {
 
 		// Generate ebook.
 		$options = [ 'images' => $images, 'fonts' => $font, 'credits' => $credits ];
-		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector, $creditRepo );
+		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector, $creditRepo, $fileCache );
 		$creator->create( $page );
 
 		// Send file.

@@ -3,6 +3,7 @@
 namespace App\Tests\Book;
 
 use App\BookProvider;
+use App\FileCache;
 use App\Repository\CreditRepository;
 use App\Util\Api;
 use DOMDocument;
@@ -35,8 +36,8 @@ class BookProviderTest extends TestCase {
 		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $client, 0 );
 		$api->setLang( 'en' );
 		$creditRepository = $this->getMockBuilder( CreditRepository::class )->disableOriginalConstructor()->getMock();
-
-		$this->bookProvider = new BookProvider( $api, [ 'categories' => false, 'credits' => true ], $creditRepository );
+		$fileCache = new FileCache( dirname( __DIR__, 2 ) );
+		$this->bookProvider = new BookProvider( $api, [ 'categories' => false, 'credits' => true ], $creditRepository, $fileCache );
 	}
 
 	public function testGetMetadata() {

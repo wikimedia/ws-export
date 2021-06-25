@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\BookCreator;
+use App\FileCache;
 use App\GeneratorSelector;
 use App\Repository\CreditRepository;
 
@@ -30,14 +31,18 @@ class CheckCommand extends Command {
 	/** @var CreditRepository */
 	private $creditRepo;
 
+	/** @var FileCache */
+	private $fileCache;
+
 	/** @var SymfonyStyle */
 	private $io;
 
-	public function __construct( Api $api, GeneratorSelector $generatorSelector, CreditRepository $creditRepo ) {
+	public function __construct( Api $api, GeneratorSelector $generatorSelector, CreditRepository $creditRepo, FileCache $fileCache ) {
 		parent::__construct();
 		$this->api = $api;
 		$this->generatorSelector = $generatorSelector;
 		$this->creditRepo = $creditRepo;
+		$this->fileCache = $fileCache;
 	}
 
 	protected function configure() {
@@ -125,7 +130,7 @@ class CheckCommand extends Command {
 	 */
 	private function check( string $page ) {
 		$this->io->section( 'https://' . $this->api->getDomainName() . '/wiki/' . str_replace( ' ', '_', $page ) );
-		$creator = BookCreator::forApi( $this->api, 'epub-3', [ 'credits' => false ], $this->generatorSelector, $this->creditRepo );
+		$creator = BookCreator::forApi( $this->api, 'epub-3', [ 'credits' => false ], $this->generatorSelector, $this->creditRepo, $this->fileCache );
 		$creator->create( $page );
 		$jsonOutput = $creator->getFilePath() . '_epubcheck.json';
 		$process = new Process( [ 'epubcheck', $creator->getFilePath(), '--json', $jsonOutput ] );

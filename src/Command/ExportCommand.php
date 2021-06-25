@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\BookCreator;
+use App\FileCache;
 use App\GeneratorSelector;
 use App\Repository\CreditRepository;
 use App\Util\Api;
@@ -29,12 +30,16 @@ class ExportCommand extends Command {
 	/** @var bool */
 	private $enableCache;
 
-	public function __construct( GeneratorSelector $generatorSelector, CreditRepository $creditRepo, Api $api, bool $enableCache ) {
+	/** @var FileCache */
+	private $fileCache;
+
+	public function __construct( GeneratorSelector $generatorSelector, CreditRepository $creditRepo, Api $api, bool $enableCache, FileCache $fileCache ) {
 		parent::__construct();
 		$this->generatorSelector = $generatorSelector;
 		$this->creditRepo = $creditRepo;
 		$this->api = $api;
 		$this->enableCache = $enableCache;
+		$this->fileCache = $fileCache;
 	}
 
 	protected function configure() {
@@ -80,7 +85,7 @@ class ExportCommand extends Command {
 			$io->writeln( 'Caching is disabled.' );
 			$this->api->disableCache();
 		}
-		$creator = BookCreator::forApi( $this->api, $input->getOption( 'format' ), $options, $this->generatorSelector, $this->creditRepo );
+		$creator = BookCreator::forApi( $this->api, $input->getOption( 'format' ), $options, $this->generatorSelector, $this->creditRepo, $this->fileCache );
 		$creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
 
 		$io->success( [

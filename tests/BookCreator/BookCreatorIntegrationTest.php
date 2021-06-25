@@ -4,6 +4,7 @@ namespace App\Tests\BookCreator;
 
 use App\BookCreator;
 use App\EpubCheck\EpubCheck;
+use App\FileCache;
 use App\FontProvider;
 use App\Generator\ConvertGenerator;
 use App\GeneratorSelector;
@@ -38,14 +39,18 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 	/** @var Intuition */
 	private $intuition;
 
+	/** @var FileCache */
+	private $fileCache;
+
 	public function setUp(): void {
 		self::bootKernel();
 		$cache = new ArrayAdapter();
 		$this->fontProvider = new FontProvider( $cache, self::$container->get( OnWikiConfig::class ) );
 		$this->api = self::$container->get( Api::class );
 		$this->intuition = self::$container->get( Intuition::class );
-		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, $this->intuition, 10, $cache );
-		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator, $this->intuition, $cache );
+		$this->fileCache = self::$container->get( FileCache::class );
+		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, $this->intuition, 10, $cache, $this->fileCache );
+		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator, $this->intuition, $cache, $this->fileCache );
 		$this->creditRepository = self::$container->get( CreditRepository::class );
 		$this->epubCheck = self::$container->get( EpubCheck::class );
 	}
@@ -83,7 +88,7 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 
 	private function createBook( $title, $language, $format ) {
 		$this->api->setLang( $language );
-		$creator = BookCreator::forApi( $this->api, $format, [ 'credits' => false ], $this->generatorSelector, $this->creditRepository );
+		$creator = BookCreator::forApi( $this->api, $format, [ 'credits' => false ], $this->generatorSelector, $this->creditRepository, $this->fileCache );
 		$creator->create( $title );
 		$this->assertFileExists( $creator->getFilePath() );
 		$this->assertNotNull( $creator->getBook() );

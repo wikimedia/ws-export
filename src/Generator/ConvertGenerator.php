@@ -4,6 +4,7 @@ namespace App\Generator;
 
 use App\Book;
 use App\Exception\WsExportException;
+use App\FileCache;
 use App\FontProvider;
 use App\Util\Api;
 use App\Util\Util;
@@ -100,12 +101,16 @@ class ConvertGenerator implements FormatGenerator {
 	/** @var CacheInterface */
 	private $cache;
 
-	public function __construct( FontProvider $fontProvider, Api $api, Intuition $intuition, int $timeout, CacheInterface $cache ) {
+	/** @var FileCache */
+	private $fileCache;
+
+	public function __construct( FontProvider $fontProvider, Api $api, Intuition $intuition, int $timeout, CacheInterface $cache, FileCache $fileCache ) {
 		$this->fontProvider = $fontProvider;
 		$this->api = $api;
 		$this->intuition = $intuition;
 		$this->timeout = $timeout;
 		$this->cache = $cache;
+		$this->fileCache = $fileCache;
 	}
 
 	/**
@@ -140,11 +145,11 @@ class ConvertGenerator implements FormatGenerator {
 	 * @return string
 	 */
 	public function create( Book $book ) {
-		$outputFileName = Util::buildTemporaryFileName( $book->title, $this->getExtension() );
+		$outputFileName = $this->fileCache->buildTemporaryFileName( $book->title, $this->getExtension() );
 
 		try {
 			$epubFileName = $this->createEpub( $book );
-			$persistentEpubFileName = Util::buildTemporaryFileName( $book->title, 'epub' );
+			$persistentEpubFileName = $this->fileCache->buildTemporaryFileName( $book->title, 'epub' );
 			rename( $epubFileName, $persistentEpubFileName );
 			$this->convert( $persistentEpubFileName, $outputFileName );
 		} finally {
@@ -157,7 +162,7 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function createEpub( Book $book ) {
-		$epubGenerator = new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $this->cache );
+		$epubGenerator = new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $this->cache, $this->fileCache );
 		return $epubGenerator->create( $book );
 	}
 

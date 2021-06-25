@@ -2,6 +2,7 @@
 
 namespace App\Tests\Book;
 
+use App\FileCache;
 use App\FontProvider;
 use App\Generator\ConvertGenerator;
 use App\Generator\EpubGenerator;
@@ -37,8 +38,9 @@ class GeneratorSelectorTest extends KernelTestCase {
 		$this->fontProvider = new FontProvider( $cache, self::$container->get( OnWikiConfig::class ) );
 		$this->api = self::$container->get( Api::class );
 		$this->intuition = self::$container->get( Intuition::class );
-		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, $this->intuition, 10, $cache );
-		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator, $this->intuition, $cache );
+		$fileCache = self::$container->get( FileCache::class );
+		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, $this->intuition, 10, $cache, $fileCache );
+		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator, $this->intuition, $cache, $fileCache );
 	}
 
 	public function testGetUnknownGeneratorRaisesException() {

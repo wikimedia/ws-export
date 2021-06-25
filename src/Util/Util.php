@@ -2,12 +2,9 @@
 
 namespace App\Util;
 
-use App\FileCache;
-use App\Refresh;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use Exception;
 use HtmlFormatter\HtmlFormatter;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -85,17 +82,6 @@ class Util {
 		return $html . '<body>' . $content . '</body></html>';
 	}
 
-	public static function getTempFile( Api $api, $lang, $name ) {
-		$cache = FileCache::singleton();
-		$path = $cache->getDirectory() . '/' . $lang . '/' . $name;
-		if ( !file_exists( $path ) ) {
-			$api->setLang( $lang );
-			$refresh = new Refresh( $api, $api->getCache() );
-			$refresh->refresh();
-		}
-		return file_get_contents( $path );
-	}
-
 	public static function encodeString( $string ) {
 		static $map = [];
 		static $num = 0;
@@ -139,27 +125,6 @@ class Util {
 		return in_array( $languageCode, [ 'ar', 'arc', 'bcc', 'bqi', 'ckb', 'dv', 'fa', 'glk', 'he', 'lrc', 'mzn', 'pnb', 'ps', 'sd', 'ug', 'ur', 'yi' ] )
 			? 'rtl'
 			: 'ltr';
-	}
-
-	/**
-	 * Builds a unique temporary file name for a given title and extension
-	 *
-	 * @param string $title
-	 * @param string $extension
-	 * @return string
-	 */
-	public static function buildTemporaryFileName( $title, $extension ) {
-		$cache = FileCache::singleton();
-		$directory = $cache->getDirectory();
-
-		for ( $i = 0; $i < 100; $i++ ) {
-			$path = $directory . '/' . 'ws-' . static::encodeString( $title ) . '-' . getmypid() . rand() . '.' . $extension;
-			if ( !file_exists( $path ) ) {
-				return $path;
-			}
-		}
-
-		throw new Exception( 'Unable to create temporary file' );
 	}
 
 	public static function removeFile( $fileName ) {

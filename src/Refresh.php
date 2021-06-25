@@ -19,20 +19,10 @@ class Refresh {
 	}
 
 	public function refresh() {
-		if ( !is_dir( $this->getTempFileName( '' ) ) ) {
-			mkdir( $this->getTempFileName( '' ) );
-		}
-
 		$this->cacheItemPool->deleteItems( [
 			'namespaces_' . $this->api->getLang(),
 			'about_' . $this->api->getLang(),
 			'css_' . $this->api->getLang(),
 		] );
-	}
-
-	protected function getTempFileName( $name ) {
-		$cache = FileCache::singleton();
-
-		return $cache->getDirectory() . '/' . $this->api->getLang() . '/' . $name;
 	}
 }

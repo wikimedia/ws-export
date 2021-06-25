@@ -4,6 +4,7 @@ namespace App\Generator;
 
 use App\Book;
 use App\Cleaner\BookCleanerEpub;
+use App\FileCache;
 use App\FontProvider;
 use App\Util\Api;
 use App\Util\Util;
@@ -38,11 +39,15 @@ class EpubGenerator implements FormatGenerator {
 	/** @var CacheInterface */
 	private $cache;
 
-	public function __construct( FontProvider $fontProvider, Api $api, Intuition $intuition, CacheInterface $cache ) {
+	/** @var FileCache */
+	private $fileCache;
+
+	public function __construct( FontProvider $fontProvider, Api $api, Intuition $intuition, CacheInterface $cache, FileCache $fileCache ) {
 		$this->fontProvider = $fontProvider;
 		$this->api = $api;
 		$this->intuition = $intuition;
 		$this->cache = $cache;
+		$this->fileCache = $fileCache;
 	}
 
 	/**
@@ -73,7 +78,7 @@ class EpubGenerator implements FormatGenerator {
 		$wsUrl = Util::wikisourceUrl( $book->lang, $book->title );
 		$cleaner = new BookCleanerEpub();
 		$cleaner->clean( $book, Util::wikisourceUrl( $book->lang ) );
-		$fileName = Util::buildTemporaryFileName( $book->title, 'epub' );
+		$fileName = $this->fileCache->buildTemporaryFileName( $book->title, 'epub' );
 		$zip = $this->createZipFile( $fileName );
 		$zip->addFromString( 'META-INF/container.xml', $this->getXmlContainer() );
 		$zip->addFromString( 'META-INF/com.apple.ibooks.display-options.xml', $this->getAppleIBooksDisplayOptionsXml() );

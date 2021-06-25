@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Util\Util;
 use DirectoryIterator;
 use Exception;
 
@@ -22,9 +23,10 @@ class FileCache {
 	private static $instance;
 
 	/**
-	 * @param string $path Directory for temp files
+	 * @param string $projectDir
 	 */
-	private function __construct( string $path ) {
+	public function __construct( string $projectDir ) {
+		$path = $projectDir . '/var/file-cache/';
 		$this->dir = $this->makePrivateDirectory( $path );
 
 		// Randomly clean up the cache
@@ -36,17 +38,21 @@ class FileCache {
 	}
 
 	/**
-	 * Returns a global instance of this class
-	 * @return FileCache
+	 * Builds a unique temporary file name for a given title and extension.
+	 *
+	 * @param string $title
+	 * @param string $extension
+	 * @return string
 	 */
-	public static function singleton(): FileCache {
-		global $wsexportConfig;
-
-		if ( !self::$instance ) {
-			self::$instance = new FileCache( $wsexportConfig['tempPath'] );
+	public function buildTemporaryFileName( $title, $extension ) {
+		for ( $i = 0; $i < 100; $i++ ) {
+			$path = $this->getDirectory() . '/' . 'ws-' . Util::encodeString( $title ) . '-' . getmypid() . rand() . '.' . $extension;
+			if ( !file_exists( $path ) ) {
+				return $path;
+			}
 		}
 
-		return self::$instance;
+		throw new Exception( 'Unable to create temporary file' );
 	}
 
 	/**
@@ -71,11 +77,11 @@ class FileCache {
 		$user = preg_replace( '/^tools\./', '', $user );
 		$dir = rtrim( $path, '/' ) . '/' . $user;
 
-		// Guard against realpth() returning false sometimes
+		// Guard against realpath() returning false sometimes
 		$dir = realpath( $dir ) ?: $dir;
 
 		if ( !is_dir( $dir ) ) {
-			if ( !mkdir( $dir, 0755 ) ) {
+			if ( !mkdir( $dir, 0755, true ) ) {
 				throw new Exception( "Couldn't create temporary directory $dir" );
 			}
 		}

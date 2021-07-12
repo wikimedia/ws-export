@@ -1,8 +1,10 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Hamilton Abreu"
+		]
 	},
 	"epub-title-page": "Título",
-	"epub-exported-date": "Conteúdo exportado da Wikisource em $1",
+	"epub-exported-date": "Conteúdo exportado da wiki Wikisource em $1",
 	"epub-about": "Sobre"
 }

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Crowley666",
 			"FakeGreenHand",
 			"GuoPC",
 			"Hmgrmb",
@@ -19,6 +20,7 @@
 	"commit-label": "提交：$1",
 	"licensed-under": "以$1进行许可。",
 	"license-link": "GPL v2或更高版本",
+	"source-and-docs": "源代码位于$1，一些文档位于$2。",
 	"source-link": "在Github上",
 	"docs-link": "在多语言维基文库",
 	"statistics": "同时提供了一些$1",
@@ -62,11 +64,15 @@
 	"error-fix": "如果遇到错误，请尝试以下步骤：",
 	"error-fix-again": "尝试再次下载电子书。",
 	"error-fix-epub": "尝试将电子书下载为EPUB文件。",
+	"error-fix-nocredits": "在“选项”中选中此框以删除署名",
+	"error-fix-noimages": "在“选项”中选中此框以删除图片。",
 	"error-breadcrumb": "错误$1",
 	"error-page-header": "发生错误",
 	"error-page-details": "错误详情：$1",
 	"error-page-issue": "如果此错误仍然存在，请$1。",
 	"error-page-issue-link": "在Phabricator上报告问题",
+	"onwikiconfig-failure": "无法从$1获取本维基配置",
+	"exception-fetching-credits": "获取贡献者信息时出错，请再次尝试导出。如果此错误仍存在，请选中“选项”中的框以删除署名。",
 	"exception-book-conversion": "转换电子书格式时出错。",
 	"epub-title-page": "封面",
 	"epub-exported-date": "于$1从维基文库导出",

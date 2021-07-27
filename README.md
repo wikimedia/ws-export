@@ -122,6 +122,11 @@ echo "WS_DOCKER_UID=$(id -u)
 WS_DOCKER_GID=$(id -g)" >> ./.env
 ```
 
+Optionally, set the port in `.env` (default is 8888):
+```bash
+WS_EXPORT_PORT=18000
+```
+
 Start the environment and install
 
 ```bash
@@ -131,7 +136,7 @@ docker-compose exec wsexport composer install
 docker-compose exec wsexport ./bin/console doctrine:migrations:migrate --no-interaction
 ```
 
-Wikisource Export should be up at http://localhost:8888/
+Wikisource Export should be up at http://localhost:8888/ (or the configured port)
 
 ### Cache
 Go to `/refresh` to clear the cache

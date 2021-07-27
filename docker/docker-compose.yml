@@ -7,7 +7,7 @@ services:
         USER_ID: ${WS_DOCKER_UID}
         GROUP_ID: ${WS_DOCKER_GID}
     ports:
-      - "8888:8080"
+      - "${WS_EXPORT_PORT:-8888}:8080"
     extra_hosts:
       - "host.docker.internal:host-gateway"  
     volumes:

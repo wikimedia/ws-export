@@ -185,10 +185,26 @@ class Util {
 	 */
 	public static function buildDOMDocumentFromHtml( string $html ): DOMDocument {
 		$document = new DOMDocument( '1.0', 'UTF-8' );
+
 		libxml_use_internal_errors( true );
-		$document->loadHTML( mb_convert_encoding( str_replace( '<?xml version="1.0" encoding="UTF-8" ?>', '', $html ), 'HTML-ENTITIES', 'UTF-8' ) );
+		// enforce a UTF-8 encoding declaration
+		$document->loadHTML( '<?xml encoding="utf-8" ?>' . $html );
 		libxml_clear_errors();
+
 		$document->encoding = 'UTF-8';
+
+		// Dirty fix to strip out existing XML Processing Instruction nodes
+		// (we already have one from the creation of the DOMDocument)
+		//
+		// This is better than re-encoding from UTF-8 to HTML-ENTITIES, because
+		// that will escape things even in CDATA blocks (e.g. T271390)
+		// https://www.php.net/manual/en/domdocument.loadhtml.php#95251
+		foreach ( $document->childNodes as $item ) {
+			if ( $item->nodeType === XML_PI_NODE ) {
+				$document->removeChild( $item );
+			}
+		}
+
 		return $document;
 	}
 

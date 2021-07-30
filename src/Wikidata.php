@@ -29,8 +29,8 @@ class Wikidata {
 
 	/**
 	 * Get names of all Wikisources.
-	 * @param string $lang The language to (try to) use for the Wikisource names.
-	 * @return array<string> Key is subdomain, value is the localized Wikisource name.
+	 * @param string $lang The language to (try to) use for the name of Multilingual Wikisource or any that don't have a localized label.
+	 * @return array<string> Key is subdomain, value is the Wikisource name.
 	 */
 	public function getWikisourceLangs( string $lang ): array {
 		return $this->cache->get( 'wikidata_wikisources_' . $lang, function ( CacheItemInterface $cacheItem ) use ( $lang ) {
@@ -40,13 +40,16 @@ class Wikidata {
 				"SELECT ?label ?website WHERE { "
 				// Instance of Wikisource language edition.
 				. "?item wdt:P31 wd:Q15156455 . "
-				// Label (fall back to English).
-				. "  optional{ ?item rdfs:label ?labelLocal FILTER( LANG(?labelLocal) = '$lang' ) } . "
+				// Wikimedia langugae code.
+				. "?item wdt:P424 ?wikiLangCode . "
+				// Label (fall back to the interface language, and then English).
+				. "  optional{ ?item rdfs:label ?labelLocal FILTER( LANG(?labelLocal) = ?wikiLangCode ) } . "
+				. "  optional{ ?item rdfs:label ?labelUselang FILTER( LANG(?labelUselang) = '$lang' ) } . "
 				. "  ?item rdfs:label ?labelEn FILTER( LANG(?labelEn) = 'en' ) . "
-				. "  BIND( IF( BOUND(?labelLocal), ?labelLocal, ?labelEn ) AS ?label ) . "
+				. "  BIND( IF( BOUND(?labelLocal), ?labelLocal, IF( BOUND(?labelUselang), ?labelUselang, ?labelEn ) ) AS ?label ) . "
 				// Official website.
 				. "?item wdt:P856 ?website . "
-				. "} ORDER BY ?label ";
+				. "} ORDER BY ?wikiLangCode ";
 			$data = $this->fetch( $query );
 			$out = [];
 			foreach ( $data as $datum ) {

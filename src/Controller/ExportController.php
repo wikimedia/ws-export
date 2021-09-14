@@ -201,7 +201,9 @@ class ExportController extends AbstractController {
 	 * Get the Wikisource language from the URL or based on the user's Accept header.
 	 */
 	private function getLang( Request $request ): string {
-		$lang = $request->get( 'lang' );
+		// This regex is a more lenient form of the one for Wikimedia language codes:
+		// https://www.wikidata.org/wiki/Property:P424#P1793
+		$lang = preg_replace( '/[^A-Za-z_-]/', '', $request->get( 'lang' ) );
 		if ( !$lang ) {
 			$localInfo = Locale::parseLocale( $request->getPreferredLanguage() );
 			$lang = $localInfo['language'] ?? '';

@@ -91,6 +91,8 @@ class BookTest extends WebTestCase {
 			[ '', 'en-US', 'en' ],
 			[ '', 'qq, en-fr', 'qq' ],
 			[ 'bn', 'en-AU', 'bn' ],
+			// T290674
+			[ '<script>alert("foo")</script>', 'en', 'scriptalertfooscript' ]
 		];
 	}
 

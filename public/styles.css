@@ -38,7 +38,6 @@ footer p {
 .back-to-wikisource a {
 	color: inherit;
 	font-weight: bold;
-	line-height: 20px;
 }
 
 .back-to-wikisource img {
@@ -57,12 +56,12 @@ footer p {
 h2 {
 	border-bottom: 1px solid #e5e5e5;
 	margin: 25px 0;
-	font-size: 22px;
+	font-size: 1.8em;
 }
 
 fieldset legend,
 label {
-	font-size: 14px;
+	font-size: 1.1em;
 	font-weight: bold;
 	border: 0;
 	margin: 0;

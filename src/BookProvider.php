@@ -275,30 +275,49 @@ class BookProvider {
 		$title = $id[0];
 		$picture = new Picture();
 		$picture->title = $cover;
-		$response = $this->api->queryAsync( [ 'titles' => 'File:' . $title, 'prop' => 'imageinfo', 'iiprop' => 'mime|url|canonicaltitle' ] )->wait();
+		$response = $this->api->queryAsync( [
+			'titles' => 'File:' . $title,
+			'prop' => 'imageinfo',
+			'iiprop' => 'mime|dimensions'
+		] )->wait();
 		$page = end( $response['query']['pages'] );
-		$picture->url = $page['imageinfo'][0]['url'];
-		$picture->mimetype = $page['imageinfo'][0]['mime'];
-		if ( in_array( $picture->mimetype, [ 'image/vnd.djvu', 'application/pdf' ] ) ) {
-			if ( !array_key_exists( 1, $id ) ) {
-				$id[1] = 1;
+		$iinfo = $page['imageinfo'][0];
+
+		$thumbParams = min( $iinfo['width'], 400 ) . 'px';
+
+		// sanitize the page number if there is one
+		if ( in_array( $iinfo['mime'], [ 'image/vnd.djvu', 'application/pdf' ] ) ) {
+			$count = $iinfo['pagecount'];
+			$pageNum = 1;
+			if ( array_key_exists( 1, $id ) ) {
+				$pageNum = intval( $id[1] );
 			}
-			$temps = explode( '/', $picture->url );
-			foreach ( $temps as $temp ) {
-				$title = $temp;
-			}
-			if ( strstr( $picture->url, '/commons/' ) ) {
-				$picture->url = str_replace( 'commons/', 'commons/thumb/', $picture->url ) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
-			} elseif ( strstr( $picture->url, '/wikisource/' . $lang ) ) {
-				$picture->url = str_replace( 'wikisource/' . $lang, 'wikisource/' . $lang . '/thumb/', $picture->url ) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
-			} elseif ( strstr( $picture->url, '/sources/' ) ) {
-				$picture->url = str_replace( 'sources/', 'sources/thumb/', $picture->url ) . '/page' . $id[1] . '-400px-' . $title . '.jpg';
-			} else {
-				return new Picture();
-			}
-			$picture->mimetype = 'image/jpeg';
-			$picture->title .= '.jpg';
-			$picture->name = $page['imageinfo'][0]['canonicaltitle'];
+
+			$pageNum = max( 1, min( $count, $pageNum ) );
+			// include the page number in the URL parameters
+			$thumbParams = 'page' . $pageNum . '-' . $thumbParams;
+		}
+
+		// we need to get the properties of the actual thumbnail now
+		$response = $this->api->queryAsync( [
+			'titles' => 'File:' . $title,
+			'prop' => 'imageinfo',
+			'iiprop' => 'thumbmime|url|canonicaltitle',
+			'iiurlparam' => $thumbParams
+		] )->wait();
+
+		$page = end( $response['query']['pages'] );
+		$iinfo = $page['imageinfo'][0];
+
+		$picture->url = $iinfo['thumburl'];
+		$picture->mimetype = $iinfo['thumbmime'];
+		$picture->name = $iinfo['canonicaltitle'];
+
+		$picture->title = $iinfo['canonicaltitle'];
+		// if these are different, the thumb isn't the same as the canonicalTitle
+		// so add the extension from the URL
+		if ( $iinfo['mime'] !== $iinfo['thumbmime'] ) {
+			$picture->title .= preg_replace( '/.*(?=\.[^.]+$)/', '', $picture->url );
 		}
 
 		return $picture;

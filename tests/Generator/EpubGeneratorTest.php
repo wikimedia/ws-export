@@ -63,6 +63,4 @@ class EpubGeneratorTest extends TestCase {
 			$generator->getCss( $book )
 		);
 	}
-
-
 }

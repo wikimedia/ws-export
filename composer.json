@@ -33,6 +33,7 @@
 		"doctrine/annotations": "^1.10",
 		"doctrine/doctrine-bundle": "^2.1",
 		"doctrine/doctrine-migrations-bundle": "^3.1",
+		"doctrine/migrations": ">=3.1.1",
 		"doctrine/orm": "^2.8",
 		"guzzlehttp/guzzle": "^6.0",
 		"kevinrob/guzzle-cache-middleware": "^3.3",

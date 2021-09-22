@@ -451,6 +451,9 @@
     "twig/twig": {
         "version": "v3.0.5"
     },
+    "tysonandre/var_representation_polyfill": {
+        "version": "0.1.1"
+    },
     "webmozart/assert": {
         "version": "1.9.1"
     },

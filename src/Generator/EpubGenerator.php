@@ -447,8 +447,9 @@ class EpubGenerator implements FormatGenerator {
 	 * @param Book $book
 	 * @return string
 	 */
-	private function getCss( Book $book ): string {
-		return $this->cache->get( Util::sanitizeCacheKey( 'css_' . $book->lang ), function ( ItemInterface $item ) {
+	public function getCss( Book $book ): string {
+		$css = isset( $book->options['fonts'] ) ? $this->fontProvider->getCss( $book->options['fonts'] ) : '';
+		$css .= $this->cache->get( Util::sanitizeCacheKey( 'css_' . $book->lang ), function ( ItemInterface $item ) {
 			$item->expiresAfter( new DateInterval( 'P14D' ) );
 			$css = file_get_contents( dirname( __DIR__, 2 ) . '/resources/styles/mediawiki.css' );
 			try {
@@ -457,6 +458,7 @@ class EpubGenerator implements FormatGenerator {
 			}
 			return $css;
 		} );
+		return $css;
 	}
 
 	private function createZipFile( $fileName ) {

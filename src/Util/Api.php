@@ -42,7 +42,7 @@ class Api {
 	/** @var LoggerInterface */
 	private $logger;
 
-	/** @var CacheItemPoolInterface */
+	/** @var CacheInterface */
 	private $cache;
 
 	/** @var string[][] */
@@ -168,6 +168,7 @@ class Api {
 	 * @return PromiseInterface the body of the result
 	 */
 	public function getAsync( $url, array $options = [] ) {
+		// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface
 		return $this->client->getAsync(
 			$url,
 			$options
@@ -187,6 +188,7 @@ class Api {
 	 * @return PromiseInterface
 	 */
 	public function createAsyncRequest( string $url, array $options = [] ): PromiseInterface {
+		// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface
 		return $this->client->getAsync(
 			$url,
 			$options
@@ -272,6 +274,7 @@ class Api {
 					function ( string $result ) use ( $title ) {
 						return Util::getXhtmlFromContent( $this->getLang(), $result, $title );
 					},
+					/** @return never */
 					function ( $reason ) use ( $title ) {
 						throw new WsExportException( 'rest-page-not-found', [ $title ], 404, false );
 					}
@@ -283,6 +286,7 @@ class Api {
 	 * @return string the file content
 	 */
 	public function get( $url ) {
+		// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface
 		return $this->client->get( $url )->getBody()->getContents();
 	}
 

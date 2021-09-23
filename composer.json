@@ -53,7 +53,7 @@
 		"dama/doctrine-test-bundle": "^6.5",
 		"mediawiki/mediawiki-codesniffer": "^v34.0",
 		"mediawiki/minus-x": "^1.0",
-		"phan/phan": "^4.0",
+		"phan/phan": "5.2.1",
 		"symfony/browser-kit": "5.3.*",
 		"symfony/css-selector": "5.3.*",
 		"symfony/maker-bundle": "^1.25",
@@ -96,7 +96,10 @@
 			"./bin/console lint:twig ./templates",
 			"./bin/console lint:yaml ./config",
 			"minus-x check .",
-			"phan --allow-polyfill-parser --load-baseline=./.phan/baseline.php"
+			"@phan"
+		],
+		"phan": [
+			"phan --allow-polyfill-parser --long-progress-bar --color"
 		],
 		"fix": [
 			"phpcbf"

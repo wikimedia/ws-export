@@ -20,6 +20,7 @@ class Book extends Page {
 
 	/**
 	 * output options
+	 * @phan-var array{images:bool,fonts:string|null,categories:bool,credits:bool}
 	 */
 	public $options = [];
 

@@ -15,7 +15,7 @@ use GuzzleHttp\Psr7\Response;
 class BookProvider {
 	protected $api = null;
 	protected $options = [
-		'images' => true, 'fonts' => false, 'categories' => true, 'credits' => true
+		'images' => true, 'fonts' => null, 'categories' => true, 'credits' => true
 	];
 	private $creditRepo;
 
@@ -23,8 +23,10 @@ class BookProvider {
 	private $fileCache;
 
 	/**
-	 * @param $api Api
+	 * @param Api $api
 	 * @param bool[] $options
+	 * @param CreditRepository $creditRepo
+	 * @param FileCache $fileCache
 	 */
 	public function __construct( Api $api, array $options, CreditRepository $creditRepo, FileCache $fileCache ) {
 		$this->api = $api;
@@ -218,6 +220,7 @@ class BookProvider {
 				$url = $picture->url;
 				yield function () use ( $client, $url ) {
 					// We could use the 'sink' option here, but for https://github.com/Kevinrob/guzzle-cache-middleware/issues/82
+					// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface
 					return $client->getAsync( $url );
 				};
 			}

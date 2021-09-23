@@ -55,7 +55,7 @@ class EpubGeneratorTest extends TestCase {
 
 		$providerCss = 'mary had a little lamb 341346 correct horse battery staple';
 		$fontProvider = $this->createMock( FontProvider::class );
-		$fontProvider->expects( $this->never() )->method( 'getCss' );
+		$fontProvider->expects( $this->never() )->method( 'getCss' )->willReturn( $providerCss );
 		$generator = $this->getEpubGenerator( $fontProvider );
 		// The soft expectation of $this->never() should already be enough anyway.
 		$this->assertStringNotContainsString(

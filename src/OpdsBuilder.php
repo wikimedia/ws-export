@@ -36,10 +36,14 @@ class OpdsBuilder {
 	/** @var string */
 	private $lang;
 
+	/** @var Api */
+	private $api;
+
 	/**
 	 * @param BookProvider $bookProvider
 	 * @param Api $api
 	 * @param string $lang
+	 * @param FileCache $fileCache
 	 * @param string $exportBasePath
 	 */
 	public function __construct( BookProvider $bookProvider, Api $api, string $lang, FileCache $fileCache, $exportBasePath = '' ) {

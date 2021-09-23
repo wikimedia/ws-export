@@ -38,7 +38,7 @@ class RefreshTest extends KernelTestCase {
 		$book = new Book();
 		$book->lang = 'en';
 		$book->title = 'Emma';
-		$book->options = [ 'images' => false, 'fonts' => false, 'credits' => false ];
+		$book->options = [ 'images' => false, 'fonts' => null, 'credits' => false ];
 		$epubGenerator->create( $book );
 		$this->assertTrue( $cache->hasItem( 'css_en' ) );
 

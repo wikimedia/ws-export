@@ -22,7 +22,7 @@ class FontProvider {
 	/** @var CacheInterface */
 	private $cache;
 
-	/** @var string[][]|null */
+	/** @var string[][][][]|null */
 	private $data;
 
 	/** @var string[] Runtime cache of variants of font names. */
@@ -89,6 +89,7 @@ class FontProvider {
 					// Guard against malformed results.
 					continue;
 				}
+				'@phan-var string[] $parts';
 				$file = $parts[0];
 				$family = $this->getFamilyName( $parts[1] );
 				$slant = $parts[2];
@@ -154,7 +155,7 @@ class FontProvider {
 	 * @param string|null $name
 	 * @return string|bool The normalized name, or false if a matching font could not be found.
 	 */
-	public function resolveName( ?string $name ): string {
+	public function resolveName( ?string $name ) {
 		if ( isset( $this->names[ $name ] ) ) {
 			return $this->names[ $name ];
 		}
@@ -192,6 +193,9 @@ class FontProvider {
 			return '';
 		}
 		$font = $this->getOne( $name );
+		if ( !$font ) {
+			return '';
+		}
 		$css = [];
 		foreach ( $font['styles'] as $style => $styleInfo ) {
 			// Information about the weight and slant values is in /usr/share/doc/fontconfig/fontconfig-user.html

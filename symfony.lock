@@ -108,6 +108,9 @@
     "felixfbecker/advanced-json-rpc": {
         "version": "v3.2.0"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.3"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.5.5"
     },
@@ -122,6 +125,12 @@
     },
     "krinkle/intuition": {
         "version": "v1.2.0"
+    },
+    "laminas/laminas-code": {
+        "version": "3.4.1"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.3.0"
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"

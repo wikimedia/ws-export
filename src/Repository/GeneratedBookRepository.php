@@ -40,6 +40,12 @@ class GeneratedBookRepository extends ServiceEntityRepository {
 	 * @return int[][] Total counts, keyed by format and then language code.
 	 */
 	public function getTypeAndLangStats( string $month, string $year ): array {
+		if ( !is_numeric( $month ) ) {
+			$month = null;
+		}
+		if ( !is_numeric( $year ) ) {
+			$year = null;
+		}
 		$sql = 'SELECT `format`, `lang`, COUNT(1) AS `number` '
 			. ' FROM books_generated'
 			. ' WHERE YEAR(`time`) = :year AND MONTH(`time`) = :month'

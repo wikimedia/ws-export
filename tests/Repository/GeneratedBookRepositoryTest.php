@@ -60,4 +60,27 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 			$firstLog->getTitle()
 		);
 	}
+
+	/**
+	 * Passing invalid strings for month or year shouldn't give incorrect results.
+	 *
+	 * @link https://phabricator.wikimedia.org/T290674
+	 * @covers \App\Repository\GeneratedBookRepository::getTypeAndLangStats()
+	 */
+	public function testInvalidDateParams(): void {
+		$noStats = $this->genBookRepo->getTypeAndLangStats( 'foo', 'bar' );
+		$this->assertEmpty( $noStats );
+
+		$testBook = new Book();
+		$testBook->lang = 'en';
+		$testBook->title = 'Test &quot;Book&quot;';
+		$this->entityManager->persist( new GeneratedBook( $testBook, 'epub' ) );
+		$this->entityManager->flush();
+
+		$oneStat = $this->genBookRepo->getTypeAndLangStats( date( 'n' ), date( 'Y' ) );
+		$this->assertCount( 1, $oneStat );
+
+		$invalidMonthStat = $this->genBookRepo->getTypeAndLangStats( '09 AND 1=1', date( 'Y' ) );
+		$this->assertEmpty( $invalidMonthStat );
+	}
 }

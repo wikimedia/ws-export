@@ -21,7 +21,7 @@
 			</button>
 			<p class="message-inner">
 				<strong>{{ msg( 'export-failed' ) }}</strong>
-				<span>{{ msg( exception.i18nMessage, exception.i18nParams ) }}</span>
+				<span>{{ msg( exception.i18nMessage, exception.i18nParams|map(p => p|escape ) ) }}</span>
 				{% if exception.friendly %}
 					{# Friendly errors show a 'Learn more' link with troubleshooting tips. #}
 					<button id="learn-more-link" type="button" role="button" data-toggle="collapse" class="btn btn-link alert-link"

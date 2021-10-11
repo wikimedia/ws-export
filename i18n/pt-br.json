@@ -25,7 +25,7 @@
 	"previous-alt-text": "Ícone de seta voltado para trás que indica que o link retorna para o Wikisource.",
 	"export-book": "Exportar um livro",
 	"lang-field-label": "Wikisource",
-	"lang-field-help": "Código de idioma do Wikisource ou subdomínio, como 'en' ou 'fr'.",
+	"lang-field-help": "O Wikisource do qual exportar o livro.",
 	"title-field-label": "Título",
 	"title-field-help": "Título do livro ou seção a exportar.",
 	"format-field-label": "Formato de arquivo",

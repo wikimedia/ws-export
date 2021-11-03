@@ -60,13 +60,18 @@ services:
     App\Generator\ConvertGenerator:
         arguments:
             $timeout: '%env(default::int:APP_TIMEOUT)%'
-        
+
     App\Repository\CreditRepository:
         public: true
 
     App\FileCache:
         arguments:
             $projectDir: '%kernel.project_dir%'
+
+    App\EventSubscriber\RateLimitSubscriber:
+        arguments:
+            $rateLimit: '%env(int:APP_RATE_LIMIT)%'
+            $rateDuration: '%env(int:APP_RATE_DURATION)%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

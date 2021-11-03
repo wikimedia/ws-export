@@ -37,6 +37,7 @@
 	"format-pdf-letter": "PDF - US letter size",
 	"format-rtf": "RTF",
 	"format-txt": "Plain text",
+	"exceeded-rate-limitation": "You are making too many requests during a short period of time. Please wait $1 {{PLURAL:$1|minute|minutes}} before reloading this tool.",
 	"exception-invalid-format":  "\"$1\" is not a valid format. Valid formats are: $2",
 	"font-field-label": "Font",
 	"no-font-option": "None (use device default)",

@@ -42,6 +42,7 @@
 	"format-pdf-letter": "PDF — format lettre US",
 	"format-rtf": "RTF",
 	"format-txt": "Texte brut",
+	"exceeded-rate-limitation": "Vous faites trop de requêtes pendant une courte période de temps. Veuillez attendre $1 {{PLURAL:$1|minute|minutes}} avant de recharger cet outil.",
 	"exception-invalid-format": "« $1 » n’est pas un format valide. Les formats valides sont : $2",
 	"font-field-label": "Police",
 	"no-font-option": "Aucun (utiliser la valeur par défaut de l’appareil)",

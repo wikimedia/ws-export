@@ -41,6 +41,7 @@
 	"format-pdf-letter": "PDF - US veľkosť písma",
 	"format-rtf": "RTF",
 	"format-txt": "Čistý text",
+	"exceeded-rate-limitation": "Vo veľmi krátkom čase ste zadali príliš veľa požiadaviek. Pred znovu načítaním tohto nástroja rosím počkajte {{PLURAL:$1|minútu|minúty|minút}}.",
 	"exception-invalid-format": "\"$1\" nie je platný formát. Platné formáty sú: $2",
 	"font-field-label": "Písmo",
 	"no-font-option": "Žiadne (použiť predvolené nastavenie zariadenia)",

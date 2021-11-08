@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bruno44101",
 			"Hmonroy",
 			"Ntorasso",
 			"Rossnyev"
@@ -22,6 +23,7 @@
 	"format-pdf-a6": "PDF - A6 medida",
 	"format-pdf-letter": "PDF - medida carta de los EE.UU.",
 	"format-rtf": "RTF",
+	"exceeded-rate-limitation": "Está haciendo demasiadas solicitudes durante un corto período de tiempo. Espere $1 {{PLURAL:$1|minute|minutes}} antes de volver a cargar esta herramienta.",
 	"font-field-label": "Fuente:",
 	"options-label": "Opciones:",
 	"credits-field-label": "Excluir créditos a los editores (para una descarga más rápida)",

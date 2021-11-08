@@ -42,6 +42,7 @@
 	"format-pdf-letter": "PDF - US-amerikansische Größe Letter",
 	"format-rtf": "RTF",
 	"format-txt": "Nur Text",
+	"exceeded-rate-limitation": "Du hast zu viele Anfragen innerhalb eines kurzen Zeitraums gemacht. Bitte warte $1 {{PLURAL:$1|Minute|Minuten}}, bevor du dieses Tool erneut nutzt.",
 	"exception-invalid-format": "„$1“ ist kein gültiges Format. Gültige Formate sind: $2.",
 	"font-field-label": "Schriftart",
 	"no-font-option": "Keine (Standardeinstellung des Gerätes benutzen)",

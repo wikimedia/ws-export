@@ -273,6 +273,8 @@ class PageParser {
 		$this->removeNodesWithXpath( '//a[@class="mw-headline-anchor"]' );
 		$this->removeNodesWithXpath( '//div[@class="mediaContainer"]' );
 		$this->removeNodesWithXpath( '//link[@rel="mw:PageProp/Category"]' );
+		// Remove meta tags such as <meta property="mw:PageProp/disambiguation" about="#mwt1" />
+		$this->removeNodesWithXpath( '//meta[starts-with(@property, "mw:PageProp/")]' );
 		$this->removeNodesWithXpath( '//link[contains(@typeof, "mw:Extension")]' );
 		$this->deprecatedNodes( 'big', 'span', 'font-size:large;' );
 		$this->deprecatedNodes( 'center', 'div', 'text-align:center;' );

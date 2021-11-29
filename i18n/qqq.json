@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Robby"
 		]
 	},
@@ -46,7 +47,7 @@
 	"font-field-label": "Form field label for the 'Font' field.",
 	"no-font-option": "Font dropdown option to indicate that no font should be used.",
 	"font-field-help": "Help text for the 'Font' field.\n\nParameter:\n* $1 is the total number of fonts (an integer).",
-	"options-label": "Form label for the set of 'Options' fields.",
+	"options-label": "Form label for the set of 'Options' fields.\n\n{{Identical|Options}}",
 	"credits-field-label": "Form field label for the 'do/don't include credits' option field.",
 	"credits-default-message": "Text shown in place of credits when they are not included in a book.",
 	"images-field-label": "Form field label for the 'do/don't include images' option field.",

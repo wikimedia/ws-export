@@ -3,6 +3,7 @@
 		"authors": [
 			"Alan Mena",
 			"Aleator",
+			"Delta123",
 			"Mguix",
 			"Xavier Dengra"
 		]
@@ -41,6 +42,7 @@
 	"format-pdf-letter": "PDF - mida de carta estàndard dels EUA",
 	"format-rtf": "RTF",
 	"format-txt": "Text sense format",
+	"exceeded-rate-limitation": "Estàs fent massa peticions durant un període curt de temps. Si us plau espereu $1 {{PLURAL:1$|minuts|de minut}} abans tornar a fer servir aquesta eina.",
 	"exception-invalid-format": "\"$1\" no és un format vàlid. Els formats vàlids són: $2",
 	"font-field-label": "Tipus de lletra",
 	"no-font-option": "Cap (empra el format per defecte del dispositiu)",

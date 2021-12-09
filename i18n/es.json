@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Bruno44101",
+			"DDPAT",
 			"Hmonroy",
 			"Ntorasso",
 			"Rossnyev"
@@ -12,9 +13,9 @@
 	"source-link": "en Github",
 	"statistics-link": "estadísticas",
 	"issue-button": "Crea asunto",
-	"title-field-label": "Título:",
+	"title-field-label": "Título",
 	"title-field-help": "Título de la página principal del libro.",
-	"format-field-label": "Formato de expediente:",
+	"format-field-label": "Formato de expediente",
 	"format-epub-3": "EPUB 3 (para la mayoría de ereaders)",
 	"format-htmlz": "HTML",
 	"format-mobi": "MOBI (para Kindles)",
@@ -24,8 +25,8 @@
 	"format-pdf-letter": "PDF - medida carta de los EE.UU.",
 	"format-rtf": "RTF",
 	"exceeded-rate-limitation": "Está haciendo demasiadas solicitudes durante un corto período de tiempo. Espere $1 {{PLURAL:$1|minute|minutes}} antes de volver a cargar esta herramienta.",
-	"font-field-label": "Fuente:",
-	"options-label": "Opciones:",
+	"font-field-label": "Fuente",
+	"options-label": "Opciones",
 	"credits-field-label": "Excluir créditos a los editores (para una descarga más rápida)",
 	"export-button": "Exportar",
 	"exception-fetching-credits": "Error al extraer información de los créditos. Por favor intente nuevamente. Si el error persiste, marque la opción 'Opciones' para quitar los créditos.",

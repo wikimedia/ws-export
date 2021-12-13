@@ -40,6 +40,7 @@
 	"format-pdf-letter": "PDF - בגודל מכתב אמריקאי",
 	"format-rtf": "RTF",
 	"format-txt": "טקסט רגיל",
+	"exceeded-rate-limitation": "הגשת יותר מדי בקשות בפרק זמן קצר. נא להמתין {{PLURAL:$1|דקה|$1  דקות}} לפני רענון הכלי הזה.",
 	"exception-invalid-format": "„$1” אינה תצורה תקינה. התצורות התקינות הן: $2",
 	"font-field-label": "גופן",
 	"no-font-option": "אין (להשתמש בבררת המחדל של המכשיר)",

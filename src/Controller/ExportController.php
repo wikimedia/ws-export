@@ -118,6 +118,7 @@ class ExportController extends AbstractController {
 			'formats' => GeneratorSelector::getValidFormats(),
 			'format' => $this->getFormat( $request ),
 			'title' => $this->getTitle( $request ),
+			'wikiLangs' => $this->wikidata->getWikisourceLangs( $this->intuition->getLang() );
 			'langs' => $this->getLangs( $request ),
 			'lang' => $this->getLang( $request ),
 			'credits' => $credits,

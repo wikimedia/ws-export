@@ -3,7 +3,7 @@
 {% block main %}
 
 <p class="back-to-wikisource">
-	<a href="https://{% if lang %}{{ lang }}.{% endif %}wikisource.org{% if title %}/wiki/{{ title|e('url') }}{% endif %}">
+	<a href="https://{% if lang in wikiLangs|keys %}{{ lang }}.{% endif %}wikisource.org{% if title %}/wiki/{{ title|e('url') }}{% endif %}">
 		{# Arrow is from OOUI. #}
 		<img src="/img/previous-{% if is_rtl() %}rtl{% else %}ltr{% endif %}.svg" alt="{{ msg('previous-alt-text') }}" width="20" height="20" />
 		<span>{{ msg('back-to-wikisource') }}</span>

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kly"
+			"Kly",
+			"LNDDYL"
 		]
 	},
 	"app-title": "維基文庫電子書匯出",
@@ -52,7 +53,7 @@
 	"images-field-label": "不包含圖片",
 	"nocache-field-label": "繞過所有快取（較慢但有助於偵錯）",
 	"export-button": "匯出",
-	"cache-updated": "快取已針對語言：$1 刷新",
+	"cache-updated": "已重新整理 $1 語言的快取",
 	"alert-close": "關閉",
 	"export-failed": "下載失敗。",
 	"exception-url-fetch-error": "無法索取 URL：$1",

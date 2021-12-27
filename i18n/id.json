@@ -3,6 +3,7 @@
 		"authors": [
 			"AJBot2",
 			"Akmaie Ajam",
+			"Daud I.F. Argana",
 			"Naufal06"
 		]
 	},
@@ -40,6 +41,7 @@
 	"format-pdf-letter": "PDF - ukuran letter AS",
 	"format-rtf": "RTF",
 	"format-txt": "Teks polos",
+	"exceeded-rate-limitation": "Anda terlalu banyak membuat permintaan dalam jangka waktu yang singkat. Tolong tunggu $1 {{PLURAL:$1|menit}} sebelum memuat kembali perkakas ini.",
 	"exception-invalid-format": "\"$1\" bukan format yang sah. Format yang sah adalah: $2",
 	"font-field-label": "Fon",
 	"no-font-option": "Tidak ada (gunakan bawaan perangkat)",

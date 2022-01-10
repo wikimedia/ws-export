@@ -45,6 +45,7 @@
 	"format-pdf-letter": "PDF - 美国信纸大小",
 	"format-rtf": "RTF",
 	"format-txt": "纯文本",
+	"exceeded-rate-limitation": "您在短时间内发出太多请求。请等待 $1 {{PLURAL:$1|分钟}}后再重新加载此工具。",
 	"exception-invalid-format": "\"$1\" 不是一个有效的格式。有效的格式为: $2",
 	"font-field-label": "字体",
 	"no-font-option": "无（使用设备默认值）",

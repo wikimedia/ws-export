@@ -41,6 +41,7 @@
 	"format-pdf-letter": "PDF - ukuran surat AS",
 	"format-rtf": "RTF",
 	"format-txt": "Suratan polos",
+	"exceeded-rate-limitation": "Ragané bes akéhan ngardi pinunasan ring kala sané éndép. Durus jantos $1 {{PLURAL:$1|menit}} sadurung ngamuat malih pakakas puniki.",
 	"exception-invalid-format": "\"$1\" nénten format sané sah. Format sané sah punika: $2",
 	"font-field-label": "Aksara",
 	"no-font-option": "Puyung (anggén perangkat baku)",

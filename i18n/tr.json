@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Can",
 			"Cobija",
 			"Joseph",
 			"Mim.saitkilic",
@@ -17,7 +18,7 @@
 	"version": "$1 sürümü",
 	"commit-label": "İşle: $1",
 	"licensed-under": "$1 ile lisanslanmış.",
-	"license-link": "GPL v2 ya da daha sonraki",
+	"license-link": "GPL v2 ya da üstü",
 	"source-and-docs": "Kaynak kodu $1 ve bazı belgeleme $2 mevcut.",
 	"source-link": "Github'ta",
 	"docs-link": "Çokdilli Vikikaynak'ta",

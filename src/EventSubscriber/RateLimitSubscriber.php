@@ -8,16 +8,28 @@ use Krinkle\Intuition\Intuition;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class RateLimitSubscriber implements EventSubscriberInterface {
+
+	/** @var int Number of minutes to cache IP blocks. */
+	private const BLOCK_CACHE_DURATION = 5;
+
+	/** Constants for different types of reasons to deny exporting of books. */
+	private const DENY_TYPE_RATE_LIMITING = 1;
+	private const DENY_TYPE_BLOCKED = 2;
 
 	/** @var Intuition */
 	protected $intuition;
 
 	/** @var CacheItemPoolInterface */
 	protected $cache;
+
+	/** @var HttpClientInterface */
+	protected $client;
 
 	/** @var int */
 	protected $rateLimit;
@@ -34,11 +46,13 @@ class RateLimitSubscriber implements EventSubscriberInterface {
 	public function __construct(
 		Intuition $intuition,
 		CacheItemPoolInterface $cache,
+		HttpClientInterface $client,
 		int $rateLimit,
 		int $rateDuration
 	) {
 		$this->intuition = $intuition;
 		$this->cache = $cache;
+		$this->client = $client;
 		$this->rateLimit = $rateLimit;
 		$this->rateDuration = $rateDuration;
 	}
@@ -73,11 +87,14 @@ class RateLimitSubscriber implements EventSubscriberInterface {
 			return;
 		}
 
-		$xff = $request->headers->get( 'x-forwarded-for', '' );
-		if ( $xff === '' ) {
+		$xff = $request->headers->get( 'x-forwarded-for' );
+		if ( !$xff ) {
 			// Happens in local environments, or outside of Cloud Services.
 			return;
 		}
+
+		// First check Meta's global blocklist. This will ween out most bots.
+		$this->checkMetaBlocklist( $xff );
 
 		$cacheKey = "ratelimit.session." . md5( $xff );
 		$cacheItem = $this->cache->getItem( $cacheKey );
@@ -96,16 +113,51 @@ class RateLimitSubscriber implements EventSubscriberInterface {
 		$this->cache->save( $cacheItem );
 	}
 
+	private function checkMetaBlocklist( string $xff ): void {
+		$cacheKey = "ratelimit.ipblock.$xff";
+		$cacheItem = $this->cache->getItem( $cacheKey );
+
+		if ( $cacheItem->isHit() ) {
+			$this->denyAccess( self::DENY_TYPE_BLOCKED );
+		}
+
+		$response = json_decode( $this->client->request(
+			'GET',
+			"https://meta.wikimedia.org/w/api.php?action=query&list=globalblocks&bgip=$xff&format=json&formatversion=2"
+		)->getContent(), true );
+
+		$block = $response['query']['globalblocks'][0] ?? null;
+		if ( $block === null ) {
+			// No block.
+			return;
+		}
+
+		// Cache this block so if we're rapidly hit by the same IP,
+		// we don't unnecessarily re-query the API.
+		$cacheItem->set( true )
+			->expiresAfter( new DateInterval( 'PT' . self::BLOCK_CACHE_DURATION . 'M' ) );
+		$this->cache->save( $cacheItem );
+
+		// Throw 403 with a friendly message.
+		$this->denyAccess( self::DENY_TYPE_BLOCKED );
+	}
+
 	/**
 	 * Throw exception for denied access due to spider crawl or hitting usage limits.
+	 * @param int $denyType One of the self::DENY_TYPE constants.
 	 * @throws TooManyRequestsHttpException
+	 * @throws AccessDeniedHttpException
 	 */
-	private function denyAccess() {
+	private function denyAccess( int $denyType = self::DENY_TYPE_RATE_LIMITING ) {
 		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
-		$message = $this->intuition->msg( 'exceeded-rate-limitation', [
-			'variables' => [ $this->rateDuration ]
-		] );
+		if ( $denyType === self::DENY_TYPE_RATE_LIMITING ) {
+			$message = $this->intuition->msg( 'exceeded-rate-limitation', [
+				'variables' => [ $this->rateDuration ],
+			] );
+			throw new TooManyRequestsHttpException( $this->rateDuration * 60, $message );
+		}
 
-		throw new TooManyRequestsHttpException( $this->rateDuration * 60, $message );
+		// More information shown for 403s in error.html.twig.
+		throw new AccessDeniedHttpException();
 	}
 }

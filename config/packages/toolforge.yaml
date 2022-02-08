@@ -1,3 +1,6 @@
 toolforge:
     intuition:
         domain: 'ws-export'
+    oauth:
+        consumer_key: '%env(OAUTH_KEY)%'
+        consumer_secret: '%env(OAUTH_SECRET)%'

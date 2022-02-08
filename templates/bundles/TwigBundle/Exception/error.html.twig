@@ -12,20 +12,28 @@
             <span class="glyphicon glyphicon-remove-circle"></span>
         </div>
        <div class="message">
-            <p>
-                {{ msg('error-page-header') }}
-            </p>
-            <p>
-                <strong>{{ msg('error-page-details', [exception.message]) }}</strong>
-            </p>
-            <p>
-                {% set issue_link %}
-                    <a href="https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=ws-export">
-                        {{ msg( 'error-page-issue-link' ) -}}
-                    </a>
-                {%- endset %}
-                {{ msg( 'error-page-issue', [ issue_link ] ) }}
-            </p>
+           <p>
+               {{ msg('error-page-header') }}
+           </p>
+           <p>
+               <strong>{{ msg('error-page-details', [exception.message]) }}</strong>
+           </p>
+           {% if exception.statusCode == 403 %}
+               <p>{{ msg('error-blocked-1') }}</p>
+               <p>{{ msg('error-blocked-2') }}</p>
+           {% else %}
+               <p>
+                   {% set issue_link %}
+                       <a href="https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=ws-export">
+                           {{ msg( 'error-page-issue-link' ) -}}
+                       </a>
+                   {%- endset %}
+                   {{ msg( 'error-page-issue', [ issue_link ] ) }}
+               </p>
+           {% endif %}
+           {% if exception.statusCode == 403 or exception.statusCode == 429 %}
+               <h3><a href="{{ path('toolforge_login', {'callback': url('toolforge_oauth_callback', {'redirect': app.request.uri})}) }}">{{ msg('error-login') }}</a></h3>
+           {% endif %}
         </div>
     </div>
 

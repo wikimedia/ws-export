@@ -7,6 +7,7 @@ use DateInterval;
 use Krinkle\Intuition\Intuition;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -31,6 +32,9 @@ class RateLimitSubscriber implements EventSubscriberInterface {
 	/** @var HttpClientInterface */
 	protected $client;
 
+	/** @var SessionInterface */
+	protected $session;
+
 	/** @var int */
 	protected $rateLimit;
 
@@ -47,12 +51,14 @@ class RateLimitSubscriber implements EventSubscriberInterface {
 		Intuition $intuition,
 		CacheItemPoolInterface $cache,
 		HttpClientInterface $client,
+		SessionInterface $session,
 		int $rateLimit,
 		int $rateDuration
 	) {
 		$this->intuition = $intuition;
 		$this->cache = $cache;
 		$this->client = $client;
+		$this->session = $session;
 		$this->rateLimit = $rateLimit;
 		$this->rateDuration = $rateDuration;
 	}
@@ -75,6 +81,7 @@ class RateLimitSubscriber implements EventSubscriberInterface {
 		$controller = $event->getController();
 		$action = null;
 		$request = $event->getRequest();
+		$loggedIn = (bool)$this->session->get( 'logged_in_user' );
 
 		// when a controller class defines multiple action methods, the controller
 		// is returned as [$controllerInstance, 'methodName']
@@ -83,7 +90,9 @@ class RateLimitSubscriber implements EventSubscriberInterface {
 		}
 
 		// Abort if rate limitations are disabled or we're not exporting a book.
-		if ( $this->rateLimit + $this->rateDuration === 0 || $action !== 'home' || !$request->get( 'page' ) ) {
+		if ( $loggedIn || $this->rateLimit + $this->rateDuration === 0 ||
+			$action !== 'home' || !$request->get( 'page' )
+		) {
 			return;
 		}
 

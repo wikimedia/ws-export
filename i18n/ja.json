@@ -3,6 +3,7 @@
 		"authors": [
 			"A2y4",
 			"Likibp",
+			"MathXplore",
 			"Omotecho",
 			"Tamaki Wakita"
 		]
@@ -43,6 +44,7 @@
 	"format-pdf-letter": "PDF - USレターサイズ",
 	"format-rtf": "RTF",
 	"format-txt": "プレーンテキスト",
+	"exceeded-rate-limitation": "短時間に多くのリクエストを行っています。このツールをリロードする前に$1秒待ってください。",
 	"exception-invalid-format": "「$1」は有効なファイル形式ではありません。有効なファイル形式は次の通りです：$2",
 	"font-field-label": "フォント",
 	"no-font-option": "なし（デバイスの規定のフォントを使用する）",
@@ -59,6 +61,7 @@
 	"exception-url-fetch-error": "次のURLを取得できませんでした：$1",
 	"exception-rest-page-not-found": "書籍「$1」は見つかりませんでした。",
 	"learn-more": "もっと詳しく。",
+	"error-blocked-1": "あなたのIPアドレスは現在ブロックされています。",
 	"error-fix": "エラーが発生した場合は次の手順をお試しください：",
 	"error-fix-again": "もう一度書籍をダウンロードしてみて下さい。",
 	"error-fix-epub": "EPUBファイルの書籍でダウンロードしてみて下さい。",

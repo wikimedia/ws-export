@@ -5,6 +5,7 @@
 			"Likibp",
 			"MathXplore",
 			"Omotecho",
+			"Shirayuki",
 			"Tamaki Wakita"
 		]
 	},
@@ -44,7 +45,7 @@
 	"format-pdf-letter": "PDF - USレターサイズ",
 	"format-rtf": "RTF",
 	"format-txt": "プレーンテキスト",
-	"exceeded-rate-limitation": "短時間に多くのリクエストを行っています。このツールをリロードする前に$1秒待ってください。",
+	"exceeded-rate-limitation": "短時間の間にあまりにも多くのリクエストを行っています。このツールを再読み込みする前に $1 {{PLURAL:$1|分}} を待つか、ログインしてこの問題の再発を防いでください。",
 	"exception-invalid-format": "「$1」は有効なファイル形式ではありません。有効なファイル形式は次の通りです：$2",
 	"font-field-label": "フォント",
 	"no-font-option": "なし（デバイスの規定のフォントを使用する）",

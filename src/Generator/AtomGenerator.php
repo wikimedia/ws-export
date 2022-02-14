@@ -120,7 +120,8 @@ class AtomGenerator implements FormatGenerator {
 			return;
 		}
 
-		$node = $dom->createElement( $name, str_replace( '&', '&amp;', $value ) );
+		$node = $dom->createElement( $name );
+		$node->textContent = $value;
 
 		if ( $type !== '' ) {
 			$node->setAttribute( 'xsi:type', $type );

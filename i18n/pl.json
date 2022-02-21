@@ -1,7 +1,11 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Thoji"
+		]
 	},
+	"logo-alt-text": "Logo Wikiźródeł, niebiesko-biała ilustracja góry lodowej.",
+	"lang-field-label": "Wikiźródła",
 	"epub-title-page": "Strona tytułowa",
 	"epub-exported-date": "Pobrano z Wikiźródeł dnia $1",
 	"epub-about": "O tej publikacji"

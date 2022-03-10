@@ -2,6 +2,9 @@
     "composer/package-versions-deprecated": {
         "version": "1.11.99"
     },
+    "composer/pcre": {
+        "version": "1.0.1"
+    },
     "composer/semver": {
         "version": "1.5.0"
     },
@@ -156,14 +159,8 @@
     "nikic/php-parser": {
         "version": "v4.10.3"
     },
-    "ocramius/proxy-manager": {
-        "version": "2.2.3"
-    },
     "phan/phan": {
         "version": "4.0.3"
-    },
-    "php": {
-        "version": "7.3"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -355,9 +352,6 @@
             "config/packages/test/monolog.yaml"
         ]
     },
-    "symfony/orm-pack": {
-        "version": "v2.0.0"
-    },
     "symfony/phpunit-bridge": {
         "version": "4.3",
         "recipe": {
@@ -480,11 +474,5 @@
     },
     "wikimedia/toolforge-bundle": {
         "version": "1.0.0"
-    },
-    "zendframework/zend-code": {
-        "version": "3.4.1"
-    },
-    "zendframework/zend-eventmanager": {
-        "version": "3.2.1"
     }
 }

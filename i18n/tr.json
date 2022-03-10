@@ -46,7 +46,7 @@
 	"format-pdf-letter": "PDF - US letter boyutunda",
 	"format-rtf": "RTF",
 	"format-txt": "Düz metin",
-	"exceeded-rate-limitation": "Kısa bir zamanda çok fazla istekte bulundunuz. Bu aracı tekrar yüklemeden önce lütfen $1 {{PLURAL:$1|dakika}} bekleyin.",
+	"exceeded-rate-limitation": "Kısa bir süre içinde çok fazla istekte bulunuyorsunuz. Lütfen bu aracı yeniden yüklemeden önce $1 dakika bekleyin veya bunun tekrar olmasını önlemek için oturum açın.",
 	"exception-invalid-format": "\"$1\" geçerli bir biçim değil. Geçerli biçimler: $2",
 	"font-field-label": "Yazı tipi",
 	"no-font-option": "Yok (cihaz varsayılanını kulllan)",

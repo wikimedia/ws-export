@@ -5,8 +5,10 @@
 			"WikiPhoenix"
 		]
 	},
-	"app-title": "WS-exportering",
+	"app-title": "Wikisource-bokexport",
+	"app-title-html": "$1-bokexport",
 	"app-subtitle": "Exportera böcker från Wikisource i flera olika filformat.",
+	"logo-alt-text": "Wikisource logotyp, en blåvit bild av ett isberg",
 	"footer-version": "Det här är version $2 av $1.",
 	"version": "version $1",
 	"commit-label": "Bidrag: $1",
@@ -20,6 +22,7 @@
 	"issues": "Var god rapportera problem med $1-projektet på Phabricator.",
 	"issue-button": "Skapa ärende",
 	"back-to-wikisource": "Tillbaka till Wikisource",
+	"previous-alt-text": "Bakåtpekande pilikon som indikerar att länken går tillbaka till Wikisource.",
 	"export-book": "Exportera en bok",
 	"lang-field-label": "Wikisource",
 	"lang-field-value": "$1 ($2)",

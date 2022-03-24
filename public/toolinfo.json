@@ -4,6 +4,16 @@
 	"description" : "Export Wikisource books in many file formats.",
 	"url" : "https://wsexport.toolforge.org/tool/book.php",
 	"keywords" : "Wikisource, books, ebooks, ePub, PDF",
-	"author" : "Tpt",
+	"author" : [
+		{"name": "Tpt"},
+		{"name": "Sam Wilson"},
+		{"name": "MusikAnimal"},
+		{"name": "Dayllan Maza"},
+		{"name": "Jan Berkel"},
+		{"name": "phil-el"},
+		{"name": "cimurah"},
+		{"name": "Max Semenik"},
+		{"name": "Daimona"}
+	],
 	"repository" : "https://github.com/wsexport/tool"
 }

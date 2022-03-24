@@ -195,6 +195,15 @@
     "sabre/event": {
         "version": "5.1.2"
     },
+    "samwilson/console-readme-generator": {
+        "version": "0.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "0.0",
+            "ref": ""
+        }
+    },
     "squizlabs/php_codesniffer": {
         "version": "3.0",
         "recipe": {

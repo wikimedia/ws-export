@@ -55,8 +55,47 @@ $ ./php bin/console toolforge:ssh
 $ php bin/console toolforge:ssh --bind-address=0.0.0.0
 ```
 
-Tests
-=====
+## CLI Usage
+
+### app:check
+
+Run epubcheck on books. With no options set, this will check 10 random books from English Wikisource. Note that the random 10 will be cached (for repeatability) unless you use <info>--nocache</info>.
+
+    app:check [-l|--lang LANG] [--nocache] [-t|--title TITLE] [-c|--count COUNT] [-s|--namespaces NAMESPACES]
+
+* `--lang` `-l` — Wikisource language code.
+  Default: 'en'
+* `--nocache` — Do not cache anything (re-fetch all data).
+* `--title` `-t` — Wiki page name of a single work to check.
+* `--count` `-c` — How many random pages to check. Ignored if <info>--title</info> is used.
+  Default: 10
+* `--namespaces` `-s` — Pipe-delimited namespace IDs. Ignored if <info>--title</info> is used.
+
+### app:export
+
+Export a book.
+
+    app:export [-l|--lang LANG] [-t|--title TITLE] [-f|--format FORMAT] [-p|--path PATH] [--nocache] [--nocredits]
+
+* `--lang` `-l` — Wikisource language code.
+* `--title` `-t` — Wiki page name of the work to export. Required
+* `--format` `-f` — Export format. One of: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+  Default: 'epub-3'
+* `--path` `-p` — Filesystem path to export to.
+  Default: '[CWD]'
+* `--nocache` — Do not cache anything (re-fetch all data).
+* `--nocredits` — Do not include the credits list in the exported ebook.
+
+### app:opds
+
+Generate an OPDS file.
+
+    app:opds [-l|--lang LANG] [-c|--category CATEGORY]
+
+* `--lang` `-l` — Wikisource language code.
+* `--category` `-c` — Category name to export.
+
+## Tests
 
 Run `composer install` to install dependencies required for testing.
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "661fff1755dd76fa33d581a83938c075",
+    "content-hash": "be0b4d332e67ddd4c9745a2253cb37c3",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -7131,6 +7131,54 @@
                 "source": "https://github.com/fruux/sabre-event"
             },
             "time": "2020-10-03T11:02:22+00:00"
+        },
+        {
+            "name": "samwilson/console-readme-generator",
+            "version": "0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/samwilson/console-readme-generator.git",
+                "reference": "7f597543b4ed7da5ad3fa9a401c7944e686a06c4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/samwilson/console-readme-generator/zipball/7f597543b4ed7da5ad3fa9a401c7944e686a06c4",
+                "reference": "7f597543b4ed7da5ad3fa9a401c7944e686a06c4",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/console": "^5.2"
+            },
+            "require-dev": {
+                "mediawiki/minus-x": "^1.1",
+                "phan/phan": "^4.0",
+                "php-parallel-lint/php-parallel-lint": "^1.0",
+                "phpunit/phpunit": "^8|^9",
+                "roslov/psr12ext": "^4.0",
+                "symfony/var-dumper": "^4|^5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Samwilson\\ConsoleReadmeGenerator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sam Wilson",
+                    "homepage": "https://samwilson.id.au"
+                }
+            ],
+            "description": "A tool to add command documentation",
+            "support": {
+                "issues": "https://github.com/samwilson/console-readme-generator/issues",
+                "source": "https://github.com/samwilson/console-readme-generator/tree/0.3.0"
+            },
+            "time": "2022-03-23T08:36:45+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

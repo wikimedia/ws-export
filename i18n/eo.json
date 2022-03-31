@@ -1,7 +1,26 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Robin van der Vliet"
+		]
 	},
+	"version": "versio $1",
+	"commit-label": "Enmeto: $1",
+	"licensed-under": "Ĝi estas eldonita sub la permesilo $1.",
+	"statistics-link": "statistikoj",
+	"lang-field-label": "Vikifontaro",
+	"title-field-label": "Titolo",
+	"format-field-label": "Dosieraranĝo",
+	"format-htmlz": "HTML",
+	"format-mobi": "MOBI (por Kindles)",
+	"format-rtf": "RTF",
+	"format-txt": "Plata teksto",
+	"font-field-label": "Tiparo",
+	"options-label": "Opcioj",
+	"export-button": "Eksporti",
+	"alert-close": "Fermi",
+	"error-breadcrumb": "Eraro $1",
+	"error-page-header": "Eraro okazis",
 	"epub-title-page": "Titolpaĝo",
 	"epub-exported-date": "Elŝutita el Vikifontaro la $1",
 	"epub-about": "Pri ĉi tiu eldonaĵo"

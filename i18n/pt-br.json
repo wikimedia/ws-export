@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Eduardoaddad",
-			"Mariagarbin"
+			"Mariagarbin",
+			"YuriNikolai"
 		]
 	},
 	"app-title": "Exportação de livro do Wikisource",
@@ -39,6 +40,7 @@
 	"format-pdf-letter": "PDF - Tamanho de carta dos EUA",
 	"format-rtf": "RTF",
 	"format-txt": "Texto simples",
+	"exceeded-rate-limitation": "Você está realizando pedidos demais durante um período curto de tempo. Por favor, aguarde $1 {{PLURAL:$1|minuto|minutos}} antes de recarregar esta ferramenta, ou autentique-se para impedir isto de ocorrer novamente.",
 	"exception-invalid-format": "\"$1\" não é um formato válido. Os formatos válidos são: $2",
 	"font-field-label": "Fonte",
 	"no-font-option": "Nenhum (usar o padrão do dispositivo)",
@@ -55,12 +57,15 @@
 	"exception-url-fetch-error": "Impossível recuperar URL: $1",
 	"exception-rest-page-not-found": "O livro '$1' não foi encontrado.",
 	"learn-more": "Saiba mais.",
+	"error-blocked-1": "Seu endereço de IP está atualmente bloqueado.",
+	"error-blocked-2": "Para impedir abuso por automação prejudicial, WS Export nega o acesso de usuários não autenticados que estejam globalmente bloqueados em wikis da Wikimedia.",
 	"error-fix": "Por favor tente estes passos se você encontrar um erro:",
 	"error-fix-again": "Tente baixar o livro novamente.",
 	"error-fix-epub": "Tente baixar o livro como um arquivo EPUB.",
 	"error-fix-nocredits": "Marque a caixa em 'Opções' para remover créditos",
 	"error-fix-noimages": "Marque a caixa em 'Opções' para remover imagens.",
 	"error-breadcrumb": "Erro $1",
+	"error-login": "Por favor, autentique-se no WS Export para continuar.",
 	"error-page-header": "Um erro ocorreu",
 	"error-page-details": "Detalhes do erro: $1",
 	"error-page-issue": "Se este erro persistir, por favor $1",

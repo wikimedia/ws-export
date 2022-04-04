@@ -7,6 +7,7 @@
 			"Hmgrmb",
 			"LNDDYL",
 			"Si109",
+			"StarrySky",
 			"Zhang8569"
 		]
 	},
@@ -62,12 +63,15 @@
 	"exception-url-fetch-error": "无法检索URL：$1",
 	"exception-rest-page-not-found": "找不到电子书“$1”。",
 	"learn-more": "学到更多。",
+	"error-blocked-1": "您的 IP 地址当前已被封禁。",
+	"error-blocked-2": "为防止滥用，WS Export拒绝在维基媒体wiki上被全域封锁的用户访问。",
 	"error-fix": "如果遇到错误，请尝试以下步骤：",
 	"error-fix-again": "尝试再次下载电子书。",
 	"error-fix-epub": "尝试将电子书下载为EPUB文件。",
 	"error-fix-nocredits": "在“选项”中选中此框以删除署名",
 	"error-fix-noimages": "在“选项”中选中此框以删除图片。",
 	"error-breadcrumb": "错误$1",
+	"error-login": "请登录 WS Export 以继续。",
 	"error-page-header": "发生错误",
 	"error-page-details": "错误详情：$1",
 	"error-page-issue": "如果此错误仍然存在，请$1。",

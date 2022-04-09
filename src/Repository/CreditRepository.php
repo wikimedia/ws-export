@@ -160,7 +160,7 @@ class CreditRepository {
 		} catch ( DriverException $e ) {
 			// 1226 = the 'max_user_connections' error, all others are variants of MySQL timeouts.
 			// In all cases, we encourage re-trying and disabling credits if it continues to fail.
-			if ( in_array( $e->getErrorCode(), [ 1226, 1969, 2006, 2013 ] ) ) {
+			if ( in_array( $e->getCode(), [ 1226, 1969, 2006, 2013 ] ) ) {
 				throw new WsExportException( 'fetching-credits', [], Response::HTTP_SERVICE_UNAVAILABLE, false );
 			}
 

@@ -1,4 +1,4 @@
-FROM php:7.3-apache-stretch
+FROM php:7.3-apache
 
 ARG USER_ID
 ARG GROUP_ID
@@ -10,7 +10,7 @@ EXPOSE 8080
 # work around https://github.com/docker-library/openjdk/blob/0584b2804ed12dca7c5e264b5fc55fc07a3ac148/8-jre/slim/Dockerfile#L51-L54
 RUN mkdir -p /usr/share/man/man1
 
-RUN addgroup --gid $GROUP_ID docker 
+RUN if [[ "$OSTYPE" == "linux-gnu"* ]]; then addgroup --gid $GROUP_ID docker; fi
 RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID docker 
 
 RUN apt-get update -q && apt-get install -y \
@@ -50,4 +50,5 @@ RUN apt-get update -q && apt-get install -y \
       && wget -nv -O- https://get.symfony.com/cli/installer | bash \
       && mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
-USER docker 
+USER docker
+

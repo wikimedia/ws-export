@@ -31,7 +31,7 @@
 		"ext-zip": "*",
 		"composer/package-versions-deprecated": "^1.11",
 		"doctrine/annotations": "^1.10",
-		"doctrine/doctrine-bundle": "^2.1",
+		"doctrine/doctrine-bundle": "^2.4",
 		"doctrine/doctrine-migrations-bundle": "^3.1",
 		"doctrine/orm": "^2.8",
 		"guzzlehttp/guzzle": "^6.0",
@@ -69,7 +69,10 @@
 		"platform": {
 			"php": "7.3"
 		},
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"symfony/flex": true
+		}
 	},
 	"replace": {
 		"paragonie/random_compat": "2.*",

@@ -48,11 +48,11 @@ Installation
 
   * Establish an SSH tunnel to the replicas (only necessary on local environments)
 ```bash
-$ ./php bin/console toolforge:ssh
+$ ./bin/console toolforge:ssh
 ```
   * Bind address for docker enviroments
 ```bash
-$ php bin/console toolforge:ssh --bind-address=0.0.0.0
+$ ./bin/console toolforge:ssh --bind-address=0.0.0.0
 ```
 
 ## CLI Usage
@@ -101,7 +101,7 @@ Run `composer install` to install dependencies required for testing.
 
 Make sure the test database is created and migrations are up-to-date:
 ```bash
-$ ./bin/console doctrine:migrations:database:create --env=test
+$ ./bin/console doctrine:database:create --env=test
 $ ./bin/console doctrine:migrations:migrate --env=test --no-interaction
 ```
 

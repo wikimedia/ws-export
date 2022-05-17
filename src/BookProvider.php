@@ -108,12 +108,10 @@ class BookProvider {
 		$book->scan = str_replace( ' ', '_', $metadataParser->getMetadata( 'ws-scan' ) );
 		$pictures = [];
 		if ( $this->options['images'] || $isMetadata ) {
-			$book->cover = $metadataParser->getMetadata( 'ws-cover' );
-			if ( $book->cover != '' ) {
-				$pictures[$book->cover] = $this->getCover( $book->cover, $book->lang );
-				if ( $pictures[$book->cover]->url == '' ) {
-					$book->cover = '';
-				}
+			$cover = $this->getCover( $metadataParser->getMetadata( 'ws-cover' ) );
+			if ( $cover instanceof Picture ) {
+				$book->cover = $cover->title;
+				$pictures[$book->cover] = $cover;
 			}
 		}
 		if ( $this->options['categories'] ) {
@@ -271,9 +269,12 @@ class BookProvider {
 	/**
 	 * return the cover of the book
 	 * @param $cover string the name of the cover
-	 * @return Picture The cover
+	 * @return ?Picture The cover picture, or null if it could not be determined.
 	 */
-	public function getCover( $cover, $lang ) {
+	public function getCover( $cover ): ?Picture {
+		if ( trim( $cover ) === '' ) {
+			return null;
+		}
 		$id = explode( '/', $cover );
 		$title = $id[0];
 		$picture = new Picture();
@@ -284,6 +285,9 @@ class BookProvider {
 			'iiprop' => 'mime|dimensions'
 		] )->wait();
 		$page = end( $response['query']['pages'] );
+		if ( !isset( $page['imageinfo'] ) ) {
+			return null;
+		}
 		$iinfo = $page['imageinfo'][0];
 
 		$thumbParams = min( $iinfo['width'], 400 ) . 'px';

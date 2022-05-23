@@ -2,12 +2,32 @@
 	"@metadata": {
 		"authors": [
 			"Meno25",
+			"NEHAOUA",
 			"محمد أحمد عبد الفتاح"
 		]
 	},
+	"app-title": "تصدير كتاب ويكي مصدر",
+	"app-title-html": "تصدير كتاب $1",
+	"app-subtitle": "تصدير الكتب من ويكي مصدر بصيغ مختلفة للملفات.",
+	"logo-alt-text": "شعار ويكي مصدر، رسم توضيحي باللونين الأزرق والأبيض لجبل جليدي.",
+	"footer-version": "هذا $1 إصدار $2.",
+	"version": "إصدار $1",
+	"licensed-under": "رُخص بموجب $1",
 	"source-link": "على جيت هاب",
 	"docs-link": "على ويكي مصدر متعدد اللغات",
+	"statistics-link": "إحصاءات",
+	"export-book": "صدر كتابًا",
+	"lang-field-label": "ويكي مصدر",
+	"title-field-label": "العنوان",
+	"format-field-label": "صيغة الملف",
+	"format-pdf-a4": "PDF - حجم A4",
+	"format-pdf-a5": "PDF - حجم A5",
+	"format-pdf-a6": "PDF - حجم A6",
+	"format-rtf": "RTF",
 	"format-txt": "نص عادي",
+	"export-button": "تصدير",
+	"alert-close": "أغلق",
+	"export-failed": "فشل التنزيل.",
 	"epub-title-page": "العنوان",
 	"epub-exported-date": "منقول من ويكي مصدر في $1",
 	"epub-about": "حول"

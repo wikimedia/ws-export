@@ -50,7 +50,7 @@
 	"credits-default-message": "[רשימת העורכים הושמטה לבקשתך.]",
 	"images-field-label": "לא לכלול תמונות",
 	"nocache-field-label": "לעקוף את כל השמיר במטמון (אטי אבל יעיל יותר לניפוי שגיאות)",
-	"export-button": "ייצוא",
+	"export-button": "יצוא",
 	"cache-updated": "המטמון התרענן לשפה: $1",
 	"alert-close": "סגירה",
 	"export-failed": "ההורדה נכשלה.",

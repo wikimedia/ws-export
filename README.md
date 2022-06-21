@@ -30,12 +30,12 @@ Installation
    * In order to export to PDF, plain text, RTF, or Mobi formats
      you should also install [Calibre](https://calibre-ebook.com)
      so that the tool can use the `ebook-convert` command.
-   * To run the integration tests (or just to validate exported ebooks)
+   * To validate exported ebooks (with the `./bin/console app:check` command),
      you should also install
      [epubcheck](https://github.com/w3c/epubcheck).
      If it's not installed at `/usr/bin/epubcheck` then
      set the `EPUBCHECK_JAR` environment variable.
-   * To  fonts-linuxlibertine
+   * To run the integration tests, also install the `fonts-linuxlibertine` package.
 
 3. Create a mysql database and database user
    and add these details to `.env.local`.

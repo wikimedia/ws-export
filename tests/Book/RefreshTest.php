@@ -9,7 +9,6 @@ use App\Generator\EpubGenerator;
 use App\Refresh;
 use App\Util\Api;
 use App\Util\OnWikiConfig;
-use GuzzleHttp\Client;
 use Krinkle\Intuition\Intuition;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -24,7 +23,7 @@ class RefreshTest extends KernelTestCase {
 		self::bootKernel();
 
 		$cache = new ArrayAdapter();
-		$api = new Api( new NullLogger(), $cache, $cache, new Client(), 0 );
+		$api = new Api( new NullLogger(), $cache, $cache, 0 );
 		$api->setLang( 'en' );
 		$refresh = new Refresh( $api, $cache );
 		$intuition = new Intuition();

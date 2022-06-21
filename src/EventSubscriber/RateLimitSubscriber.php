@@ -91,7 +91,7 @@ class RateLimitSubscriber implements EventSubscriberInterface {
 
 		// Abort if rate limitations are disabled or we're not exporting a book.
 		if ( $loggedIn || $this->rateLimit + $this->rateDuration === 0 ||
-			$action !== 'home' || !$request->get( 'page' )
+			$action !== 'home' || !$request->query->get( 'page' )
 		) {
 			return;
 		}

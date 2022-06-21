@@ -86,13 +86,13 @@ class ExportController extends AbstractController {
 		FileCache $fileCache
 	) {
 		// Handle ?refresh=1 for backwards compatibility.
-		if ( $request->get( 'refresh', false ) !== false ) {
+		if ( $request->query->get( 'refresh', false ) !== false ) {
 			return $this->redirectToRoute( 'refresh' );
 		}
 
 		$api->setLang( $this->getLang( $request ) );
 
-		$nocache = (bool)$request->get( 'nocache' );
+		$nocache = (bool)$request->query->get( 'nocache' );
 		if ( $nocache || !$this->enableCache ) {
 			$api->disableCache();
 		}
@@ -100,7 +100,7 @@ class ExportController extends AbstractController {
 		// If the book title is specified, export it now.
 		$exception = false;
 		$response = new Response();
-		if ( $request->get( 'page' ) ) {
+		if ( $request->query->get( 'page' ) ) {
 			try {
 				return $this->export( $request, $api, $fontProvider, $generatorSelector, $creditRepo, $fileCache );
 			} catch ( WsExportException $ex ) {
@@ -110,8 +110,8 @@ class ExportController extends AbstractController {
 		}
 
 		$font = $this->getFont( $request, $fontProvider );
-		$credits = (bool)$request->get( 'credits', true );
-		$images = (bool)$request->get( 'images', true );
+		$credits = (bool)$request->query->get( 'credits', true );
+		$images = (bool)$request->query->get( 'images', true );
 		return $this->render( 'export.html.twig', [
 			'fonts' => $fontProvider->getAll(),
 			'font' => $font,
@@ -138,13 +138,13 @@ class ExportController extends AbstractController {
 		FileCache $fileCache
 	) {
 		// Get params.
-		$page = $request->get( 'page' );
+		$page = $request->query->get( 'page' );
 		$format = $this->getFormat( $request );
 		$font = $this->getFont( $request, $fontProvider );
 		// The `credits` checkbox submits as 'false' to disable, so needs extra filtering.
-		$credits = filter_var( $request->get( 'credits', true ), FILTER_VALIDATE_BOOL );
+		$credits = filter_var( $request->query->get( 'credits', true ), FILTER_VALIDATE_BOOL );
 		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
-		$images = filter_var( $request->get( 'images', true ), FILTER_VALIDATE_BOOL );
+		$images = filter_var( $request->query->get( 'images', true ), FILTER_VALIDATE_BOOL );
 
 		// Start timing.
 		if ( $this->enableStats ) {
@@ -188,7 +188,7 @@ class ExportController extends AbstractController {
 	 * @return string|null
 	 */
 	private function getFont( Request $request, FontProvider $fontProvider, ?bool $getDefault = true ): ?string {
-		$font = $fontProvider->resolveName( $request->get( 'fonts' ) );
+		$font = $fontProvider->resolveName( $request->query->get( 'fonts' ) );
 		if ( !$font && $getDefault ) {
 			$font = $fontProvider->getDefault( $this->getLang( $request ) );
 		}
@@ -204,7 +204,7 @@ class ExportController extends AbstractController {
 	private function getLang( Request $request ): string {
 		// This regex is a more lenient form of the one for Wikimedia language codes:
 		// https://www.wikidata.org/wiki/Property:P424#P1793
-		$lang = preg_replace( '/[^A-Za-z_-]/', '', $request->get( 'lang' ) );
+		$lang = preg_replace( '/[^A-Za-z_-]/', '', $request->query->get( 'lang' ) );
 		if ( !$lang ) {
 			$localInfo = Locale::parseLocale( $request->getPreferredLanguage() );
 			$lang = $localInfo['language'] ?? '';
@@ -229,7 +229,7 @@ class ExportController extends AbstractController {
 	 */
 	private function getFormat( Request $request ): string {
 		$defaultFormat = 'epub-3';
-		$format = $request->get( 'format' );
+		$format = $request->query->get( 'format' );
 		if ( !$format ) {
 			$format = $defaultFormat;
 		}
@@ -242,6 +242,6 @@ class ExportController extends AbstractController {
 	private function getTitle( Request $request ): string {
 		// It doesn't always make sense to fall back to the 'page' parameter, because that's what prompts the export,
 		// but for error pages it's useful.
-		return ucfirst( str_replace( '_', ' ', $request->get( 'title', $request->get( 'page' ) ) ) );
+		return ucfirst( str_replace( '_', ' ', $request->query->get( 'title', $request->query->get( 'page' ) ) ) );
 	}
 }

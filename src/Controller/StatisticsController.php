@@ -25,8 +25,8 @@ class StatisticsController extends AbstractController {
 	 */
 	public function index( Request $request, GeneratedBookRepository $generatedBookRepo ) {
 		$now = new DateTime();
-		$month = $request->get( 'month', $now->format( 'm' ) );
-		$year = $request->get( 'year', $now->format( 'Y' ) );
+		$month = $request->query->get( 'month', $now->format( 'm' ) );
+		$year = $request->query->get( 'year', $now->format( 'Y' ) );
 
 		$stat = $generatedBookRepo->getTypeAndLangStats( $month, $year );
 

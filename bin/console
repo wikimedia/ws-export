@@ -41,5 +41,7 @@ if ($_SERVER['APP_DEBUG']) {
 
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $application = new Application($kernel);
-$application->add(new ReadmeGenCommand());
+if ( class_exists( ReadmeGenCommand::class ) ) {
+    $application->add( new ReadmeGenCommand() );
+}
 $application->run($input);

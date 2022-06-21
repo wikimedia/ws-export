@@ -22,7 +22,7 @@
 				{% set app_title_strong %}
 					<strong>{{ msg('app-title-wikisource') }}</strong>
 				{% endset %}
-				{{ msg( 'app-title-html', [app_title_strong] ) }}
+				{{ msg( 'app-title-html', [app_title_strong~''] ) }}
 			</h1>
 			<p>{{ msg( 'app-subtitle' ) }}</p>
 		</div>
@@ -41,13 +41,13 @@
 						{{ msg( 'version', [ git_tag() ] ) }}{#
 					#}</a>{#
 				#}{% endset %}
-				{{ msg( 'footer-version', [ msg( 'app-title' ), version_link ] ) }}
+				{{ msg( 'footer-version', [ msg( 'app-title' ), version_link~'' ] ) }}
 				{% set license_link %}
 					<a rel="licence" href="https://www.gnu.org/licenses/gpl.html">
 						{{ msg( 'license-link' ) }}{#
 					#}</a>{#
 				#}{% endset %}
-				{{ msg( 'licensed-under', [ license_link ] ) }}
+				{{ msg( 'licensed-under', [ license_link~'' ] ) }}
 			</p>
 			<p>
 				{% set source_link %}
@@ -60,7 +60,7 @@
 					{{ msg( 'docs-link' ) }}{#
 				#}</a>{#
 				#}{% endset %}
-				{{ msg( 'source-and-docs', [ source_link, docs_link ] ) }}
+				{{ msg( 'source-and-docs', [ source_link~'', docs_link~'' ] ) }}
 			</p>
 			<p>
 				{% set stats_link %}
@@ -68,7 +68,7 @@
 					{{ msg( 'statistics-link' ) }}{#
 				#}</a>{#
 				#}{% endset %}
-				{{ msg( 'statistics', [ stats_link ] ) }}
+				{{ msg( 'statistics', [ stats_link~'' ] ) }}
 				{{ msg( 'issues', [ '<a href="https://phabricator.wikimedia.org/tag/ws-export">#ws-export</a>' ] ) }}
 				<a href="https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?projects=ws-export" class="badge">
 					{{ msg( 'issue-button' ) }}

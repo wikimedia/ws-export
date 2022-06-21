@@ -35,6 +35,7 @@ Installation
      [epubcheck](https://github.com/w3c/epubcheck).
      If it's not installed at `/usr/bin/epubcheck` then
      set the `EPUBCHECK_JAR` environment variable.
+   * To  fonts-linuxlibertine
 
 3. Create a mysql database and database user
    and add these details to `.env.local`.

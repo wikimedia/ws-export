@@ -32,8 +32,8 @@ class BookProviderTest extends TestCase {
 			new Response( 200, [], '' ), // mock getting content from '$oldWikisourceApi' in Refresh::getAboutXhtmlWikisource
 		];
 		$this->mockHandler = new MockHandler( $responses );
-		$client = new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] );
-		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $client, 0 );
+		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), 0 );
+		$api->setClient( new Client( [ 'handler' => HandlerStack::create( $this->mockHandler ) ] ) );
 		$api->setLang( 'en' );
 		$creditRepository = $this->getMockBuilder( CreditRepository::class )->disableOriginalConstructor()->getMock();
 		$fileCache = new FileCache( dirname( __DIR__, 2 ) );

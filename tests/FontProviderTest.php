@@ -21,8 +21,8 @@ class FontProviderTest extends TestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$client = new Client( [ 'handler' => HandlerStack::create( new MockHandler( [] ) ) ] );
-		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), $client, 0 );
+		$api = new Api( new NullLogger(), new NullAdapter(), new NullAdapter(), 0 );
+		$api->setClient( new Client( [ 'handler' => HandlerStack::create( new MockHandler( [] ) ) ] ) );
 		$this->fontProvider = new FontProvider( new ArrayAdapter(), new OnWikiConfig( $api, new ArrayAdapter(), new Intuition() ) );
 	}
 

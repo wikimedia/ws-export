@@ -17,6 +17,7 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -42,20 +43,27 @@ class Api {
 	/** @var LoggerInterface */
 	private $logger;
 
-	/** @var CacheInterface */
+	/**
+	 * @todo Use PSR6 cache ($this->cacheItemPool) here instead of this
+	 * because we have to use it for Guzzle and it'd be simpler to not have two caches.
+	 * @var CacheInterface
+	 */
 	private $cache;
+
+	/** @var CacheItemPoolInterface */
+	private $cacheItemPool;
+
+	/** @var int */
+	private $cacheTtl;
 
 	/** @var string[][] */
 	private $namespaces = [];
 
-	public function __construct( LoggerInterface $logger, CacheItemPoolInterface $cacheItemPool, CacheInterface $cache, ?ClientInterface $client, int $cacheTtl ) {
+	public function __construct( LoggerInterface $logger, CacheItemPoolInterface $cacheItemPool, CacheInterface $cache, int $cacheTtl ) {
 		$this->logger = $logger;
 		$this->cache = $cache;
-
-		if ( $client === null ) {
-			$client = $this->createClient( $logger, $cacheItemPool, $cacheTtl );
-		}
-		$this->client = $client;
+		$this->cacheItemPool = $cacheItemPool;
+		$this->cacheTtl = $cacheTtl;
 	}
 
 	/**
@@ -154,13 +162,6 @@ class Api {
 	}
 
 	/**
-	 * @return ClientInterface
-	 */
-	public function getClient() {
-		return $this->client;
-	}
-
-	/**
 	 * GET action
 	 *
 	 * @param string $url the target URL
@@ -168,8 +169,8 @@ class Api {
 	 * @return PromiseInterface the body of the result
 	 */
 	public function getAsync( $url, array $options = [] ) {
-		// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface
-		return $this->client->getAsync(
+		return $this->getClient()->requestAsync(
+			'get',
 			$url,
 			$options
 		)->then(
@@ -188,8 +189,8 @@ class Api {
 	 * @return PromiseInterface
 	 */
 	public function createAsyncRequest( string $url, array $options = [] ): PromiseInterface {
-		// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface
-		return $this->client->getAsync(
+		return $this->getClient()->requestAsync(
+			'get',
 			$url,
 			$options
 		);
@@ -199,20 +200,7 @@ class Api {
 	 * Disable caching.
 	 */
 	public function disableCache(): void {
-		// Disable Symfony cache.
 		$this->cache = new NullAdapter();
-
-		// Disable cache for Guzzle.
-		/** @var HandlerStack */
-		$stack = $this->client->getConfig( 'handler' );
-		$stack->remove( 'cache' );
-	}
-
-	/**
-	 * Get the cache. This is a temporary method and can be removed once Util::getTempFile() has been removed.
-	 */
-	public function getCache(): CacheItemPoolInterface {
-		return $this->cache;
 	}
 
 	/**
@@ -286,27 +274,33 @@ class Api {
 	 * @return string the file content
 	 */
 	public function get( $url ) {
-		// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface
-		return $this->client->get( $url )->getBody()->getContents();
+		return $this->getClient()->request( 'get', $url )->getBody()->getContents();
+	}
+
+	public function setClient( ClientInterface $client ): void {
+		$this->client = $client;
 	}
 
 	/**
-	 * @param LoggerInterface $logger
-	 * @param CacheItemPoolInterface $cache
-	 * @param int $cacheTtl
 	 * @return ClientInterface
 	 */
-	private function createClient( LoggerInterface $logger, CacheItemPoolInterface $cache, int $cacheTtl ): ClientInterface {
+	public function getClient(): ClientInterface {
+		if ( $this->client instanceof ClientInterface ) {
+			return $this->client;
+		}
+
 		$handler = HandlerStack::create();
 
 		// Logger.
-		$handler->push( LoggingMiddleware::forLogger( $logger ), 'logging' );
+		$handler->push( LoggingMiddleware::forLogger( $this->logger ), 'logging' );
 
 		// Cache.
-		$cacheStrategy = new GreedyCacheStrategy( new Psr6CacheStorage( $cache ), $cacheTtl );
-		$handler->push( new CacheMiddleware( $cacheStrategy ), 'cache' );
+		if ( $this->cache instanceof NullAdapter ) {
+			$cacheStrategy = new GreedyCacheStrategy( new Psr6CacheStorage( $this->cacheItemPool ), $this->cacheTtl );
+			$handler->push( new CacheMiddleware( $cacheStrategy ), 'cache' );
+		}
 
-		return new Client( [
+		$this->client = new Client( [
 			'defaults' => [
 				'connect_timeout' => self::CONNECT_TIMEOUT,
 				'headers' => [ 'User-Agent' => self::USER_AGENT ],
@@ -314,12 +308,13 @@ class Api {
 			],
 			'handler' => $handler
 		] );
+		return $this->client;
 	}
 
 	/**
 	 * Turn off logging.
 	 */
 	public function disableLogging(): void {
-		$this->client->getConfig( 'handler' )->remove( 'logging' );
+		$this->logger = new NullLogger();
 	}
 }

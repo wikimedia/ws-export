@@ -7,7 +7,6 @@ use DateInterval;
 use Krinkle\Intuition\Intuition;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -76,7 +75,7 @@ class RateLimitSubscriber implements EventSubscriberInterface {
 		$controller = $event->getController();
 		$action = null;
 		$request = $event->getRequest();
-		$loggedIn = (bool)$request->getSession()->get( 'logged_in_user' );
+		$loggedIn = $request->hasSession() && $request->getSession()->has( 'logged_in_user' );
 
 		// when a controller class defines multiple action methods, the controller
 		// is returned as [$controllerInstance, 'methodName']

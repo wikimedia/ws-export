@@ -204,7 +204,7 @@ class ExportController extends AbstractController {
 	private function getLang( Request $request ): string {
 		// This regex is a more lenient form of the one for Wikimedia language codes:
 		// https://www.wikidata.org/wiki/Property:P424#P1793
-		$lang = preg_replace( '/[^A-Za-z_-]/', '', $request->query->get( 'lang' ) );
+		$lang = preg_replace( '/[^A-Za-z_-]/', '', $request->query->get( 'lang', '' ) );
 		if ( !$lang ) {
 			$localInfo = Locale::parseLocale( $request->getPreferredLanguage() );
 			$lang = $localInfo['language'] ?? '';
@@ -242,6 +242,6 @@ class ExportController extends AbstractController {
 	private function getTitle( Request $request ): string {
 		// It doesn't always make sense to fall back to the 'page' parameter, because that's what prompts the export,
 		// but for error pages it's useful.
-		return ucfirst( str_replace( '_', ' ', $request->query->get( 'title', $request->query->get( 'page' ) ) ) );
+		return ucfirst( str_replace( '_', ' ', $request->query->get( 'title', $request->query->get( 'page', '' ) ) ) );
 	}
 }

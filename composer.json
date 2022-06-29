@@ -36,7 +36,7 @@
 		"doctrine/orm": "^2.8",
 		"guzzlehttp/guzzle": "^7.0",
 		"kevinrob/guzzle-cache-middleware": "^4.0",
-		"symfony/dotenv": "5.3.*",
+		"symfony/dotenv": "5.4.*",
 		"symfony/framework-bundle": "5.3.*",
 		"symfony/mailer": "5.3.*",
 		"symfony/monolog-bundle": "^3.6",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60e763a14a1df7fb50da9861e954fd8b",
+    "content-hash": "e1ffdb7e304119eea78376f6636d6676",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -6444,30 +6444,30 @@
     "packages-dev": [
         {
             "name": "composer/pcre",
-            "version": "1.0.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/pcre.git",
-                "reference": "67a32d7d6f9f560b726ab25a061b38ff3a80c560"
+                "reference": "c8e9d27cfc5ed22643c19c160455b473ffd8aabe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/pcre/zipball/67a32d7d6f9f560b726ab25a061b38ff3a80c560",
-                "reference": "67a32d7d6f9f560b726ab25a061b38ff3a80c560",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/c8e9d27cfc5ed22643c19c160455b473ffd8aabe",
+                "reference": "c8e9d27cfc5ed22643c19c160455b473ffd8aabe",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.2 || ^7.0 || ^8.0"
+                "php": "^7.2 || ^8.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1.3",
                 "phpstan/phpstan-strict-rules": "^1.1",
-                "symfony/phpunit-bridge": "^4.2 || ^5"
+                "symfony/phpunit-bridge": "^5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.x-dev"
+                    "dev-main": "2.x-dev"
                 }
             },
             "autoload": {
@@ -6495,7 +6495,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/pcre/issues",
-                "source": "https://github.com/composer/pcre/tree/1.0.1"
+                "source": "https://github.com/composer/pcre/tree/2.0.0"
             },
             "funding": [
                 {
@@ -6511,7 +6511,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-21T20:24:37+00:00"
+            "time": "2022-02-25T20:05:29+00:00"
         },
         {
             "name": "composer/semver",
@@ -6676,27 +6676,27 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "2.0.5",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "9e36aeed4616366d2b690bdce11f71e9178c579a"
+                "reference": "ced299686f41dce890debac69273b47ffe98a40c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/9e36aeed4616366d2b690bdce11f71e9178c579a",
-                "reference": "9e36aeed4616366d2b690bdce11f71e9178c579a",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/ced299686f41dce890debac69273b47ffe98a40c",
+                "reference": "ced299686f41dce890debac69273b47ffe98a40c",
                 "shasum": ""
             },
             "require": {
-                "composer/pcre": "^1",
-                "php": "^5.3.2 || ^7.0 || ^8.0",
+                "composer/pcre": "^1 || ^2 || ^3",
+                "php": "^7.2.5 || ^8.0",
                 "psr/log": "^1 || ^2 || ^3"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.1",
-                "symfony/phpunit-bridge": "^4.2 || ^5.0 || ^6.0"
+                "symfony/phpunit-bridge": "^6.0"
             },
             "type": "library",
             "autoload": {
@@ -6722,7 +6722,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/xdebug-handler/issues",
-                "source": "https://github.com/composer/xdebug-handler/tree/2.0.5"
+                "source": "https://github.com/composer/xdebug-handler/tree/3.0.3"
             },
             "funding": [
                 {
@@ -6738,7 +6738,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-24T20:20:32+00:00"
+            "time": "2022-02-25T21:32:43+00:00"
         },
         {
             "name": "dama/doctrine-test-bundle",
@@ -7104,21 +7104,21 @@
         },
         {
             "name": "phan/phan",
-            "version": "5.2.1",
+            "version": "5.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phan/phan.git",
-                "reference": "d724bbb8fc3ba89179868bb5220ecdf6a9c1636b"
+                "reference": "b7697eb811e912c038f709f8e1c4911c7ada3edc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phan/phan/zipball/d724bbb8fc3ba89179868bb5220ecdf6a9c1636b",
-                "reference": "d724bbb8fc3ba89179868bb5220ecdf6a9c1636b",
+                "url": "https://api.github.com/repos/phan/phan/zipball/b7697eb811e912c038f709f8e1c4911c7ada3edc",
+                "reference": "b7697eb811e912c038f709f8e1c4911c7ada3edc",
                 "shasum": ""
             },
             "require": {
                 "composer/semver": "^1.4|^2.0|^3.0",
-                "composer/xdebug-handler": "^1.3.2|^2.0.0",
+                "composer/xdebug-handler": "^2.0|^3.0",
                 "ext-filter": "*",
                 "ext-json": "*",
                 "ext-tokenizer": "*",
@@ -7126,8 +7126,8 @@
                 "microsoft/tolerant-php-parser": "^0.1.0",
                 "netresearch/jsonmapper": "^1.6.0|^2.0|^3.0|^4.0",
                 "php": "^7.2.0|^8.0.0",
-                "sabre/event": "^5.0.3",
-                "symfony/console": "^3.2|^4.0|^5.0",
+                "sabre/event": "^5.1.3",
+                "symfony/console": "^3.2|^4.0|^5.0|^6.0",
                 "symfony/polyfill-mbstring": "^1.11.0",
                 "symfony/polyfill-php80": "^1.20.0",
                 "tysonandre/var_representation_polyfill": "^0.0.2|^0.1.0"
@@ -7136,7 +7136,7 @@
                 "phpunit/phpunit": "^8.5.0"
             },
             "suggest": {
-                "ext-ast": "Needed for parsing ASTs (unless --use-fallback-parser is used). 1.0.1+ is needed, 1.0.14+ is recommended.",
+                "ext-ast": "Needed for parsing ASTs (unless --use-fallback-parser is used). 1.0.1+ is needed, 1.0.16+ is recommended.",
                 "ext-iconv": "Either iconv or mbstring is needed to ensure issue messages are valid utf-8",
                 "ext-igbinary": "Improves performance of polyfill when ext-ast is unavailable",
                 "ext-mbstring": "Either iconv or mbstring is needed to ensure issue messages are valid utf-8",
@@ -7177,9 +7177,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phan/phan/issues",
-                "source": "https://github.com/phan/phan/tree/5.2.1"
+                "source": "https://github.com/phan/phan/tree/5.3.2"
             },
-            "time": "2021-09-15T00:08:40+00:00"
+            "time": "2022-02-01T00:17:36+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",

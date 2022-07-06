@@ -84,18 +84,18 @@
 	},
 	"scripts": {
 		"post-install-cmd": [
-			"./bin/console cache:clear"
+			"@php ./bin/console cache:clear"
 		],
 		"post-update-cmd": [
-			"./bin/console cache:clear"
+			"@php ./bin/console cache:clear"
 		],
 		"test": [
 			"composer validate",
 			"phpcs -s .",
-			"./bin/console lint:twig ./templates",
-			"./bin/console lint:yaml ./config",
+			"@php ./bin/console lint:twig ./templates",
+			"@php ./bin/console lint:yaml ./config",
 			"minus-x check .",
-			"./bin/console generate-readme --include='app:' --usage='CLI Usage'",
+			"@php ./bin/console generate-readme --include='app:' --usage='CLI Usage'",
 			"@phan"
 		],
 		"phan": [

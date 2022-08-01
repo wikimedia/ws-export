@@ -1,11 +1,36 @@
 {
 	"@metadata": {
 		"authors": [
+			"Matlin",
 			"Thoji"
 		]
 	},
+	"app-title": "Eksport książek z Wikiźródeł",
+	"app-title-html": "Eksport książki $1",
+	"app-subtitle": "Eksport książek z Wikiźródeł w wielu różnych formatach plików.",
 	"logo-alt-text": "Logo Wikiźródeł, niebiesko-biała ilustracja góry lodowej.",
+	"footer-version": "To jest $1 w wersji $2.",
+	"version": "wersja $1",
+	"license-link": "GPL v2 lub nowsza",
+	"source-and-docs": "Dostępny jest kod źródłowy $1 i trochę dokumentacji $2.",
+	"source-link": "na Githubie",
+	"docs-link": "na wielojęzycznych Wikiźródłach",
+	"statistics": "Przewidziano również $1.",
+	"statistics-link": "statystyki",
+	"issues": "Błędy proszę zgłaszać w ramach projektu $1 na Phabricatorze.",
+	"issue-button": "Utwórz problem",
+	"back-to-wikisource": "Powrót do Wikiźródeł",
 	"lang-field-label": "Wikiźródła",
+	"title-field-label": "Tytuł",
+	"title-field-help": "Tytuł książki lub sekcji do wyeksportowania.",
+	"format-field-label": "Format pliku",
+	"format-epub-3": "EPUB 3 (dla większości czytników)",
+	"format-epub-2": "EPUB 2 (przestarzały, może być przydatny w przypadku bardzo starych czytników e-booków)",
+	"format-htmlz": "HTML",
+	"format-rtf": "RTF",
+	"format-txt": "Zwykły tekst",
+	"font-field-label": "Czcionka",
+	"export-button": "Eksport",
 	"epub-title-page": "Strona tytułowa",
 	"epub-exported-date": "Pobrano z Wikiźródeł dnia $1",
 	"epub-about": "O tej publikacji"

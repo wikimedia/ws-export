@@ -52,7 +52,7 @@
 		"dama/doctrine-test-bundle": "^6.5",
 		"mediawiki/mediawiki-codesniffer": "^v34.0",
 		"mediawiki/minus-x": "^1.0",
-		"phan/phan": "5.2.1",
+		"phan/phan": "5.4.0",
 		"samwilson/console-readme-generator": "^0.3",
 		"symfony/browser-kit": "5.4.*",
 		"symfony/css-selector": "5.4.*",

@@ -1,0 +1,28 @@
+{
+	"@metadata": {
+		"authors": [
+			"Olve Utne"
+		]
+	},
+	"app-title": "Wikisource-girrjeekspårrtå",
+	"app-title-html": "$1 Girrjeekspårrtå",
+	"footer-version": "Dát lä $1, versjuvdna $2.",
+	"version": "versjuvdna $1",
+	"source-link": "Github sinne",
+	"statistics-link": "Statistijjka",
+	"back-to-wikisource": "Ruoptojt Wikisource gugu",
+	"export-book": "Eksporteri girjev",
+	"lang-field-label": "Wikigálldo",
+	"title-field-label": "Girrjenamma",
+	"format-field-label": "Fijjlaformáhtta",
+	"format-htmlz": "HTML",
+	"format-pdf-a4": "PDF - A4-sturrudak",
+	"format-pdf-a5": "PDF - A5-sturrudak",
+	"format-pdf-a6": "PDF - A6-sturrudak",
+	"format-pdf-letter": "PDF - \"US letter\" sturrudak",
+	"format-rtf": "RTF",
+	"font-field-label": "Fånntå",
+	"export-button": "Eksporteri",
+	"learn-more": "Liera ienabuv.",
+	"epub-about": "Birra"
+}

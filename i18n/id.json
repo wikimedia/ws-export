@@ -4,7 +4,8 @@
 			"AJBot2",
 			"Akmaie Ajam",
 			"Daud I.F. Argana",
-			"Naufal06"
+			"Naufal06",
+			"Veracious"
 		]
 	},
 	"app-title": "Ekspor Buku Wikisource",
@@ -26,7 +27,7 @@
 	"back-to-wikisource": "Kembali ke Wikisource",
 	"previous-alt-text": "Ikon panah yang menghadap ke belakang yang menunjukkan bahwa tautannya kembali ke Wikisource.",
 	"export-book": "Ekspor buku",
-	"lang-field-label": "Wikisource",
+	"lang-field-label": "Wikisumber",
 	"lang-field-help": "Wikisource bahasa apa untuk mengekspor bukunya.",
 	"title-field-label": "Judul",
 	"title-field-help": "Judul dari buku atau bagian untuk diekspor.",

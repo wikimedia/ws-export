@@ -32,7 +32,8 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 	 */
 	public function testAddAndRetrieve() {
 		// Make sure it's empty to start with.
-		static::assertEmpty(
+		static::assertSame(
+			[],
 			$this->genBookRepo->getTypeAndLangStats( date( 'n' ), date( 'Y' ) )
 		);
 
@@ -69,7 +70,7 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 	 */
 	public function testInvalidDateParams(): void {
 		$noStats = $this->genBookRepo->getTypeAndLangStats( 'foo', 'bar' );
-		$this->assertEmpty( $noStats );
+		$this->assertSame( [], $noStats );
 
 		$testBook = new Book();
 		$testBook->lang = 'en';
@@ -81,6 +82,6 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 		$this->assertCount( 1, $oneStat );
 
 		$invalidMonthStat = $this->genBookRepo->getTypeAndLangStats( '09 AND 1=1', date( 'Y' ) );
-		$this->assertEmpty( $invalidMonthStat );
+		$this->assertSame( [], $invalidMonthStat );
 	}
 }

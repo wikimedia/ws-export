@@ -20,13 +20,13 @@ class OnWikiConfigTest extends TestCase {
 		// Set up getDomainName() to return whatever was given to setLang(), for ease of testing.
 		$lang = null;
 		$api->expects( $this->exactly( 3 ) )->method( 'setLang' )->willReturnCallback(
-			function ( $arg ) use ( &$lang ) {
+			static function ( $arg ) use ( &$lang ) {
 				$lang = $arg;
 			}
 		);
 		$api->expects( $this->exactly( 3 ) )
 			->method( 'getDomainName' )
-			->willReturnCallback( function () use ( &$lang ) {
+			->willReturnCallback( static function () use ( &$lang ) {
 				return $lang;
 			} );
 

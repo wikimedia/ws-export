@@ -35,7 +35,7 @@ class Result {
 	}
 
 	public function toString(): string {
-		$allLocations = "\n\n\t" . implode( "\n\t", array_map( function ( Location $l ) {
+		$allLocations = "\n\n\t" . implode( "\n\t", array_map( static function ( Location $l ) {
 				return $l->__toString();
 		}, $this->locations ) );
 		if ( $this->additionalLocations > 0 ) {

@@ -95,6 +95,6 @@ body { font-family: "OpenDyslexic" }
 	public function testGetForLang() {
 		$this->assertNotEmpty( $this->fontProvider->getForLang( 'en' ) );
 		$this->assertNotEmpty( $this->fontProvider->getForLang( 'kn' ) );
-		$this->assertEmpty( $this->fontProvider->getForLang( 'not-a-lang' ) );
+		$this->assertSame( [], $this->fontProvider->getForLang( 'not-a-lang' ) );
 	}
 }

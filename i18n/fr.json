@@ -58,7 +58,7 @@
 	"export-failed": "Le téléchargement a échoué.",
 	"exception-url-fetch-error": "Impossible de récupérer l’URL : $1",
 	"exception-rest-page-not-found": "Le livre « $1 » est introuvable.",
-	"learn-more": "En savoir plus",
+	"learn-more": "En savoir plus.",
 	"error-blocked-1": "Votre adresse IP est bloquée actuellement.",
 	"error-blocked-2": "Afin d’éviter les abus par des automatismes perturbateurs, WS Export refuse l’accès par des utilisateurs non connectés qui sont bloqués globalement sur les wikis de Wikimedia.",
 	"error-fix": "Veuillez essayer ces étapes si vous rencontrez une erreur :",

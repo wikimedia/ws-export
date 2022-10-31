@@ -52,7 +52,7 @@
 	"images-field-label": "Ne vključi slik",
 	"nocache-field-label": "Preskoči vse predpomnjenje (počasneje, toda uporabno za odpravljanje napak)",
 	"export-button": "Izvozi",
-	"cache-updated": "Predpomnilnik je bil osvežen za jezik: $1",
+	"cache-updated": "Predpomnenje je bilo osveženo za jezik: $1",
 	"alert-close": "Zapri",
 	"export-failed": "Prenos ni uspel.",
 	"exception-url-fetch-error": "URL-ja ni mogoče pridobiti: $1",

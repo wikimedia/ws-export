@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"GinawaSaHapon"
+			"GinawaSaHapon",
+			"Jojit fb"
 		]
 	},
 	"app-title": "Wikisource Book Export",
@@ -13,7 +14,7 @@
 	"commit-label": "Commit: $1",
 	"licensed-under": "Lisensiyado sa ilalim ng $1.",
 	"license-link": "GPL v2 o mas bago",
-	"source-and-docs": "Available $1 ang source code at ilang dokumentasyon $2.",
+	"source-and-docs": "Mayroon $1 ang source code at ilang dokumentasyon $2.",
 	"source-link": "sa Github",
 	"docs-link": "sa Multilingual Wikisource",
 	"statistics": "Binigay din ang ilang $1.",

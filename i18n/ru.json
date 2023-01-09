@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Kareyac",
+			"Max34",
 			"Okras",
 			"Putnik",
 			"Tanzun",
@@ -52,9 +53,9 @@
 	"credits-field-label": "Исключить упоминания редакторов (более быстрая загрузка)",
 	"credits-default-message": "[Список участников был опущен по запросу.]",
 	"images-field-label": "Не включать изображения",
-	"nocache-field-label": "Обойти все кеширование (медленнее, но полезно для отладки)",
+	"nocache-field-label": "Обойти всё кеширование (медленнее, но полезно для отладки)",
 	"export-button": "Экспортировать",
-	"cache-updated": "Кэш обновлен для языка: $1",
+	"cache-updated": "Кэш обновлён для языка: $1",
 	"alert-close": "Закрыть",
 	"export-failed": "Загрузка не удалась.",
 	"exception-url-fetch-error": "Не удаётся загрузить URL: $1",

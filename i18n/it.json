@@ -4,10 +4,11 @@
 			"ACortellari",
 			"Ajeje Brazorf",
 			"Beta16",
+			"McDutchie",
 			"Toa"
 		]
 	},
-	"footer-version": "Questa è una versione di $1 $2.",
+	"footer-version": "Questa è la versione $2 di $1.",
 	"version": "versione $1",
 	"source-link": "su Github",
 	"statistics-link": "statistiche",

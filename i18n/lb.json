@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Robby"
+			"Robby",
+			"Volvox"
 		]
 	},
 	"footer-version": "Dëst ass d'Versioun $2 vu(n) $1.",
@@ -23,7 +24,12 @@
 	"font-field-label": "Schrëftaart",
 	"options-label": "Optiounen",
 	"alert-close": "Zoumaachen",
+	"exception-rest-page-not-found": "D'Buch '$1' konnt net fonnt ginn.",
 	"learn-more": "Fir méi ze wëssen",
+	"error-blocked-1": "Är IP-Adress ass am Moment gespaart.",
 	"error-breadcrumb": "Feeler $1",
+	"error-page-header": "Et ass e Feeler geschitt",
+	"error-page-details": "Feelerdetailer: $1",
+	"error-page-issue": "Wann dëse Feeler bestoe bleift, wgl. $1.",
 	"epub-about": "Iwwer"
 }

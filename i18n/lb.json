@@ -5,6 +5,7 @@
 			"Volvox"
 		]
 	},
+	"logo-alt-text": "Wikisource-Logo, eng blo-wäiss Illustratioun vun engem Äisbierg.",
 	"footer-version": "Dëst ass d'Versioun $2 vu(n) $1.",
 	"version": "Versioun $1",
 	"licensed-under": "Et ass lizenzéiert ënner $1.",
@@ -22,8 +23,11 @@
 	"format-pdf-a6": "PDF - Gréisst A6",
 	"format-pdf-letter": "PDF - Gréisst US letter",
 	"format-rtf": "RTF",
+	"exception-invalid-format": "\"$1\" ass kee gültegt Format. Gülteg Formater sinn: $2",
 	"font-field-label": "Schrëftaart",
+	"font-field-help": "Wielt aus $1 verfügbare Schrëftaarten.",
 	"options-label": "Optiounen",
+	"export-button": "Exportéieren",
 	"alert-close": "Zoumaachen",
 	"exception-rest-page-not-found": "D'Buch '$1' konnt net fonnt ginn.",
 	"learn-more": "Fir méi ze wëssen",

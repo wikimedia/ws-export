@@ -49,7 +49,7 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 		$this->api = self::$container->get( Api::class );
 		$this->intuition = self::$container->get( Intuition::class );
 		$this->fileCache = self::$container->get( FileCache::class );
-		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, $this->intuition, 10, $cache, $this->fileCache );
+		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, $this->intuition, 30, $cache, $this->fileCache );
 		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator, $this->intuition, $cache, $this->fileCache );
 		$this->creditRepository = self::$container->get( CreditRepository::class );
 		$this->epubCheck = self::$container->get( EpubCheck::class );

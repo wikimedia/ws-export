@@ -96,7 +96,7 @@ class Util {
 		foreach ( $search as $i => $pat ) {
 			$map[$string] = mb_eregi_replace( $pat, $replace[$i], $map[$string] );
 		}
-		$map[$string] = 'c' . $num . '_' . static::cutFilename( utf8_decode( $map[$string] ) );
+		$map[$string] = 'c' . $num . '_' . static::cutFilename( mb_convert_encoding( $map[$string], 'ISO-8859-1', 'UTF-8' ) );
 		$num++;
 
 		return $map[$string];

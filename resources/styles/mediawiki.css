@@ -47,3 +47,61 @@ div.tleft {
 .small {
 	font-size: 94%;
 }
+
+/* Styles simplified from resources/src/mediawiki.skinning/content.media-common.less */
+.mw-valign-middle {
+	vertical-align: middle;
+}
+
+.mw-valign-baseline {
+	vertical-align: baseline;
+}
+
+.mw-valign-sub {
+	vertical-align: sub;
+}
+
+.mw-valign-super {
+	vertical-align: super;
+}
+
+.mw-valign-top {
+	vertical-align: top;
+}
+
+.mw-valign-text-top {
+	vertical-align: text-top;
+}
+
+.mw-valign-bottom {
+	vertical-align: bottom;
+}
+
+.mw-valign-text-bottom {
+	vertical-align: text-bottom;
+}
+
+.mw-halign-right {
+	margin: 0 0 0.5em 0.5em;
+	clear: right;
+	float: right;
+}
+
+.mw-halign-left {
+	margin: 0 0.5em 0.5em 0;
+	clear: left;
+	float: left;
+}
+
+.mw-halign-none {
+	clear: none;
+	float: none;
+}
+
+.mw-halign-center {
+	margin: 0 auto;
+	display: table;
+	border-collapse: collapse;
+	clear: none;
+	float: none;
+}

@@ -47,7 +47,7 @@ jobs:
     - name: Install Calibre, epubcheck, and fonts
       run: |
         sudo apt-get update -q
-        sudo apt-get install fonts-freefont-ttf fonts-linuxlibertine fonts-dejavu-core fonts-gubbi libegl1 libopengl0 -y
+        sudo apt-get install fonts-freefont-ttf fonts-linuxlibertine fonts-dejavu-core fonts-gubbi fonts-opendyslexic libegl1 libopengl0 -y
         sudo mkdir /usr/share/desktop-directories/
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
         wget https://github.com/w3c/epubcheck/releases/download/v4.2.4/epubcheck-4.2.4.zip

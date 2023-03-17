@@ -29,6 +29,7 @@ RUN apt-get update -q && apt-get install -y \
         fonts-linuxlibertine \
         fonts-dejavu-core \
         fonts-gubbi \
+        fonts-opendyslexic \
         git \
         libzip-dev \
         libicu-dev \

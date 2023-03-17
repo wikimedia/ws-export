@@ -12,7 +12,7 @@ Requirements
 * PHP 7.3 or 7.4
 * [Composer](http://getcomposer.org/)
 * The `fc-list` command
-* The following fonts:
+* The following fonts (optional, but required for development):
   * `fonts-freefont-ttf`
   * `fonts-linuxlibertine`
   * `fonts-dejavu-core`

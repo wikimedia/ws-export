@@ -16,6 +16,8 @@ RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID docker
 RUN apt-get update -q && apt-get install -y \
         python \
         libnss3 \
+        libegl1 \
+        libopengl0 \
         jarwrapper \
         libcommons-compress-java \
         libguava-java \

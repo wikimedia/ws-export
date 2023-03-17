@@ -39,6 +39,7 @@ class FontProviderTest extends TestCase {
 			[ 'freeserif', 'FreeSerif' ],
 			[ 'dejavu-sans', 'DejaVu Sans' ],
 			[ 'linuxlibertine', 'Linux Libertine O' ],
+			[ 'opendyslexic', 'OpenDyslexic' ]
 		];
 	}
 
@@ -76,6 +77,14 @@ body { font-family: "Linux Libertine O" }
 		$this->assertSame( '@font-face {  font-family: "Gubbi";  font-weight: normal;  font-style: normal;  src: url("fonts/Gubbi.ttf");}
 body { font-family: "Gubbi" }
 ', $this->fontProvider->getCss( 'Gubbi' ) );
+
+		$this->assertSame( '@font-face {  font-family: "OpenDyslexic";  font-weight: normal;  font-style: normal;  src: url("fonts/OpenDyslexic-Regular.woff");}
+@font-face {  font-family: "OpenDyslexic";  font-weight: 800;  font-style: normal;  src: url("fonts/OpenDyslexic-Bold.woff");}
+@font-face {  font-family: "OpenDyslexic";  font-weight: normal;  font-style: italic;  src: url("fonts/OpenDyslexic-Italic.woff");}
+@font-face {  font-family: "OpenDyslexic";  font-weight: 800;  font-style: italic;  src: url("fonts/OpenDyslexic-BoldItalic.woff");}
+body { font-family: "OpenDyslexic" }
+',
+		$this->fontProvider->getCss( 'OpenDyslexic' ) );
 
 		$this->assertSame( '', $this->fontProvider->getCss( 'invalid-font-name' ) );
 	}

@@ -150,7 +150,7 @@ class FontProvider {
 	}
 
 	/**
-	 * Turn a font family name into its canonical form (as its known by the OS).
+	 * Turn a font family name into its canonical form (as it's known by the OS).
 	 * This will check lower- and snake-case variants.
 	 * @param string|null $name
 	 * @return string|bool The normalized name, or false if a matching font could not be found.

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Ajeje Brazorf",
+			"Amire80",
 			"Robby"
 		]
 	},
@@ -26,12 +27,12 @@
 	"previous-alt-text": "Icon image alt text for non-visual users.",
 	"export-book": "Header for the main export form.",
 	"lang-field-label": "Form field label for the Wikisource language dropdown field.",
-	"lang-field-value": "Format for each option in the language dropdown field.\n\n* $1 - The language name in the current interface language (can be translated on Wikidata).\n* $2 - The subdomain for the language's Wikisource.",
+	"lang-field-value": "{{Optional}}\n\nFormat for each option in the language dropdown field.\n\n* $1 - The language name in the current interface language (can be translated on Wikidata).\n* $2 - The subdomain for the language's Wikisource.",
 	"lang-field-help": "Help text for the language field.",
 	"title-field-label": "Form field label for the 'Title' field.",
 	"title-field-help": "Help text for the 'Title' field.",
 	"format-field-label": "Form field label for the 'Format' field.",
-	"format-field-help": "Help text for the 'Format' field. Not currently used for English, but other languages may use it.",
+	"format-field-help": "{{Optional}}\n\nHelp text for the 'Format' field. Not currently used for English, but other languages may use it.",
 	"format-epub-3": "Format label and description.",
 	"format-epub-2": "Format label and description.",
 	"format-htmlz": "Format label and description.",

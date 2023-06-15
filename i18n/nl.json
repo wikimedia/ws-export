@@ -25,7 +25,6 @@
 	"previous-alt-text": "Naar achteren gericht pijlpictogram dat aangeeft dat de link terugkeert naar Wikisource.",
 	"export-book": "Exporteer een boek",
 	"lang-field-label": "Wikisource",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "De Wikisource van waaruit het boek moet worden geëxporteerd.",
 	"title-field-label": "Titel",
 	"title-field-help": "Titel van het boek of de sectie om te exporteren.",

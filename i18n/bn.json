@@ -24,7 +24,6 @@
 	"back-to-wikisource": "উইকিসংকলনে ফেরত যান",
 	"export-book": "একটি বই রপ্তানি করুন",
 	"lang-field-label": "উইকিসংকলন",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "উইকিসংকলন যা থেকে বইটি রপ্তানি করতে হবে।",
 	"title-field-label": "শিরোনাম",
 	"title-field-help": "রপ্তানি করার জন্য বই বা অনুচ্ছেদটির শিরোনাম।",

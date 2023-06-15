@@ -26,7 +26,6 @@
 	"back-to-wikisource": "위키문헌으로 돌아가기",
 	"export-book": "책 내보내기",
 	"lang-field-label": "위키문헌",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "책을 내보낼 위키문헌입니다.",
 	"title-field-label": "제목",
 	"title-field-help": "내보낼 책 또는 문단의 제목입니다.",

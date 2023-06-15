@@ -25,7 +25,6 @@
 	"previous-alt-text": "Šípka nasmerovaná smerom vzad, ktorá oznamuje, že odkaz Vás vráti späť na Wikizdroje.",
 	"export-book": "Exportovať knihu",
 	"lang-field-label": "Wikizdroj",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "Wikizdroj z ktorého chcete exportovať knihu.",
 	"title-field-label": "Názov",
 	"title-field-help": "Názov knihy alebo odseku na export.",

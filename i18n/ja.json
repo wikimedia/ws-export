@@ -30,7 +30,6 @@
 	"previous-alt-text": "リンクがウィキソースに戻ることを示す、後ろ向きの矢印アイコン。",
 	"export-book": "書籍を書き出す",
 	"lang-field-label": "ウィキソース",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "書籍の書き出し元となるウィキソース。",
 	"title-field-label": "題名",
 	"title-field-help": "書き出す書籍またはセクションの題名。",

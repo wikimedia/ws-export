@@ -26,7 +26,6 @@
 	"previous-alt-text": "Icône de flèche en contre-sens qui indique que le lien retourne à Wikisource.",
 	"export-book": "Exporter un livre",
 	"lang-field-label": "Wikisource",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "L’édition de Wikisource depuis laquelle le livre doit être exporté.",
 	"title-field-label": "Titre",
 	"title-field-help": "Titre du livre ou de la section à exporter.",

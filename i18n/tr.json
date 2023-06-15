@@ -30,7 +30,6 @@
 	"previous-alt-text": "Geriye dönük ok simgesi bağlantının Vikikaynak’a geri döndüğünü ifade eder.",
 	"export-book": "Bir kitabı dışa aktar",
 	"lang-field-label": "Vikikaynak",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "Kitabın dışa aktarılacağı Vikikaynak.",
 	"title-field-label": "Başlık",
 	"title-field-help": "Dışa aktarılacak kitabın başlığı ya da bölümü.",

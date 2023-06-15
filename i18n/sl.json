@@ -25,7 +25,6 @@
 	"previous-alt-text": "Nazaj obrnjena puščica, ki označuje, da se povezava vrne v Wikivir.",
 	"export-book": "Izvozi knjigo",
 	"lang-field-label": "Wikivir",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "Wikivir, iz katerega želite izvoziti knjigo.",
 	"title-field-label": "Naslov",
 	"title-field-help": "Naslov knjige ali razdelka za izvoz.",

@@ -6,6 +6,7 @@
 		]
 	},
 	"app-title": "ייצוא ספר מוויקיטקסט",
+	"app-title-wikisource": "ויקיטקסט",
 	"app-title-html": "ייצוא הספר $1",
 	"app-subtitle": "יצוא ספרים מוויקיטקסטים במגוון תצורות קבצים שונות.",
 	"logo-alt-text": "הלוגו של ויקיטקסט, איור של קרחון בכחול ולבן.",
@@ -22,11 +23,10 @@
 	"issues": "נא לדווח על תקלות תחת המיזם $1 ב־Phabricator.",
 	"issue-button": "יצירת בקשה",
 	"back-to-wikisource": "חזרה לוויקיטקסט",
-	"previous-alt-text": "חץ שפונה לכיוון ההפוך שמציין שהקישור הזה חוזר לוויקיציטוט.",
+	"previous-alt-text": "חץ שפונה לכיוון ההפוך שמציין שהקישור הזה חוזר לוויקיטקסט.",
 	"export-book": "לייצא ספר",
 	"lang-field-label": "ויקיטקסט",
-	"lang-field-value": "$1 ($2)",
-	"lang-field-help": "הוויקיציטוט ממנו לייצא את הספר",
+	"lang-field-help": "הוויקיטקסט שהספר ייוצא ממנו",
 	"title-field-label": "כותרת",
 	"title-field-help": "כותרת העמוד הראשי של הספר.",
 	"format-field-label": "סוג קובץ",
@@ -74,6 +74,6 @@
 	"exception-fetching-credits": "משיכת פרטי התודות נתקלה בשגיאה. נא לנסות לייצא שוב. אם השגיאה הזאת נמשכת, יש לסמן את התיבה ‚אפשרות’ כדי להסיר תודות.",
 	"exception-book-conversion": "שגיאה בהמרת תצורת הספר.",
 	"epub-title-page": "עמוד הכותרת",
-	"epub-exported-date": "יוצא מוויקיציטוט ב־$1",
+	"epub-exported-date": "יוצא מוויקיטקסט ב־$1",
 	"epub-about": "על אודות"
 }

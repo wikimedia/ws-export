@@ -11,7 +11,6 @@
 	"back-to-wikisource": "Zpět na Wikizdroje",
 	"export-book": "Exportovat knihu",
 	"lang-field-label": "Wikizdroje",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "Wikizdroje, ze kterých se má kniha exportovat.",
 	"title-field-label": "Název",
 	"title-field-help": "Název knihy nebo části k exportu.",

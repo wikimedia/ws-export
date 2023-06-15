@@ -25,7 +25,6 @@
 	"previous-alt-text": "Bakåtpekande pilikon som indikerar att länken går tillbaka till Wikisource.",
 	"export-book": "Exportera en bok",
 	"lang-field-label": "Wikisource",
-	"lang-field-value": "$1 ($2)",
 	"lang-field-help": "Wikisource-versionen som boken ska exporteras från.",
 	"title-field-label": "Titel",
 	"title-field-help": "Titeln på boken eller avsnittet att exportera.",

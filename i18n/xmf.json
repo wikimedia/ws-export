@@ -1,0 +1,31 @@
+{
+	"@metadata": {
+		"authors": [
+			"Narazeni"
+		]
+	},
+	"app-title": "წინგეფიშ ექსპორტი ვიკითეკაშე",
+	"app-title-html": "$1-შე წინგიშ ექსპორტი",
+	"app-subtitle": "ვიკითეკაშე წინგეფიშ ექსპორტი შხვადოშხვა ფაილიშ ფორმატით.",
+	"logo-alt-text": "ვიკითეკაშ ლოგო, აისბერგიშ ლენი დო ჩე ილუსტრაცია.",
+	"footer-version": "თენა რე $2 ვერსიაშ $1",
+	"version": "ვერსია $1",
+	"commit-label": "კომიტ: $1",
+	"statistics-link": "სტატისტიკა",
+	"title-field-label": "დუდჯოხო",
+	"format-field-label": "ფაილიშ ფორმატი",
+	"format-epub-3": "EPUB 3 (უმენტაშ E-reader-შო)",
+	"format-htmlz": "HTML",
+	"format-mobi": "MOBI (Kindle-შო)",
+	"format-pdf-a4": "PDF - A4 ზჷმა",
+	"format-pdf-a5": "PDF - A5 ზჷმა",
+	"format-pdf-a6": "PDF - A6 ზჷმა",
+	"format-txt": "რჩქვანელობური ტექსტი",
+	"font-field-label": "შრიფტი",
+	"options-label": "პარამეტრეფი",
+	"images-field-label": "სურათეფიშ უმუშო",
+	"export-button": "ექსპორტი",
+	"alert-close": "კილუა",
+	"learn-more": "ქიგეგით უმოსი.",
+	"error-blocked-1": "თქვანი IP მიოწურაფუ ასე ბლოკირი რე."
+}

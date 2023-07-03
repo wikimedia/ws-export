@@ -1,0 +1,37 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saraiki"
+		]
+	},
+	"app-title": "وکی ماخذ کتاب ایکسپورٹ",
+	"app-title-wikisource": "وکی ماخذ",
+	"app-title-html": "$1 کتاب ایکسپورٹ",
+	"version": "ورژن $1",
+	"source-link": "گٹ ہب تے",
+	"statistics-link": "شماريات",
+	"back-to-wikisource": "وکی ماخذ تے واپس",
+	"export-book": "کتاب ایکسپورٹ کرو",
+	"lang-field-label": "وکی ماخذ",
+	"title-field-label": "عنوان",
+	"format-field-label": "فائل فارمیٹ",
+	"format-htmlz": "ایچ ٹی ایم ایل",
+	"format-pdf-a4": "پی ڈی ایف ـ A4 سائز",
+	"format-pdf-a5": "پی ڈی ایف ـ A5 سائز",
+	"format-pdf-a6": "پی ڈی ایف ـ A6 سائز",
+	"format-pdf-letter": "پی ڈی ایف ـ امریکی لیٹر سائز",
+	"format-rtf": "آرٹی ایف",
+	"format-txt": "سادہ عبارت",
+	"font-field-label": "فونٹ",
+	"options-label": "اختیارات",
+	"images-field-label": "تصویراں وچ شامل نہ کرو",
+	"export-button": "ٻاہر بھیڄو",
+	"alert-close": "بند کرو",
+	"export-failed": "ڈاؤن لوڈ وچ ناکامی تھئی۔",
+	"learn-more": "ٻیا سِکھو۔",
+	"error-breadcrumb": "نقص $1",
+	"error-page-header": "رپھڑ پئے ڳیا",
+	"error-page-details": "خرابی تفصیلاں:$1",
+	"epub-title-page": "عنوان ورقہ",
+	"epub-about": "تعارف"
+}

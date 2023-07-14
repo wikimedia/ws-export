@@ -38,13 +38,14 @@ class Wikidata {
 			$this->logger->debug( "Requesting list of Wikisources from Wikidata" );
 			$query =
 				"SELECT ?label ?website WHERE { "
-				// Instance of Wikisource language edition.
+				// Instance of Wikisource language edition but not of closed wiki.
 				. "?item wdt:P31 wd:Q15156455 . "
-				// Wikimedia langugae code.
+				. "MINUS { ?item wdt:P31 wd:Q47495990 . } "
+				// Wikimedia language code.
 				. "?item wdt:P424 ?wikiLangCode . "
 				// Label (fall back to the interface language, and then English).
-				. "  optional{ ?item rdfs:label ?labelLocal FILTER( LANG(?labelLocal) = ?wikiLangCode ) } . "
-				. "  optional{ ?item rdfs:label ?labelUselang FILTER( LANG(?labelUselang) = '$lang' ) } . "
+				. "  OPTIONAL { ?item rdfs:label ?labelLocal FILTER( LANG(?labelLocal) = ?wikiLangCode ) } . "
+				. "  OPTIONAL { ?item rdfs:label ?labelUselang FILTER( LANG(?labelUselang) = '$lang' ) } . "
 				. "  ?item rdfs:label ?labelEn FILTER( LANG(?labelEn) = 'en' ) . "
 				. "  BIND( IF( BOUND(?labelLocal), ?labelLocal, IF( BOUND(?labelUselang), ?labelUselang, ?labelEn ) ) AS ?label ) . "
 				// Official website.

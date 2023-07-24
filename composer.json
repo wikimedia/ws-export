@@ -92,6 +92,7 @@
 		"test": [
 			"composer validate",
 			"phpcs -s .",
+			"cat bin/console | ./vendor/bin/phpcs",
 			"@php ./bin/console lint:twig ./templates",
 			"@php ./bin/console lint:yaml ./config",
 			"minus-x check .",

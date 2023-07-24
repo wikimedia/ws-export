@@ -37,7 +37,7 @@ class Wikidata {
 			$cacheItem->expiresAfter( new DateInterval( 'P1M' ) );
 			$this->logger->debug( "Requesting list of Wikisources from Wikidata" );
 			$query =
-				"SELECT ?label ?website WHERE { "
+				"SELECT ?item ?label ?website WHERE { "
 				// Instance of Wikisource language edition but not of closed wiki.
 				. "?item wdt:P31 wd:Q15156455 . "
 				. "MINUS { ?item wdt:P31 wd:Q47495990 . } "
@@ -54,12 +54,14 @@ class Wikidata {
 			$data = $this->fetch( $query );
 			$out = [];
 			foreach ( $data as $datum ) {
-				preg_match( '|https://([a-z-_]*)\.?wikisource\.org|', $datum['website'], $matches );
-				$subdomain = $matches[1];
-				if ( empty( $subdomain ) ) {
-					$subdomain = 'mul';
+				// Hard-code Multilingual Wikisource, to avoid issues with incubator Wikisources
+				// being given the same domain name as P856 (official website). T342520.
+				if ( str_ends_with( $datum['item'], 'Q18198097' ) ) {
+					$out['mul'] = $datum['label'];
+					continue;
 				}
-				$out[$subdomain] = $datum['label'];
+				preg_match( '|https://([a-z-_]*)\.?wikisource\.org|', $datum['website'], $matches );
+				$out[$matches[1]] = $datum['label'];
 			}
 			return $out;
 		} );

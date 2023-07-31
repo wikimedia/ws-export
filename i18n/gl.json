@@ -1,19 +1,20 @@
 {
 	"@metadata": {
 		"authors": [
-			"Maria zaos"
+			"Maria zaos",
+			"Toliño"
 		]
 	},
 	"footer-version": "Esta é a $1 versión $2",
 	"version": "Versión $1",
 	"export-book": "Exportar un libro",
-	"title-field-label": "Título:",
-	"format-field-label": "Formato de ficheiro:",
+	"title-field-label": "Título",
+	"format-field-label": "Formato de ficheiro",
 	"format-pdf-a5": "PDF - tamaño A5",
 	"format-pdf-a6": "PDF - tamaño A6",
 	"format-txt": "Texto sen formato",
-	"font-field-label": "Tipo de letra:",
+	"font-field-label": "Tipo de letra",
 	"font-field-help": "Escolla entre $1 tipos de letra dispoñibles.",
-	"options-label": "Opcións:",
+	"options-label": "Opcións",
 	"export-button": "Exportar"
 }

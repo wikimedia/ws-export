@@ -19,36 +19,83 @@ Requirements
   * `fonts-gubbi`
   * `fonts-opendyslexic`
 
-Installation
+Contributing
 ============
 
 1. Get the source code:
 
-       git clone https://github.com/wikimedia/ws-export.git
-       cd tool
+   ```
+   git clone https://github.com/wikimedia/ws-export.git
+   cd ws-export
+   ```
 
 2. Install dependencies:
 
-       composer install --no-dev
+   ```
+   composer install
+   ```
 
-   Then create a `.env.local` file.
+   A few PHP extensions are required; if these are not installed, Composer will let you know and you will need to install them with your operating system's package manager. For example, in Debian-based Linux distributions:
 
-   * In order to export to PDF, plain text, RTF, or Mobi formats
-     you should also install [Calibre](https://calibre-ebook.com)
-     so that the tool can use the `ebook-convert` command.
-   * To validate exported ebooks (with the `./bin/console app:check` command),
-     you should also install
-     [epubcheck](https://github.com/w3c/epubcheck).
-     If it's not installed at `/usr/bin/epubcheck` then
-     set the `EPUBCHECK_JAR` environment variable.
-   * To run the integration tests, also install the `fonts-linuxlibertine` package.
+   ```
+   apt install php-sqlite3 php-zip php-curl
+   ```
 
-3. Create a mysql database and database user
-   and add these details to `.env.local`.
+   Then create a `.env.local` file:
 
-4. Create the database with `./bin/console doctrine:database:create`
+   ```
+   cp .env .env.local
+   ```
 
-5. Run the migrations with `./bin/console doctrine:migrations:migrate`
+   Edit `.env.local` and set `APP_ENV=dev` and `APP_SECRET` to a random string of your choice.
+
+3. [Install Symfony CLI](https://symfony.com/download#step-1-install-symfony-cli)
+   and start the development web server with:
+
+   ```
+   symfony server:start -d
+   ```
+
+4. Open your web browser to e.g. http://localhost:8000
+   and the basic operations should be working with the following requirements:
+   * you can only export to EPUB format; and
+   * you must check the 'Exclude credits' option,
+     to avoid querying the database for usernames.
+
+   Continue on for setting up more exporting and development options.
+
+5. Install optional dependencies:
+
+   **Calibre:**
+   In order to export to PDF, plain text, RTF, or Mobi formats
+   you must install [Calibre](https://calibre-ebook.com)
+   so that the tool can use the `ebook-convert` command.
+
+   **epubcheck:**
+   To validate exported ebooks (with the `./bin/console app:check` command),
+   you must install [epubcheck](https://github.com/w3c/epubcheck).
+   If it's not installed at `/usr/bin/epubcheck` then
+   set the `EPUBCHECK_JAR` environment variable.
+
+   **Fonts:**
+   To run the integration tests, also install
+   the `fonts-linuxlibertine` package.
+   You can also install any other fonts you want to use for exporting books.
+
+3. WS Export has two uses of databases:
+   firstly, a local database to store download statistics;
+   and secondly, it connects to the remote Wikimedia database replicas
+   to fetch information about Wikisource contributors for the credits list that can be included at the end of exported books.
+
+   For the first (statistics recording) you add the database user
+   and add these details to `.env.local`:
+
+   ```
+   DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name
+   ```
+
+4. Then create the database with `./bin/console doctrine:database:create`
+   and run the migrations with `./bin/console doctrine:migrations:migrate`
 
 6. This tool uses the [Toolforge Bundle](https://github.com/wikimedia/ToolforgeBundle), and it connects to [multiple databases](https://github.com/wikimedia/ToolforgeBundle#replicas-connection-manager).
   * Set replicas credentials in the `.env.local` file.

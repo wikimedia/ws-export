@@ -82,6 +82,7 @@ class Util {
 		return $html . '<body>' . $content . '</body></html>';
 	}
 
+	// Replace non-ASCII characters with ASCII equivalents.
 	public static function encodeString( $string ) {
 		static $map = [];
 		static $num = 0;
@@ -96,7 +97,7 @@ class Util {
 		foreach ( $search as $i => $pat ) {
 			$map[$string] = mb_eregi_replace( $pat, $replace[$i], $map[$string] );
 		}
-		$map[$string] = 'c' . $num . '_' . static::cutFilename( mb_convert_encoding( $map[$string], 'ISO-8859-1', 'UTF-8' ) );
+		$map[$string] = 'c' . $num . '_' . static::cutFilename( iconv( 'UTF-8', 'ISO-8859-1//TRANSLIT', $map[$string] ) );
 		$num++;
 
 		return $map[$string];

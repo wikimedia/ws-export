@@ -91,11 +91,37 @@ class Util {
 			return $map[$string];
 		}
 		$map[$string] = $string;
-		$search = [ '[αάàâäΑÂÄ]', '[βΒ]', '[Ψç]', '[δΔ]', '[εéèêëΕÊË]', '[η]', '[φϕΦ]', '[γΓ]', '[θΘ]', '[ιîïΙÎÏ]', '[Κκ]', '[λΛ]', '[μ]', '[ν]', '[οôöÔÖ]', '[Ωω]', '[πΠ]', '[Ψψ]', '[ρΡ]', '[σΣ]', '[τ]', '[υûùüΥÛÜ]', '[ξΞ]', '[ζΖ]', '[ ]', '[^a-zA-Z0-9_\.]' ];
-		$replace = [ 'a', 'b', 'c', 'd', 'e', 'eh', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'oh', 'p', 'ps', 'r', 's', 't', 'u', 'x', 'z', '_', '_' ];
+		$replacements = [
+			'[αάàâäΑÂÄ]' => 'a',
+			'[βΒ]' => 'b',
+			'[Ψç]' => 'c',
+			'[δΔ]' => 'd',
+			'[εéèêëΕÊË]' => 'e',
+			'[η]' => 'eh',
+			'[φϕΦ]' => 'f',
+			'[γΓ]' => 'g',
+			'[θΘ]' => 'h',
+			'[ιîïΙÎÏ]' => 'i',
+			'[Κκ]' => 'k',
+			'[λΛ]' => 'l',
+			'[μ]' => 'm',
+			'[ν]' => 'n',
+			'[οôöÔÖ]' => 'o',
+			'[Ωω]' => 'oh',
+			'[πΠ]' => 'p',
+			'[Ψψ]' => 'ps',
+			'[ρΡ]' => 'r',
+			'[σΣ]' => 's',
+			'[τ]' => 't',
+			'[υûùüΥÛÜ]' => 'u',
+			'[ξΞ]' => 'x',
+			'[ζΖ]' => 'z',
+			'[ ]' => '_',
+			'[^a-zA-Z0-9_\.]' => '_'
+		];
 		mb_regex_encoding( 'UTF-8' );
-		foreach ( $search as $i => $pat ) {
-			$map[$string] = mb_eregi_replace( $pat, $replace[$i], $map[$string] );
+		foreach ( $replacements as $search => $replace ) {
+			$map[$string] = mb_eregi_replace( $search, $replace, $map[$string] );
 		}
 		$map[$string] = 'c' . $num . '_' . static::cutFilename( iconv( 'UTF-8', 'ISO-8859-1//TRANSLIT', $map[$string] ) );
 		$num++;

@@ -82,6 +82,7 @@ class Util {
 		return $html . '<body>' . $content . '</body></html>';
 	}
 
+	// Replace non-ASCII characters with ASCII equivalents.
 	public static function encodeString( $string ) {
 		static $map = [];
 		static $num = 0;

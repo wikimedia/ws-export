@@ -15,6 +15,7 @@ class UtilTest extends TestCase {
 			[ '.-!:?$',   '_._____' ],
 			[ '🎉',       '__' ],
 			[ 'Fóø Båř',  '_Foo_Bar' ],
+			[ 'Ξεσκεπάζω την ψυχοφθόρα σας βδελυγμία', '_Xeskepazoh_tehn_psuchofh_ra_sas_bdelugm_a' ],
 		];
 	}
 

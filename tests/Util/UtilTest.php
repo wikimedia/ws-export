@@ -9,7 +9,7 @@ class UtilTest extends TestCase {
 
 	public function provideEncodeStringCases() {
 		return [
-			[ 'test_Δôü', '_test_dou' ],
+			[ 'test_Δôü', '_test_Dou' ],
 			[ 'foo',      '_foo' ],
 			[ 'æ,þ,η,ŋ',  '_ae_th_eh_ng' ],
 			[ '.-!:?$',   '_._____' ],

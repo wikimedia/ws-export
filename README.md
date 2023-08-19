@@ -1,14 +1,13 @@
-WS Export
-=========
+# WS Export
 
 ![CI](https://github.com/wikimedia/ws-export/workflows/CI/badge.svg)
 
 WS Export is a tool for exporting Wikisource books to many formats, such as EPUB or PDF.
 The documentation can be found here:
-https://wikisource.org/wiki/Wikisource:WS_Export
+<https://wikisource.org/wiki/Wikisource:WS_Export>
 
-Requirements
-============
+## Requirements
+
 * PHP 7.3 or 7.4
 * [Composer](http://getcomposer.org/)
 * The `fc-list` command
@@ -19,31 +18,32 @@ Requirements
   * `fonts-gubbi`
   * `fonts-opendyslexic`
 
-Contributing
-============
+## Contributing
 
 1. Get the source code:
 
-   ```
+   ```console
    git clone https://github.com/wikimedia/ws-export.git
    cd ws-export
    ```
 
 2. Install dependencies:
 
-   ```
+   ```console
    composer install
    ```
 
-   A few PHP extensions are required; if these are not installed, Composer will let you know and you will need to install them with your operating system's package manager. For example, in Debian-based Linux distributions:
+   A few PHP extensions are required; if these are not installed, Composer will let you know
+   and you will need to install them with your operating system's package manager.
+   For example, in Debian-based Linux distributions:
 
-   ```
+   ```console
    apt install php-sqlite3 php-zip php-curl
    ```
 
    Then create a `.env.local` file:
 
-   ```
+   ```console
    cp .env .env.local
    ```
 
@@ -52,11 +52,11 @@ Contributing
 3. [Install Symfony CLI](https://symfony.com/download#step-1-install-symfony-cli)
    and start the development web server with:
 
-   ```
+   ```console
    symfony server:start -d
    ```
 
-4. Open your web browser to e.g. http://localhost:8000
+4. Open your web browser to e.g. <http://localhost:8000>
    and the basic operations should be working with the following requirements:
    * you can only export to EPUB format; and
    * you must check the 'Exclude credits' option,
@@ -82,40 +82,49 @@ Contributing
    the `fonts-linuxlibertine` package.
    You can also install any other fonts you want to use for exporting books.
 
-3. WS Export has two uses of databases:
+6. WS Export has two uses of databases:
    firstly, a local database to store download statistics;
    and secondly, it connects to the remote Wikimedia database replicas
-   to fetch information about Wikisource contributors for the credits list that can be included at the end of exported books.
+   to fetch information about Wikisource contributors
+   for the credits list that can be included at the end of exported books.
 
    For the first (statistics recording) you add the database user
    and add these details to `.env.local`:
 
-   ```
+   ```console
    DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name
    ```
 
-4. Then create the database with `./bin/console doctrine:database:create`
+7. Then create the database with `./bin/console doctrine:database:create`
    and run the migrations with `./bin/console doctrine:migrations:migrate`
 
-6. This tool uses the [Toolforge Bundle](https://github.com/wikimedia/ToolforgeBundle), and it connects to [multiple databases](https://github.com/wikimedia/ToolforgeBundle#replicas-connection-manager).
-  * Set replicas credentials in the `.env.local` file.
+8. This tool uses the [Toolforge Bundle](https://github.com/wikimedia/ToolforgeBundle),
+   and it connects to [multiple databases](https://github.com/wikimedia/ToolforgeBundle#replicas-connection-manager).
 
-  * Establish an SSH tunnel to the replicas (only necessary on local environments)
-```bash
-$ ./bin/console toolforge:ssh
-```
-  * Bind address for docker enviroments
-```bash
-$ ./bin/console toolforge:ssh --bind-address=0.0.0.0
-```
+   * Set replicas credentials in the `.env.local` file.
+
+   * Establish an SSH tunnel to the replicas (only necessary on local environments)
+
+     ```console
+     ./bin/console toolforge:ssh
+     ```
+
+   * Bind address for docker enviroments
+
+     ```console
+     ./bin/console toolforge:ssh --bind-address=0.0.0.0
+     ```
 
 ## CLI Usage
 
 ### app:check
 
-Run epubcheck on books. With no options set, this will check 10 random books from English Wikisource. Note that the random 10 will be cached (for repeatability) unless you use <info>--nocache</info>.
+Run epubcheck on books. With no options set, this will check 10 random books from English Wikisource.
+Note that the random 10 will be cached (for repeatability) unless you use <info>--nocache</info>.
 
-    app:check [-l|--lang LANG] [--nocache] [-t|--title TITLE] [-c|--count COUNT] [-s|--namespaces NAMESPACES]
+```console
+app:check [-l|--lang LANG] [--nocache] [-t|--title TITLE] [-c|--count COUNT] [-s|--namespaces NAMESPACES]
+```
 
 * `--lang` `-l` — Wikisource language code.
   Default: 'en'
@@ -129,7 +138,9 @@ Run epubcheck on books. With no options set, this will check 10 random books fro
 
 Export a book.
 
-    app:export [-l|--lang LANG] [-t|--title TITLE] [-f|--format FORMAT] [-p|--path PATH] [--nocache] [--nocredits]
+```console
+app:export [-l|--lang LANG] [-t|--title TITLE] [-f|--format FORMAT] [-p|--path PATH] [--nocache] [--nocredits]
+```
 
 * `--lang` `-l` — Wikisource language code.
 * `--title` `-t` — Wiki page name of the work to export. Required
@@ -144,7 +155,9 @@ Export a book.
 
 Generate an OPDS file.
 
-    app:opds [-l|--lang LANG] [-c|--category CATEGORY]
+```console
+app:opds [-l|--lang LANG] [-c|--category CATEGORY]
+```
 
 * `--lang` `-l` — Wikisource language code.
 * `--category` `-c` — Category name to export.
@@ -154,9 +167,10 @@ Generate an OPDS file.
 Run `composer install` to install dependencies required for testing.
 
 Make sure the test database is created and migrations are up-to-date:
-```bash
-$ ./bin/console doctrine:database:create --env=test
-$ ./bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+```console
+./bin/console doctrine:database:create --env=test
+./bin/console doctrine:migrations:migrate --env=test --no-interaction
 ```
 
 You only need to run the first command once, and the second one only
@@ -164,26 +178,25 @@ when new migrations are created.
 
 Tests are located in the `tests/` directory, to run them:
 
-```bash
-$ ./bin/phpunit --exclude-group integration
-$ ./bin/phpunit --group integration # runs integration tests (slow)
+```console
+./bin/phpunit --exclude-group integration
+./bin/phpunit --group integration # runs integration tests (slow)
 ```
 
 You can also run code linting etc. with `composer test`.
 
-Docker Developer Environment
-============================
+## Docker Developer Environment
 
 Wikisource export can also be run for development using Docker Compose. _(beta, only tested on linux)_
 
 The default environment provides PHP, Apache, Calibre, Epubcheck and a MariaDB database.
 
-### Requirements
+### Docker requirements
 
 You'll need a locally running Docker and Docker Compose:
 
-  - [Docker installation instructions][docker-install]
-  - [Docker Compose installation instructions][docker-compose]
+* [Docker installation instructions][docker-install]
+* [Docker Compose installation instructions][docker-compose]
 
 [docker-install]: https://docs.docker.com/install/
 [docker-compose]: https://docs.docker.com/compose/install/
@@ -193,50 +206,58 @@ You'll need a locally running Docker and Docker Compose:
 ### Quickstart
 
 Modify or create `.env.local`. This config uses the database container defaults.
-```
+
+```console
 DATABASE_URL=mysql://root:@database:3306/wsexport
 ```
 
 Do the same for the test database at `.env.test.local`, but giving a different database name:
-```
+
+```console
 DATABASE_URL=mysql://root:@database:3306/wsexport_test
 ```
 
 Make sure you cd into `./docker`
 
-```bash
+```console
 cd ./docker 
 ```
 
 Run the following command to add your user ID and group ID to your `.env` file:
 
-```bash
+```console
 echo "WS_DOCKER_UID=$(id -u)
 WS_DOCKER_GID=$(id -g)" >> ./.env
 ```
 
 Optionally, set the port in `.env` (default is 8888):
-```bash
+
+```console
 WS_EXPORT_PORT=18000
 ```
 
 Start the environment and install
 
-```bash
+```console
 # -d is detached mode - runs containers in the background:
 docker-compose build && docker-compose up -d
 docker-compose exec wsexport composer install
 docker-compose exec wsexport ./bin/console doctrine:migrations:migrate --no-interaction
 ```
 
-Wikisource Export should be up at http://localhost:8888/ (or the configured port)
+Wikisource Export should be up at <http://localhost:8888/> (or the configured port)
 
 ### Cache
+
 Go to `/refresh` to clear the cache
 
 ### Setup Xdebug
-Xdebug is disabled by default. If you need to enable it you can do so via an env variable by creating a `./docker/docker-compose.override.yml` file with the following content
-```
+
+Xdebug is disabled by default.
+If you need to enable it, you can do so via an environment variable,
+by creating a `./docker/docker-compose.override.yml` file with the following content:
+
+```yaml
 version: '3.7'
 services:
   wsexport:
@@ -247,7 +268,8 @@ services:
 #### Visual Studio Code
 
 Add the following configuration to your `launch.json`
-```
+
+```json
 {
     "version": "0.2.0",
     "configurations": [
@@ -268,9 +290,7 @@ You need to install the [php-xdebug-ext]
 
 [php-xdebug-ext]: https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug
 
-
-Licence
-=======
+## Licence
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

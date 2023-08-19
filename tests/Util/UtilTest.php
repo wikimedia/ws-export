@@ -15,6 +15,7 @@ class UtilTest extends TestCase {
 	public function testEncodeString() {
 		$this->assertStringEndsWith( '_test_dou', Util::encodeString( 'test_Δôü' ) );
 		$this->assertStringEndsWith( '_foo', Util::encodeString( 'foo' ) );
+		$this->assertStringEndsWith( '_ae_th_eh_ng', Util::encodeString( 'æ,þ,η,ŋ' ) );
 		$this->assertStringEndsWith( '_._____', Util::encodeString( '.-!:?$' ) );
 		$this->assertStringEndsWith( '__', Util::encodeString( '🎉' ) );
 	}

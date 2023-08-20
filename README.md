@@ -8,7 +8,7 @@ The documentation can be found here:
 
 ## Requirements
 
-* PHP 7.3 or 7.4
+* PHP 7.3 or above
 * [Composer](http://getcomposer.org/)
 * The `fc-list` command
 * The following fonts (optional, but required for development):
@@ -18,7 +18,9 @@ The documentation can be found here:
   * `fonts-gubbi`
   * `fonts-opendyslexic`
 
-## Contributing
+## Development installation (without Docker)
+
+This section deals with a full installation of WS Export on the local development machine. For Docker installation instructions, see below.
 
 1. Get the source code:
 
@@ -82,38 +84,39 @@ The documentation can be found here:
    the `fonts-linuxlibertine` package.
    You can also install any other fonts you want to use for exporting books.
 
-6. WS Export has two uses of databases:
-   firstly, a local database to store download statistics;
-   and secondly, it connects to the remote Wikimedia database replicas
+6. WS Export uses two database connections:
+   firstly, to its own database to store download statistics;
+   and secondly, it connects to the Wikimedia database replicas
    to fetch information about Wikisource contributors
    for the credits list that can be included at the end of exported books.
 
-   For the first (statistics recording) you add the database user
-   and add these details to `.env.local`:
+   For the statistics recording database you create the the database
+   and add connection details to `.env.local`:
 
    ```console
    DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name
    ```
 
-7. Then create the database with `./bin/console doctrine:database:create`
-   and run the migrations with `./bin/console doctrine:migrations:migrate`
+7. Then create the database tables with:
 
-8. This tool uses the [Toolforge Bundle](https://github.com/wikimedia/ToolforgeBundle),
-   and it connects to [multiple databases](https://github.com/wikimedia/ToolforgeBundle#replicas-connection-manager).
+   ```
+   ./bin/console doctrine:migrations:migrate`
+   ```
 
-   * Set replicas credentials in the `.env.local` file.
+8. To connect to the Wikimedia replicas, this tool uses
+   the [Toolforge Bundle](https://github.com/wikimedia/ToolforgeBundle),
+   and connects to [multiple databases](https://github.com/wikimedia/ToolforgeBundle#replicas-connection-manager).
 
-   * Establish an SSH tunnel to the replicas (only necessary on local environments)
+   Set replicas credentials in your `.env.local` file according to the Bundle's documentation.
 
-     ```console
-     ./bin/console toolforge:ssh
-     ```
+9. Establish an SSH tunnel to the replicas:
 
-   * Bind address for docker enviroments
+  ```console
+  ./bin/console toolforge:ssh
+  ```
 
-     ```console
-     ./bin/console toolforge:ssh --bind-address=0.0.0.0
-     ```
+10. At this point, you should be able to use all of the functionality
+    of WS Export both via the web interface and CLI.
 
 ## CLI Usage
 

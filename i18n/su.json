@@ -56,5 +56,11 @@
 	"exception-rest-page-not-found": "Pustaka '$1' teu kapanggih.",
 	"learn-more": "Lenyepan.",
 	"error-blocked-1": "Alamat IP anjeun keur dipeungpeuk.",
-	"error-blocked-2": "Pikeun nyegah otomasi anu ngaruksak, Expor WS nolak aksés ti pamaké anu geus kaluar log anu sacara global dipeungpeuk di sakur wiki Wikimédia."
+	"error-blocked-2": "Pikeun nyegah otomasi anu ngaruksak, Expor WS nolak aksés ti pamaké anu geus kaluar log anu sacara global dipeungpeuk di sakur wiki Wikimédia.",
+	"error-fix": "Mangga cobian léngkah ieu upami anjeun mendakan kasalahan:",
+	"error-fix-again": "Coba undeur deui bukuna.",
+	"error-fix-epub": "Coba undeur buku salaku berkas EPUB.",
+	"error-fix-nocredits": "Céntang kotak dina 'Pilihan' pikeun ngahapus pangajén",
+	"error-fix-noimages": "Céntang kotak dina 'Pilihan' pikeun ngahapus gambar.",
+	"error-breadcrumb": "Kasalahan $1"
 }

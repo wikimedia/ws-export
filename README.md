@@ -124,7 +124,6 @@ This section deals with a full installation of WS Export on the local developmen
 
 Export lots of books and report some info.
 
-
 ```console
 app:benchmark [-l|--lang LANG] [-f|--format FORMAT] [--nocache] [-t|--title TITLE] [-c|--count COUNT]
 ```
@@ -142,7 +141,6 @@ app:benchmark [-l|--lang LANG] [-f|--format FORMAT] [--nocache] [-t|--title TITL
 
 Run epubcheck on books. With no options set, this will check 10 random books from English Wikisource. Note that the random 10 will be cached (for repeatability) unless you use <info>--nocache</info>.
 
-
 ```console
 app:check [-l|--lang LANG] [--nocache] [-t|--title TITLE] [-c|--count COUNT] [-s|--namespaces NAMESPACES]
 ```
@@ -158,7 +156,6 @@ app:check [-l|--lang LANG] [--nocache] [-t|--title TITLE] [-c|--count COUNT] [-s
 ### app:export
 
 Export a book.
-
 
 ```console
 app:export [-l|--lang LANG] [-t|--title TITLE] [-f|--format FORMAT] [-p|--path PATH] [--nocache] [--nocredits]
@@ -176,7 +173,6 @@ app:export [-l|--lang LANG] [-t|--title TITLE] [-f|--format FORMAT] [-p|--path P
 ### app:opds
 
 Generate an OPDS file.
-
 
 ```console
 app:opds [-l|--lang LANG] [-c|--category CATEGORY]

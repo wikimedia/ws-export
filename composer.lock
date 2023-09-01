@@ -7424,16 +7424,16 @@
         },
         {
             "name": "samwilson/console-readme-generator",
-            "version": "0.3.1",
+            "version": "0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/samwilson/console-readme-generator.git",
-                "reference": "9ca294f11a1ded0105db013527dd8297fb493626"
+                "reference": "598bd2c3ff646245791e90d2de553c1d1be9fa6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/samwilson/console-readme-generator/zipball/9ca294f11a1ded0105db013527dd8297fb493626",
-                "reference": "9ca294f11a1ded0105db013527dd8297fb493626",
+                "url": "https://api.github.com/repos/samwilson/console-readme-generator/zipball/598bd2c3ff646245791e90d2de553c1d1be9fa6a",
+                "reference": "598bd2c3ff646245791e90d2de553c1d1be9fa6a",
                 "shasum": ""
             },
             "require": {
@@ -7466,9 +7466,9 @@
             "description": "A tool to add command documentation",
             "support": {
                 "issues": "https://github.com/samwilson/console-readme-generator/issues",
-                "source": "https://github.com/samwilson/console-readme-generator/tree/0.3.1"
+                "source": "https://github.com/samwilson/console-readme-generator/tree/0.3.2"
             },
-            "time": "2023-09-01T00:07:14+00:00"
+            "time": "2023-09-01T02:44:04+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

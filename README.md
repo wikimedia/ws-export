@@ -120,23 +120,6 @@ This section deals with a full installation of WS Export on the local developmen
 
 ## CLI Usage
 
-### app:benchmark
-
-Export lots of books and report some info.
-
-```console
-app:benchmark [-l|--lang LANG] [-f|--format FORMAT] [--nocache] [-t|--title TITLE] [-c|--count COUNT]
-```
-
-* `--lang` `-l` — Wikisource language code.
-  Default: 'en'
-* `--format` `-f` — What formats to export (comma-separated list)
-  Default: 'epub,pdf'
-* `--nocache` — Do not cache anything (re-fetch all data).
-* `--title` `-t` — Wiki page name of a single work to check.
-* `--count` `-c` — How many times to export.
-  Default: 10
-
 ### app:check
 
 Run epubcheck on books. With no options set, this will check 10 random books from English Wikisource. Note that the random 10 will be cached (for repeatability) unless you use <info>--nocache</info>.

@@ -82,6 +82,7 @@ class Util {
 		return $html . '<body>' . $content . '</body></html>';
 	}
 
+	// Replace non-ASCII characters with ASCII equivalents.
 	public static function encodeString( $string ) {
 		static $map = [];
 		static $num = 0;
@@ -90,13 +91,9 @@ class Util {
 			return $map[$string];
 		}
 		$map[$string] = $string;
-		$search = [ '[αάàâäΑÂÄ]', '[βΒ]', '[Ψç]', '[δΔ]', '[εéèêëΕÊË]', '[η]', '[φϕΦ]', '[γΓ]', '[θΘ]', '[ιîïΙÎÏ]', '[Κκ]', '[λΛ]', '[μ]', '[ν]', '[οôöÔÖ]', '[Ωω]', '[πΠ]', '[Ψψ]', '[ρΡ]', '[σΣ]', '[τ]', '[υûùüΥÛÜ]', '[ξΞ]', '[ζΖ]', '[ ]', '[^a-zA-Z0-9_\.]' ];
-		$replace = [ 'a', 'b', 'c', 'd', 'e', 'eh', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'oh', 'p', 'ps', 'r', 's', 't', 'u', 'x', 'z', '_', '_' ];
-		mb_regex_encoding( 'UTF-8' );
-		foreach ( $search as $i => $pat ) {
-			$map[$string] = mb_eregi_replace( $pat, $replace[$i], $map[$string] );
-		}
-		$map[$string] = 'c' . $num . '_' . static::cutFilename( mb_convert_encoding( $map[$string], 'ISO-8859-1', 'UTF-8' ) );
+		$map[$string] = transliterator_transliterate( 'Any-Latin; Latin-ASCII', $map[$string] );
+		$map[$string] = mb_ereg_replace( '[^a-zA-Z0-9_.]', '_', $map[$string] );
+		$map[$string] = 'c' . $num . '_' . static::cutFilename( $map[$string] );
 		$num++;
 
 		return $map[$string];

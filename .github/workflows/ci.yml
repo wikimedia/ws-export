@@ -64,3 +64,5 @@ jobs:
         composer test
         ./bin/phpunit --exclude-group=exclude-from-ci
         npm test
+        git status
+        git status | grep "nothing added to commit"

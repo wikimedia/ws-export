@@ -1,0 +1,28 @@
+{
+	"@metadata": {
+		"authors": [
+			"Atzerritik"
+		]
+	},
+	"app-title": "Wikisource Book Export",
+	"app-subtitle": "Esportatu Wikisources-etik liburuak fitxategi formatu ezberdinetan.",
+	"logo-alt-text": "Wikisource logotipoa, iceberg baten ilustrazio zuri urdina.",
+	"issue-button": "Sortu arazoa",
+	"back-to-wikisource": "Itzuli Wikisourcera",
+	"previous-alt-text": "Esteka Wikisourcera itzultzen dela adierazten duen atzerantz begira dagoen gezi-ikonoa.",
+	"export-book": "Esportatu liburu bat",
+	"lang-field-label": "Wikiteka",
+	"lang-field-help": "Liburua esportatzeko Wikiteka.",
+	"title-field-label": "Izenburua",
+	"format-field-label": "Fitxategi formatuak",
+	"format-epub-3": "EPUB 3 (irakurle gehienentzat)",
+	"format-epub-2": "EPUB 2 (zaharkituta, erabilgarria izan daiteke irakurle zahar batzuentzat)",
+	"format-mobi": "MOBI (Kindleerako)",
+	"format-pdf-a4": "PDF - A4 tamaina",
+	"format-pdf-a5": "PDF - A5 tamaina",
+	"format-pdf-a6": "PDF - A6 tamaina",
+	"format-pdf-letter": "PDF - AEBetako letra tamaina",
+	"format-rtf": "RTF",
+	"exceeded-rate-limitation": "Eskaera gehiegi egiten ari zara denbora tarte laburrean. Mesedez, itxaron $1 {{PLURAL:$1| minutu|minutu}} tresna hau berriro kargatu baino lehen, edo hasi saioa berriro gerta ez dadin.",
+	"exception-invalid-format": "\" $1 \" ez da baliozko formatua. Baliozko formatuak hauek dira: $2"
+}

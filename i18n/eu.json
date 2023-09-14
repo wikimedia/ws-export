@@ -5,8 +5,12 @@
 		]
 	},
 	"app-title": "Wikisource Book Export",
+	"app-title-html": "$1 liburu esportatu",
 	"app-subtitle": "Esportatu Wikisources-etik liburuak fitxategi formatu ezberdinetan.",
 	"logo-alt-text": "Wikisource logotipoa, iceberg baten ilustrazio zuri urdina.",
+	"footer-version": "Hau $1 $2 bertsioa da.",
+	"version": "$1 bertsioa",
+	"license-link": "GPL v2 edo berriagoa",
 	"issue-button": "Sortu arazoa",
 	"back-to-wikisource": "Itzuli Wikisourcera",
 	"previous-alt-text": "Esteka Wikisourcera itzultzen dela adierazten duen atzerantz begira dagoen gezi-ikonoa.",

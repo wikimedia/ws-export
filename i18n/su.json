@@ -62,5 +62,6 @@
 	"error-fix-epub": "Coba undeur buku salaku berkas EPUB.",
 	"error-fix-nocredits": "Céntang kotak dina 'Pilihan' pikeun ngahapus pangajén",
 	"error-fix-noimages": "Céntang kotak dina 'Pilihan' pikeun ngahapus gambar.",
-	"error-breadcrumb": "Kasalahan $1"
+	"error-breadcrumb": "Kasalahan $1",
+	"error-login": "Mangga login ka WS Export pikeun nuluykeun."
 }

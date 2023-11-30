@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Adriendelucca"
+		]
+	},
+	"footer-version": "Hemañ zo $1 stumm $2.",
+	"version": "stumm $1",
+	"license-link": "GPL v2 pe diwezhatoc'h",
+	"source-link": "war Github",
+	"docs-link": "war Wikimammenn liesyezhek",
+	"statistics-link": "stadegoù",
+	"back-to-wikisource": "Distreiñ da Wikimammenn",
+	"export-book": "Ezporzhiañ ul levr",
+	"lang-field-label": "Wikimammenn",
+	"title-field-label": "Titl",
+	"format-field-label": "Furmad ar restr",
+	"format-htmlz": "HTML",
+	"format-pdf-a4": "PDF - Ment A4",
+	"format-pdf-a5": "PDF - Ment A5",
+	"format-pdf-a6": "PDF - Ment A6",
+	"font-field-label": "Font",
+	"no-font-option": "Hini ebet (ober gant an hini dre ziouer)",
+	"options-label": "Dibarzhioù",
+	"export-button": "Ezporzhiañ",
+	"alert-close": "Serriñ",
+	"export-failed": "Pellgargadur c'hwitet.",
+	"exception-rest-page-not-found": "N'haller ket kavout al levr \"$1\"",
+	"learn-more": "Gouzout hiroc'h.",
+	"error-breadcrumb": "Fazi $1",
+	"error-page-header": "Ur fazi zo bet",
+	"epub-title-page": "Titl ar bajenn",
+	"epub-exported-date": "Ezporzhiet diouzh Wikimammenn war $1",
+	"epub-about": "Diwar-benn"
+}

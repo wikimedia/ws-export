@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Atzerritik",
 			"Bruno44101",
 			"DDPAT",
 			"Hmonroy",
@@ -15,7 +16,7 @@
 	"statistics-link": "estadísticas",
 	"issue-button": "Crea asunto",
 	"title-field-label": "Título",
-	"title-field-help": "Título de la página principal del libro.",
+	"title-field-help": "Título del libro o sección a exportar.",
 	"format-field-label": "Formato de expediente",
 	"format-epub-3": "EPUB 3 (para la mayoría de ereaders)",
 	"format-htmlz": "HTML",
@@ -25,7 +26,7 @@
 	"format-pdf-a6": "PDF - A6 medida",
 	"format-pdf-letter": "PDF - medida carta de los EE.UU.",
 	"format-rtf": "RTF",
-	"exceeded-rate-limitation": "Está haciendo demasiadas solicitudes durante un corto período de tiempo. Espere $1 {{PLURAL:$1|minute|minutes}} antes de volver a cargar esta herramienta.",
+	"exceeded-rate-limitation": "Estás realizando demasiadas solicitudes durante un corto período de tiempo. Por favor espere $1 {{PLURAL:$1| minuto|minutos}} antes de recargar esta herramienta, o inicie sesión para evitar que esto vuelva a suceder.",
 	"font-field-label": "Fuente",
 	"options-label": "Opciones",
 	"credits-field-label": "Excluir créditos a los editores (para una descarga más rápida)",

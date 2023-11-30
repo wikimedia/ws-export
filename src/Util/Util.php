@@ -74,7 +74,7 @@ class Util {
 		if ( $lang != null ) {
 			$html .= ' xml:lang="' . $lang . '" dir="' . static::getLanguageDirection( $lang ) . '"';
 		}
-		$html .= '><head><meta content="application/xhtml+xml;charset=UTF-8" http-equiv="default-style" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head>';
+		$html .= '><head><meta charset="UTF-8" content="application/xhtml+xml;charset=UTF-8" http-equiv="default-style" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head>';
 
 		if ( $bodyPosition ) {
 			return $html . $content;
@@ -183,7 +183,7 @@ class Util {
 	public static function buildDOMDocumentFromHtml( string $html ): DOMDocument {
 		$document = new DOMDocument( '1.0', 'UTF-8' );
 		libxml_use_internal_errors( true );
-		$document->loadHTML( mb_convert_encoding( str_replace( '<?xml version="1.0" encoding="UTF-8" ?>', '', $html ), 'HTML-ENTITIES', 'UTF-8' ) );
+		$document->loadHTML( str_replace( '<?xml version="1.0" encoding="UTF-8" ?>', '', $html ), LIBXML_HTML_NODEFDTD );
 		libxml_clear_errors();
 		$document->encoding = 'UTF-8';
 		return $document;

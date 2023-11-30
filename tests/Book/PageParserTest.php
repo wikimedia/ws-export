@@ -81,14 +81,14 @@ class PageParserTest extends TestCase {
 
 	public function testCleanIds() {
 		$doc1 = new DOMDocument();
-		$doc1->loadHTML( '<span id="1"></span><span id="lorem"></span><a id=".123 foo:bar" href="/foobar#1"></a>' );
+		$doc1->loadHTML( '<span id="1"></span><span id="lorem"></span><a id=".123 foo:bar" href="/foobar#1">t</a>' );
 		$pageParser = new PageParser( $doc1 );
 		$doc2 = new DOMDocument();
 		$doc2->loadHTML( '<span id="1"></span><span id="lorem"></span>' );
 		$pageParser2 = new PageParser( $doc2 );
 
 		// Parse the documents.
-		$html = $pageParser->getContent( false )->saveHTML();
+		$html = $pageParser->getContent( false )->saveXML();
 		$pageParser2->getContent( false );
 
 		// Test outputs.
@@ -99,8 +99,8 @@ class PageParserTest extends TestCase {
 		$this->assertArrayHasKey( 'lorem-n9', PageParser::getIds() );
 		$this->assertArrayHasKey( 'id-.123_foo:bar', PageParser::getIds() );
 
-		$this->assertStringContainsString( '<span id="id-1"></span>', $html );
-		$this->assertStringContainsString( '<a id="id-.123_foo:bar" href="/foobar#id-1"></a>', $html );
+		$this->assertStringContainsString( '<span id="id-1"/>', $html );
+		$this->assertStringContainsString( '<a id="id-.123_foo:bar" href="/foobar#id-1">t</a>', $html );
 	}
 
 	private function parseFile( $filename ) {
@@ -110,32 +110,44 @@ class PageParserTest extends TestCase {
 	}
 
 	/**
+	 * Test for T271390.
+	 */
+	public function testStyleParse() {
+		$html = '<style typeof="mw:Extension/templatestyles" about="#mwt55"><![CDATA[
+			.wst-flatlist li:after{ content:" ·"; }
+		]]></style>';
+		$doc = Util::buildDOMDocumentFromHtml( Util::getXhtmlFromContent( 'en', $html ) );
+		$pageParser = new PageParser( $doc );
+		$this->assertStringContainsString( 'content:" ·";', $pageParser->getContent( false )->saveXML() );
+	}
+
+	/**
 	 * @dataProvider provideAlignAttr()
 	 */
 	public function testAlignAttr( string $in, string $out ) {
 		$doc1 = new DOMDocument();
 		$doc1->loadHTML( $in );
 		$pageParser1 = new PageParser( $doc1 );
-		$this->assertStringContainsString( $out, $pageParser1->getContent( false )->saveHTML() );
+		$this->assertStringContainsString( $out, $pageParser1->getContent( false )->saveXML() );
 	}
 
 	public function provideAlignAttr() {
 		return [
 			[
-				'<table align="center"></table>',
-				'<table style="margin: auto;"></table>',
+				'<table align="center">x</table>',
+				'<table style="margin: auto;">x</table>',
 			],
 			[
-				'<table align="right"></table>',
-				'<table style="margin-left: auto;"></table>',
+				'<table align="right">x</table>',
+				'<table style="margin-left: auto;">x</table>',
 			],
 			[
-				'<div align="center" style="color: green"></div>',
-				'<div style="text-align: center; color: green"></div>',
+				'<div align="center" style="color: green">x</div>',
+				'<div style="text-align: center; color: green">x</div>',
 			],
 			[
-				'<div align="right"></div>',
-				'<div style="text-align: right;"></div>',
+				'<div align="right">x</div>',
+				'<div style="text-align: right;">x</div>',
 			],
 		];
 	}
@@ -145,7 +157,7 @@ class PageParserTest extends TestCase {
 	 * @dataProvider provideSubpageHrefs()
 	 */
 	public function testSubpageHrefs( string $title, string $html, array $subpages ) {
-		$doc = Util::buildDOMDocumentFromHtml( "<body>$html</body>" );
+		$doc = Util::buildDOMDocumentFromHtml( Util::getXhtmlFromContent( 'en', $html ) );
 		$pageParser = new PageParser( $doc );
 		$this->assertEquals( $subpages, $pageParser->getFullChaptersList( $title, [], [] ) );
 	}

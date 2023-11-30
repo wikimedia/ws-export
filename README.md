@@ -68,7 +68,9 @@ $ ./bin/console toolforge:ssh --bind-address=0.0.0.0
 
 Run epubcheck on books. With no options set, this will check 10 random books from English Wikisource. Note that the random 10 will be cached (for repeatability) unless you use <info>--nocache</info>.
 
-    app:check [-l|--lang LANG] [--nocache] [-t|--title TITLE] [-c|--count COUNT] [-s|--namespaces NAMESPACES]
+```console
+app:check [-l|--lang LANG] [--nocache] [-t|--title TITLE] [-c|--count COUNT] [-s|--namespaces NAMESPACES]
+```
 
 * `--lang` `-l` — Wikisource language code.
   Default: 'en'
@@ -82,7 +84,9 @@ Run epubcheck on books. With no options set, this will check 10 random books fro
 
 Export a book.
 
-    app:export [-l|--lang LANG] [-t|--title TITLE] [-f|--format FORMAT] [-p|--path PATH] [--nocache] [--nocredits]
+```console
+app:export [-l|--lang LANG] [-t|--title TITLE] [-f|--format FORMAT] [-p|--path PATH] [--nocache] [--nocredits]
+```
 
 * `--lang` `-l` — Wikisource language code.
 * `--title` `-t` — Wiki page name of the work to export. Required
@@ -97,7 +101,9 @@ Export a book.
 
 Generate an OPDS file.
 
-    app:opds [-l|--lang LANG] [-c|--category CATEGORY]
+```console
+app:opds [-l|--lang LANG] [-c|--category CATEGORY]
+```
 
 * `--lang` `-l` — Wikisource language code.
 * `--category` `-c` — Category name to export.

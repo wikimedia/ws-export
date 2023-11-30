@@ -3,19 +3,16 @@
 namespace App\Command;
 
 use App\BookCreator;
+use App\EpubCheck\EpubCheck;
 use App\FileCache;
 use App\GeneratorSelector;
 use App\Repository\CreditRepository;
-
 use App\Util\Api;
-use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Process;
-use ZipArchive;
 
 class CheckCommand extends Command {
 
@@ -34,15 +31,19 @@ class CheckCommand extends Command {
 	/** @var FileCache */
 	private $fileCache;
 
+	/** @var EpubCheck */
+	private $epubCheck;
+
 	/** @var SymfonyStyle */
 	private $io;
 
-	public function __construct( Api $api, GeneratorSelector $generatorSelector, CreditRepository $creditRepo, FileCache $fileCache ) {
+	public function __construct( Api $api, GeneratorSelector $generatorSelector, CreditRepository $creditRepo, FileCache $fileCache, EpubCheck $epubCheck ) {
 		parent::__construct();
 		$this->api = $api;
 		$this->generatorSelector = $generatorSelector;
 		$this->creditRepo = $creditRepo;
 		$this->fileCache = $fileCache;
+		$this->epubCheck = $epubCheck;
 	}
 
 	protected function configure() {
@@ -132,44 +133,23 @@ class CheckCommand extends Command {
 		$this->io->section( 'https://' . $this->api->getDomainName() . '/wiki/' . str_replace( ' ', '_', $page ) );
 		$creator = BookCreator::forApi( $this->api, 'epub-3', [ 'credits' => false ], $this->generatorSelector, $this->creditRepo, $this->fileCache );
 		$creator->create( $page );
-		$jsonOutput = $creator->getFilePath() . '_epubcheck.json';
-		$process = new Process( [ 'epubcheck', $creator->getFilePath(), '--json', $jsonOutput ] );
-		$process->run();
-		$errors = json_decode( file_get_contents( $jsonOutput ), true );
-		if ( !isset( $errors['messages'] ) ) {
-			throw new Exception( 'Unable to get results of epubcheck.' );
+		$results = $this->epubCheck->check( $creator->getFilePath() );
+		if ( count( $results ) === 0 ) {
+			return;
 		}
 		$hasErrors = false;
-		foreach ( $errors['messages'] as $message ) {
-			if ( $message['severity'] === 'ERROR' ) {
+		foreach ( $results as $result ) {
+			if ( $result->isError() ) {
 				$hasErrors = true;
-				$lineNum = $message['locations'][0]['line'];
-				$colNum = $message['locations'][0]['column'];
-				$this->io->warning(
-					"Line $lineNum column $colNum"
-					. ' of ' . $message['locations'][0]['path'] . ': '
-					. $message['message']
-				);
-				$zip = new ZipArchive();
-				$zip->open( $creator->getFilePath() );
-				$fileContents = $zip->getFromName( $message['locations'][0]['path'] );
-				$lines = explode( "\n", $fileContents );
-				$contextLines = array_slice( $lines, $lineNum - 2, 3, true );
-				foreach ( $contextLines as $l => $line ) {
-					if ( $l + 1 === $lineNum ) {
-						$line = substr( $line, 0, $colNum )
-							. '<error>' . substr( $line, $colNum, 1 ) . '</error>'
-							. substr( $line, $colNum + 1 );
-					}
-					$this->io->writeln( "<info>" . ( $l + 1 ) . ":</info> $line" );
+				$this->io->warning( $result->getMessage() );
+				$this->io->writeln( 'In ' . count( $result->getLocations() ) . ' location' . ( count( $result->getLocations() ) > 1 ? 's' : '' ) . ':' );
+				foreach ( $result->getLocations() as $locNum => $location ) {
+					$this->io->writeln( "    $locNum: <info>$location</info>" );
 				}
 			}
 		}
 		if ( !$hasErrors ) {
 			$this->io->success( 'No errors found in ' . $page . ' (however, there may be warnings etc.)' );
-		}
-		if ( file_exists( $jsonOutput ) ) {
-			unlink( $jsonOutput );
 		}
 		if ( file_exists( $creator->getFilePath() ) ) {
 			unlink( $creator->getFilePath() );

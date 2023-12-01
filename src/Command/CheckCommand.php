@@ -134,9 +134,6 @@ class CheckCommand extends Command {
 		$creator = BookCreator::forApi( $this->api, 'epub-3', [ 'credits' => false ], $this->generatorSelector, $this->creditRepo, $this->fileCache );
 		$creator->create( $page );
 		$results = $this->epubCheck->check( $creator->getFilePath() );
-		if ( count( $results ) === 0 ) {
-			return;
-		}
 		$hasErrors = false;
 		foreach ( $results as $result ) {
 			if ( $result->isError() ) {

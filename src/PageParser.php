@@ -277,6 +277,8 @@ class PageParser {
 		$this->removeNodesWithXpath( '//meta[starts-with(@property, "mw:PageProp/")]' );
 		// Remove <meta typeof="mw:Includes/NoInclude"/> and <meta typeof="mw:Includes/NoInclude/End"/>
 		$this->removeNodesWithXpath( '//meta[starts-with(@typeof, "mw:Includes/NoInclude")]' );
+		// Remove mw:Extension meta and link elements.
+		$this->removeNodesWithXpath( '//meta[starts-with(@typeof, "mw:Extension")]' );
 		$this->removeNodesWithXpath( '//link[contains(@typeof, "mw:Extension")]' );
 		$this->deprecatedNodes( 'big', 'span', 'font-size:large;' );
 		$this->deprecatedNodes( 'center', 'div', 'text-align:center;' );

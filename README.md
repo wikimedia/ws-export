@@ -1,15 +1,14 @@
-WS Export
-=========
+# WS Export
 
 ![CI](https://github.com/wikimedia/ws-export/workflows/CI/badge.svg)
 
 WS Export is a tool for exporting Wikisource books to many formats, such as EPUB or PDF.
 The documentation can be found here:
-https://wikisource.org/wiki/Wikisource:WS_Export
+<https://wikisource.org/wiki/Wikisource:WS_Export>
 
-Requirements
-============
-* PHP 7.3 or 7.4
+## Requirements
+
+* PHP 7.3 or above
 * [Composer](http://getcomposer.org/)
 * The `fc-list` command
 * The following fonts (optional, but required for development):
@@ -19,48 +18,106 @@ Requirements
   * `fonts-gubbi`
   * `fonts-opendyslexic`
 
-Installation
-============
+## Development installation (without Docker)
+
+This section deals with a full installation of WS Export on the local development machine. For Docker installation instructions, see [below](#docker-developer-environment).
 
 1. Get the source code:
 
-       git clone https://github.com/wikimedia/ws-export.git
-       cd tool
+   ```console
+   git clone https://github.com/wikimedia/ws-export.git
+   cd ws-export
+   ```
 
 2. Install dependencies:
 
-       composer install --no-dev
+   ```console
+   composer install
+   ```
 
-   Then create a `.env.local` file.
+   A few PHP extensions are required; if these are not installed, Composer will let you know
+   and you will need to install them with your operating system's package manager.
+   For example, in Debian-based Linux distributions:
 
-   * In order to export to PDF, plain text, RTF, or Mobi formats
-     you should also install [Calibre](https://calibre-ebook.com)
-     so that the tool can use the `ebook-convert` command.
-   * To validate exported ebooks (with the `./bin/console app:check` command),
-     you should also install
-     [epubcheck](https://github.com/w3c/epubcheck).
-     If it's not installed at `/usr/bin/epubcheck` then
-     set the `EPUBCHECK_JAR` environment variable.
-   * To run the integration tests, also install the `fonts-linuxlibertine` package.
+   ```console
+   apt install php-sqlite3 php-zip php-curl
+   ```
 
-3. Create a mysql database and database user
-   and add these details to `.env.local`.
+   Then create a `.env.local` file:
 
-4. Create the database with `./bin/console doctrine:database:create`
+   ```console
+   cp .env .env.local
+   ```
 
-5. Run the migrations with `./bin/console doctrine:migrations:migrate`
+   Edit `.env.local` and set `APP_ENV=dev` and `APP_SECRET` to a random string of your choice.
 
-6. This tool uses the [Toolforge Bundle](https://github.com/wikimedia/ToolforgeBundle), and it connects to [multiple databases](https://github.com/wikimedia/ToolforgeBundle#replicas-connection-manager).
-  * Set replicas credentials in the `.env.local` file.
+3. [Install Symfony CLI](https://symfony.com/download#step-1-install-symfony-cli)
+   and start the development web server with:
 
-  * Establish an SSH tunnel to the replicas (only necessary on local environments)
-```bash
-$ ./bin/console toolforge:ssh
-```
-  * Bind address for docker enviroments
-```bash
-$ ./bin/console toolforge:ssh --bind-address=0.0.0.0
-```
+   ```console
+   symfony server:start -d
+   ```
+
+4. Open your web browser to e.g. <http://localhost:8000>
+   and the basic operations should be working with the following limitations:
+   * you can only export to EPUB format; and
+   * you must check the 'Exclude credits' option,
+     to avoid querying the database for usernames.
+
+   Continue on for setting up more exporting and development options.
+
+5. Install optional dependencies:
+
+   **Calibre:**
+   In order to export to PDF, plain text, RTF, or Mobi formats
+   you must install [Calibre](https://calibre-ebook.com)
+   so that the tool can use the `ebook-convert` command.
+
+   **epubcheck:**
+   To validate exported ebooks (with the [`./bin/console app:check` command](#appcheck)),
+   you must install [epubcheck](https://github.com/w3c/epubcheck).
+   If it is installed at a location other than `/usr/bin/epubcheck`, then
+   set the `EPUBCHECK_JAR` environment variable to the correct path.
+
+   **Fonts:**
+   To run the integration tests, also install
+   the `fonts-linuxlibertine` package.
+   You can also install any other fonts you want to use for exporting books.
+
+6. WS Export uses two database connections:
+   firstly, to its own database to store download statistics;
+   and secondly, it connects to the Wikimedia database replicas
+   to fetch information about Wikisource contributors
+   for the credits list that can be included at the end of exported books.
+
+   For the statistics recording database you need to create the the database
+   and add connection details to `.env.local`:
+
+   ```console
+   DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name
+   ```
+
+7. Then create the database tables with:
+
+   ```
+   ./bin/console doctrine:migrations:migrate`
+   ```
+
+8. To connect to the Wikimedia replicas, this tool uses
+   the [Toolforge Bundle](https://github.com/wikimedia/ToolforgeBundle),
+   and connects to [multiple databases](https://github.com/wikimedia/ToolforgeBundle#replicas-connection-manager).
+
+   Set the replicas' credentials in your `.env.local` file
+   according to the Bundle's documentation.
+
+9. Establish an SSH tunnel to the replicas:
+
+  ```console
+  ./bin/console toolforge:ssh
+  ```
+
+10. At this point, you should be able to use all of the functionality
+    of WS Export, via both the web interface and the CLI.
 
 ## CLI Usage
 
@@ -68,7 +125,9 @@ $ ./bin/console toolforge:ssh --bind-address=0.0.0.0
 
 Run epubcheck on books. With no options set, this will check 10 random books from English Wikisource. Note that the random 10 will be cached (for repeatability) unless you use <info>--nocache</info>.
 
-    app:check [-l|--lang LANG] [--nocache] [-t|--title TITLE] [-c|--count COUNT] [-s|--namespaces NAMESPACES]
+```console
+app:check [-l|--lang LANG] [--nocache] [-t|--title TITLE] [-c|--count COUNT] [-s|--namespaces NAMESPACES]
+```
 
 * `--lang` `-l` — Wikisource language code.
   Default: 'en'
@@ -82,7 +141,9 @@ Run epubcheck on books. With no options set, this will check 10 random books fro
 
 Export a book.
 
-    app:export [-l|--lang LANG] [-t|--title TITLE] [-f|--format FORMAT] [-p|--path PATH] [--nocache] [--nocredits]
+```console
+app:export [-l|--lang LANG] [-t|--title TITLE] [-f|--format FORMAT] [-p|--path PATH] [--nocache] [--nocredits]
+```
 
 * `--lang` `-l` — Wikisource language code.
 * `--title` `-t` — Wiki page name of the work to export. Required
@@ -97,7 +158,9 @@ Export a book.
 
 Generate an OPDS file.
 
-    app:opds [-l|--lang LANG] [-c|--category CATEGORY]
+```console
+app:opds [-l|--lang LANG] [-c|--category CATEGORY]
+```
 
 * `--lang` `-l` — Wikisource language code.
 * `--category` `-c` — Category name to export.
@@ -107,9 +170,10 @@ Generate an OPDS file.
 Run `composer install` to install dependencies required for testing.
 
 Make sure the test database is created and migrations are up-to-date:
-```bash
-$ ./bin/console doctrine:database:create --env=test
-$ ./bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+```console
+./bin/console doctrine:database:create --env=test
+./bin/console doctrine:migrations:migrate --env=test --no-interaction
 ```
 
 You only need to run the first command once, and the second one only
@@ -117,26 +181,25 @@ when new migrations are created.
 
 Tests are located in the `tests/` directory, to run them:
 
-```bash
-$ ./bin/phpunit --exclude-group integration
-$ ./bin/phpunit --group integration # runs integration tests (slow)
+```console
+./bin/phpunit --exclude-group integration
+./bin/phpunit --group integration # runs integration tests (slow)
 ```
 
 You can also run code linting etc. with `composer test`.
 
-Docker Developer Environment
-============================
+## Docker Developer Environment
 
 Wikisource export can also be run for development using Docker Compose. _(beta, only tested on linux)_
 
 The default environment provides PHP, Apache, Calibre, Epubcheck and a MariaDB database.
 
-### Requirements
+### Docker requirements
 
 You'll need a locally running Docker and Docker Compose:
 
-  - [Docker installation instructions][docker-install]
-  - [Docker Compose installation instructions][docker-compose]
+* [Docker installation instructions][docker-install]
+* [Docker Compose installation instructions][docker-compose]
 
 [docker-install]: https://docs.docker.com/install/
 [docker-compose]: https://docs.docker.com/compose/install/
@@ -146,50 +209,58 @@ You'll need a locally running Docker and Docker Compose:
 ### Quickstart
 
 Modify or create `.env.local`. This config uses the database container defaults.
-```
+
+```console
 DATABASE_URL=mysql://root:@database:3306/wsexport
 ```
 
 Do the same for the test database at `.env.test.local`, but giving a different database name:
-```
+
+```console
 DATABASE_URL=mysql://root:@database:3306/wsexport_test
 ```
 
 Make sure you cd into `./docker`
 
-```bash
+```console
 cd ./docker 
 ```
 
 Run the following command to add your user ID and group ID to your `.env` file:
 
-```bash
+```console
 echo "WS_DOCKER_UID=$(id -u)
 WS_DOCKER_GID=$(id -g)" >> ./.env
 ```
 
 Optionally, set the port in `.env` (default is 8888):
-```bash
+
+```console
 WS_EXPORT_PORT=18000
 ```
 
 Start the environment and install
 
-```bash
+```console
 # -d is detached mode - runs containers in the background:
 docker-compose build && docker-compose up -d
 docker-compose exec wsexport composer install
 docker-compose exec wsexport ./bin/console doctrine:migrations:migrate --no-interaction
 ```
 
-Wikisource Export should be up at http://localhost:8888/ (or the configured port)
+Wikisource Export should be up at <http://localhost:8888/> (or the configured port)
 
 ### Cache
+
 Go to `/refresh` to clear the cache
 
 ### Setup Xdebug
-Xdebug is disabled by default. If you need to enable it you can do so via an env variable by creating a `./docker/docker-compose.override.yml` file with the following content
-```
+
+Xdebug is disabled by default.
+If you need to enable it, you can do so via an environment variable,
+by creating a `./docker/docker-compose.override.yml` file with the following content:
+
+```yaml
 version: '3.7'
 services:
   wsexport:
@@ -200,7 +271,8 @@ services:
 #### Visual Studio Code
 
 Add the following configuration to your `launch.json`
-```
+
+```json
 {
     "version": "0.2.0",
     "configurations": [
@@ -221,9 +293,7 @@ You need to install the [php-xdebug-ext]
 
 [php-xdebug-ext]: https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug
 
-
-Licence
-=======
+## Licence
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

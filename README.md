@@ -20,7 +20,7 @@ The documentation can be found here:
 
 ## Development installation (without Docker)
 
-This section deals with a full installation of WS Export on the local development machine. For Docker installation instructions, see below.
+This section deals with a full installation of WS Export on the local development machine. For Docker installation instructions, see [below](#docker-developer-environment).
 
 1. Get the source code:
 

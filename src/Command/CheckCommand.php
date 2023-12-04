@@ -136,9 +136,13 @@ class CheckCommand extends Command {
 		$results = $this->epubCheck->check( $creator->getFilePath() );
 		$hasErrors = false;
 		foreach ( $results as $result ) {
-			if ( $result->isError() ) {
+			if ( $result->isError() || $result->isWarning() ) {
 				$hasErrors = true;
-				$this->io->warning( $result->getMessage() );
+				if ( $result->isError() ) {
+					$this->io->error( $result->getMessage() );
+				} else {
+					$this->io->warning( $result->getMessage() );
+				}
 				$this->io->writeln( 'In ' . count( $result->getLocations() ) . ' location' . ( count( $result->getLocations() ) > 1 ? 's' : '' ) . ':' );
 				foreach ( $result->getLocations() as $locNum => $location ) {
 					$this->io->writeln( "    $locNum: <info>$location</info>" );
@@ -146,7 +150,7 @@ class CheckCommand extends Command {
 			}
 		}
 		if ( !$hasErrors ) {
-			$this->io->success( 'No errors found in ' . $page . ' (however, there may be warnings etc.)' );
+			$this->io->success( 'No errors or warnings found in ' . $page );
 		}
 		if ( file_exists( $creator->getFilePath() ) ) {
 			unlink( $creator->getFilePath() );

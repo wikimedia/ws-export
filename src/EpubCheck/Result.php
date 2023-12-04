@@ -26,6 +26,10 @@ class Result {
 		return $this->severity === 'ERROR';
 	}
 
+	public function isWarning(): bool {
+		return $this->severity === 'WARNING';
+	}
+
 	public function getMessage(): string {
 		return $this->message;
 	}

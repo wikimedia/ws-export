@@ -59,7 +59,7 @@ This section deals with a full installation of WS Export on the local developmen
    ```
 
 4. Open your web browser to e.g. <http://localhost:8000>
-   and the basic operations should be working with the following requirements:
+   and the basic operations should be working with the following limitations:
    * you can only export to EPUB format; and
    * you must check the 'Exclude credits' option,
      to avoid querying the database for usernames.

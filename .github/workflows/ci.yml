@@ -21,15 +21,16 @@ jobs:
           - '3306:3306'
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
-    env:
-      APP_ENV: test
-      DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=5.7
-      EPUBCHECK_JAR: /home/runner/work/tool/tool/epubcheck-4.2.4/epubcheck.jar
-
     strategy:
       matrix:
         os: [ ubuntu-latest ]
         php: [ '7.3', '7.4', '8.0', '8.1', '8.2' ]
+        epubcheck: [ '4.2.4', '5.0.0' ]
+    
+    env:
+      APP_ENV: test
+      DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=5.7
+      EPUBCHECK_JAR: /home/runner/work/tool/tool/epubcheck-${{matrix.epubcheck}}/epubcheck.jar
 
     runs-on: ${{matrix.os}}
 
@@ -50,8 +51,8 @@ jobs:
         sudo apt-get install fonts-freefont-ttf fonts-linuxlibertine fonts-dejavu-core fonts-gubbi fonts-opendyslexic libegl1 libopengl0 libxcb-cursor0 -y
         sudo mkdir /usr/share/desktop-directories/
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
-        wget https://github.com/w3c/epubcheck/releases/download/v4.2.4/epubcheck-4.2.4.zip
-        unzip epubcheck-4.2.4.zip
+        wget https://github.com/w3c/epubcheck/releases/download/v${{matrix.epubcheck}}/epubcheck-${{matrix.epubcheck}}.zip
+        unzip epubcheck-${{matrix.epubcheck}}.zip
 
     - name: Install WSExport
       run: |

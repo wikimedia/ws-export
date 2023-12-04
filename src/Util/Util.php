@@ -74,7 +74,7 @@ class Util {
 		if ( $lang != null ) {
 			$html .= ' xml:lang="' . $lang . '" dir="' . static::getLanguageDirection( $lang ) . '"';
 		}
-		$html .= '><head><meta charset="UTF-8" content="application/xhtml+xml;charset=UTF-8" http-equiv="default-style" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head>';
+		$html .= '><head><meta charset="UTF-8" /><link type="text/css" rel="stylesheet" href="main.css" /><title>' . $title . '</title></head>';
 
 		if ( $bodyPosition ) {
 			return $html . $content;

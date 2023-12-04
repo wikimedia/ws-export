@@ -74,10 +74,10 @@ This section deals with a full installation of WS Export on the local developmen
    so that the tool can use the `ebook-convert` command.
 
    **epubcheck:**
-   To validate exported ebooks (with the `./bin/console app:check` command),
+   To validate exported ebooks (with the [`./bin/console app:check` command](#appcheck)),
    you must install [epubcheck](https://github.com/w3c/epubcheck).
-   If it's not installed at `/usr/bin/epubcheck` then
-   set the `EPUBCHECK_JAR` environment variable.
+   If it is installed at a location other than `/usr/bin/epubcheck`, then
+   set the `EPUBCHECK_JAR` environment variable to the correct path.
 
    **Fonts:**
    To run the integration tests, also install
@@ -90,7 +90,7 @@ This section deals with a full installation of WS Export on the local developmen
    to fetch information about Wikisource contributors
    for the credits list that can be included at the end of exported books.
 
-   For the statistics recording database you create the the database
+   For the statistics recording database you need to create the the database
    and add connection details to `.env.local`:
 
    ```console
@@ -107,7 +107,8 @@ This section deals with a full installation of WS Export on the local developmen
    the [Toolforge Bundle](https://github.com/wikimedia/ToolforgeBundle),
    and connects to [multiple databases](https://github.com/wikimedia/ToolforgeBundle#replicas-connection-manager).
 
-   Set replicas credentials in your `.env.local` file according to the Bundle's documentation.
+   Set the replicas' credentials in your `.env.local` file
+   according to the Bundle's documentation.
 
 9. Establish an SSH tunnel to the replicas:
 
@@ -116,7 +117,7 @@ This section deals with a full installation of WS Export on the local developmen
   ```
 
 10. At this point, you should be able to use all of the functionality
-    of WS Export both via the web interface and CLI.
+    of WS Export, via both the web interface and the CLI.
 
 ## CLI Usage
 

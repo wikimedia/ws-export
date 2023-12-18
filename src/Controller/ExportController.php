@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Book;
 use App\BookCreator;
 use App\Entity\GeneratedBook;
 use App\Exception\WsExportException;
 use App\FileCache;
 use App\FontProvider;
 use App\GeneratorSelector;
+use App\Message\CreateBookMessage;
 use App\Refresh;
 use App\Repository\CreditRepository;
 use App\Util\Api;
@@ -23,6 +25,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Messenger\MessageBusInterface;
 // phpcs:ignore
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -79,6 +82,7 @@ class ExportController extends AbstractController {
 	 */
 	public function home(
 		Request $request,
+		MessageBusInterface $bus,
 		Api $api,
 		FontProvider $fontProvider,
 		GeneratorSelector $generatorSelector,
@@ -102,7 +106,7 @@ class ExportController extends AbstractController {
 		$response = new Response();
 		if ( $request->query->get( 'page' ) ) {
 			try {
-				return $this->export( $request, $api, $fontProvider, $generatorSelector, $creditRepo, $fileCache );
+				return $this->export( $request, $bus, $api, $fontProvider, $generatorSelector, $creditRepo, $fileCache );
 			} catch ( WsExportException $ex ) {
 				$exception = $ex;
 				$response->setStatusCode( $ex->getResponseCode() );
@@ -131,6 +135,7 @@ class ExportController extends AbstractController {
 
 	private function export(
 		Request $request,
+		MessageBusInterface $bus,
 		Api $api,
 		FontProvider $fontProvider,
 		GeneratorSelector $generatorSelector,
@@ -138,7 +143,7 @@ class ExportController extends AbstractController {
 		FileCache $fileCache
 	) {
 		// Get params.
-		$page = $request->query->get( 'page' );
+		$page = $this->getTitle( $request );
 		$format = $this->getFormat( $request );
 		$font = $this->getFont( $request, $fontProvider );
 		// The `credits` checkbox submits as 'false' to disable, so needs extra filtering.
@@ -152,31 +157,48 @@ class ExportController extends AbstractController {
 		}
 
 		// Generate ebook.
-		$options = [ 'images' => $images, 'fonts' => $font, 'credits' => $credits ];
+
+		$options = [ 'images' => $images, 'fonts' => $font, 'credits' => $credits, 'categories' => false ];
 		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector, $creditRepo, $fileCache );
-		$creator->create( $page );
 
-		// Send file.
-		$response = new BinaryFileResponse( $creator->getFilePath() );
-		$response->headers->set( 'X-Robots-Tag', 'none' );
-		$response->headers->set( 'Content-Description', 'File Transfer' );
-		$response->headers->set( 'Content-Type', $creator->getMimeType() );
-		$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $creator->getFilename() );
-		$response->deleteFileAfterSend();
+		$book = new Book();
+		$book->lang = $api->getLang();
+		$book->title = $page;
+		$book->options = $options;
 
-		// Log book generation.
-		if ( $this->enableStats ) {
-			try {
-				$genBook = new GeneratedBook( $creator->getBook(), $format, $this->stopwatch->stop( 'generate-book' ) );
-				$this->entityManager->persist( $genBook );
-				$this->entityManager->flush();
-			} catch ( DriverException $e ) {
-				// There was an error writing to tools-db.
-				// Silently ignore as this shouldn't prevent the book from being downloaded.
+		$filePathHash = md5( serialize( $book ) . $format );
+		$filePath = $fileCache->getDirectory() . '/ebook_' . $filePathHash . '.' . $creator->getExtension();
+
+		$bus->dispatch( new CreateBookMessage( $book, $filePath, $format ) );
+
+		for ( $i = 0; $i < 30; $i++ ) {
+			if ( file_exists( $filePath ) ) {
+				// Send file.
+				$response = new BinaryFileResponse( $filePath );
+				$response->headers->set( 'X-Robots-Tag', 'none' );
+				$response->headers->set( 'Content-Description', 'File Transfer' );
+				$response->headers->set( 'Content-Type', $creator->getMimeType() );
+				$filename = str_replace( [ '/', '\\' ], '_', $page ) . '.' . $creator->getExtension();
+				$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename );
+				$response->deleteFileAfterSend();
+
+				// Log book generation.
+				if ( $this->enableStats ) {
+					try {
+						$genBook = new GeneratedBook( $book, $format, $this->stopwatch->stop( 'generate-book' ) );
+						$this->entityManager->persist( $genBook );
+						$this->entityManager->flush();
+					} catch ( DriverException $e ) {
+						// There was an error writing to tools-db.
+						// Silently ignore as this shouldn't prevent the book from being downloaded.
+					}
+				}
+				return $response;
 			}
+			sleep( 1 );
 		}
 
-		return $response;
+		throw new WsExportException( 'error-no-file-generated', [], 500 );
 	}
 
 	/**

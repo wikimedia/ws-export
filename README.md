@@ -90,7 +90,7 @@ This section deals with a full installation of WS Export on the local developmen
    to fetch information about Wikisource contributors
    for the credits list that can be included at the end of exported books.
 
-   For the statistics recording database you need to create the the database
+   For the statistics recording database you need to create the database
    and add connection details to `.env.local`:
 
    ```console

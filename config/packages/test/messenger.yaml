@@ -1,0 +1,7 @@
+framework:
+    messenger:
+        transports:
+            async: "sync://"
+            failed: "sync://"
+        # routing:
+        #     'App\Message\CreateBookMessage': async

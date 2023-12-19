@@ -76,6 +76,7 @@
 	"onwikiconfig-failure": "Error message displayed if the on-wiki configuration fetching failed.\n\n* $1 - the URL of the config JSON page on Wikisource.",
 	"exception-fetching-credits": "Error message displayed when credits information could not be retrieved.",
 	"exception-book-conversion": "Error message displayed when a book could not be converted to another format.",
+	"exception-no-file-generated": "Error message displayed if the job queue takes too long to generate a book.\n\nParameters:\n\n* $1 — integer number of seconds that it took to not generate the book.",
 	"epub-title-page": "Name of the title page in exported books (used in the table of contents).",
 	"epub-exported-date": "Phrase used on the title page to indicate the book export date.\n\n$1 - the localized date.",
 	"epub-about": "Name of the 'about' page in exported books (used in the table of contents)."

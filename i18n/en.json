@@ -70,6 +70,7 @@
 	"onwikiconfig-failure": "Unable to retrieve the on-wiki configuration from: $1",
 	"exception-fetching-credits": "Error fetching credits information. Please try exporting again. If this error persists, check the box in 'Options' to remove credits.",
 	"exception-book-conversion": "Error converting the format of the book.",
+	"exception-no-file-generated": "The book was not generated within $1 seconds.",
 	"epub-title-page": "Title page",
 	"epub-exported-date": "Exported from Wikisource on $1",
 	"epub-about": "About"

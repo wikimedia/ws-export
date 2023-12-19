@@ -15,10 +15,14 @@ final class CreateBookMessage {
 	/** @var string */
 	private $format;
 
-	public function __construct( Book $book, string $filePath, string $format ) {
+	/** @var int Timestamp that this message should expire. */
+	private $expiry;
+
+	public function __construct( Book $book, string $filePath, string $format, int $expiry ) {
 		$this->book = $book;
 		$this->filePath = $filePath;
 		$this->format = $format;
+		$this->expiry = $expiry;
 	}
 
 	public function getBook(): Book {
@@ -31,5 +35,9 @@ final class CreateBookMessage {
 
 	public function getFormat(): string {
 		return $this->format;
+	}
+
+	public function getExpiry(): int {
+		return $this->expiry;
 	}
 }

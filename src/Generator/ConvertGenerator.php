@@ -5,15 +5,11 @@ namespace App\Generator;
 use App\Book;
 use App\Exception\WsExportException;
 use App\FileCache;
-use App\FontProvider;
-use App\Util\Api;
 use App\Util\Util;
 use InvalidArgumentException;
-use Krinkle\Intuition\Intuition;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @author Thomas Pellissier Tanon
@@ -86,31 +82,19 @@ class ConvertGenerator implements FormatGenerator {
 	 */
 	private $format;
 
-	/** @var FontProvider */
-	private $fontProvider;
-
-	/** @var Api */
-	private $api;
-
-	/** @var Intuition */
-	private $intuition;
-
 	/** @var int Command timeout in seconds. */
 	private $timeout;
-
-	/** @var CacheInterface */
-	private $cache;
 
 	/** @var FileCache */
 	private $fileCache;
 
-	public function __construct( FontProvider $fontProvider, Api $api, Intuition $intuition, int $timeout, CacheInterface $cache, FileCache $fileCache ) {
-		$this->fontProvider = $fontProvider;
-		$this->api = $api;
-		$this->intuition = $intuition;
+	/** @var EpubGenerator */
+	private $epubGenerator;
+
+	public function __construct( int $timeout, FileCache $fileCache, EpubGenerator $epubGenerator ) {
 		$this->timeout = $timeout;
-		$this->cache = $cache;
 		$this->fileCache = $fileCache;
+		$this->epubGenerator = $epubGenerator;
 	}
 
 	/**
@@ -148,7 +132,7 @@ class ConvertGenerator implements FormatGenerator {
 		$outputFileName = $this->fileCache->buildTemporaryFileName( $book->title, $this->getExtension() );
 
 		try {
-			$epubFileName = $this->createEpub( $book );
+			$epubFileName = $this->epubGenerator->create( $book );
 			$persistentEpubFileName = $this->fileCache->buildTemporaryFileName( $book->title, 'epub' );
 			rename( $epubFileName, $persistentEpubFileName );
 			$this->convert( $persistentEpubFileName, $outputFileName );
@@ -159,11 +143,6 @@ class ConvertGenerator implements FormatGenerator {
 		}
 
 		return $outputFileName;
-	}
-
-	private function createEpub( Book $book ) {
-		$epubGenerator = new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $this->cache, $this->fileCache );
-		return $epubGenerator->create( $book );
 	}
 
 	private function convert( $epubFileName, $outputFileName ) {

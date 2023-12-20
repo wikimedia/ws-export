@@ -39,7 +39,8 @@ class GeneratorSelectorTest extends KernelTestCase {
 		$this->api = self::$container->get( Api::class );
 		$this->intuition = self::$container->get( Intuition::class );
 		$fileCache = self::$container->get( FileCache::class );
-		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, $this->intuition, 10, $cache, $fileCache );
+		$epubGenerator = new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $cache, $fileCache );
+		$convertGenerator = new ConvertGenerator( 10, $fileCache, $epubGenerator );
 		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator, $this->intuition, $cache, $fileCache );
 	}
 

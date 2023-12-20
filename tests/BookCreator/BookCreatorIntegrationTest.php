@@ -7,6 +7,7 @@ use App\EpubCheck\EpubCheck;
 use App\FileCache;
 use App\FontProvider;
 use App\Generator\ConvertGenerator;
+use App\Generator\EpubGenerator;
 use App\GeneratorSelector;
 use App\Repository\CreditRepository;
 use App\Util\Api;
@@ -49,7 +50,8 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 		$this->api = self::$container->get( Api::class );
 		$this->intuition = self::$container->get( Intuition::class );
 		$this->fileCache = self::$container->get( FileCache::class );
-		$convertGenerator = new ConvertGenerator( $this->fontProvider, $this->api, $this->intuition, 30, $cache, $this->fileCache );
+		$epubGenerator = new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $cache, $this->fileCache );
+		$convertGenerator = new ConvertGenerator( 30, $this->fileCache, $epubGenerator );
 		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator, $this->intuition, $cache, $this->fileCache );
 		$this->creditRepository = self::$container->get( CreditRepository::class );
 		$this->epubCheck = self::$container->get( EpubCheck::class );

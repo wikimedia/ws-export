@@ -82,6 +82,5 @@
 	"breadcrumbs-home-link": "Link of home page shown in the breadcrumb",
 	"breadcrumbs-stats-link": "Link of statistics page shown in the breadcrumb",
 	"recently-popular-heading": "Heading text for recently popular section",
-	"recently-popular-subtext": "Description for recently popular section",
-	"stat-date-label": "Label text for stat dates"
+	"recently-popular-subtext": "Description for recently popular section"
 }

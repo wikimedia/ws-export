@@ -78,5 +78,10 @@
 	"exception-book-conversion": "Error message displayed when a book could not be converted to another format.",
 	"epub-title-page": "Name of the title page in exported books (used in the table of contents).",
 	"epub-exported-date": "Phrase used on the title page to indicate the book export date.\n\n$1 - the localized date.",
-	"epub-about": "Name of the 'about' page in exported books (used in the table of contents)."
+	"epub-about": "Name of the 'about' page in exported books (used in the table of contents).",
+	"breadcrumbs-home-link": "Link of home page shown in the breadcrumb",
+	"breadcrumbs-stats-link": "Link of statistics page shown in the breadcrumb",
+	"recently-popular-heading": "Heading text for recently popular section",
+	"recently-popular-subtext": "Description for recently popular section",
+	"stat-date-label": "Label text for stat dates"
 }

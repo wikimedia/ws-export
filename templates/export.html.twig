@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-
+<div class="container">
 <p class="back-to-wikisource">
 	<a href="https://{% if lang in wikiLangs|keys %}{{ lang }}.{% endif %}wikisource.org{% if title %}/wiki/{{ title|e('url') }}{% endif %}">
 		{# Arrow is from OOUI. #}
@@ -119,5 +119,5 @@
 	</p>
 
 </form>
-
+</div>
 {% endblock %}

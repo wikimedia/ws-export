@@ -28,6 +28,7 @@ footer {
 	font-size: smaller;
 	border-top: 1px solid #e5e5e5;
 	padding: 25px 0;
+	margin-top: 2rem;
 }
 
 footer p {
@@ -114,4 +115,68 @@ div.error > .message {
 
 div.error p {
 	margin: 0;
+}
+
+.stats {
+	padding: 0 1.5rem;
+}
+
+.recents {
+	background-color: #f5f5f5;
+	border-radius: 2px;
+	padding: 1.5rem 2rem;
+}
+
+.recents h1,
+.recents h4 {
+	margin: 0;
+}
+
+.recents h4 {
+	margin-top: 2px;
+}
+
+.recents ol {
+	margin-top: 3rem;
+	padding: 0;
+}
+
+.recents ol li {
+	list-style: none;
+}
+
+.recent {
+	margin: 0 auto;
+	padding-top: 15px;
+}
+
+.recent:not( :last-child ) {
+	border-bottom: 1px solid #d9d9d9;
+	padding-bottom: 15px;
+}
+
+.recent div {
+	padding: 0;
+}
+
+.recent h4,
+.recent h3 {
+	margin: 0;
+}
+
+.recent h3 {
+	margin-top: 5px;
+}
+
+.recent div:nth-child( 2 ) {
+	display: flex;
+	height: 50px;
+	padding-right: 5px;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.recent img {
+	height: 25px;
+	width: 25px;
 }

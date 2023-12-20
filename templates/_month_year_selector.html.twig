@@ -1,0 +1,15 @@
+<form class="form-inline" role="form">
+	<div class="form-group">
+		<label class="sr-only" for="month">Month</label>
+		<div class="input-group">
+			<div class="input-group-addon">Month</div>
+			<input name="month" id="month" type="number" placeholder="month" size="2" maxlength="2" min="1" max="12" required="required" value="{{ month }}" class="form-control">
+		</div>
+		<label class="sr-only" for="year">Year</label>
+		<div class="input-group">
+			<div class="input-group-addon">Year</div>
+			<input name="year" id="year" type="number" placeholder="year" size="4" maxlength="4" min="2012" required="required" value="{{ year }}" class="form-control">
+		</div>
+	</div>
+	<button type="submit" class="btn btn-primary">Fetch stats</button>
+</form>

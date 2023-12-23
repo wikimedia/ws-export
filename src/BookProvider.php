@@ -290,7 +290,8 @@ class BookProvider {
 		}
 		$iinfo = $page['imageinfo'][0];
 
-		$thumbParams = min( $iinfo['width'], 400 ) . 'px';
+		$thumbWidth = min( $iinfo['width'], 400 );
+		$thumbParams = $thumbWidth . 'px';
 
 		// sanitize the page number if there is one
 		if ( in_array( $iinfo['mime'], [ 'image/vnd.djvu', 'application/pdf' ] ) ) {
@@ -310,7 +311,8 @@ class BookProvider {
 			'titles' => 'File:' . $title,
 			'prop' => 'imageinfo',
 			'iiprop' => 'thumbmime|url|canonicaltitle',
-			'iiurlparam' => $thumbParams
+			'iiurlparam' => $thumbParams,
+			'iiurlwidth' => $thumbWidth,
 		] )->wait();
 
 		$page = end( $response['query']['pages'] );

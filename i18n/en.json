@@ -72,5 +72,9 @@
 	"exception-book-conversion": "Error converting the format of the book.",
 	"epub-title-page": "Title page",
 	"epub-exported-date": "Exported from Wikisource on $1",
-	"epub-about": "About"
+	"epub-about": "About",
+	"breadcrumbs-home-link": "Home",
+	"breadcrumbs-stats-link": "Statistics",
+	"recently-popular-heading": "Recently popular",
+	"recently-popular-subtext": "Most popular downloads from the last three months"
 }

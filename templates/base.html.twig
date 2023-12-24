@@ -29,12 +29,13 @@
 	</div>
 </header>
 
-<div class="container">
+<div>
 	<div class="content">
 		{% block main %}
 		{% endblock %}
 
 		<footer class="footer">
+		<div class="container">
 			<p>
 				{% set version_link %}
 					<a href="https://github.com/wikimedia/ws-export/releases/tag/{{ git_tag() }}" title="{{ msg( 'commit-label', [ git_hash_short() ] ) }}">
@@ -74,6 +75,7 @@
 					{{ msg( 'issue-button' ) }}
 				</a>
 			</p>
+		</div>
 		</footer>
 	</div>
 </div>

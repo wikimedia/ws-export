@@ -75,5 +75,9 @@
 	"exception-book-conversion": "Napaka pri pretvorbi formata knjige.",
 	"epub-title-page": "Naslov",
 	"epub-exported-date": "Pridobljeno iz Wikivira, dne $1",
-	"epub-about": "O programu"
+	"epub-about": "O programu",
+	"breadcrumbs-home-link": "Domov",
+	"breadcrumbs-stats-link": "Statistika",
+	"recently-popular-heading": "Nedavno priljubljeno",
+	"recently-popular-subtext": "Najbolj priljubljeni prenosi v zadnjih treh mesecih"
 }

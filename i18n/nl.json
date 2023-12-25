@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"McDutchie",
 			"Romaine"
 		]
 	},
@@ -39,7 +40,7 @@
 	"format-pdf-letter": "PDF - US letter-formaat",
 	"format-rtf": "RTF",
 	"format-txt": "Tekst zonder opmaak",
-	"exceeded-rate-limitation": "U doet te veel verzoeken in een korte periode. Wacht a.u.b. $1 {{PLURAL:$1|minuut|minuten}} voordat u deze tool opnieuw laadt of log in om te voorkomen dat dit opnieuw gebeurt.",
+	"exceeded-rate-limitation": "U doet te veel verzoeken in een korte periode. Wacht a.u.b. $1 {{PLURAL:$1|minuut|minuten}} voordat u deze tool opnieuw laadt of meld u aan om te voorkomen dat dit opnieuw gebeurt.",
 	"exception-invalid-format": "\"$1\" is geen geldig formaat. Geldige formaten zijn: $2",
 	"font-field-label": "Lettertype",
 	"no-font-option": "Geen (gebruik apparaatstandaard)",
@@ -64,7 +65,7 @@
 	"error-fix-nocredits": "Vink het vakje bij 'Opties' aan om de bijdragers te verwijderen",
 	"error-fix-noimages": "Vink het vakje bij 'Opties' aan om afbeeldingen te verwijderen.",
 	"error-breadcrumb": "Fout $1",
-	"error-login": "Log in op WS Export om door te gaan.",
+	"error-login": "Meld u aan bij WS Export om door te gaan.",
 	"error-page-header": "Er is een fout opgetreden",
 	"error-page-details": "Foutdetails: $1",
 	"error-page-issue": "Als deze fout zich blijft voordoen, gelieve dan $1.",

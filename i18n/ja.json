@@ -79,5 +79,6 @@
 	"exception-book-conversion": "書籍のフォーマットの変換エラー。",
 	"epub-title-page": "表題紙",
 	"epub-exported-date": "$1にウィキソースから書き出されました。",
-	"epub-about": "About"
+	"epub-about": "About",
+	"breadcrumbs-stats-link": "統計"
 }

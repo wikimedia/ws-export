@@ -77,5 +77,9 @@
 	"exception-book-conversion": "轉換電子書格式錯誤。",
 	"epub-title-page": "標題頁面",
 	"epub-exported-date": "於 $1 從維基文庫匯出",
-	"epub-about": "關於"
+	"epub-about": "關於",
+	"breadcrumbs-home-link": "首頁",
+	"breadcrumbs-stats-link": "統計",
+	"recently-popular-heading": "近期熱門",
+	"recently-popular-subtext": "在過去三個月最受歡迎的下載"
 }

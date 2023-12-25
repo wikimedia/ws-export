@@ -35,5 +35,7 @@
 	"error-page-header": "Et ass e Feeler geschitt",
 	"error-page-details": "Feelerdetailer: $1",
 	"error-page-issue": "Wann dëse Feeler bestoe bleift, wgl. $1.",
-	"epub-about": "Iwwer"
+	"epub-about": "Iwwer",
+	"breadcrumbs-home-link": "Haaptsäit",
+	"breadcrumbs-stats-link": "Statistiken"
 }

@@ -75,5 +75,9 @@
 	"exception-book-conversion": "שגיאה בהמרת תצורת הספר.",
 	"epub-title-page": "עמוד הכותרת",
 	"epub-exported-date": "יוצא מוויקיטקסט ב־$1",
-	"epub-about": "על אודות"
+	"epub-about": "על אודות",
+	"breadcrumbs-home-link": "דף הבית",
+	"breadcrumbs-stats-link": "סטטיסטיקה",
+	"recently-popular-heading": "נפוץ לאחרונה",
+	"recently-popular-subtext": "ההורדות הנפוצות ביותר בשלושת החודשים האחרונים"
 }

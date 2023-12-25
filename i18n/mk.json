@@ -73,5 +73,9 @@
 	"exception-book-conversion": "Грешка при претворањето на форматот на книгата.",
 	"epub-title-page": "Насловна страница",
 	"epub-exported-date": "Извезено од Викиизвор на $1",
-	"epub-about": "За ова"
+	"epub-about": "За ова",
+	"breadcrumbs-home-link": "Почетна",
+	"breadcrumbs-stats-link": "Статистика",
+	"recently-popular-heading": "Неодамна популарно",
+	"recently-popular-subtext": "Најпопуларни преземања од изминатите три месеци"
 }

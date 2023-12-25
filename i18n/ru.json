@@ -79,5 +79,6 @@
 	"exception-book-conversion": "Ошибка конвертирования формата книги.",
 	"epub-title-page": "Заглавие",
 	"epub-exported-date": "Экспортировано из Викитеки $1",
-	"epub-about": "Информация"
+	"epub-about": "Информация",
+	"breadcrumbs-stats-link": "Статистика"
 }

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Balajijagadesh"
+			"Balajijagadesh",
+			"Fahimrazick"
 		]
 	},
 	"app-title": "விக்கிமூலம் நூல் ஏற்றுமதி",
@@ -33,5 +34,5 @@
 	"exception-book-conversion": "நூலின் வடிவத்தை மாற்றும் பொழுது பிழை ஏற்பட்டுள்ளது.",
 	"epub-title-page": "தலைப்புப் பக்கம்",
 	"epub-exported-date": "$1 அன்று விக்கிமூலத்தில் இருந்து பதிவிறக்கப்பட்டது",
-	"epub-about": "இம்மின்னூல் பற்றி"
+	"epub-about": "இதைப் பற்றி"
 }

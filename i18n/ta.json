@@ -34,5 +34,9 @@
 	"exception-book-conversion": "நூலின் வடிவத்தை மாற்றும் பொழுது பிழை ஏற்பட்டுள்ளது.",
 	"epub-title-page": "தலைப்புப் பக்கம்",
 	"epub-exported-date": "$1 அன்று விக்கிமூலத்தில் இருந்து பதிவிறக்கப்பட்டது",
-	"epub-about": "இதைப் பற்றி"
+	"epub-about": "இதைப் பற்றி",
+	"breadcrumbs-home-link": "முகப்பு",
+	"breadcrumbs-stats-link": "புள்ளிவிவரங்கள்",
+	"recently-popular-heading": "அண்மையிற் புகழ் பெற்றவை",
+	"recently-popular-subtext": "சென்ற மூன்று மாதங்களிலிருந்து ஆகவும் புகழ் பெற்ற பதிவிறக்கங்கள்"
 }

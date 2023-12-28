@@ -76,5 +76,9 @@
 	"exception-book-conversion": "Помилка перетворення формату книги.",
 	"epub-title-page": "Титульна сторінка",
 	"epub-exported-date": "Експортується з Вікіджерел в $1",
-	"epub-about": "Опис"
+	"epub-about": "Опис",
+	"breadcrumbs-home-link": "Головна",
+	"breadcrumbs-stats-link": "Статистика",
+	"recently-popular-heading": "Останні популярні",
+	"recently-popular-subtext": "Найпопулярніші завантаження за останні три місяці"
 }

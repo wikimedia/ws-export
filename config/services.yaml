@@ -70,5 +70,11 @@ services:
             $rateLimit: '%env(int:APP_RATE_LIMIT)%'
             $rateDuration: '%env(int:APP_RATE_DURATION)%'
 
+    App\Util\Semaphore\Semaphore:
+        class: 'App\Util\Semaphore\UnixSemaphore'
+        arguments:
+            $semaphoreKey: 123455435644
+            $capacity: 4
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

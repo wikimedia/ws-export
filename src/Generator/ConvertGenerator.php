@@ -5,6 +5,7 @@ namespace App\Generator;
 use App\Book;
 use App\Exception\WsExportException;
 use App\FileCache;
+use App\Util\Semaphore\Semaphore;
 use App\Util\Util;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,9 +78,7 @@ class ConvertGenerator implements FormatGenerator {
 		return array_keys( self::$CONFIG );
 	}
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $format;
 
 	/** @var int Command timeout in seconds. */
@@ -91,10 +90,14 @@ class ConvertGenerator implements FormatGenerator {
 	/** @var EpubGenerator */
 	private $epubGenerator;
 
-	public function __construct( int $timeout, FileCache $fileCache, EpubGenerator $epubGenerator ) {
+	/** @var ?Semaphore */
+	private $semaphore;
+
+	public function __construct( int $timeout, FileCache $fileCache, EpubGenerator $epubGenerator, ?Semaphore $semaphore = null ) {
 		$this->timeout = $timeout;
 		$this->fileCache = $fileCache;
 		$this->epubGenerator = $epubGenerator;
+		$this->semaphore = $semaphore;
 	}
 
 	/**
@@ -146,6 +149,14 @@ class ConvertGenerator implements FormatGenerator {
 	}
 
 	private function convert( $epubFileName, $outputFileName ) {
+		$lock = null;
+		if ( $this->semaphore !== null ) {
+			$lock = $this->semaphore->tryLock();
+			if ( $lock === null ) {
+				// Overload
+				throw new WsExportException( 'book-conversion', [], Response::HTTP_INTERNAL_SERVER_ERROR );
+			}
+		}
 		try {
 			$command = array_merge(
 				[ 'ebook-convert', $epubFileName, $outputFileName ],
@@ -156,6 +167,10 @@ class ConvertGenerator implements FormatGenerator {
 			$process->mustRun();
 		} catch ( ProcessTimedOutException $e ) {
 			throw new WsExportException( 'book-conversion', [], Response::HTTP_INTERNAL_SERVER_ERROR );
+		} finally {
+			if ( $lock !== null ) {
+				$lock->release();
+			}
 		}
 	}
 }

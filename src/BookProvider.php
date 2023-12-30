@@ -267,8 +267,8 @@ class BookProvider {
 	}
 
 	/**
-	 * return the cover of the book
-	 * @param $cover string the name of the cover
+	 * Return the cover of the book.
+	 * @param string $cover The title of the cover without 'File', e.g. Lorem.pdf/3
 	 * @return ?Picture The cover picture, or null if it could not be determined.
 	 */
 	public function getCover( $cover ): ?Picture {
@@ -279,41 +279,26 @@ class BookProvider {
 		$title = $id[0];
 		$picture = new Picture();
 		$picture->title = $cover;
+
+		$pageNum = 1;
+		if ( array_key_exists( 1, $id ) && intval( $id[1] ) ) {
+			$pageNum = intval( $id[1] );
+		}
+		$width = 400;
+		$urlParam = '';
+		if ( in_array( pathinfo( $title, PATHINFO_EXTENSION ), [ 'pdf', 'djvu' ] ) ) {
+			$urlParam = 'page' . $pageNum . '-' . $width . 'px';
+		}
 		$response = $this->api->queryAsync( [
 			'titles' => 'File:' . $title,
 			'prop' => 'imageinfo',
-			'iiprop' => 'mime|dimensions'
+			'iiprop' => 'thumbmime|dimensions|url|canonicaltitle',
+			'iiurlparam' => $urlParam,
+			'iiurlwidth' => $width,
 		] )->wait();
-		$page = end( $response['query']['pages'] );
-		if ( !isset( $page['imageinfo'] ) ) {
+		if ( !isset( $response['query']['pages'] ) ) {
 			return null;
 		}
-		$iinfo = $page['imageinfo'][0];
-
-		$thumbWidth = min( $iinfo['width'], 400 );
-		$thumbParams = $thumbWidth . 'px';
-
-		// sanitize the page number if there is one
-		if ( in_array( $iinfo['mime'], [ 'image/vnd.djvu', 'application/pdf' ] ) ) {
-			$count = $iinfo['pagecount'];
-			$pageNum = 1;
-			if ( array_key_exists( 1, $id ) ) {
-				$pageNum = intval( $id[1] );
-			}
-
-			$pageNum = max( 1, min( $count, $pageNum ) );
-			// include the page number in the URL parameters
-			$thumbParams = 'page' . $pageNum . '-' . $thumbParams;
-		}
-
-		// we need to get the properties of the actual thumbnail now
-		$response = $this->api->queryAsync( [
-			'titles' => 'File:' . $title,
-			'prop' => 'imageinfo',
-			'iiprop' => 'thumbmime|url|canonicaltitle',
-			'iiurlparam' => $thumbParams,
-			'iiurlwidth' => $thumbWidth,
-		] )->wait();
 
 		$page = end( $response['query']['pages'] );
 		$iinfo = $page['imageinfo'][0];

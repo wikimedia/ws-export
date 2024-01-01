@@ -70,5 +70,6 @@
 	"error-page-issue-link": "파브리케이터에 이슈를 보고",
 	"exception-book-conversion": "책의 포맷을 변환하는 중 오류가 발생했습니다.",
 	"epub-title-page": "표지",
-	"epub-about": "정보"
+	"epub-about": "정보",
+	"breadcrumbs-stats-link": "통계"
 }

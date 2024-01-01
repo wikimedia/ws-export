@@ -74,5 +74,9 @@
 	"exception-book-conversion": "Produciuse un erro ao converter o formato do libro.",
 	"epub-title-page": "Páxina de título",
 	"epub-exported-date": "Exportado desde Wikisource o $1",
-	"epub-about": "Acerca de"
+	"epub-about": "Acerca de",
+	"breadcrumbs-home-link": "Inicio",
+	"breadcrumbs-stats-link": "Estatísticas",
+	"recently-popular-heading": "Popular recentemente",
+	"recently-popular-subtext": "Descargas máis populares dos últimos tres meses"
 }

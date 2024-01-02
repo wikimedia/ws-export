@@ -40,7 +40,7 @@ This section deals with a full installation of WS Export on the local developmen
    For example, in Debian-based Linux distributions:
 
    ```console
-   apt install php-sqlite3 php-zip php-curl
+   apt install php-sqlite3 php-zip php-curl php-sysvsem
    ```
 
    Then create a `.env.local` file:

@@ -5,6 +5,7 @@
 			"Ideophagous",
 			"Meno25",
 			"NEHAOUA",
+			"Sandra Hanbo",
 			"محمد أحمد عبد الفتاح"
 		]
 	},
@@ -78,5 +79,9 @@
 	"exception-book-conversion": "خطأ في تحويل تنسيق الكتاب.",
 	"epub-title-page": "العنوان",
 	"epub-exported-date": "منقول من ويكي مصدر في $1",
-	"epub-about": "حول"
+	"epub-about": "حول",
+	"breadcrumbs-home-link": "الصفحة الرئيسية",
+	"breadcrumbs-stats-link": "الإحصاءات",
+	"recently-popular-heading": "شعبية مؤخراً",
+	"recently-popular-subtext": "التنزيلات الأكثر شعبية من الأشهر الثلاثة الماضية"
 }

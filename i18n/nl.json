@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"McDutchie",
-			"Romaine"
+			"Romaine",
+			"Siebrand"
 		]
 	},
 	"app-title": "Wikisource-boekexport",
@@ -75,5 +76,9 @@
 	"exception-book-conversion": "Fout bij het converteren van het formaat van het boek.",
 	"epub-title-page": "Titelpagina",
 	"epub-exported-date": "Geëxporteerd van Wikisource op $1",
-	"epub-about": "Over"
+	"epub-about": "Over",
+	"breadcrumbs-home-link": "Startpagina",
+	"breadcrumbs-stats-link": "Statistieken",
+	"recently-popular-heading": "Recent populair",
+	"recently-popular-subtext": "De meest populaire downloads van de afgelopen drie maanden"
 }

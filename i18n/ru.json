@@ -80,5 +80,8 @@
 	"epub-title-page": "Заглавие",
 	"epub-exported-date": "Экспортировано из Викитеки $1",
 	"epub-about": "Информация",
-	"breadcrumbs-stats-link": "Статистика"
+	"breadcrumbs-home-link": "Главная",
+	"breadcrumbs-stats-link": "Статистика",
+	"recently-popular-heading": "Недавно популярные",
+	"recently-popular-subtext": "Самые популярные загрузки за последние три месяца"
 }

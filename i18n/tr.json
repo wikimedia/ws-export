@@ -3,6 +3,7 @@
 		"authors": [
 			"Can",
 			"Cobija",
+			"Hedda",
 			"Joseph",
 			"Mim.saitkilic",
 			"SaldırganSincap",
@@ -80,5 +81,9 @@
 	"exception-book-conversion": "Kitabın biçimi çevrilirken hata oluştu.",
 	"epub-title-page": "Başlık",
 	"epub-exported-date": "$1 tarihinde oluşturuldu",
-	"epub-about": "Hakkında"
+	"epub-about": "Hakkında",
+	"breadcrumbs-home-link": "Anasayfa",
+	"breadcrumbs-stats-link": "İstatistikler",
+	"recently-popular-heading": "Son zamanlarda popüler",
+	"recently-popular-subtext": "Son üç ayın en popüler indirmeleri"
 }

@@ -1,0 +1,31 @@
+{
+	"@metadata": {
+		"authors": [
+			"Milicevic01"
+		]
+	},
+	"app-title": "Викизворник Извоз књиге",
+	"app-title-wikisource": "Викизворник",
+	"app-subtitle": "Извоз књига из Викизворника у више различитих формата.",
+	"back-to-wikisource": "Назад на Викизворник",
+	"export-book": "Извоз књиге",
+	"lang-field-label": "Викизворник",
+	"lang-field-help": "Викизворник са којег се извози књига.",
+	"title-field-label": "Наслов",
+	"title-field-help": "Наслов књиге или одељка за извоз.",
+	"format-field-label": "Формат датотеке",
+	"format-txt": "Обичан текст",
+	"font-field-label": "Фонт",
+	"font-field-help": "Изаберите један од $1 доступних фонтова.",
+	"options-label": "Опције",
+	"images-field-label": "Без слика",
+	"export-button": "Извези",
+	"alert-close": "Затвори",
+	"export-failed": "Преузимање није успело.",
+	"learn-more": "Сазнајте више.",
+	"error-blocked-1": "Ваша IP адреса је тренутно блокирана.",
+	"error-breadcrumb": "Грешка $1",
+	"epub-about": "О",
+	"breadcrumbs-home-link": "Почетна",
+	"breadcrumbs-stats-link": "Статистике"
+}

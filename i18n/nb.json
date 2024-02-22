@@ -73,5 +73,9 @@
 	"exception-book-conversion": "Feil under konvertering av format for boka.",
 	"epub-title-page": "Tittelside",
 	"epub-exported-date": "Eksportert fra Wikikilden $1",
-	"epub-about": "Om"
+	"epub-about": "Om",
+	"breadcrumbs-home-link": "Hjem",
+	"breadcrumbs-stats-link": "Statistikk",
+	"recently-popular-heading": "Nylig populært",
+	"recently-popular-subtext": "De mest populære nedlastingene de siste tre månedene"
 }

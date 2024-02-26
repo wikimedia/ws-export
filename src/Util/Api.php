@@ -9,6 +9,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Promise\Each;
 use GuzzleHttp\Promise\PromiseInterface;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 use Kevinrob\GuzzleCache\Storage\Psr6CacheStorage;
@@ -28,6 +29,7 @@ class Api {
 	private const USER_AGENT = 'Wikisource Export/0.1';
 	private const CONNECT_TIMEOUT = 10; // in seconds
 	private const REQUEST_TIMEOUT = 60; // in seconds
+	private const MAX_CONNECTIONS = 10;
 
 	/** @var string */
 	private $lang = '';
@@ -252,6 +254,8 @@ class Api {
 	}
 
 	/**
+	 * Get a page asynchronously, with unlimited concurrency
+	 *
 	 * @param string $title the title of the page
 	 * @return PromiseInterface promise with the content of a page
 	 */
@@ -267,6 +271,31 @@ class Api {
 						throw new WsExportException( 'rest-page-not-found', [ $title ], 404, false );
 					}
 				);
+	}
+
+	/**
+	 * Get a batch of pages, with a concurrency limit
+	 *
+	 * @param string[] $titles
+	 * @return string[] The contents of the pages
+	 */
+	public function getPageBatch( $titles ) {
+		$requests = function () use ( $titles ) {
+			foreach ( $titles as $id => $title ) {
+				yield $id => $this->getPageAsync( $title );
+			}
+		};
+		$this->logger->debug( "Sending request for " . count( $titles ) . " titles" );
+		$texts = [];
+		Each::ofLimit(
+			$requests(),
+			self::MAX_CONNECTIONS,
+			function ( $text, $id ) use ( &$texts ) {
+				$texts[$id] = $text;
+			}
+		)->wait();
+		$this->logger->debug( "Got responses for " . count( $texts ) . " pages" );
+		return $texts;
 	}
 
 	/**

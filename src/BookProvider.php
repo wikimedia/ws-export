@@ -193,16 +193,15 @@ class BookProvider {
 	 * @return Page[]
 	 */
 	protected function getPages( $pages ) {
-		$promises = [];
-
+		$pageTitles = [];
 		foreach ( $pages as $id => $page ) {
-			$promises[$id] = $this->api->getPageAsync( $page->title );
+			$pageTitles[$id] = $page->title;
 		}
-
+		$contents = $this->api->getPageBatch( $pageTitles );
 		foreach ( $pages as $id => $page ) {
-			$page->content = $this->domDocumentFromHtml( $promises[$id]->wait() );
+			$page->content = isset( $contents[$id] )
+				? $this->domDocumentFromHtml( $contents[$id] ) : null;
 		}
-
 		return $pages;
 	}
 

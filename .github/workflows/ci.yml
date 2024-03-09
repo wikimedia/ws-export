@@ -58,6 +58,7 @@ jobs:
       run: |
         composer install
         ./bin/console doctrine:migrations:migrate --no-interaction
+        ./bin/console messenger:setup-transports
         npm ci
 
     - name: Test

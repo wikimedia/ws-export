@@ -19,7 +19,7 @@ class BookTest extends WebTestCase {
 
 	public function testGetEmptyPage() {
 		$client = static::createClient();
-		$client->request( 'GET', '/book.php' );
+		$client->request( 'GET', '/' );
 		$contentTypeHeader = $client->getResponse()->headers->get( 'Content-Type' );
 		$this->assertSame( 'text/html; charset=UTF-8', $contentTypeHeader );
 		$this->assertStringContainsString( 'Export books from Wikisources in many different file formats.', $client->getResponse()->getContent() );
@@ -37,7 +37,7 @@ class BookTest extends WebTestCase {
 
 		$client = static::createClient();
 		$client->getContainer()->set( CreditRepository::class, $creditRepository );
-		$client->request( 'GET', '/book.php', [ 'page' => $title, 'lang' => $language ] );
+		$client->request( 'GET', '/', [ 'page' => $title, 'lang' => $language ] );
 		$headers = $client->getResponse()->headers;
 		$this->assertSame( 'File Transfer', $headers->get( 'Content-Description' ) );
 		$this->assertSame( 'application/epub+zip', $headers->get( 'Content-Type' ) );
@@ -56,14 +56,14 @@ class BookTest extends WebTestCase {
 
 	public function testGetNonExistingTitleDisplaysError() {
 		$client = static::createClient();
-		$client->request( 'GET', '/book.php', [ 'page' => 'xxx' ] );
+		$client->request( 'GET', '/', [ 'page' => 'xxx' ] );
 		$this->assertStringContainsString( "The book 'xxx' could not be found.", $client->getResponse()->getContent() );
 		$this->assertSame( 404, $client->getResponse()->getStatusCode() );
 	}
 
 	public function testGetInvalidFormatDisplaysError() {
 		$client = static::createClient();
-		$client->request( 'GET', '/book.php', [ 'page' => 'xxx', 'format' => 'xxx' ] );
+		$client->request( 'GET', '/', [ 'page' => 'xxx', 'format' => 'xxx' ] );
 		$this->assertStringContainsString( '"xxx" is not a valid format.', $client->getResponse()->getContent() );
 		$this->assertSame( 400, $client->getResponse()->getStatusCode() );
 	}

@@ -35,6 +35,7 @@
 	"format-pdf-a4": "PDF - A4 koko",
 	"format-pdf-a5": "PDF - A5 koko",
 	"format-pdf-a6": "PDF - A6 koko",
+	"format-pdf-letter": "PDF - US letter koko",
 	"format-rtf": "RTF",
 	"format-txt": "Pelkkä teksti",
 	"exception-invalid-format": "\"$1\" ei ole kelvollinen muoto. Kelvolliset muodot ovat: $2",
@@ -58,7 +59,12 @@
 	"error-login": "Kirjaudu sisään WS Exportiin jatkaaksesi.",
 	"error-page-header": "Tapahtui virhe",
 	"error-page-details": "Virhetiedot: $1",
+	"error-page-issue": "Jos virhe jatkuu, $1.",
 	"error-page-issue-link": "ilmoita ongelmasta Phabricatorissa",
+	"exception-book-conversion": "Virhe muunnettaessa kirjan muotoa.",
 	"epub-exported-date": "Viety Wikiaineistosta $1",
-	"epub-about": "Tietoja"
+	"epub-about": "Tietoja",
+	"breadcrumbs-home-link": "Etusivu",
+	"breadcrumbs-stats-link": "Tilastot",
+	"recently-popular-heading": "Viime aikoina suosittu"
 }

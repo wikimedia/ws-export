@@ -442,8 +442,11 @@ class PageParser {
 
 	private function cleanReferenceLinks() {
 		$links = $this->xPath->query(
-			'//*[@typeof="mw:Extension/ref"]/a | //a[@rel="mw:referencedBy"]'
+			'//*[contains(@typeof,"mw:Extension/ref")]/a | //a[@rel="mw:referencedBy"]'
 		);
+		if ( !$links ) {
+			return;
+		}
 		foreach ( $links as $link ) {
 			$href = $link->getAttribute( 'href' );
 			$pos = strpos( $href, '#' );

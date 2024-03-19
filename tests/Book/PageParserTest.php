@@ -233,4 +233,25 @@ class PageParserTest extends TestCase {
 			],
 		];
 	}
+
+	/**
+	 * @dataProvider provideCleanReferenceLinks
+	 */
+	public function testCleanReferenceLinks( string $html, string $expected ) {
+		$pageParser1 = new PageParser( Util::buildDOMDocumentFromHtml( $html ) );
+		$this->assertStringContainsString( $expected, $pageParser1->getContent( false )->saveXML() );
+	}
+
+	public function provideCleanReferenceLinks() {
+		return [
+			'no links to clean' => [
+				'<sup><a href="./Page#fn"><span>[1]</span></a></sup>',
+				'<a href="./Page#fn">',
+			],
+			'ref that is also transcluded' => [
+				'<sup class="mw-ref reference" id="cite_ref-1" rel="dc:references" typeof="mw:Transclusion mw:Extension/ref"><a href="./Page#cite_note-1"><span class="mw-reflink-text">[1]</span></a></sup>',
+				'<a href="#cite_note-1">',
+			],
+		];
+	}
 }

@@ -52,7 +52,7 @@
 	"alert-close": "Close",
 	"export-failed": "Download failed.",
 	"exception-url-fetch-error": "Unable to retrieve URL: $1",
-	"exception-rest-page-not-found": "The book '$1' could not be found.",
+	"exception-rest-page-not-found": "The page '$1' could not be found.",
 	"learn-more": "Learn more.",
 	"error-blocked-1": "Your IP address is currently blocked.",
 	"error-blocked-2": "To prevent abuse from disruptive automation, WS Export denies access from logged out users that are globally blocked on Wikimedia wikis.",

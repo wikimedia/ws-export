@@ -292,6 +292,9 @@ class Api {
 			self::MAX_CONNECTIONS,
 			function ( $text, $id ) use ( &$texts ) {
 				$texts[$id] = $text;
+			},
+			function ( $exception, $id ): never {
+				throw $exception;
 			}
 		)->wait();
 		$this->logger->debug( "Got responses for " . count( $texts ) . " pages" );

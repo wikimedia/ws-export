@@ -73,5 +73,9 @@
 	"exception-book-conversion": "Китабны конвертация форматыны халаты.",
 	"epub-title-page": "Баш бет",
 	"epub-exported-date": "$1 Викикъайнакъдан экспорт этилди",
-	"epub-about": "Юсюнден"
+	"epub-about": "Юсюнден",
+	"breadcrumbs-home-link": "Баш бет",
+	"breadcrumbs-stats-link": "Статистика",
+	"recently-popular-heading": "Арт заманда популяр",
+	"recently-popular-subtext": "Арт юч айны эм популяр эндириулери"
 }

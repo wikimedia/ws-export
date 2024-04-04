@@ -22,6 +22,7 @@
 	"export-button": "Извези",
 	"alert-close": "Затвори",
 	"export-failed": "Преузимање није успело.",
+	"exception-rest-page-not-found": "Страница „$1” није пронађена.",
 	"learn-more": "Сазнајте више.",
 	"error-blocked-1": "Ваша IP адреса је тренутно блокирана.",
 	"error-breadcrumb": "Грешка $1",

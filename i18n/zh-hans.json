@@ -63,7 +63,7 @@
 	"alert-close": "关闭",
 	"export-failed": "下载失败。",
 	"exception-url-fetch-error": "无法检索URL：$1",
-	"exception-rest-page-not-found": "找不到电子书“$1”。",
+	"exception-rest-page-not-found": "找不到页面“$1”。",
 	"learn-more": "了解详情",
 	"error-blocked-1": "您的 IP 地址当前已被封禁。",
 	"error-blocked-2": "为防止滥用，WS Export拒绝在维基媒体wiki上被全域封锁的用户访问。",

@@ -49,7 +49,7 @@
 	"cache-updated": "Välimuisti on päivitetty kielelle: $1",
 	"alert-close": "Sulje",
 	"export-failed": "Lataaminen epäonnistui.",
-	"exception-rest-page-not-found": "Kirjaa '$1' ei löytynyt.",
+	"exception-rest-page-not-found": "Sivua '$1' ei löytynyt.",
 	"learn-more": "Lisätietoja",
 	"error-blocked-1": "IP-osoitteesi on tällä hetkellä estetty.",
 	"error-fix": "Kokeile näitä ohjeita, jos kohtaat virheen:",

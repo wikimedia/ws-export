@@ -53,7 +53,7 @@
 	"alert-close": "Clauder",
 	"export-failed": "Discargamento fallite.",
 	"exception-url-fetch-error": "Non pote recuperar URL: $1",
-	"exception-rest-page-not-found": "Le libro '$1' non poteva esser trovate.",
+	"exception-rest-page-not-found": "Le pagina ‘$1’ non poteva esser trovate.",
 	"learn-more": "Leger plus.",
 	"error-blocked-1": "Tu adresse IP es actualmente blocate.",
 	"error-blocked-2": "Pro evitar le abuso resultante de automatisation disruptive, WS Export refusa le accesso al usatores non authenticate que es globalmente blocate sur wikis de Wikimedia.",
@@ -73,5 +73,9 @@
 	"exception-book-conversion": "Error de conversion del formato del libro.",
 	"epub-title-page": "Pagina de titulo",
 	"epub-exported-date": "Exportate de Wikisource le $1",
-	"epub-about": "A proposito"
+	"epub-about": "A proposito",
+	"breadcrumbs-home-link": "Initio",
+	"breadcrumbs-stats-link": "Statisticas",
+	"recently-popular-heading": "Recentemente popular",
+	"recently-popular-subtext": "Le discargamentos le plus popular del ultime tres menses"
 }

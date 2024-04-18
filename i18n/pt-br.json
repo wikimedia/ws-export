@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Eduardoaddad",
+			"Felipe L. Ewald",
 			"Mariagarbin",
 			"YuriNikolai"
 		]
@@ -55,7 +56,7 @@
 	"alert-close": "Fechar",
 	"export-failed": "Download falhou.",
 	"exception-url-fetch-error": "Impossível recuperar URL: $1",
-	"exception-rest-page-not-found": "O livro '$1' não foi encontrado.",
+	"exception-rest-page-not-found": "A página '$1' não foi encontrada.",
 	"learn-more": "Saiba mais.",
 	"error-blocked-1": "Seu endereço de IP está atualmente bloqueado.",
 	"error-blocked-2": "Para impedir abuso por automação prejudicial, WS Export nega o acesso de usuários não autenticados que estejam globalmente bloqueados em wikis da Wikimedia.",
@@ -75,5 +76,9 @@
 	"exception-book-conversion": "Erro ao converter o formato do livro.",
 	"epub-title-page": "Título",
 	"epub-exported-date": "Conteúdo exportado da Wikisource em $1",
-	"epub-about": "Sobre"
+	"epub-about": "Sobre",
+	"breadcrumbs-home-link": "Página principal",
+	"breadcrumbs-stats-link": "Estatísticas",
+	"recently-popular-heading": "Recentemente popular",
+	"recently-popular-subtext": "Downloads mais populares dos últimos três meses"
 }

@@ -54,7 +54,7 @@
 	"alert-close": "닫기",
 	"export-failed": "다운로드를 실패했습니다.",
 	"exception-url-fetch-error": "URL을 검색할 수 없습니다: $1",
-	"exception-rest-page-not-found": "'$1' 책을 찾을 수 없습니다.",
+	"exception-rest-page-not-found": "'$1' 페이지를 찾을 수 없습니다.",
 	"learn-more": "더 알아봅니다.",
 	"error-blocked-1": "당신의 IP 주소는 현재 차단되었습니다.",
 	"error-fix": "오류가 발생하는 경우 다음 단계를 시도해 주십시오:",

@@ -6,6 +6,7 @@
 		]
 	},
 	"app-title": "Pengeksport Buku Wikisumber",
+	"app-title-wikisource": "Wikisumber",
 	"app-title-html": "Pengeksport Buku $1",
 	"app-subtitle": "Eksport buku daripada Wikisumber dalam banyak format fail yang berbeza.",
 	"logo-alt-text": "Logo Wikisumber, ilustrasi biru dan putih pada aisberg.",
@@ -73,7 +74,7 @@
 	"exception-fetching-credits": "Ralat semasa mengambil maklumat kredit. Sila cuba mengeksport sekali lagi. Jika ralat ini berterusan, tandai kotak dalam 'Pilihan' untuk mengalih keluar kredit.",
 	"exception-book-conversion": "Ralat menukar format buku.",
 	"epub-title-page": "Tajuk muka surat",
-	"epub-exported-date": "Dieksport daripada Wikisource pada $1",
+	"epub-exported-date": "Dieksport daripada Wikisumber pada $1",
 	"epub-about": "Perihal",
 	"breadcrumbs-home-link": "Laman Utama",
 	"breadcrumbs-stats-link": "Statistik",

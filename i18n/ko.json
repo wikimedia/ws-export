@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Gustmd7410",
+			"Suleiman the Magnificent Television",
 			"Ykhwong",
 			"그냥기여자"
 		]
@@ -24,6 +25,7 @@
 	"issues": "파브리케이터의 $1 프로젝트에서 이슈를 보고해 주십시오.",
 	"issue-button": "이슈 만들기",
 	"back-to-wikisource": "위키문헌으로 돌아가기",
+	"previous-alt-text": "위키소스에 링크가 돌아간다는 것을 나타내는 뒤로 향하는 화살표 아이콘",
 	"export-book": "책 내보내기",
 	"lang-field-label": "위키문헌",
 	"lang-field-help": "책을 내보낼 위키문헌입니다.",
@@ -71,5 +73,7 @@
 	"exception-book-conversion": "책의 포맷을 변환하는 중 오류가 발생했습니다.",
 	"epub-title-page": "표지",
 	"epub-about": "정보",
-	"breadcrumbs-stats-link": "통계"
+	"breadcrumbs-stats-link": "통계",
+	"recently-popular-heading": "최근 인기",
+	"recently-popular-subtext": "지난 3개월 동안 가장 인기 있는 다운로드"
 }

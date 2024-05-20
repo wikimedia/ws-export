@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"GolyatGeri"
+			"GolyatGeri",
+			"Mirzali"
 		]
 	},
 	"app-title": "Wikiçıme kıtab teberdayış",
@@ -18,6 +19,8 @@
 	"export-book": "Yo kıtabi teberkerdış",
 	"lang-field-label": "Wikiçıme",
 	"title-field-label": "Serek:",
+	"format-field-label": "Formatê dosya",
+	"format-epub-3": "EPUB 3 (zeder serva e-wanayoğ)",
 	"format-htmlz": "HTML",
 	"format-mobi": "MOBI (Kindles)",
 	"format-pdf-a4": "PDF - A4 size",
@@ -33,7 +36,7 @@
 	"export-button": "Teberdayış",
 	"cache-updated": "Serva verviri zonê bı newe :$1",
 	"alert-close": "Kefelnayış",
-	"export-failed": "Ronayış nebı",
+	"export-failed": "Barkerdış nêbi.",
 	"learn-more": "Tayêna bımuse",
 	"error-blocked-1": "Adresa IP enewke men biya.",
 	"error-page-header": "Yew xeta biye",

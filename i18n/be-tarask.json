@@ -53,7 +53,7 @@
 	"alert-close": "Закрыць",
 	"export-failed": "Памылка загрузкі.",
 	"exception-url-fetch-error": "Немагчыма загрузіць URL: $1",
-	"exception-rest-page-not-found": "Кніга „$1“ ня знойдзеная.",
+	"exception-rest-page-not-found": "Старонка „$1“ ня знойдзеная.",
 	"learn-more": "Даведацца болей.",
 	"error-blocked-1": "У цяперашні час ваш IP-адрас заблякаваны.",
 	"error-blocked-2": "Каб прадухіліць злоўжываньне ад падрыўной аўтаматызацыі, WS Export забараняе доступ глябальна заблякаваным у праектах Вікімэдыі ўдзельнікам, якія выйшлі з сыстэмы.",
@@ -73,5 +73,9 @@
 	"exception-book-conversion": "Памылка канвэртаваньня фармату кнігі.",
 	"epub-title-page": "Тытульная старонка",
 	"epub-exported-date": "Экспартавана зь Вікікрыніцаў $1",
-	"epub-about": "Пра"
+	"epub-about": "Пра",
+	"breadcrumbs-home-link": "Галоўная",
+	"breadcrumbs-stats-link": "Статыстыка",
+	"recently-popular-heading": "Апошнія папулярныя",
+	"recently-popular-subtext": "Найбольш папулярныя спампоўкі за апошнія тры месяцы"
 }

@@ -56,7 +56,7 @@
 	"alert-close": "Sluiten",
 	"export-failed": "Download mislukt.",
 	"exception-url-fetch-error": "Kan URL niet ophalen: $1",
-	"exception-rest-page-not-found": "Het boek '$1' kon niet worden gevonden.",
+	"exception-rest-page-not-found": "De pagina '$1' kon niet worden gevonden.",
 	"learn-more": "Meer informatie",
 	"error-blocked-1": "Uw IP-adres is momenteel geblokkeerd.",
 	"error-blocked-2": "Om misbruik door verstorende automatisering te voorkomen, ontzegt WS Export de toegang van uitgelogde gebruikers die wereldwijd zijn geblokkeerd op Wikimedia-wiki's.",

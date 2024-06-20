@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Darafsh",
 			"Jeeputer",
 			"Yoosef Pooranvary"
 		]
@@ -9,8 +10,20 @@
 	"app-title-html": "کتاب‌ساز $1",
 	"app-subtitle": "ساخت کتاب برای ویکی‌نبشته‌ها در انواع قالب‌های فایلی",
 	"logo-alt-text": "نقشک ویکی‌نبشته، کوه یخی به رنگ سفید و آبی",
+	"footer-version": "این نسخهٔ $1 از $2 است.",
+	"version": "نسخهٔ $1",
+	"commit-label": "تعهد: $1",
+	"licensed-under": "تحت مجوز $1 است.",
+	"license-link": "GPL v2 یا جدیدتر",
+	"source-and-docs": "کد منبع در $1 و برخی اسناد در $2 موجودند.",
+	"source-link": "در گیت‌هاب",
+	"docs-link": "در ویکی‌نبشتهٔ چندزبانه",
 	"exception-rest-page-not-found": "ناتوان در یافتن صفحهٔ «$1».",
 	"epub-title-page": "عنوان",
 	"epub-exported-date": "خروجی ویکی‌نبشته",
-	"epub-about": "دربارهٔ"
+	"epub-about": "دربارهٔ",
+	"breadcrumbs-home-link": "خانه",
+	"breadcrumbs-stats-link": "آمار",
+	"recently-popular-heading": "اخیراً محبوب",
+	"recently-popular-subtext": "محبوب ترین دانلودها در سه ماه گذشته"
 }

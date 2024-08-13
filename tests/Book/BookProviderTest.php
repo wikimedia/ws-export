@@ -19,7 +19,7 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
  * @covers BookProvider
  */
 class BookProviderTest extends TestCase {
-	private BookProvider $bookProvider;
+	private $bookProvider;
 	private $mockHandler;
 
 	public function setUp(): void {

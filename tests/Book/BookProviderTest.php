@@ -19,13 +19,16 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
  * @covers BookProvider
  */
 class BookProviderTest extends TestCase {
-	private $bookProvider;
+	private BookProvider $bookProvider;
 	private $mockHandler;
 
 	public function setUp(): void {
 		$responses = [
 			// Namespaces.
 			new Response( 200, [], json_encode( [ 'query' => [ 'namespaces' => [ [ 'id' => 5, '*' => 'test' ] ], 'namespacealiases' => [] ] ] ) ),
+			// Image responses for testImageUrls()
+			new Response( 404, [ 'Content-Type' => 'image/png' ], '' ),
+			new Response( 404, [ 'Content-Type' => 'image/png' ], '' ),
 			// The rest of these responses are required for mocking the Refresh process ('about' page, etc.).
 			new Response( 200, [], '' ),
 			new Response( 404, [], '' ), // mock returning 404 in first api call in Refresh::getAboutXhtmlWikisource
@@ -78,5 +81,22 @@ class BookProviderTest extends TestCase {
 		$book = $this->bookProvider->getMetadata( 'Title name', false, $doc );
 		$this->assertSame( 'Title name', $book->title );
 		$this->assertSame( 'Title & name', $book->name );
+	}
+
+	/**
+	 * @dataProvider provideImageUrls
+	 */
+	public function testImageUrls( string $html, string $url ) {
+		$doc = new DOMDocument();
+		$doc->loadHTML( "<body>$html</body>" );
+		$book = $this->bookProvider->getMetadata( 'Title name', false, $doc );
+		$this->assertSame( $url, reset( $book->pictures )->url );
+	}
+
+	public function provideImageUrls() {
+		return [
+			[ '<img src="//upload.wikimedia.org/foo.jpg" />', 'https://upload.wikimedia.org/foo.jpg' ],
+			[ '<img src="/w/extensions/ExampleExt/foo.jpg" />', 'https://en.wikisource.org/w/extensions/ExampleExt/foo.jpg' ],
+		];
 	}
 }

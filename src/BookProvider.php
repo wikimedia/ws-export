@@ -169,6 +169,17 @@ class BookProvider {
 
 			$pictures = $this->getPicturesData( $pictures );
 		}
+		// Clean up the image URLs if they're protocol relative or only a path. This would probably be better in
+		// PageParser, but it doesn't have access to the domain name.
+		foreach ( $pictures as $pic ) {
+			$url = $pic->url;
+			if ( str_starts_with( $url, '//' ) ) {
+				$url = 'https:' . $url;
+			} elseif ( str_starts_with( $url, '/' ) ) {
+				$url = 'https://' . $this->api->getDomainName() . $url;
+			}
+			$pic->url = $url;
+		}
 		$book->pictures = $pictures;
 
 		return $book;
@@ -215,13 +226,6 @@ class BookProvider {
 		$requests = function () use ( $client, $pictures ) {
 			foreach ( $pictures as $picture ) {
 				$url = $picture->url;
-				// Clean up the URL if it's protocol relative or only a path.
-				if ( str_starts_with( $url, '//' ) ) {
-					$url = 'https:' . $url;
-				} elseif ( str_starts_with( $url, '/' ) ) {
-					// The PageParser doesn't have access to the domain name, so we add it in here.
-					$url = 'https://' . $this->api->getDomainName() . $url;
-				}
 				yield function () use ( $client, $url ) {
 					// We could use the 'sink' option here, but for https://github.com/Kevinrob/guzzle-cache-middleware/issues/82
 					// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface

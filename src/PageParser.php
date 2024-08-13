@@ -227,17 +227,9 @@ class PageParser {
 
 			$picture->name = $picture->title;
 		}
-		$picture->url = $this->resolveProtocolRelativeUrl( $url );
+		$picture->url = $url;
 
 		return $picture;
-	}
-
-	private function resolveProtocolRelativeUrl( $url ) {
-		if ( strpos( $url, '//' ) === 0 ) {
-			return 'https:' . $url;
-		} else {
-			return $url;
-		}
 	}
 
 	/**

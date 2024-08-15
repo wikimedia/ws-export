@@ -304,7 +304,7 @@ class BookProvider {
 			'iiurlwidth' => $width,
 			'formatversion' => 2,
 		] )->wait();
-		// Give up for invalid cover titles or those that do not exist or have errors.
+		// Give up for invalid cover titles or those that do not exist.
 		if ( !isset( $response['query']['pages'] )
 			|| isset( $response['query']['pages'][0]['missing'] )
 			|| isset( $response['query']['pages'][0]['invalid'] )

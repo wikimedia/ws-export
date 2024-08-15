@@ -222,6 +222,7 @@ class BookProvider {
 				} elseif ( str_starts_with( $url, '/' ) ) {
 					$url = 'https://' . $this->api->getDomainName() . $url;
 				}
+				$picture->url = $url;
 				yield function () use ( $client, $url ) {
 					// We could use the 'sink' option here, but for https://github.com/Kevinrob/guzzle-cache-middleware/issues/82
 					// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface

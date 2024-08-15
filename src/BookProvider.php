@@ -169,6 +169,17 @@ class BookProvider {
 
 			$pictures = $this->getPicturesData( $pictures );
 		}
+		// Clean up the image URLs if they're protocol relative or only a path. This would probably be better in
+		// PageParser, but it doesn't have access to the domain name.
+		foreach ( $pictures as $pic ) {
+			$url = $pic->url;
+			if ( str_starts_with( $url, '//' ) ) {
+				$url = 'https:' . $url;
+			} elseif ( str_starts_with( $url, '/' ) ) {
+				$url = 'https://' . $this->api->getDomainName() . $url;
+			}
+			$pic->url = $url;
+		}
 		$book->pictures = $pictures;
 
 		return $book;

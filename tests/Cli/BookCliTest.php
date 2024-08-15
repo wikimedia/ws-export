@@ -12,7 +12,8 @@ class BookCliTest extends TestCase {
 	public function bookProvider() {
 		return [
 			[ 'The_Kiss_and_its_History', 'en' ],
-			[ 'Les_Fleurs_du_mal', 'fr' ]
+			[ 'Les_Fleurs_du_mal', 'fr' ],
+			[ 'Stelae_of_Naukratis', 'mul' ],
 		];
 	}
 

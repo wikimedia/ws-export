@@ -55,7 +55,7 @@
 	"alert-close": "Sineb",
 	"export-failed": "Unduhan gagal",
 	"exception-url-fetch-error": "Tan prasida ngambil URL: $1",
-	"exception-rest-page-not-found": "Buku $1 tan prasida katemuin",
+	"exception-rest-page-not-found": "Kaca $1 tan prasida kacunduk",
 	"learn-more": "Pelajahin malih.",
 	"error-blocked-1": "Alamat IP ragané sané mangkin kacadel",
 	"error-blocked-2": "Antuk ngalangin panyalahwigunaan otomasi, WS Export ngalarang aksés saking anganggé ring medal log sané kacadel sacara global ring wiki-wiki Wikimédia.",
@@ -75,5 +75,9 @@
 	"exception-book-conversion": "Pikobet nyilurin format buku.",
 	"epub-title-page": "Murda kaca",
 	"epub-exported-date": "Kaékspor saking Wikipustaka ring $1",
-	"epub-about": "Indik"
+	"epub-about": "Indik",
+	"breadcrumbs-home-link": "Umah",
+	"breadcrumbs-stats-link": "Statistik",
+	"recently-popular-heading": "Mangkin kasub",
+	"recently-popular-subtext": "Unduhan sané pinih kasub saking tigang sasih sané sampun lintang"
 }

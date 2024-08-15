@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Умар"
+		]
+	},
+	"app-title": "Викихьостан чуьра жайнаш экспорт дар",
+	"app-title-html": "$1 чуьра жайнаш экспорт дар",
+	"app-subtitle": "Тайп-тайпанчу файлан форматашца Викихьостера жайнаш экспорт дар",
+	"logo-alt-text": "Викихьостан логотип, айсберган сийна а, кӀайн а сурт ду.",
+	"footer-version": "ХӀара $1 верси йу $2.",
+	"version": "$1 верси",
+	"commit-label": "Коммит: $1",
+	"license-link": "GPL v2 йа тӀаьхьо",
+	"source-link": "Github тӀехь",
+	"title-field-label": "Корта",
+	"format-pdf-a4": "PDF — А4 барам",
+	"format-pdf-a5": "PDF — A5 барам",
+	"format-pdf-a6": "PDF — A6 барам",
+	"font-field-label": "Шрифт",
+	"options-label": "Нисдаран гӀирс",
+	"export-button": "Экспортйе",
+	"alert-close": "ДӀачӀагӀа",
+	"learn-more": "Цул совнаха хаа.",
+	"error-blocked-1": "ХӀинца йолу ханна хьан IP-адрес блоктоьхна ду.",
+	"error-breadcrumb": "$1 гӀалат",
+	"error-page-header": "ГӀалат даьлла",
+	"error-page-details": "ГӀалатах информаци: $1",
+	"epub-title-page": "Корта",
+	"epub-about": "Информаци",
+	"breadcrumbs-home-link": "Коьрта",
+	"breadcrumbs-stats-link": "Статистика",
+	"recently-popular-heading": "ТӀаьхьарчу хенахь гӀарайаьлла",
+	"recently-popular-subtext": "ТӀаьххьарчу кхаа баттахь уггаре а дукха чуйаьхнарш"
+}

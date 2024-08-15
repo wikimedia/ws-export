@@ -13,7 +13,7 @@ class BookCliTest extends TestCase {
 		return [
 			[ 'The_Kiss_and_its_History', 'en' ],
 			[ 'Les_Fleurs_du_mal', 'fr' ],
-			[ 'Stelae of Naukratis', 'mul' ],
+			[ 'Stelae_of_Naukratis', 'mul' ],
 		];
 	}
 

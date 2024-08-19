@@ -302,8 +302,13 @@ class BookProvider {
 			'iiprop' => 'thumbmime|dimensions|url|canonicaltitle',
 			'iiurlparam' => $urlParam,
 			'iiurlwidth' => $width,
+			'formatversion' => 2,
 		] )->wait();
-		if ( !isset( $response['query']['pages'] ) ) {
+		// Give up for invalid cover titles or those that do not exist.
+		if ( !isset( $response['query']['pages'] )
+			|| isset( $response['query']['pages'][0]['missing'] )
+			|| isset( $response['query']['pages'][0]['invalid'] )
+		) {
 			return null;
 		}
 

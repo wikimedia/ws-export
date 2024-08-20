@@ -304,10 +304,9 @@ class BookProvider {
 			'iiurlwidth' => $width,
 			'formatversion' => 2,
 		] )->wait();
-		// Give up for invalid cover titles or those that do not exist.
+		// Give up if no imageinfo is returned (e.g. invalid or missing title).
 		if ( !isset( $response['query']['pages'] )
-			|| isset( $response['query']['pages'][0]['missing'] )
-			|| isset( $response['query']['pages'][0]['invalid'] )
+			|| !isset( $response['query']['pages'][0]['imageinfo'][0] )
 		) {
 			return null;
 		}

@@ -1,6 +1,6 @@
 # WS Export
 
-![CI](https://github.com/wikimedia/ws-export/workflows/CI/badge.svg)
+[![CI](https://github.com/wikimedia/ws-export/actions/workflows/ci.yml/badge.svg)](https://github.com/wikimedia/ws-export/actions/workflows/ci.yml)
 
 WS Export is a tool for exporting Wikisource books to many formats, such as EPUB or PDF.
 The documentation can be found here:

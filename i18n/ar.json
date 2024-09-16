@@ -4,6 +4,7 @@
 			"Dr-Taher",
 			"Ideophagous",
 			"Meno25",
+			"Mohanad",
 			"NEHAOUA",
 			"Sandra Hanbo",
 			"محمد أحمد عبد الفتاح"
@@ -59,7 +60,7 @@
 	"alert-close": "أغلق",
 	"export-failed": "فشل التنزيل.",
 	"exception-url-fetch-error": "تعذر استرداد URL: $1",
-	"exception-rest-page-not-found": "تعذر العثور على الكتاب \"$1\".",
+	"exception-rest-page-not-found": "تعذّر العثور على الصفحة \"$1\".",
 	"learn-more": "معرفة المزيد.",
 	"error-blocked-1": "عنوان IP الخاص بك محظور حاليًا.",
 	"error-blocked-2": "لمنع إساءة الاستخدام من الأتمتة التخريبية ، ترفض WS Export الوصول من المستخدمين المسجلين المحظورين عالميًا على Wikimedia wikis.",
@@ -82,6 +83,6 @@
 	"epub-about": "حول",
 	"breadcrumbs-home-link": "الصفحة الرئيسية",
 	"breadcrumbs-stats-link": "الإحصاءات",
-	"recently-popular-heading": "شعبية مؤخراً",
-	"recently-popular-subtext": "التنزيلات الأكثر شعبية من الأشهر الثلاثة الماضية"
+	"recently-popular-heading": "رائجة مؤخرًا",
+	"recently-popular-subtext": "التنزيلات الأكثر رواجًا خلال الأشهر الثلاثة الماضية"
 }

@@ -3,6 +3,7 @@
 		"authors": [
 			"Gustmd7410",
 			"Suleiman the Magnificent Television",
+			"YeBoy371",
 			"Ykhwong",
 			"그냥기여자"
 		]
@@ -77,6 +78,7 @@
 	"exception-book-conversion": "책의 포맷을 변환하는 중 오류가 발생했습니다.",
 	"epub-title-page": "표지",
 	"epub-about": "정보",
+	"breadcrumbs-home-link": "홈",
 	"breadcrumbs-stats-link": "통계",
 	"recently-popular-heading": "최근 인기",
 	"recently-popular-subtext": "지난 3개월 동안 가장 인기 있는 다운로드"

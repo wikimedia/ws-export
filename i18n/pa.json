@@ -1,0 +1,34 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cabal",
+			"Kuldeepburjbhalaike",
+			"Satdeep gill"
+		]
+	},
+	"app-title": "ਵਿਕੀਸਰੋਤ ਕਿਤਾਬ ਐਕਸਪੋਰਟ",
+	"app-title-html": "$1 ਕਿਤਾਬ ਐਕਸਪੋਰਟ",
+	"source-link": "Github 'ਤੇ",
+	"docs-link": "ਬਹੁਭਾਸ਼ਾਈ ਵਿਕੀਸਰੋਤ ਉੱਤੇ",
+	"statistics-link": "ਅੰਕੜੇ",
+	"back-to-wikisource": "ਵਿਕੀਸਰੋਤ ’ਤੇ ਵਾਪਸ ਜਾਓ",
+	"lang-field-label": "ਵਿਕੀਸਰੋਤ",
+	"title-field-label": "ਸਿਰਲੇਖ",
+	"title-field-help": "ਬਰਾਮਦ ਕਰਨ ਲਈ ਕਿਤਾਬ ਜਾਂ ਭਾਗ ਦਾ ਸਿਰਲੇਖ।",
+	"format-txt": "ਆਮ ਲਿਖਤ",
+	"font-field-label": "ਫ਼ੌਂਟ:",
+	"options-label": "ਚੋਣਾਂ",
+	"images-field-label": "ਚਿੱਤਰ ਸ਼ਾਮਲ ਨਾ ਕਰੋ",
+	"export-button": "ਬਰਾਮਦ",
+	"alert-close": "ਬੰਦ ਕਰੋ",
+	"learn-more": "ਹੋਰ ਸਿੱਖੋ",
+	"error-breadcrumb": "ਗਲਤੀ $1",
+	"error-page-header": "ਇੱਕ ਗਲਤੀ ਆਈ ਹੈ",
+	"error-page-details": "ਗਲਤੀ ਵੇਰਵੇ: $1",
+	"error-page-issue": "ਜੇਕਰ ਇਹ ਗਲਤੀ ਬਣੀ ਰਹਿੰਦੀ ਹੈ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ $1।",
+	"epub-title-page": "ਸਿਰਲੇਖ ਸਫ਼ਾ",
+	"epub-about": "ਬਾਬਤ",
+	"breadcrumbs-home-link": "ਘਰ",
+	"breadcrumbs-stats-link": "ਅੰਕੜੇ",
+	"recently-popular-heading": "ਹਾਲ ਹੀ ਵਿੱਚ ਪ੍ਰਸਿੱਧ"
+}

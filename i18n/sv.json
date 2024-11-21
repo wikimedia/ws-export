@@ -54,7 +54,7 @@
 	"alert-close": "Stäng",
 	"export-failed": "Nedladdning misslyckades.",
 	"exception-url-fetch-error": "Kunde inte hämta URL: $1",
-	"exception-rest-page-not-found": "Boken \"$1\" hittades inte.",
+	"exception-rest-page-not-found": "Sidan \"$1\" hittades inte.",
 	"learn-more": "Läs mer.",
 	"error-blocked-1": "Din IP-adress är för tillfället blockerad.",
 	"error-blocked-2": "För att motverka vandalism från störande automatisering nekar WS Export åtkomst för utloggade användare som är globalt blockerade på Wikimedias wikier.",
@@ -74,5 +74,9 @@
 	"exception-book-conversion": "Fel uppstod för bokens format skulle konverteras.",
 	"epub-title-page": "Titelsida",
 	"epub-exported-date": "Exporterad från Wikisource $1",
-	"epub-about": "Om"
+	"epub-about": "Om",
+	"breadcrumbs-home-link": "Huvudsida",
+	"breadcrumbs-stats-link": "Statistik",
+	"recently-popular-heading": "Nyligen populär",
+	"recently-popular-subtext": "Mest populära nedladdningar från de senaste tre månaderna"
 }

@@ -57,7 +57,7 @@
 	"alert-close": "Tutup",
 	"export-failed": "Pengunduhan gagal.",
 	"exception-url-fetch-error": "Tidak bisa mengambil URL: $1",
-	"exception-rest-page-not-found": "Buku '$1' tidak bisa ditemukan.",
+	"exception-rest-page-not-found": "Halaman '$1' tidak bisa ditemukan.",
 	"learn-more": "Pelajari selengkapnya.",
 	"error-blocked-1": "Alamat IP Anda saat ini sedang diblokir.",
 	"error-blocked-2": "Untuk mencegah penyalahgunaan otomasi, WS Export melarang akses dari pengguna di luar log yang diblokir secara global di wiki-wiki Wikimedia.",
@@ -77,5 +77,9 @@
 	"exception-book-conversion": "Terjadi kesalahan ketika mengonversi format buku.",
 	"epub-title-page": "Halaman judul",
 	"epub-exported-date": "Diekspor dari Wikisource pada $1",
-	"epub-about": "Tentang"
+	"epub-about": "Tentang",
+	"breadcrumbs-home-link": "Beranda",
+	"breadcrumbs-stats-link": "Statistik",
+	"recently-popular-heading": "Baru-baru ini populer",
+	"recently-popular-subtext": "Unduhan paling populer dalam tiga bulan terakhir"
 }

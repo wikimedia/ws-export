@@ -11,6 +11,7 @@ use App\Util\Util;
 use DateInterval;
 use Exception;
 use IntlDateFormatter;
+// use Imagick;
 use Krinkle\Intuition\Intuition;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -72,6 +73,26 @@ class EpubGenerator implements FormatGenerator {
 	 * @return string
 	 */
 	public function create( Book $book ) {
+		
+
+		// Get the protocol (http or https)
+		$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+		// Get the host (domain or IP)
+		$host = $_SERVER['HTTP_HOST'];
+		// Get the requested URI (path + query string)
+		$requestUri = $_SERVER['REQUEST_URI'];
+		// Combine them to get the full URL
+		$currentUrl = $protocol . '://' . $host . $requestUri;
+		// Print the current URL
+		// echo "The current URL is: " . $currentUrl;
+
+		// Use regular expression to extract the first word before .wikimedia.org or .wikisource.org
+		if (preg_match('/https?:\/\/([a-zA-Z0-9]+)\.(wikimedia|wikisource)\.org/', $currentUrl, $matches)) {
+    	// The first word before .wikimedia.org or .wikisource.org is stored in $matches[1]
+    	$firstWord = $matches[1];
+    	// echo "The first word before the domain is: " . $firstWord;
+		}
+
 		$oldBookTitle = $book->title;
 		$css = $this->getCss( $book );
 		$this->intuition->setLang( $book->lang );
@@ -89,8 +110,29 @@ class EpubGenerator implements FormatGenerator {
 		$zip->addFromString( 'OPS/about.xhtml', $this->getXhtmlAbout( $book, $wsUrl ) );
 		$dir = dirname( __DIR__, 2 ) . '/resources';
 		if ( $book->options['images'] ) {
-			$zip->addFile( $dir . '/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png' );
+			$zip->addFile( $dir . '/images/Wikisource-logo.png', 'OPS/images/Wikisource-logo.png' );
 		}
+
+		// if ( $book->options['images'] ) {
+		// 	// Convert SVG to PNG in memory
+		// 	$imagick = new Imagick();
+		// 	$imagick->readImage($dir . '/images/Wikisource-logo.png');
+		// 	$imagick->setImageFormat('png');
+			
+		// 	// Get the PNG image data in memory
+		// 	$imageData = $imagick->getImageBlob();
+		
+		// 	// Add the PNG image data to the ZIP file (using tmpfile() to create a temporary file)
+		// 	$tempFile = tmpfile();
+		// 	fwrite($tempFile, $imageData);
+		// 	$tempFilePath = stream_get_meta_data($tempFile)['uri'];
+		
+		// 	$zip->addFile($tempFilePath, 'OPS/images/Wikisource-logo.png');
+		
+		// 	// Close the temporary file after use
+		// 	fclose($tempFile);
+		// }
+		
 
 		$font = $this->fontProvider->getOne( $book->options['fonts'] );
 		if ( $font !== null ) {
@@ -168,7 +210,7 @@ class EpubGenerator implements FormatGenerator {
 		$content .= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
 				    <item id="mainCss" href="main.css" media-type="text/css" />';
 		if ( $book->options['images'] ) {
-			$content .= '<item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
+			$content .= '<item id="Wikisource-logo.png" href="images/Wikisource-logo.png" media-type="image/png" />';
 		}
 		$font = $this->fontProvider->getOne( $book->options['fonts'] );
 		if ( $font !== null ) {
@@ -399,7 +441,7 @@ class EpubGenerator implements FormatGenerator {
 					<h3>' . htmlspecialchars( $book->author, ENT_QUOTES ) . '</h3>
 					<br />';
 		if ( $book->options['images'] ) {
-			$content .= '<img alt="" src="images/Accueil_scribe.png" />';
+			$content .= '<img alt="" src="images/Wikisource-logo.png" />';
 		}
 		$content .= '<br />
 					<h5>' . implode( ', ', $footerElements ) . '</h5>

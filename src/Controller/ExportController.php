@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Book;
 use App\BookCreator;
 use App\Entity\GeneratedBook;
 use App\Exception\WsExportException;
 use App\FileCache;
 use App\FontProvider;
 use App\GeneratorSelector;
+use App\Message\CreateBookMessage;
 use App\Refresh;
 use App\Repository\CreditRepository;
 use App\Util\Api;
@@ -23,6 +25,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Messenger\MessageBusInterface;
 // phpcs:ignore
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -79,6 +82,7 @@ class ExportController extends AbstractController {
 	 */
 	public function home(
 		Request $request,
+		MessageBusInterface $bus,
 		Api $api,
 		FontProvider $fontProvider,
 		GeneratorSelector $generatorSelector,
@@ -102,7 +106,7 @@ class ExportController extends AbstractController {
 		$response = new Response();
 		if ( $request->query->get( 'page' ) ) {
 			try {
-				return $this->export( $request, $api, $fontProvider, $generatorSelector, $creditRepo, $fileCache );
+				return $this->export( $request, $bus, $api, $fontProvider, $generatorSelector, $creditRepo, $fileCache );
 			} catch ( WsExportException $ex ) {
 				$exception = $ex;
 				$response->setStatusCode( $ex->getResponseCode() );
@@ -131,6 +135,7 @@ class ExportController extends AbstractController {
 
 	private function export(
 		Request $request,
+		MessageBusInterface $bus,
 		Api $api,
 		FontProvider $fontProvider,
 		GeneratorSelector $generatorSelector,
@@ -151,32 +156,55 @@ class ExportController extends AbstractController {
 			$this->stopwatch->start( 'generate-book' );
 		}
 
-		// Generate ebook.
-		$options = [ 'images' => $images, 'fonts' => $font, 'credits' => $credits ];
+		// Set up ebook details.
+		$options = [ 'images' => $images, 'fonts' => $font, 'credits' => $credits, 'categories' => false ];
 		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector, $creditRepo, $fileCache );
-		$creator->create( $page );
+		$book = new Book();
+		$book->lang = $api->getLang();
+		$book->title = $page;
+		$book->options = $options;
 
-		// Send file.
-		$response = new BinaryFileResponse( $creator->getFilePath() );
-		$response->headers->set( 'X-Robots-Tag', 'none' );
-		$response->headers->set( 'Content-Description', 'File Transfer' );
-		$response->headers->set( 'Content-Type', $creator->getMimeType() );
-		$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $creator->getFilename() );
-		$response->deleteFileAfterSend();
+		// Fetch the first page to check that it exists.
+		// If it does, it'll be cached and this won't be done again; if it doesn't, this will throw an exception.
+		$api->getPageAsync( $page )->wait();
 
-		// Log book generation.
-		if ( $this->enableStats ) {
-			try {
-				$genBook = new GeneratedBook( $creator->getBook(), $format, $this->stopwatch->stop( 'generate-book' ) );
-				$this->entityManager->persist( $genBook );
-				$this->entityManager->flush();
-			} catch ( DriverException $e ) {
-				// There was an error writing to tools-db.
-				// Silently ignore as this shouldn't prevent the book from being downloaded.
+		// Dispatch a message to the job queue with the details of the book to generate and where to save the output.
+		$filePathHash = md5( serialize( $book ) . $format );
+		$filePath = $fileCache->getDirectory() . '/ebook_' . $filePathHash . '_' . uniqid() . '.' . $creator->getExtension();
+		// @todo Don't hardcode the expiry here.
+		$ttl = 30;
+		$bus->dispatch( new CreateBookMessage( $book, $filePath, $format, time() + $ttl ) );
+
+		// Loop while checking for the existence of the generated output file.
+		for ( $i = 0; $i < 30; $i++ ) {
+			if ( file_exists( $filePath ) ) {
+				// The file has been generated now, so send it.
+				$response = new BinaryFileResponse( $filePath );
+				$response->headers->set( 'X-Robots-Tag', 'none' );
+				$response->headers->set( 'Content-Description', 'File Transfer' );
+				$response->headers->set( 'Content-Type', $creator->getMimeType() );
+				$filename = str_replace( [ '/', '\\' ], '_', $page ) . '.' . $creator->getExtension();
+				$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename );
+				$response->deleteFileAfterSend();
+
+				// Log book generation.
+				if ( $this->enableStats ) {
+					try {
+						$genBook = new GeneratedBook( $book, $format, $this->stopwatch->stop( 'generate-book' ) );
+						$this->entityManager->persist( $genBook );
+						$this->entityManager->flush();
+					} catch ( DriverException $e ) {
+						// There was an error writing to tools-db.
+						// Silently ignore as this shouldn't prevent the book from being downloaded.
+					}
+				}
+				return $response;
 			}
+			sleep( 1 );
 		}
 
-		return $response;
+		// If the file wasn't generated by the job queue, tell the user.
+		throw new WsExportException( 'no-file-generated', [ $ttl ], 500 );
 	}
 
 	/**

@@ -1,10 +1,15 @@
 # WS Export
 
-[![CI](https://github.com/wikimedia/ws-export/actions/workflows/ci.yml/badge.svg)](https://github.com/wikimedia/ws-export/actions/workflows/ci.yml)
+**WS Export** is a tool for exporting [Wikisource](https://en.wikipedia.org/wiki/Wikisource) books to many formats, such as EPUB or PDF.
+For more information, see the following links:
 
-WS Export is a tool for exporting Wikisource books to many formats, such as EPUB or PDF.
-The documentation can be found here:
-<https://wikisource.org/wiki/Wikisource:WS_Export>
+* Tool URL: https://ws-export.wmcloud.org
+* User documentation: https://wikisource.org/wiki/Wikisource:WS_Export
+* Issue tracker: https://phabricator.wikimedia.org/tag/ws_export/
+
+The rest of this readme is aimed at developers and people running WS Export locally (e.g. for batch downloading).
+
+[![CI](https://github.com/wikimedia/ws-export/actions/workflows/ci.yml/badge.svg)](https://github.com/wikimedia/ws-export/actions/workflows/ci.yml)
 
 ## Requirements
 

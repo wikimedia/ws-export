@@ -39,7 +39,7 @@ class ExportCommand extends Command {
 		$this->fileCache = $fileCache;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$formatDesc = 'Export format. One of: ' . implode( ', ', array_keys( GeneratorSelector::getValidFormats() ) );
 		$this->setDescription( 'Export a book.' )
 			->addOption( 'lang', 'l', InputOption::VALUE_REQUIRED, 'Wikisource language code.' )

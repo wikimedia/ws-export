@@ -31,7 +31,7 @@ class OpdsCommand extends Command {
 		$this->fileCache = $fileCache;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this->setDescription( 'Generate an OPDS file.' )
 			->addOption( 'lang', 'l', InputOption::VALUE_REQUIRED, 'Wikisource language code.' )
 			->addOption( 'category', 'c', InputOption::VALUE_REQUIRED, 'Category name to export.' );

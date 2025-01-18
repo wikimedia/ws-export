@@ -58,3 +58,5 @@ doctrine:
                         prefix: App\Entity
                         alias: Entity
                         is_bundle: false
+        controller_resolver:
+            auto_mapping: false

@@ -43,7 +43,7 @@ class CheckCommand extends Command {
 		$this->epubCheck = $epubCheck;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$randCount = 10;
 		$this->setDescription(
 			'Run epubcheck on books.'

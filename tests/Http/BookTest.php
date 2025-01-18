@@ -31,9 +31,9 @@ class BookTest extends WebTestCase {
 	public function testGetPage( $title, $language ) {
 		$creditRepository = $this->getMockBuilder( CreditRepository::class )->disableOriginalConstructor()->getMock();
 		$creditRepository->method( 'getPageCredits' )
-			->will( $this->returnValue( [] ) );
+			->willReturn( [] );
 		$creditRepository->method( 'getImageCredits' )
-			->will( $this->returnValue( [] ) );
+			->willReturn( [] );
 
 		$client = static::createClient();
 		$client->getContainer()->set( CreditRepository::class, $creditRepository );
@@ -46,7 +46,7 @@ class BookTest extends WebTestCase {
 
 		// Test that it took at least a second to generate.
 		/** @var GeneratedBook $genBook */
-		$genBook = self::$container
+		$genBook = self::getContainer()
 			->get( 'doctrine' )
 			->getManager()
 			->getRepository( GeneratedBook::class )

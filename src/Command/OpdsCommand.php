@@ -15,8 +15,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class OpdsCommand extends Command {
 
-	protected static $defaultName = 'app:opds';
-
 	/** @var Api */
 	private $api;
 
@@ -27,7 +25,7 @@ class OpdsCommand extends Command {
 	private $fileCache;
 
 	public function __construct( Api $api, CreditRepository $creditRepo, FileCache $fileCache ) {
-		parent::__construct();
+		parent::__construct( 'app:opds' );
 		$this->api = $api;
 		$this->creditRepo = $creditRepo;
 		$this->fileCache = $fileCache;

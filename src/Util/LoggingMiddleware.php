@@ -12,7 +12,7 @@ class LoggingMiddleware {
 	private $nextHandler;
 
 	public static function forLogger( LoggerInterface $logger ) {
-		return function ( callable $handler ) use ( $logger ) {
+		return static function ( callable $handler ) use ( $logger ) {
 			return new LoggingMiddleware( $logger, $handler );
 		};
 	}

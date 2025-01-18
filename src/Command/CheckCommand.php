@@ -16,9 +16,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CheckCommand extends Command {
 
-	/** @var string */
-	protected static $defaultName = 'app:check';
-
 	/** @var Api */
 	private $api;
 
@@ -38,7 +35,7 @@ class CheckCommand extends Command {
 	private $io;
 
 	public function __construct( Api $api, GeneratorSelector $generatorSelector, CreditRepository $creditRepo, FileCache $fileCache, EpubCheck $epubCheck ) {
-		parent::__construct();
+		parent::__construct( 'app:check' );
 		$this->api = $api;
 		$this->generatorSelector = $generatorSelector;
 		$this->creditRepo = $creditRepo;

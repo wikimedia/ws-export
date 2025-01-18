@@ -15,9 +15,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ExportCommand extends Command {
 
-	/** @var string */
-	protected static $defaultName = 'app:export';
-
 	/** @var GeneratorSelector */
 	private $generatorSelector;
 
@@ -34,7 +31,7 @@ class ExportCommand extends Command {
 	private $fileCache;
 
 	public function __construct( GeneratorSelector $generatorSelector, CreditRepository $creditRepo, Api $api, bool $enableCache, FileCache $fileCache ) {
-		parent::__construct();
+		parent::__construct( 'app:export' );
 		$this->generatorSelector = $generatorSelector;
 		$this->creditRepo = $creditRepo;
 		$this->api = $api;

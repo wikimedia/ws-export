@@ -22,17 +22,18 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		self::bootKernel();
-		$this->entityManager = self::$container->get( 'doctrine' )->getManager();
+		$this->entityManager = self::getContainer()->get( 'doctrine' )->getManager();
 		$this->genBookRepo = $this->entityManager
 			->getRepository( GeneratedBook::class );
 	}
 
 	/**
-	 * @covers GeneratedBookRepository::getTypeAndLangStats
+	 * @covers \App\Repository\GeneratedBookRepository::getTypeAndLangStats
 	 */
 	public function testAddAndRetrieve() {
 		// Make sure it's empty to start with.
-		static::assertEmpty(
+		static::assertEquals(
+			[],
 			$this->genBookRepo->getTypeAndLangStats( date( 'n' ), date( 'Y' ) )
 		);
 
@@ -69,7 +70,7 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 	 */
 	public function testInvalidDateParams(): void {
 		$noStats = $this->genBookRepo->getTypeAndLangStats( 'foo', 'bar' );
-		$this->assertEmpty( $noStats );
+		$this->assertEquals( [], $noStats );
 
 		$testBook = new Book();
 		$testBook->lang = 'en';
@@ -81,6 +82,6 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 		$this->assertCount( 1, $oneStat );
 
 		$invalidMonthStat = $this->genBookRepo->getTypeAndLangStats( '09 AND 1=1', date( 'Y' ) );
-		$this->assertEmpty( $invalidMonthStat );
+		$this->assertEquals( [], $invalidMonthStat );
 	}
 }

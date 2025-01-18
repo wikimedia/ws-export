@@ -59,9 +59,7 @@ class ExportController extends AbstractController {
 		$this->wikidata = $wikidata;
 	}
 
-	/**
-	 * @Route("/refresh", name="refresh")
-	 */
+	#[Route( '/refresh', name: 'refresh' )]
 	public function refresh( Request $request, Api $api, CacheItemPoolInterface $cacheItemPool ) {
 		$api->setLang( $this->getLang( $request ) );
 		$refresh = new Refresh( $api, $cacheItemPool );
@@ -73,10 +71,10 @@ class ExportController extends AbstractController {
 	/**
 	 * The main export form.
 	 * This route should support the following query string parameters: page, format, images, fonts, refresh.
-	 * @Route("/", name="home")
-	 * @Route("book.php")
-	 * @Route("tool/book.php")
 	 */
+	#[Route( '/', name: 'home' )]
+	#[Route( 'book.php' )]
+	#[Route( 'tool/book.php' )]
 	public function home(
 		Request $request,
 		Api $api,

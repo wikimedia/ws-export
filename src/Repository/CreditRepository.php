@@ -43,7 +43,7 @@ class CreditRepository {
 	 * @param array $pages Pages to get credits for.
 	 * @return array
 	 */
-	public function getPageCredits( string $lang, array $namespaces, array $pages ) : array {
+	public function getPageCredits( string $lang, array $namespaces, array $pages ): array {
 		$dbname = $this->getDatabaseName( $lang, 'wikisource' );
 
 		$connection = $this->client->getConnection( $dbname );
@@ -99,7 +99,7 @@ class CreditRepository {
 	 * @param array $images Images to get credits for.
 	 * @return array
 	 */
-	public function getImageCredits( array $images ) : array {
+	public function getImageCredits( array $images ): array {
 		$dbname = $this->getDatabaseName( 'commons', 'wiki' );
 
 		$connection = $this->client->getConnection( $dbname );

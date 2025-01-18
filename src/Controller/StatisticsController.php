@@ -17,12 +17,12 @@ class StatisticsController extends AbstractController {
 	}
 
 	/**
-	 * @Route("/statistics", name="statistics")
-	 * @Route("/stat.php")
 	 * @param Request $request
 	 * @param GeneratedBookRepository $generatedBookRepo
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
+	#[Route( '/statistics', name: 'statistics' )]
+	#[Route( '/stat.php' )]
 	public function index( Request $request, GeneratedBookRepository $generatedBookRepo ) {
 		$now = new DateTime();
 		$month = $request->query->get( 'month', $now->format( 'm' ) );

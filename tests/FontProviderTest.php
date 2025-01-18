@@ -27,7 +27,7 @@ class FontProviderTest extends TestCase {
 	}
 
 	/**
-	 * @covers FontProvider::resolveName()
+	 * @covers \App\FontProvider::resolveName()
 	 * @dataProvider provideResolveName
 	 */
 	public function testResolveName( $in, $out ) {
@@ -44,7 +44,7 @@ class FontProviderTest extends TestCase {
 	}
 
 	/**
-	 * @covers FontProvider::getOne()
+	 * @covers \App\FontProvider::getOne()
 	 */
 	public function testGetOne() {
 		// Non-existing font.
@@ -56,7 +56,7 @@ class FontProviderTest extends TestCase {
 	}
 
 	/**
-	 * @covers FontProvider::getCss()
+	 * @covers \App\FontProvider::getCss()
 	 */
 	public function testGetCss() {
 		$this->assertSame( '@font-face {  font-family: "FreeSerif";  font-weight: normal;  font-style: normal;  src: url("fonts/FreeSerif.ttf");}
@@ -90,11 +90,11 @@ body { font-family: "OpenDyslexic" }
 	}
 
 	/**
-	 * @covers FontProvider::getForLang()
+	 * @covers \App\FontProvider::getForLang()
 	 */
 	public function testGetForLang() {
 		$this->assertNotEmpty( $this->fontProvider->getForLang( 'en' ) );
 		$this->assertNotEmpty( $this->fontProvider->getForLang( 'kn' ) );
-		$this->assertEmpty( $this->fontProvider->getForLang( 'not-a-lang' ) );
+		$this->assertSame( [], $this->fontProvider->getForLang( 'not-a-lang' ) );
 	}
 }

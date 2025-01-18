@@ -9,7 +9,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers PageParser
+ * @covers \App\PageParser
  */
 class PageParserTest extends TestCase {
 	/**
@@ -71,7 +71,7 @@ class PageParserTest extends TestCase {
 
 	public function testGetMetadataReturnsEmptyIfNotSet() {
 		$data = $this->pageParser->getMetadata( 'ws-xxx' );
-		$this->assertEmpty( $data );
+		$this->assertSame( '', $data );
 	}
 
 	public function testGetContentReturnsADOMDocument() {

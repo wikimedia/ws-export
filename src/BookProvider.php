@@ -223,7 +223,7 @@ class BookProvider {
 					$url = 'https://' . $this->api->getDomainName() . $url;
 				}
 				$picture->url = $url;
-				yield function () use ( $client, $url ) {
+				yield static function () use ( $client, $url ) {
 					// We could use the 'sink' option here, but for https://github.com/Kevinrob/guzzle-cache-middleware/issues/82
 					// @phan-suppress-next-line PhanUndeclaredMethod Magic method not declared in the interface
 					return $client->getAsync( $url );
@@ -377,7 +377,7 @@ class BookProvider {
 			$credits[$name]['bot'] = $values['bot'];
 		}
 
-		uasort( $credits, function ( $a, $b ) {
+		uasort( $credits, static function ( $a, $b ) {
 			return $b['count'] - $a['count'];
 		} );
 

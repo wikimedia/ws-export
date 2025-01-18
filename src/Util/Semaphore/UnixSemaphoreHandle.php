@@ -21,7 +21,7 @@ class UnixSemaphoreHandle implements SemaphoreHandle {
 		sem_release( $this->semaphore );
 	}
 
-	public function  __destruct() {
+	public function __destruct() {
 		$this->release();
 	}
 }

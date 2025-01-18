@@ -16,7 +16,7 @@ use Psr\Log\NullLogger;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
- * @covers BookProvider
+ * @covers \App\BookProvider
  */
 class BookProviderTest extends TestCase {
 	private $bookProvider;

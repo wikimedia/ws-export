@@ -24,7 +24,8 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        php: [ '8.2', '8.2', '8.4' ]
+        # Test against the lowest and highest PHP versions that we support.
+        php: [ '8.2', '8.4' ]
         epubcheck: [ '5.1.0' ]
 
     env:

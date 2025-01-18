@@ -5964,16 +5964,16 @@
         },
         {
             "name": "wikimedia/toolforge-bundle",
-            "version": "1.7.1",
+            "version": "1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/ToolforgeBundle.git",
-                "reference": "92cadd6e124881d753c515c4a6df6e719d596eef"
+                "reference": "1663a9ccafc007fe7fd6f45d014e3bec4dc907dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/92cadd6e124881d753c515c4a6df6e719d596eef",
-                "reference": "92cadd6e124881d753c515c4a6df6e719d596eef",
+                "url": "https://api.github.com/repos/wikimedia/ToolforgeBundle/zipball/1663a9ccafc007fe7fd6f45d014e3bec4dc907dd",
+                "reference": "1663a9ccafc007fe7fd6f45d014e3bec4dc907dd",
                 "shasum": ""
             },
             "require": {
@@ -6018,7 +6018,7 @@
                 "issues": "https://phabricator.wikimedia.org/tag/toolforgebundle/",
                 "source": "https://github.com/wikimedia/toolforgebundle"
             },
-            "time": "2025-01-07T15:49:12+00:00"
+            "time": "2025-01-18T23:20:54+00:00"
         }
     ],
     "packages-dev": [

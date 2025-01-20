@@ -13,7 +13,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:5.8
         env:
           MYSQL_DATABASE: wsexport_test
           MYSQL_ROOT_PASSWORD: testpwd
@@ -30,7 +30,7 @@ jobs:
 
     env:
       APP_ENV: test
-      DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=5.7
+      DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=5.8
       EPUBCHECK_JAR: /home/runner/work/tool/tool/epubcheck-${{matrix.epubcheck}}/epubcheck.jar
 
     runs-on: ${{matrix.os}}

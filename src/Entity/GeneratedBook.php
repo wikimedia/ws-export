@@ -35,25 +35,25 @@ class GeneratedBook {
 	/**
 	 * @var string Language code.
 	 */
-	#[ORM\Column( type: 'string', length: '10' )]
+	#[ORM\Column( name: 'lang', type: 'string', length: 10 )]
 	private $lang;
 
 	/**
 	 * @var string Title of work.
 	 */
-	#[ORM\Column( type: 'string', length: '255' )]
+	#[ORM\Column( name: 'title', type: 'string', length: 255 )]
 	private $title;
 
 	/**
 	 * @var string Format such as 'epub', 'pdf', etc.
 	 */
-	#[ORM\Column( type: 'string', length: '10' )]
+	#[ORM\Column( name: 'format', type: 'string', length: 10 )]
 	private $format;
 
 	/**
 	 * @var int|null The book generation duration in seconds.
 	 */
-	#[ORM\Column( type: 'integer', nullable: 'true' )]
+	#[ORM\Column( name: 'duration', type: 'integer', length: null, precision: null, scale: null, nullable: true )]
 	private $duration;
 
 	/**

@@ -22,6 +22,9 @@ return [
 	'suppress_issue_types' => [
 		// Done by PHPCS, which can also read inline @var comment
 		'PhanUnreferencedUseNormal',
+		// Symfony defines multiple classes sometimes, for backwards compatibility.
+		'PhanRedefinedExtendedClass',
+		'PhanRedefinedClassReference'
 	],
 
 	'plugins' => [

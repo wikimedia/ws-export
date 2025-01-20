@@ -2,8 +2,10 @@
 
 namespace App\Util\Semaphore;
 
+use SysvSemaphore;
+
 class UnixSemaphoreHandle implements SemaphoreHandle {
-	/** @var resource */
+	/** @var resource|SysvSemaphore */
 	private $semaphore;
 	/** @var bool */
 	private $isReleased;

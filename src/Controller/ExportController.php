@@ -203,8 +203,9 @@ class ExportController extends AbstractController {
 		// This regex is a more lenient form of the one for Wikimedia language codes:
 		// https://www.wikidata.org/wiki/Property:P424#P1793
 		$lang = preg_replace( '/[^A-Za-z_-]/', '', $request->query->get( 'lang', '' ) );
-		if ( !$lang ) {
-			$localInfo = Locale::parseLocale( $request->getPreferredLanguage() );
+		$preferredLang = $request->getPreferredLanguage();
+		if ( !$lang && $preferredLang ) {
+			$localInfo = Locale::parseLocale( $preferredLang );
 			$lang = $localInfo['language'] ?? '';
 		}
 		return strtolower( $lang );

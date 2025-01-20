@@ -13,9 +13,9 @@ use Symfony\Component\Stopwatch\StopwatchEvent;
  * The GeneratedBook is the log of exports.
  */
 #[ORM\Entity( repositoryClass: GeneratedBookRepository::class )]
-#[ORM\Table( name: "books_generated" )]
-#[ORM\Index( name: "time", columns: [ "time" ] )]
-#[ORM\Index( name: "lang", columns: [ "lang" ] )]
+#[ORM\Table( name: 'books_generated' )]
+#[ORM\Index( name: 'time', columns: [ 'time' ] )]
+#[ORM\Index( name: 'lang', columns: [ 'lang' ] )]
 class GeneratedBook {
 
 	/**
@@ -23,37 +23,37 @@ class GeneratedBook {
 	 */
 	#[ORM\Id()]
 	#[ORM\GeneratedValue()]
-	#[ORM\Column( type: "integer" )]
+	#[ORM\Column( type: 'integer' )]
 	private $id;
 
 	/**
 	 * @var DateTime Date and time of the export.
 	 */
-	#[ORM\Column( type: "datetime" )]
+	#[ORM\Column( type: 'datetime' )]
 	private $time;
 
 	/**
 	 * @var string Language code.
 	 */
-	#[ORM\Column( type: "string", length: 10 )]
+	#[ORM\Column( type: 'string', length: '10' )]
 	private $lang;
 
 	/**
 	 * @var string Title of work.
 	 */
-	#[ORM\Column( type: "string", length: 255 )]
+	#[ORM\Column( type: 'string', length: '255' )]
 	private $title;
 
 	/**
 	 * @var string Format such as 'epub', 'pdf', etc.
 	 */
-	#[ORM\Column( type: "string", length: 10 )]
+	#[ORM\Column( type: 'string', length: '10' )]
 	private $format;
 
 	/**
 	 * @var int|null The book generation duration in seconds.
 	 */
-	#[ORM\Column( type: "integer", nullable: true )]
+	#[ORM\Column( type: 'integer', nullable: 'true' )]
 	private $duration;
 
 	/**

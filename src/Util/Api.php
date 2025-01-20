@@ -293,7 +293,6 @@ class Api {
 			static function ( $text, $id ) use ( &$texts ) {
 				$texts[$id] = $text;
 			},
-			// @phan-suppress-next-line PhanPluginNeverReturnFunction
 			static function ( $exception, $id ): never {
 				throw $exception;
 			}

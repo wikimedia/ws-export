@@ -24,7 +24,9 @@ return [
 		'PhanUnreferencedUseNormal',
 		// Symfony defines multiple classes sometimes, for backwards compatibility.
 		'PhanRedefinedExtendedClass',
-		'PhanRedefinedClassReference'
+		'PhanRedefinedClassReference',
+		// Bug between PHP 8.2 and 8.3?
+		'PhanPluginNeverReturnFunction'
 	],
 
 	'plugins' => [

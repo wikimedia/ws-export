@@ -32,7 +32,7 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 	 */
 	public function testAddAndRetrieve() {
 		// Make sure it's empty to start with.
-		static::assertEquals(
+		static::assertSame(
 			[],
 			$this->genBookRepo->getTypeAndLangStats( date( 'n' ), date( 'Y' ) )
 		);
@@ -49,14 +49,14 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 		$this->entityManager->flush();
 
 		// Test stats.
-		static::assertEquals(
+		static::assertSame(
 			[ 'epub' => [ 'en' => 2 ], 'pdf' => [ 'en' => 1 ] ],
 			$this->genBookRepo->getTypeAndLangStats( date( 'n' ), date( 'Y' ) )
 		);
 		// Test data.
 		/** @var GeneratedBook $firstLog */
 		$firstLog = $this->genBookRepo->findOneBy( [] );
-		static::assertEquals(
+		static::assertSame(
 			'Test "Book"',
 			$firstLog->getTitle()
 		);

@@ -5,7 +5,7 @@ namespace App\Util\Semaphore;
 use SysvSemaphore;
 
 class UnixSemaphoreHandle implements SemaphoreHandle {
-	/** @var resource|SysvSemaphore */
+	/** @var SysvSemaphore */
 	private $semaphore;
 	/** @var bool */
 	private $isReleased;

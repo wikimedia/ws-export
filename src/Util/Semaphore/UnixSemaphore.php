@@ -14,7 +14,7 @@ class UnixSemaphore implements Semaphore {
 	private $semaphoreKey;
 	/** @var int */
 	private $capacity;
-	/** @var resource|SysvSemaphore|null the lazily initialized semaphore descriptor */
+	/** @var SysvSemaphore|null the lazily initialized semaphore descriptor */
 	private $semaphore;
 
 	/**

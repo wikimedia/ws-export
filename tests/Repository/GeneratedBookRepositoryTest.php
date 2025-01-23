@@ -32,7 +32,7 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 	 */
 	public function testAddAndRetrieve() {
 		// Make sure it's empty to start with.
-		static::assertSame(
+		$this->assertSame(
 			[],
 			$this->genBookRepo->getTypeAndLangStats( date( 'n' ), date( 'Y' ) )
 		);
@@ -49,14 +49,14 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 		$this->entityManager->flush();
 
 		// Test stats.
-		static::assertSame(
+		$this->assertSame(
 			[ 'epub' => [ 'en' => 2 ], 'pdf' => [ 'en' => 1 ] ],
 			$this->genBookRepo->getTypeAndLangStats( date( 'n' ), date( 'Y' ) )
 		);
 		// Test data.
 		/** @var GeneratedBook $firstLog */
 		$firstLog = $this->genBookRepo->findOneBy( [] );
-		static::assertSame(
+		$this->assertSame(
 			'Test "Book"',
 			$firstLog->getTitle()
 		);
@@ -70,7 +70,7 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 	 */
 	public function testInvalidDateParams(): void {
 		$noStats = $this->genBookRepo->getTypeAndLangStats( 'foo', 'bar' );
-		$this->assertEquals( [], $noStats );
+		$this->assertSame( [], $noStats );
 
 		$testBook = new Book();
 		$testBook->lang = 'en';
@@ -82,6 +82,6 @@ class GeneratedBookRepositoryTest extends KernelTestCase {
 		$this->assertCount( 1, $oneStat );
 
 		$invalidMonthStat = $this->genBookRepo->getTypeAndLangStats( '09 AND 1=1', date( 'Y' ) );
-		$this->assertEquals( [], $invalidMonthStat );
+		$this->assertSame( [], $invalidMonthStat );
 	}
 }

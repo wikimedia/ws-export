@@ -26,7 +26,7 @@ class BookCliTest extends TestCase {
 		$outputPath = sys_get_temp_dir();
 		$process = new Process( [ 'php', $binPath, 'app:export', '--title', $title, '--lang', $language, '--path', $outputPath, '--nocredits' ] );
 		$process->mustRun();
-		static::assertTrue( $process->isSuccessful() );
-		static::assertFileExists( $outputPath . "/$title.epub" );
+		$this->assertTrue( $process->isSuccessful() );
+		$this->assertFileExists( $outputPath . "/$title.epub" );
 	}
 }

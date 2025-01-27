@@ -13,7 +13,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.4
         env:
           MYSQL_DATABASE: wsexport_test
           MYSQL_ROOT_PASSWORD: testpwd
@@ -24,12 +24,13 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        php: [ '7.3', '7.4', '8.0', '8.1', '8.2' ]
+        # Test against the lowest and highest PHP versions that we support.
+        php: [ '8.2', '8.3' ]
         epubcheck: [ '5.1.0' ]
 
     env:
       APP_ENV: test
-      DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=5.7
+      DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=8.4
       EPUBCHECK_JAR: /home/runner/work/tool/tool/epubcheck-${{matrix.epubcheck}}/epubcheck.jar
 
     runs-on: ${{matrix.os}}

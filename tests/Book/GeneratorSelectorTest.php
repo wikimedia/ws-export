@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
- * @covers GeneratorSelector
+ * @covers \App\GeneratorSelector
  */
 class GeneratorSelectorTest extends KernelTestCase {
 
@@ -35,10 +35,10 @@ class GeneratorSelectorTest extends KernelTestCase {
 		parent::setUp();
 		self::bootKernel();
 		$cache = new ArrayAdapter();
-		$this->fontProvider = new FontProvider( $cache, self::$container->get( OnWikiConfig::class ) );
-		$this->api = self::$container->get( Api::class );
-		$this->intuition = self::$container->get( Intuition::class );
-		$fileCache = self::$container->get( FileCache::class );
+		$this->fontProvider = new FontProvider( $cache, self::getContainer()->get( OnWikiConfig::class ) );
+		$this->api = self::getContainer()->get( Api::class );
+		$this->intuition = self::getContainer()->get( Intuition::class );
+		$fileCache = self::getContainer()->get( FileCache::class );
 		$epubGenerator = new EpubGenerator( $this->fontProvider, $this->api, $this->intuition, $cache, $fileCache );
 		$convertGenerator = new ConvertGenerator( 10, $fileCache, $epubGenerator );
 		$this->generatorSelector = new GeneratorSelector( $this->fontProvider, $this->api, $convertGenerator, $this->intuition, $cache, $fileCache );

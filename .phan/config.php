@@ -6,7 +6,7 @@
  * after this file is read.
  */
 return [
-	'target_php_version' => '7.3',
+	'target_php_version' => '8.2',
 
 	'directory_list' => [
 		'src',
@@ -22,6 +22,11 @@ return [
 	'suppress_issue_types' => [
 		// Done by PHPCS, which can also read inline @var comment
 		'PhanUnreferencedUseNormal',
+		// Symfony defines multiple classes sometimes, for backwards compatibility.
+		'PhanRedefinedExtendedClass',
+		'PhanRedefinedClassReference',
+		// Bug between PHP 8.2 and 8.3?
+		'PhanPluginNeverReturnFunction'
 	],
 
 	'plugins' => [

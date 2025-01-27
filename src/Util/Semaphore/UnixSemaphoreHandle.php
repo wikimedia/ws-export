@@ -2,8 +2,10 @@
 
 namespace App\Util\Semaphore;
 
+use SysvSemaphore;
+
 class UnixSemaphoreHandle implements SemaphoreHandle {
-	/** @var resource */
+	/** @var SysvSemaphore */
 	private $semaphore;
 	/** @var bool */
 	private $isReleased;
@@ -21,7 +23,7 @@ class UnixSemaphoreHandle implements SemaphoreHandle {
 		sem_release( $this->semaphore );
 	}
 
-	public function  __destruct() {
+	public function __destruct() {
 		$this->release();
 	}
 }

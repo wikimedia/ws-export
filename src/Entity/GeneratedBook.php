@@ -3,62 +3,57 @@
 namespace App\Entity;
 
 use App\Book;
+use App\Repository\GeneratedBookRepository;
 use DateTime;
 use DateTimeZone;
-// mediawiki-codesniffer apparently can't search annotations for unused classes.
-// phpcs:ignore MediaWiki.Classes.UnusedUseStatement.UnusedUse
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 
 /**
  * The GeneratedBook is the log of exports.
- * @ORM\Entity(repositoryClass="App\Repository\GeneratedBookRepository")
- * @ORM\Table(
- *     name="books_generated",
- *     indexes={
- * @ORM\Index(name="time", columns={"time"}),
- * @ORM\Index(name="lang", columns={"lang"})
- *     }
- * )
  */
+#[ORM\Entity( repositoryClass: GeneratedBookRepository::class )]
+#[ORM\Table( name: 'books_generated' )]
+#[ORM\Index( name: 'time', columns: [ 'time' ] )]
+#[ORM\Index( name: 'lang', columns: [ 'lang' ] )]
 class GeneratedBook {
 
 	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue()
-	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
+	#[ORM\Id()]
+	#[ORM\GeneratedValue()]
+	#[ORM\Column( type: 'integer' )]
 	private $id;
 
 	/**
-	 * @ORM\Column(type="datetime")
 	 * @var DateTime Date and time of the export.
 	 */
+	#[ORM\Column( type: 'datetime' )]
 	private $time;
 
 	/**
-	 * @ORM\Column(type="string", length=10)
 	 * @var string Language code.
 	 */
+	#[ORM\Column( name: 'lang', type: 'string', length: 10 )]
 	private $lang;
 
 	/**
-	 * @ORM\Column(type="string", length=255)
 	 * @var string Title of work.
 	 */
+	#[ORM\Column( name: 'title', type: 'string', length: 255 )]
 	private $title;
 
 	/**
-	 * @ORM\Column(type="string", length=10)
 	 * @var string Format such as 'epub', 'pdf', etc.
 	 */
+	#[ORM\Column( name: 'format', type: 'string', length: 10 )]
 	private $format;
 
 	/**
-	 * @ORM\Column(type="integer", nullable=true)
 	 * @var int|null The book generation duration in seconds.
 	 */
+	#[ORM\Column( name: 'duration', type: 'integer', length: null, precision: null, scale: null, nullable: true )]
 	private $duration;
 
 	/**

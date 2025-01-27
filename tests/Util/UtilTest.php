@@ -10,11 +10,11 @@ class UtilTest extends TestCase {
 	public function provideEncodeStringCases() {
 		return [
 			[ 'test_Δôü', '_test_Dou' ],
-			[ 'foo',      '_foo' ],
-			[ 'æ,þ,η,ŋ',  '_ae_th_e_n' ],
-			[ '.-!:?$',   '_._____' ],
-			[ '🎉',       '__' ],
-			[ 'Fóø Båř',  '_Foo_Bar' ],
+			[ 'foo', '_foo' ],
+			[ 'æ,þ,η,ŋ', '_ae_th_e_n' ],
+			[ '.-!:?$', '_._____' ],
+			[ '🎉', '__' ],
+			[ 'Fóø Båř', '_Foo_Bar' ],
 			// Greek
 			[ 'Ξεσκεπάζω την ψυχοφθόρα σας βδελυγμία', '_Xeskepazo_ten_psychophthora_sas_bdelygmia' ],
 			// Cyrillic

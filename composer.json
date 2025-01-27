@@ -18,7 +18,7 @@
 		}
 	},
 	"require": {
-		"php": ">=7.2.5",
+		"php": ">=8.2",
 		"ext-ctype": "*",
 		"ext-dom": "*",
 		"ext-iconv": "*",
@@ -30,35 +30,34 @@
 		"ext-sqlite3": "*",
 		"ext-zip": "*",
 		"composer/package-versions-deprecated": "^1.11",
-		"doctrine/annotations": "^1.10",
+		"doctrine/annotations": "^2.0",
 		"doctrine/doctrine-bundle": "^2.4",
 		"doctrine/doctrine-migrations-bundle": "^3.1",
-		"doctrine/orm": "^2.8",
+		"doctrine/orm": "^3.3",
 		"guzzlehttp/guzzle": "^7.0",
-		"kevinrob/guzzle-cache-middleware": "^4.0",
-		"symfony/dotenv": "5.4.*",
-		"symfony/framework-bundle": "5.4.*",
-		"symfony/mailer": "5.4.*",
+		"kevinrob/guzzle-cache-middleware": "^6.0",
+		"symfony/dotenv": "7.2.*",
+		"symfony/framework-bundle": "7.2.*",
+		"symfony/mailer": "7.2.*",
 		"symfony/monolog-bundle": "^3.6",
-		"symfony/process": "5.4.*",
-		"symfony/stopwatch": "5.4.*",
-		"symfony/yaml": "5.4.*",
+		"symfony/process": "7.2.*",
+		"symfony/stopwatch": "7.2.*",
+		"symfony/yaml": "7.2.*",
 		"twig/extra-bundle": "^2.12 || ^3.0",
 		"twig/twig": "^2.12 || ^3.0",
 		"wikimedia/html-formatter": "^3.0",
 		"wikimedia/toolforge-bundle": "^1.3"
 	},
 	"require-dev": {
-		"dama/doctrine-test-bundle": "^6.5",
-		"mediawiki/mediawiki-codesniffer": "^v34.0",
+		"dama/doctrine-test-bundle": "^8.2",
+		"mediawiki/mediawiki-codesniffer": "^v45.0",
 		"mediawiki/minus-x": "^1.0",
 		"phan/phan": "^5.2",
 		"samwilson/console-readme-generator": "^0.3",
-		"symfony/browser-kit": "5.4.*",
-		"symfony/css-selector": "5.4.*",
-		"symfony/maker-bundle": "^1.25",
-		"symfony/phpunit-bridge": "5.4.*",
-		"symfony/web-profiler-bundle": "5.4.*"
+		"symfony/browser-kit": "7.2.*",
+		"symfony/css-selector": "7.2.*",
+		"symfony/phpunit-bridge": "7.2.*",
+		"symfony/web-profiler-bundle": "7.2.*"
 	},
 	"config": {
 		"optimize-autoloader": true,
@@ -66,11 +65,11 @@
 			"*": "dist"
 		},
 		"platform": {
-			"php": "7.3"
+			"php": "8.2"
 		},
 		"sort-packages": true,
 		"allow-plugins": {
-			"symfony/flex": true
+			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
 	},
 	"replace": {
@@ -112,7 +111,7 @@
 	"extra": {
 		"symfony": {
 			"allow-contrib": false,
-			"require": "5.4.*"
+			"require": "7.2.*"
 		}
 	}
 }

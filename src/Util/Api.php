@@ -176,7 +176,7 @@ class Api {
 			$url,
 			$options
 		)->then(
-			function ( ResponseInterface $response ) use ( $url ) {
+			static function ( ResponseInterface $response ) use ( $url ) {
 				if ( $response->getStatusCode() !== 200 ) {
 					throw new WsExportException( 'url-fetch-error', [ $url ], 500 );
 				}
@@ -218,7 +218,7 @@ class Api {
 			'https://' . $this->getDomainName() . '/w/api.php',
 			[ 'query' => $params ]
 		)->then(
-			function ( $result ) {
+			static function ( $result ) {
 				$json = json_decode( $result, true );
 				if ( isset( $json ) ) {
 					return $json;
@@ -267,7 +267,7 @@ class Api {
 						return Util::getXhtmlFromContent( $this->getLang(), $result, $title );
 					},
 					/** @return never */
-					function ( $reason ) use ( $title ) {
+					static function ( $reason ) use ( $title ) {
 						throw new WsExportException( 'rest-page-not-found', [ $title ], 404, false );
 					}
 				);
@@ -290,10 +290,10 @@ class Api {
 		Each::ofLimit(
 			$requests(),
 			self::MAX_CONNECTIONS,
-			function ( $text, $id ) use ( &$texts ) {
+			static function ( $text, $id ) use ( &$texts ) {
 				$texts[$id] = $text;
 			},
-			function ( $exception, $id ): never {
+			static function ( $exception, $id ): never {
 				throw $exception;
 			}
 		)->wait();

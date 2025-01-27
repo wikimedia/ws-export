@@ -53,8 +53,10 @@ doctrine:
                 connection: wsexport
                 mappings:
                     Entity:
-                        type: annotation
+                        type: attribute
                         dir: '%kernel.project_dir%/src/Entity'
                         prefix: App\Entity
                         alias: Entity
                         is_bundle: false
+        controller_resolver:
+            auto_mapping: false

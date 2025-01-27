@@ -3,6 +3,7 @@
 namespace App\Util\Semaphore;
 
 use Exception;
+use SysvSemaphore;
 
 /**
  * A semaphore backed by POSIX file APIs.
@@ -13,7 +14,7 @@ class UnixSemaphore implements Semaphore {
 	private $semaphoreKey;
 	/** @var int */
 	private $capacity;
-	/** @var resource|null the lazily initialized semaphore descriptor */
+	/** @var SysvSemaphore|null the lazily initialized semaphore descriptor */
 	private $semaphore;
 
 	/**

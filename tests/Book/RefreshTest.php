@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
- * @covers Refresh
+ * @covers \App\Refresh
  */
 class RefreshTest extends KernelTestCase {
 
@@ -32,7 +32,7 @@ class RefreshTest extends KernelTestCase {
 		$this->assertFalse( $cache->hasItem( 'css_en' ) );
 
 		// Export a book, and test that this fills the cache.
-		$fileCache = self::$container->get( FileCache::class );
+		$fileCache = self::getContainer()->get( FileCache::class );
 		$epubGenerator = new EpubGenerator( new FontProvider( $cache, new OnWikiConfig( $api, $cache, $intuition ) ), $api, $intuition, $cache, $fileCache );
 		$book = new Book();
 		$book->lang = 'en';

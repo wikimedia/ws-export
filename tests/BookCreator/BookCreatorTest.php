@@ -9,7 +9,7 @@ use App\Generator\FormatGenerator;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers BookCreator
+ * @covers \App\BookCreator
  */
 class BookCreatorTest extends TestCase {
 	private $bookCreator;
@@ -26,13 +26,13 @@ class BookCreatorTest extends TestCase {
 		$book = new Book();
 		$this->bookProvider->expects( $this->once() )
 			->method( 'get' )
-			->with( $this->equalTo( 'Test' ) )
-			->will( $this->returnValue( $book ) );
+			->with( 'Test' )
+			->willReturn( $book );
 
 		$this->bookGenerator->expects( $this->once() )
 			->method( 'create' )
-			->with( $this->equalTo( $book ) )
-			->will( $this->returnValue( 'path' ) );
+			->with( $book )
+			->willReturn( 'path' );
 
 		$this->bookCreator->create( 'Test' );
 		$this->assertEquals( 'path', $this->bookCreator->getFilePath() );

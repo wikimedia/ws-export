@@ -54,6 +54,7 @@ jobs:
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
         wget https://github.com/w3c/epubcheck/releases/download/v${{matrix.epubcheck}}/epubcheck-${{matrix.epubcheck}}.zip
         unzip epubcheck-${{matrix.epubcheck}}.zip
+        realpath epubcheck-${{matrix.epubcheck}}
 
     - name: Install WSExport
       run: |

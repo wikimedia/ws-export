@@ -26,7 +26,7 @@ jobs:
         os: [ ubuntu-latest ]
         # Test against the lowest and highest PHP versions that we support.
         php: [ '8.2', '8.3' ]
-        epubcheck: [ '5.1.0' ]
+        epubcheck: [ '5.2.1' ]
 
     env:
       APP_ENV: test

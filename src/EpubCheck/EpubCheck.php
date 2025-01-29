@@ -21,7 +21,7 @@ class EpubCheck {
 	public function check( string $filePath ): array {
 		$jsonFile = tempnam( sys_get_temp_dir(), 'results-' . $filePath . '.json' );
 		$process = new Process( [ 'java', '-jar', $this->epubCheckPath, '--quiet', '--json', $jsonFile, $filePath ] );
-		$process->run();
+		$process->mustRun();
 		$decoded = json_decode( file_get_contents( $jsonFile ), true );
 		unlink( $jsonFile );
 		$results = [];

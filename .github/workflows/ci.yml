@@ -26,12 +26,12 @@ jobs:
         os: [ ubuntu-latest ]
         # Test against the lowest and highest PHP versions that we support.
         php: [ '8.2', '8.3' ]
-        epubcheck: [ '5.1.0' ]
+        epubcheck: [ '5.2.1' ]
 
     env:
       APP_ENV: test
       DATABASE_URL: mysql://root:testpwd@127.0.0.1:3306/wsexport_test?serverVersion=8.4
-      EPUBCHECK_JAR: /home/runner/work/tool/tool/epubcheck-${{matrix.epubcheck}}/epubcheck.jar
+      EPUBCHECK_JAR: /home/runner/work/ws-export/ws-export/epubcheck-${{matrix.epubcheck}}/epubcheck.jar
 
     runs-on: ${{matrix.os}}
 
@@ -54,6 +54,7 @@ jobs:
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
         wget https://github.com/w3c/epubcheck/releases/download/v${{matrix.epubcheck}}/epubcheck-${{matrix.epubcheck}}.zip
         unzip epubcheck-${{matrix.epubcheck}}.zip
+        realpath epubcheck-${{matrix.epubcheck}}
 
     - name: Install WSExport
       run: |

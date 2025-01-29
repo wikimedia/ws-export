@@ -2,6 +2,7 @@
 
 namespace App\EpubCheck;
 
+use Exception;
 use Symfony\Component\Process\Process;
 use ZipArchive;
 
@@ -20,7 +21,7 @@ class EpubCheck {
 	 */
 	public function check( string $filePath ): array {
 		if ( !file_exists( $this->epubCheckPath ) ) {
-			throw new \Exception( 'epubcheck not found at ' . $this->epubCheckPath );
+			throw new Exception( 'epubcheck not found at ' . $this->epubCheckPath );
 		}
 		$jsonFile = tempnam( sys_get_temp_dir(), 'results-' . $filePath . '.json' );
 		$process = new Process( [ 'java', '-jar', $this->epubCheckPath, '--quiet', '--json', $jsonFile, $filePath ] );

@@ -19,9 +19,12 @@ class EpubCheck {
 	 * @return Result[]
 	 */
 	public function check( string $filePath ): array {
+		if ( !file_exists( $this->epubCheckPath ) ) {
+			throw new \Exception( 'epubcheck not found at ' . $this->epubCheckPath );
+		}
 		$jsonFile = tempnam( sys_get_temp_dir(), 'results-' . $filePath . '.json' );
 		$process = new Process( [ 'java', '-jar', $this->epubCheckPath, '--quiet', '--json', $jsonFile, $filePath ] );
-		$process->mustRun();
+		$process->run();
 		$decoded = json_decode( file_get_contents( $jsonFile ), true );
 		unlink( $jsonFile );
 		$results = [];

@@ -318,3 +318,5 @@ The Wikisource logo is included as `public/img/Wikisource-logo.svg`,
 as an optimized form of the logo
 found at [commons.wikimedia.org/wiki/File:Wikisource-logo.svg](https://commons.wikimedia.org/wiki/File:Wikisource-logo.svg)
 and subject to the licence restrictions specified on that page.
+
+The PNG version in `resources/Wikisource-logo.svg.png` is based on the same SVG file.

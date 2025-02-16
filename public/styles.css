@@ -36,6 +36,10 @@ footer p {
 	padding: 0;
 }
 
+footer .change-lang {
+	margin-top: 10px;
+}
+
 .back-to-wikisource a {
 	color: inherit;
 	font-weight: bold;

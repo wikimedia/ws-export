@@ -39,7 +39,7 @@ class BookProvider {
 	 * @param $isMetadata bool only retrieve metadata on the book
 	 * @return Book
 	 */
-	public function get( $title, array $options, $isMetadata = false ) {
+	public function get( $title, array $options = [], $isMetadata = false ) {
 		$this->options = array_merge( $this->options, $options );
 		$title = str_replace( ' ', '_', trim( $title ) );
 		$doc = $this->getDocument( $title );

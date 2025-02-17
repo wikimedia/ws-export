@@ -90,8 +90,8 @@ class BookCreatorIntegrationTest extends KernelTestCase {
 
 	private function createBook( $title, $language, $format ) {
 		$this->api->setLang( $language );
-		$creator = BookCreator::forApi( $this->api, $format, [ 'credits' => false ], $this->generatorSelector, $this->creditRepository, $this->fileCache );
-		$creator->create( $title );
+		$creator = BookCreator::forApi( $this->api, $format, $this->generatorSelector, $this->creditRepository, $this->fileCache );
+		$creator->create( $title, [ 'credits' => false ] );
 		$this->assertFileExists( $creator->getFilePath() );
 		$this->assertNotNull( $creator->getBook() );
 		return $creator->getFilePath();

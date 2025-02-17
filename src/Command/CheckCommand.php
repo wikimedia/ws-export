@@ -128,8 +128,8 @@ class CheckCommand extends Command {
 	 */
 	private function check( string $page ) {
 		$this->io->section( 'https://' . $this->api->getDomainName() . '/wiki/' . str_replace( ' ', '_', $page ) );
-		$creator = BookCreator::forApi( $this->api, 'epub-3', [ 'credits' => false ], $this->generatorSelector, $this->creditRepo, $this->fileCache );
-		$creator->create( $page );
+		$creator = BookCreator::forApi( $this->api, 'epub-3', $this->generatorSelector, $this->creditRepo, $this->fileCache );
+		$creator->create( $page, [ 'credits' => false ] );
 		$results = $this->epubCheck->check( $creator->getFilePath() );
 		$hasErrors = false;
 		foreach ( $results as $result ) {

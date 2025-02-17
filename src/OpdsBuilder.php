@@ -97,8 +97,9 @@ class OpdsBuilder {
 			$this->addLink( $dom, $feed, 'alternate', $wsUrl, 'text/html' );
 		}
 
+		$options = [ 'categories' => false, 'images' => false ];
 		foreach ( array_chunk( $titles, 5 ) as $chunk ) {
-			foreach ( $this->bookProvider->getMulti( $chunk, true ) as $book ) {
+			foreach ( $this->bookProvider->getMulti( $chunk, $options, true ) as $book ) {
 				$entry = $generator->buildEntry( $book, $dom );
 				$feed->appendChild( $entry );
 			}

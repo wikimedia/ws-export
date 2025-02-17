@@ -21,14 +21,14 @@ class BookCreator {
 	/** @var string Full filesystem path to the created book. */
 	private $filePath;
 
-	public static function forApi( Api $api, $format, $options, GeneratorSelector $generatorSelector, CreditRepository $creditRepo, FileCache $fileCache ) {
+	public static function forApi( Api $api, $format, GeneratorSelector $generatorSelector, CreditRepository $creditRepo, FileCache $fileCache ) {
 		if ( !in_array( $format, GeneratorSelector::getAllFormats() ) ) {
 			$list = '"' . implode( '", "', GeneratorSelector::getValidFormats() ) . '"';
 			throw new WsExportException( 'invalid-format', [ $format, $list ], 400 );
 		}
 
 		return new BookCreator(
-			new BookProvider( $api, $options, $creditRepo, $fileCache ),
+			new BookProvider( $api, $creditRepo, $fileCache ),
 			$generatorSelector->getGenerator( $format )
 		);
 	}
@@ -43,10 +43,10 @@ class BookCreator {
 	 * @param string $title
 	 * @param string|null $outputPath
 	 */
-	public function create( $title, $outputPath = null ): void {
+	public function create( $title, array $options, $outputPath = null ): void {
 		date_default_timezone_set( 'UTC' );
 
-		$this->book = $this->bookProvider->get( $title );
+		$this->book = $this->bookProvider->get( $title, $options );
 		$this->filePath = $this->bookGenerator->create( $this->book );
 		if ( $outputPath ) {
 			$this->renameFile( $outputPath );

@@ -82,8 +82,8 @@ class ExportCommand extends Command {
 			$io->writeln( 'Caching is disabled.' );
 			$this->api->disableCache();
 		}
-		$creator = BookCreator::forApi( $this->api, $input->getOption( 'format' ), $options, $this->generatorSelector, $this->creditRepo, $this->fileCache );
-		$creator->create( $input->getOption( 'title' ), $input->getOption( 'path' ) );
+		$creator = BookCreator::forApi( $this->api, $input->getOption( 'format' ), $this->generatorSelector, $this->creditRepo, $this->fileCache );
+		$creator->create( $input->getOption( 'title' ), $options, $input->getOption( 'path' ) );
 
 		$io->success( [
 			'The ebook has been created: ' . $creator->getFilePath(),

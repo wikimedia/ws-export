@@ -24,13 +24,11 @@ class BookProvider {
 
 	/**
 	 * @param Api $api
-	 * @param bool[] $options
 	 * @param CreditRepository $creditRepo
 	 * @param FileCache $fileCache
 	 */
-	public function __construct( Api $api, array $options, CreditRepository $creditRepo, FileCache $fileCache ) {
+	public function __construct( Api $api, CreditRepository $creditRepo, FileCache $fileCache ) {
 		$this->api = $api;
-		$this->options = array_merge( $this->options, $options );
 		$this->creditRepo = $creditRepo;
 		$this->fileCache = $fileCache;
 	}
@@ -41,14 +39,16 @@ class BookProvider {
 	 * @param $isMetadata bool only retrieve metadata on the book
 	 * @return Book
 	 */
-	public function get( $title, $isMetadata = false ) {
+	public function get( $title, array $options, $isMetadata = false ) {
+		$this->options = array_merge( $this->options, $options );
 		$title = str_replace( ' ', '_', trim( $title ) );
 		$doc = $this->getDocument( $title );
 
 		return $this->getMetadata( $title, $isMetadata, $doc );
 	}
 
-	public function getMulti( array $titles, $isMetadata = false ) {
+	public function getMulti( array $titles, array $options, $isMetadata = false ) {
+		$this->options = array_merge( $this->options, $options );
 		$pages = [];
 		foreach ( $titles as $title ) {
 			$page = new Page();

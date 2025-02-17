@@ -151,8 +151,8 @@ class ExportController extends AbstractController {
 
 		// Generate ebook.
 		$options = [ 'images' => $images, 'fonts' => $font, 'credits' => $credits ];
-		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector, $creditRepo, $fileCache );
-		$creator->create( $page );
+		$creator = BookCreator::forApi( $api, $format, $generatorSelector, $creditRepo, $fileCache );
+		$creator->create( $page, $options );
 
 		// Send file.
 		$response = new BinaryFileResponse( $creator->getFilePath() );

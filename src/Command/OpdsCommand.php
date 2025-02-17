@@ -55,7 +55,7 @@ class OpdsCommand extends Command {
 
 		date_default_timezone_set( 'UTC' );
 		$this->api->setLang( $lang );
-		$provider = new BookProvider( $this->api, [ 'categories' => false, 'images' => false ], $this->creditRepo, $this->fileCache );
+		$provider = new BookProvider( $this->api, $this->creditRepo, $this->fileCache );
 
 		$exportPath = 'https://ws-export.wmcloud.org/';
 		$atomGenerator = new OpdsBuilder( $provider, $this->api, $lang, $this->fileCache, $exportPath );

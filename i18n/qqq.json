@@ -83,5 +83,5 @@
 	"breadcrumbs-stats-link": "Link of statistics page shown in the breadcrumb",
 	"recently-popular-heading": "Heading text for recently popular section",
 	"recently-popular-subtext": "Description for recently popular section",
-	"change-lang": "Button label for the footer form with which to switch between UI languages."
+	"change-lang": "Label for the button in the footer that allows switching between UI languages."
 }

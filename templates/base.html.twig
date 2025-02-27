@@ -75,6 +75,22 @@
 					{{ msg( 'issue-button' ) }}
 				</a>
 			</p>
+			<form method="get" class="form-inline change-lang">
+				<p>
+					<select name="uselang" class="form-control">
+						{% for code,lang in all_langs() %}
+							<option value="{{code}}" {% if code == lang() %}selected{% endif %}>
+								{% if lang %}
+									{{lang}}
+								{% else %}
+									({{code}})
+								{% endif %}
+							</option>
+						{% endfor %}
+					</select>
+					<input type="submit" value="{{msg('change-lang')}}" class="btn btn-small">
+				</p>
+			</form>
 		</div>
 		</footer>
 	</div>

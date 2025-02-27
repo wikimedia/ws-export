@@ -124,8 +124,12 @@ class Util {
 			: 'ltr';
 	}
 
-	public static function removeFile( $fileName ) {
-		$process = new Process( [ 'rm', realpath( $fileName ) ] );
+	public static function removeFile( $fileName ): void {
+		$realFilename = realpath( $fileName );
+		if ( !$realFilename ) {
+			return;
+		}
+		$process = new Process( [ 'rm', $realFilename ] );
 		$process->mustRun();
 	}
 

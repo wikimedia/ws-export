@@ -320,5 +320,5 @@ found at [commons.wikimedia.org/wiki/File:Wikisource-logo.svg](https://commons.w
 and subject to the licence restrictions specified on that page.
 
 The PNG version in `resources/Wikisource-logo.svg.png`
-is [the Commons derivative](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Wikisource-logo.svg/160px-Wikisource-logo.svg.png)
+is [the Commons auto-generated 160px raster version](https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Wikisource-logo.svg/160px-Wikisource-logo.svg.png)
 of the (original, non-optimized) SVG file.

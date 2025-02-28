@@ -89,7 +89,7 @@ class EpubGenerator implements FormatGenerator {
 		$zip->addFromString( 'OPS/about.xhtml', $this->getXhtmlAbout( $book, $wsUrl ) );
 		$dir = dirname( __DIR__, 2 ) . '/resources';
 		if ( $book->options['images'] ) {
-			$zip->addFile( $dir . '/images/Accueil_scribe.png', 'OPS/images/Accueil_scribe.png' );
+			$zip->addFile( $dir . '/images/Wikisource-logo.svg.png', 'OPS/images/Wikisource-logo.svg.png' );
 		}
 
 		$font = $this->fontProvider->getOne( $book->options['fonts'] );
@@ -168,7 +168,7 @@ class EpubGenerator implements FormatGenerator {
 		$content .= '<item id="title" href="title.xhtml" media-type="application/xhtml+xml" />
 				    <item id="mainCss" href="main.css" media-type="text/css" />';
 		if ( $book->options['images'] ) {
-			$content .= '<item id="Accueil_scribe.png" href="images/Accueil_scribe.png" media-type="image/png" />';
+			$content .= '<item id="Wikisource-logo.svg.png" href="images/Wikisource-logo.svg.png" media-type="image/png" />';
 		}
 		$font = $this->fontProvider->getOne( $book->options['fonts'] );
 		if ( $font !== null ) {
@@ -399,7 +399,7 @@ class EpubGenerator implements FormatGenerator {
 					<h3>' . htmlspecialchars( $book->author, ENT_QUOTES ) . '</h3>
 					<br />';
 		if ( $book->options['images'] ) {
-			$content .= '<img alt="" src="images/Accueil_scribe.png" />';
+			$content .= '<img alt="Wikisource logo" src="images/Wikisource-logo.svg.png" />';
 		}
 		$content .= '<br />
 					<h5>' . implode( ', ', $footerElements ) . '</h5>

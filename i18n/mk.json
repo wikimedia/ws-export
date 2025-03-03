@@ -53,7 +53,7 @@
 	"alert-close": "Затвори",
 	"export-failed": "Преземањето не успеа.",
 	"exception-url-fetch-error": "Не можев да ја добијам URL: $1",
-	"exception-rest-page-not-found": "Не ја пронајдов книгата „$1“.",
+	"exception-rest-page-not-found": "Не ја пронајдов страницата „$1“.",
 	"learn-more": "Дознајте повеќе.",
 	"error-blocked-1": "Вашата IP-ареса е моментално блокирана.",
 	"error-blocked-2": "За да спреиме злоупотреба со нарушителна автоматизација, Извозот на Викиизвор не им дава пристап на одјавени корисници кои биле глобално блокирани на Викимедиините викија.",
@@ -77,5 +77,6 @@
 	"breadcrumbs-home-link": "Почетна",
 	"breadcrumbs-stats-link": "Статистика",
 	"recently-popular-heading": "Неодамна популарно",
-	"recently-popular-subtext": "Најпопуларни преземања од изминатите три месеци"
+	"recently-popular-subtext": "Најпопуларни преземања од изминатите три месеци",
+	"change-lang": "Смени јазик"
 }

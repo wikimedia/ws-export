@@ -54,7 +54,7 @@
 	"alert-close": "Pechar",
 	"export-failed": "Fallou a descarga.",
 	"exception-url-fetch-error": "Non se puido recuperar o enderezo URL: $1",
-	"exception-rest-page-not-found": "Non se puido atopar o libro \"$1\".",
+	"exception-rest-page-not-found": "Non se puido atopar a páxina \"$1\".",
 	"learn-more": "Máis información.",
 	"error-blocked-1": "O teu enderezo IP está bloqueado actualmente.",
 	"error-blocked-2": "Para evitar o abuso de automatismos negativos, WS Export impide o acceso aos usuarios que pecharon sesión que están bloqueados globalmente nos wikis da Wikimedia.",
@@ -78,5 +78,6 @@
 	"breadcrumbs-home-link": "Inicio",
 	"breadcrumbs-stats-link": "Estatísticas",
 	"recently-popular-heading": "Popular recentemente",
-	"recently-popular-subtext": "Descargas máis populares dos últimos tres meses"
+	"recently-popular-subtext": "Descargas máis populares dos últimos tres meses",
+	"change-lang": "Cambiar a lingua"
 }

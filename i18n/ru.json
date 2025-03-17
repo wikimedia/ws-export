@@ -59,7 +59,7 @@
 	"alert-close": "Закрыть",
 	"export-failed": "Загрузка не удалась.",
 	"exception-url-fetch-error": "Не удаётся загрузить URL: $1",
-	"exception-rest-page-not-found": "Книга «$1» не может быть найдена.",
+	"exception-rest-page-not-found": "Страница '$1' не может быть найдена.",
 	"learn-more": "Узнать больше.",
 	"error-blocked-1": "В настоящее время ваш IP-адрес заблокирован.",
 	"error-blocked-2": "Чтобы предотвратить злоупотребления из-за подрывной автоматизации, WS Export запрещает доступ для вышедших из системы участников, которые глобально заблокированы на вики-сайтах Викимедиа.",
@@ -83,5 +83,6 @@
 	"breadcrumbs-home-link": "Главная",
 	"breadcrumbs-stats-link": "Статистика",
 	"recently-popular-heading": "Недавно популярные",
-	"recently-popular-subtext": "Самые популярные загрузки за последние три месяца"
+	"recently-popular-subtext": "Самые популярные загрузки за последние три месяца",
+	"change-lang": "Изменить язык"
 }

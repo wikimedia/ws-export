@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Adriendelucca"
+			"Adriendelucca",
+			"Huñvreüs"
 		]
 	},
 	"footer-version": "Hemañ zo $1 stumm $2.",
@@ -24,7 +25,7 @@
 	"options-label": "Dibarzhioù",
 	"export-button": "Ezporzhiañ",
 	"alert-close": "Serriñ",
-	"export-failed": "Pellgargadur c'hwitet.",
+	"export-failed": "Pellgargañ c'hwitet.",
 	"exception-rest-page-not-found": "N'haller ket kavout al levr \"$1\"",
 	"learn-more": "Gouzout hiroc'h.",
 	"error-breadcrumb": "Fazi $1",

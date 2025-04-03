@@ -57,7 +57,7 @@
 	"alert-close": "關閉",
 	"export-failed": "下載失敗。",
 	"exception-url-fetch-error": "無法索取 URL：$1",
-	"exception-rest-page-not-found": "找不到電子書「$1」。",
+	"exception-rest-page-not-found": "找不到頁面「$1」。",
 	"learn-more": "了解更多",
 	"error-blocked-1": "您的 IP 位址目前已被封鎖。",
 	"error-blocked-2": "為了防止具破壞性的自動化濫用行為，WS Export 拒絕在 Wikimedia wiki 上已被全域封鎖的註銷使用者存取內容。",
@@ -81,5 +81,6 @@
 	"breadcrumbs-home-link": "首頁",
 	"breadcrumbs-stats-link": "統計",
 	"recently-popular-heading": "近期熱門",
-	"recently-popular-subtext": "在過去三個月最受歡迎的下載"
+	"recently-popular-subtext": "在過去三個月最受歡迎的下載",
+	"change-lang": "變更語言"
 }

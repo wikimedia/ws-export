@@ -8,6 +8,7 @@
 			"Eulalio",
 			"Hmonroy",
 			"Ice bulldog",
+			"JaimeDes",
 			"Ntorasso",
 			"Rossnyev"
 		]
@@ -85,5 +86,6 @@
 	"breadcrumbs-home-link": "Inicio",
 	"breadcrumbs-stats-link": "Estadísticas",
 	"recently-popular-heading": "Recientemente popular",
-	"recently-popular-subtext": "Descargas más populares de los últimos tres meses"
+	"recently-popular-subtext": "Descargas más populares de los últimos tres meses",
+	"change-lang": "Cambiar idioma"
 }

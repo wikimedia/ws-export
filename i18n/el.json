@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Dimitris131",
-			"Geraki"
+			"Geraki",
+			"Jimkats"
 		]
 	},
 	"app-title": "Εξαγωγή Βιβλίου Βικιθήκης",
@@ -69,6 +70,7 @@
 	"error-page-details": "Λεπτομέρειες σφάλματος: $1",
 	"error-page-issue": "Αν το σφάλμα παραμείνει, παρακαλούμε $1.",
 	"error-page-issue-link": "αναφέρετε ένα πρόβλημα στο Phabricator",
+	"onwikiconfig-failure": "Δεν είναι δυνατή η ανάκτηση της διαμόρφωσης στο wiki από: $1",
 	"exception-fetching-credits": "Πρόβλημα με την λήψη των πληροφοριών για τις πιστώσεις. Παρακαλώ δοκιμάστε ξανά. Αν το πρόβλημα παραμείνει, τότε επιλέξτε το πλαίσιο στις 'Επιλογές' για να αφαιρέσετε τις πιστώσεις.",
 	"exception-book-conversion": "Σφάλμα κατά την μετατροπή της μορφής του αρχείου.",
 	"epub-title-page": "Τίτλος",
@@ -77,5 +79,6 @@
 	"breadcrumbs-home-link": "Αρχική",
 	"breadcrumbs-stats-link": "Στατιστικά",
 	"recently-popular-heading": "Πρόσφατα δημοφιλή",
-	"recently-popular-subtext": "Οι πιο δημοφιλείς λήψεις στους τελευταίους τρεις μήνες"
+	"recently-popular-subtext": "Οι πιο δημοφιλείς λήψεις στους τελευταίους τρεις μήνες",
+	"change-lang": "Αλλαγή γλώσσας"
 }

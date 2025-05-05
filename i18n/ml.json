@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Adithyak1997",
 			"Manojk"
 		]
 	},
@@ -73,7 +74,7 @@
 	"exception-book-conversion": "പുസ്തകത്തിൻ്റെ ഫോർമാറ്റ് പരിവർത്തനം ചെയ്യുന്നതിൽ പിശക്.",
 	"epub-title-page": "ശീർഷക പേജ്",
 	"epub-exported-date": "വിക്കിഗ്രന്ഥശാലയിൽ നിന്ന് $1 ന് കയറ്റുമതി ചെയ്തത്",
-	"epub-about": "കുറിച്ച്",
+	"epub-about": "വിവരണം",
 	"breadcrumbs-home-link": "ഹോം",
 	"breadcrumbs-stats-link": "സ്ഥിതിവിവരക്കണക്കുകൾ",
 	"recently-popular-heading": "അടുത്തിടെ ജനപ്രിയമായത്",

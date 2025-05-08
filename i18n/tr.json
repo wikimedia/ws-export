@@ -5,6 +5,7 @@
 			"Cobija",
 			"Hedda",
 			"Joseph",
+			"Leo",
 			"Mim.saitkilic",
 			"SaldırganSincap",
 			"ToprakM"
@@ -61,7 +62,7 @@
 	"alert-close": "Kapat",
 	"export-failed": "İndirme başarısız.",
 	"exception-url-fetch-error": "URL alınamadı: $1",
-	"exception-rest-page-not-found": "'$1' kitabı bulunamadı.",
+	"exception-rest-page-not-found": "'$1' sayfası bulunamadı.",
 	"learn-more": "Daha fazla bilgi.",
 	"error-blocked-1": "IP adresiniz şu anda engellendi.",
 	"error-blocked-2": "Anlaşmazlık otomasyondan kaynaklanan kötüye kullanımı önlemek için WS Dışa Aktarma, Wikimedia vikilerinde küresel olarak engellenen oturumu kapatılmış kullanıcıların erişimini reddeder.",
@@ -85,5 +86,6 @@
 	"breadcrumbs-home-link": "Anasayfa",
 	"breadcrumbs-stats-link": "İstatistikler",
 	"recently-popular-heading": "Son zamanlarda popüler",
-	"recently-popular-subtext": "Son üç ayın en popüler indirmeleri"
+	"recently-popular-subtext": "Son üç ayın en popüler indirmeleri",
+	"change-lang": "Dili değiştir"
 }

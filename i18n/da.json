@@ -9,6 +9,7 @@
 	"app-subtitle": "Eksporter bøger fra Wikisource i mange forskellige filformater",
 	"licensed-under": "Den er tilgængelig under licensen $1.",
 	"license-link": "GPL v2 eller senere",
+	"source-link": "på Github",
 	"statistics": "En hvis $1 er også tilgængelig.",
 	"statistics-link": "statistik",
 	"back-to-wikisource": "Tilbage til Wikisource",
@@ -41,5 +42,8 @@
 	"error-page-header": "Der opstod en fejl",
 	"epub-title-page": "Titel",
 	"epub-exported-date": "Eksporteret fra Wikisource den $1",
-	"epub-about": "Om"
+	"epub-about": "Om",
+	"breadcrumbs-home-link": "Hjem",
+	"breadcrumbs-stats-link": "Statistik",
+	"change-lang": "Skift sprog"
 }

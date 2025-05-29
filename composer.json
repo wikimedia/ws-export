@@ -42,7 +42,7 @@
 		"symfony/monolog-bundle": "^3.6",
 		"symfony/process": "7.2.*",
 		"symfony/stopwatch": "7.2.*",
-		"symfony/yaml": "7.2.*",
+		"symfony/yaml": "7.3.*",
 		"twig/extra-bundle": "^2.12 || ^3.0",
 		"twig/twig": "^2.12 || ^3.0",
 		"wikimedia/html-formatter": "^4",

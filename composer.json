@@ -37,7 +37,7 @@
 		"guzzlehttp/guzzle": "^7.0",
 		"kevinrob/guzzle-cache-middleware": "^6.0",
 		"symfony/dotenv": "7.2.*",
-		"symfony/framework-bundle": "7.2.*",
+		"symfony/framework-bundle": "7.3.*",
 		"symfony/mailer": "7.2.*",
 		"symfony/monolog-bundle": "^3.6",
 		"symfony/process": "7.2.*",

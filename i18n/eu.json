@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Atzerritik"
+			"Atzerritik",
+			"Theklan"
 		]
 	},
 	"app-title": "Wikisource Book Export",
@@ -10,7 +11,12 @@
 	"logo-alt-text": "Wikisource logotipoa, iceberg baten ilustrazio zuri urdina.",
 	"footer-version": "Hau $1 $2 bertsioa da.",
 	"version": "$1 bertsioa",
+	"licensed-under": "$1 lizenziapean egina.",
 	"license-link": "GPL v2 edo berriagoa",
+	"source-link": "Github-en",
+	"docs-link": "Hizkuntza-anitzeko Wikitekan",
+	"statistics": "$1 batzuk ere ematen dira",
+	"statistics-link": "estatistika",
 	"issue-button": "Sortu arazoa",
 	"back-to-wikisource": "Itzuli Wikisourcera",
 	"previous-alt-text": "Esteka Wikisourcera itzultzen dela adierazten duen atzerantz begira dagoen gezi-ikonoa.",
@@ -21,12 +27,33 @@
 	"format-field-label": "Fitxategi formatuak",
 	"format-epub-3": "EPUB 3 (irakurle gehienentzat)",
 	"format-epub-2": "EPUB 2 (zaharkituta, erabilgarria izan daiteke irakurle zahar batzuentzat)",
+	"format-htmlz": "HTML",
 	"format-mobi": "MOBI (Kindleerako)",
 	"format-pdf-a4": "PDF - A4 tamaina",
 	"format-pdf-a5": "PDF - A5 tamaina",
 	"format-pdf-a6": "PDF - A6 tamaina",
 	"format-pdf-letter": "PDF - AEBetako letra tamaina",
 	"format-rtf": "RTF",
+	"format-txt": "Testu laua",
 	"exceeded-rate-limitation": "Eskaera gehiegi egiten ari zara denbora tarte laburrean. Mesedez, itxaron $1 {{PLURAL:$1| minutu|minutu}} tresna hau berriro kargatu baino lehen, edo hasi saioa berriro gerta ez dadin.",
-	"exception-invalid-format": "\" $1 \" ez da baliozko formatua. Baliozko formatuak hauek dira: $2"
+	"exception-invalid-format": "\" $1 \" ez da baliozko formatua. Baliozko formatuak hauek dira: $2",
+	"font-field-label": "Letra-tipoa",
+	"options-label": "Aukerak",
+	"images-field-label": "Ez sartu irudirik",
+	"nocache-field-label": "Cache guztiak ahaztu (geldoagoa da, baina arazoak aurkitzeko hobea)",
+	"export-button": "Esportatu",
+	"cache-updated": "Hizkuntza honetarako cachea freskatu da: $1",
+	"alert-close": "Itxi",
+	"export-failed": "Jaitsieran akatsa egon da.",
+	"exception-url-fetch-error": "Ezin izan da $1 URLa eskuratu",
+	"exception-rest-page-not-found": "'$1' orrialdea ezin da aurkitu.",
+	"learn-more": "Gehiago ikasi.",
+	"error-fix-again": "Saia zaitez liburua berriro jaisten.",
+	"error-fix-epub": "Saia zaitez liburua EPUB fitxategi gisa jaisten.",
+	"error-breadcrumb": "$1 akatsa",
+	"error-page-header": "Akats bat gertatu da",
+	"error-page-details": "Akatsaren xehetasunak: $1",
+	"error-page-issue": "Akatsak irauten badu, $1 mesedez",
+	"error-page-issue-link": "akatsaren berri eman Phabricatorren",
+	"epub-title-page": "Azaleko orrialdea"
 }

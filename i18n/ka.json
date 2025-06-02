@@ -1,0 +1,31 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mehman97"
+		]
+	},
+	"app-title": "ვიკიწყაროს წიგნის ექსპორტი",
+	"app-title-html": "$1 წიგნის ექსპორტი",
+	"app-subtitle": "ვიკიწყაროდან წიგნების ექსპორტი სხვადასხვა ფაილის ფორმატში.",
+	"logo-alt-text": "ვიკიწყაროს ლოგო, აისბერგის ლურჯ-თეთრი ილუსტრაცია.",
+	"footer-version": "ეს არის $1 ვერსია $2.",
+	"version": "ვერსია $1",
+	"commit-label": "შესრულება: $1",
+	"licensed-under": "ლიცენზირებულია $1.",
+	"license-link": "GPL v2 ან უფრო ძველი",
+	"alert-close": "დახურვა",
+	"export-failed": "ჩამოტვირთვა ვერ მოხერხდა.",
+	"exception-url-fetch-error": "URL-ის მოძიება შეუძლებელია: $1",
+	"exception-rest-page-not-found": "გვერდი '$1' ვერ მოიძებნა.",
+	"learn-more": "გაიგეთ მეტი.",
+	"error-blocked-1": "თქვენი IP მისამართი ამჟამად დაბლოკილია.",
+	"error-page-issue-link": "Phabricator-ზე პრობლემის შეტყობინება",
+	"epub-title-page": "სათაურის გვერდი",
+	"epub-exported-date": "ექსპორტირებულია ვიკიწყაროდან $1-ზე",
+	"epub-about": "შესახებ",
+	"breadcrumbs-home-link": "მთავარი",
+	"breadcrumbs-stats-link": "სტატისტიკა",
+	"recently-popular-heading": "ბოლო დროს პოპულარული",
+	"recently-popular-subtext": "ბოლო სამი თვის ყველაზე პოპულარული ჩამოტვირთვები",
+	"change-lang": "ენის შეცვლა"
+}

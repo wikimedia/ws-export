@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Crochet.david",
+			"Derugon",
 			"Gomoko",
 			"Verdy p"
 		]
@@ -57,7 +58,7 @@
 	"alert-close": "Fermer",
 	"export-failed": "Le téléchargement a échoué.",
 	"exception-url-fetch-error": "Impossible de récupérer l’URL : $1",
-	"exception-rest-page-not-found": "Le livre « $1 » est introuvable.",
+	"exception-rest-page-not-found": "La page « $1 » est introuvable.",
 	"learn-more": "En savoir plus.",
 	"error-blocked-1": "Votre adresse IP est bloquée actuellement.",
 	"error-blocked-2": "Afin d’éviter les abus par des automatismes perturbateurs, WS Export refuse l’accès par des utilisateurs non connectés qui sont bloqués globalement sur les wikis de Wikimedia.",
@@ -81,5 +82,6 @@
 	"breadcrumbs-home-link": "Accueil",
 	"breadcrumbs-stats-link": "Statistiques",
 	"recently-popular-heading": "Récemment populaire",
-	"recently-popular-subtext": "Téléchargements les plus populaires des trois derniers mois"
+	"recently-popular-subtext": "Téléchargements les plus populaires des trois derniers mois",
+	"change-lang": "Changer de langue"
 }

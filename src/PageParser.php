@@ -388,10 +388,14 @@ class PageParser {
 		/** @var DOMElement $node */
 		foreach ( $nodes as $node ) {
 			if ( $attribute != null ) {
+				$value = trim( $node->getAttribute( $name ) );
 				if ( $isCss ) {
-					$node->setAttribute( 'style', $attribute . ':' . $node->getAttribute( $name ) . '; ' . $node->getAttribute( 'style' ) );
+					if ( is_numeric( $value ) ) {
+						$value .= 'px'; // CSS requires the pixel unit
+					}
+					$node->setAttribute( 'style', $attribute . ':' . $value . '; ' . $node->getAttribute( 'style' ) );
 				} else {
-					$node->setAttribute( $attribute, $node->getAttribute( $name ) );
+					$node->setAttribute( $attribute, $value );
 				}
 			}
 			$node->removeAttribute( $name );

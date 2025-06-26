@@ -3,7 +3,8 @@
 		"authors": [
 			"Albertoleoncio",
 			"B3rnas",
-			"Hamilton Abreu"
+			"Hamilton Abreu",
+			"O andras"
 		]
 	},
 	"app-title": "Exportação de livros do Wikisource",
@@ -68,12 +69,17 @@
 	"error-login": "Por favor, autentique-se no WS Export para continuar.",
 	"error-page-header": "Ocorreu um erro",
 	"error-page-details": "Detalhes do erro: $1",
-	"error-page-issue": "Se o erro persistir, por favor $1 .",
+	"error-page-issue": "Se o erro persistir, por favor $1.",
 	"error-page-issue-link": "relatar um problema no Phabricator",
 	"onwikiconfig-failure": "Incapaz de recuperar a configuração na wiki: $1",
 	"exception-fetching-credits": "Erro ao buscar informações de créditos. Tente exportar novamente. Se o erro persistir, marque a caixa em 'Opções' para remover os créditos.",
 	"exception-book-conversion": "Erro ao converter o formato do livro.",
 	"epub-title-page": "Título",
-	"epub-exported-date": "Conteúdo exportado da Wikisource em $1",
-	"epub-about": "Sobre"
+	"epub-exported-date": "Conteúdo exportado da Wikisource a $1",
+	"epub-about": "Sobre",
+	"breadcrumbs-home-link": "Início",
+	"breadcrumbs-stats-link": "Estatísticas",
+	"recently-popular-heading": "Popular recentemente",
+	"recently-popular-subtext": "Downloads mais populares dos últimos três meses",
+	"change-lang": "Alterar língua"
 }

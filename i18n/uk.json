@@ -3,7 +3,8 @@
 		"authors": [
 			"Arxivist",
 			"DDPAT",
-			"Ice bulldog"
+			"Ice bulldog",
+			"Ата"
 		]
 	},
 	"app-title": "WS Export",
@@ -56,7 +57,7 @@
 	"alert-close": "Закрити",
 	"export-failed": "Не вдалося завантажити.",
 	"exception-url-fetch-error": "Не вдається отримати URL-адресу: $1",
-	"exception-rest-page-not-found": "Не вдалося знайти книгу «$1».",
+	"exception-rest-page-not-found": "Не вдалося знайти сторінку «$1».",
 	"learn-more": "Дізнатися більше.",
 	"error-blocked-1": "Ваша IP-адреса наразі заблокована.",
 	"error-blocked-2": "Щоб запобігти зловживанням з боку автоматизації, що підриває роботу, WS Export забороняє доступ користувачам, які вийшли з системи, які глобально заблоковані у вікі Вікімедії.",
@@ -80,5 +81,6 @@
 	"breadcrumbs-home-link": "Головна",
 	"breadcrumbs-stats-link": "Статистика",
 	"recently-popular-heading": "Останні популярні",
-	"recently-popular-subtext": "Найпопулярніші завантаження за останні три місяці"
+	"recently-popular-subtext": "Найпопулярніші завантаження за останні три місяці",
+	"change-lang": "Змінити мову"
 }

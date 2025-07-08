@@ -41,12 +41,15 @@ services:
 
     App\Controller\ExportController:
         arguments:
-            $enableStats: '%env(bool:APP_ENABLE_STATS)%'
             $enableCache: '%env(bool:APP_ENABLE_CACHE)%'
 
     App\Command\ExportCommand:
         arguments:
             $enableCache: '%env(bool:APP_ENABLE_CACHE)%'
+
+    App\Command\QueueCommand:
+        arguments:
+            $enableStats: '%env(bool:APP_ENABLE_STATS)%'
 
     App\EpubCheck\EpubCheck:
         arguments:
@@ -75,6 +78,13 @@ services:
         arguments:
             $semaphoreKey: 123455435644
             $capacity: 4
+
+    App\BookStorage:
+        arguments:
+            $storageFs: '%env(string:APP_STORAGE_FS)%'
+            $localFilesystem: '@local.storage'
+            $s3Filesystem: '@s3.storage'
+            $localStorageRoot: '%kernel.project_dir%/var/storage/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

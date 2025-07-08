@@ -1,0 +1,24 @@
+services:
+    s3_client:
+        class: 'Aws\S3\S3Client'
+        arguments:
+            -
+                endpoint: '%env(APP_STORAGE_S3_ENDPOINT)%'
+                accessKeyId: '%env(APP_STORAGE_S3_ACCESS_KEY)%'
+                accessKeySecret: '%env(APP_STORAGE_S3_ACCESS_SECRET)%'
+                region: default
+
+flysystem:
+    storages:
+        local.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/var/storage/'
+        s3.storage:
+            adapter: 'aws'
+            visibility: public
+            options:
+                client: 's3_client'
+                bucket: 'APP_STORAGE_S3_BUCKET'
+                prefix: 'wsexport'
+                streamReads: true

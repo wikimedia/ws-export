@@ -2,19 +2,13 @@
 
 namespace App\Controller;
 
-use App\BookCreator;
-use App\Entity\GeneratedBook;
+use App\BookStorage;
 use App\Exception\WsExportException;
-use App\FileCache;
 use App\FontProvider;
 use App\GeneratorSelector;
 use App\Refresh;
-use App\Repository\CreditRepository;
 use App\Util\Api;
 use App\Wikidata;
-use Doctrine\DBAL\Exception\DriverException;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Krinkle\Intuition\Intuition;
 use Locale;
 use Psr\Cache\CacheItemPoolInterface;
@@ -25,21 +19,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 // phpcs:ignore
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Stopwatch\Stopwatch;
 
 class ExportController extends AbstractController {
 
-	/** @var EntityManager */
-	private $entityManager;
-
-	/** @var bool */
-	private $enableStats;
-
 	/** @var bool */
 	private $enableCache;
-
-	/** @var Stopwatch */
-	private $stopwatch;
 
 	/** @var Intuition */
 	private $intuition;
@@ -47,14 +31,8 @@ class ExportController extends AbstractController {
 	/** @var Wikidata */
 	private $wikidata;
 
-	public function __construct(
-		EntityManagerInterface $entityManager, bool $enableStats, bool $enableCache, Stopwatch $stopwatch, Intuition $intuition,
-		Wikidata $wikidata
-	) {
-		$this->entityManager = $entityManager;
-		$this->enableStats = $enableStats;
+	public function __construct( bool $enableCache, Intuition $intuition, Wikidata $wikidata ) {
 		$this->enableCache = $enableCache;
-		$this->stopwatch = $stopwatch;
 		$this->intuition = $intuition;
 		$this->wikidata = $wikidata;
 	}
@@ -79,9 +57,7 @@ class ExportController extends AbstractController {
 		Request $request,
 		Api $api,
 		FontProvider $fontProvider,
-		GeneratorSelector $generatorSelector,
-		CreditRepository $creditRepo,
-		FileCache $fileCache
+		BookStorage $bookStorage
 	) {
 		// Handle ?refresh=1 for backwards compatibility.
 		if ( $request->query->get( 'refresh', false ) !== false ) {
@@ -100,7 +76,7 @@ class ExportController extends AbstractController {
 		$response = new Response();
 		if ( $request->query->get( 'page' ) ) {
 			try {
-				return $this->export( $request, $api, $fontProvider, $generatorSelector, $creditRepo, $fileCache );
+				return $this->export( $request, $api, $fontProvider, $bookStorage );
 			} catch ( WsExportException $ex ) {
 				$exception = $ex;
 				$response->setStatusCode( $ex->getResponseCode() );
@@ -124,6 +100,7 @@ class ExportController extends AbstractController {
 			'nocache' => $nocache,
 			'enableCache' => $this->enableCache,
 			'exception' => $exception,
+			'queue_length' => $bookStorage->getQueueLength(),
 		], $response );
 	}
 
@@ -131,50 +108,43 @@ class ExportController extends AbstractController {
 		Request $request,
 		Api $api,
 		FontProvider $fontProvider,
-		GeneratorSelector $generatorSelector,
-		CreditRepository $creditRepo,
-		FileCache $fileCache
+		BookStorage $bookStorage
 	) {
 		// Get params.
-		$page = $request->query->get( 'page' );
+		$pageParam = $request->query->get( 'page' );
+		$titlesResponse = $api->queryAsync( [ 'titles' => $pageParam, 'redirects' => '1' ] )->wait();
+		if ( isset( $titlesResponse['query']['pages'][-1] ) ) {
+			throw new WsExportException( 'rest-page-not-found', [ $pageParam ], 404, false );
+		}
+		$titles = array_values( $titlesResponse['query']['pages'] );
+		$page = $titles[0]['title'] ?? null;
+
 		$format = $this->getFormat( $request );
-		$font = $this->getFont( $request, $fontProvider );
+		$font = $this->getFont( $request, $fontProvider ) ?? '';
 		// The `credits` checkbox submits as 'false' to disable, so needs extra filtering.
 		$credits = filter_var( $request->query->get( 'credits', true ), FILTER_VALIDATE_BOOL );
 		// The `images` checkbox submits as 'false' to disable, so needs extra filtering.
 		$images = filter_var( $request->query->get( 'images', true ), FILTER_VALIDATE_BOOL );
 
-		// Start timing.
-		if ( $this->enableStats ) {
-			$this->stopwatch->start( 'generate-book' );
-		}
-
-		// Generate ebook.
-		$options = [ 'images' => $images, 'fonts' => $font, 'credits' => $credits ];
-		$creator = BookCreator::forApi( $api, $format, $options, $generatorSelector, $creditRepo, $fileCache );
-		$creator->create( $page );
-
-		// Send file.
-		$response = new BinaryFileResponse( $creator->getFilePath() );
-		$response->headers->set( 'X-Robots-Tag', 'none' );
-		$response->headers->set( 'Content-Description', 'File Transfer' );
-		$response->headers->set( 'Content-Type', $creator->getMimeType() );
-		$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $creator->getFilename() );
-		$response->deleteFileAfterSend();
-
-		// Log book generation.
-		if ( $this->enableStats ) {
-			try {
-				$genBook = new GeneratedBook( $creator->getBook(), $format, $this->stopwatch->stop( 'generate-book' ) );
-				$this->entityManager->persist( $genBook );
-				$this->entityManager->flush();
-			} catch ( DriverException $e ) {
-				// There was an error writing to tools-db.
-				// Silently ignore as this shouldn't prevent the book from being downloaded.
+		// Loop while checking to see if the book has been generated by the `app:store` command.
+		$waitTime = 10;
+		for ( $s = 0; $s < $waitTime; $s++ ) {
+			$book = $bookStorage->get( $api->getLang(), $page, $format, $images, $credits, $font );
+			if ( isset( $book['url'] ) ) {
+				return $this->redirect( $book['url'] );
+			} elseif ( isset( $book[ 'local_path' ] ) ) {
+				$response = new BinaryFileResponse( $book['local_path'] );
+				$response->headers->set( 'X-Robots-Tag', 'none' );
+				$response->headers->set( 'Content-Description', 'File Transfer' );
+				$response->headers->set( 'Content-Type', $book['mime_type'] );
+				$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $book['filename'] );
+				return $response;
 			}
+			sleep( 1 );
 		}
 
-		return $response;
+		// If it's taken this long, tell the user to come back later.
+		throw new WsExportException( 'waited-too-long', [], 202 );
 	}
 
 	/**

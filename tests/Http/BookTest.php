@@ -2,6 +2,7 @@
 
 namespace App\Tests\Http;
 
+use App\BookStorage;
 use App\Entity\GeneratedBook;
 use App\Repository\CreditRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -13,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class BookTest extends WebTestCase {
 	public function bookProvider() {
 		return [
-			[ 'The_Kiss_and_its_History', 'en' ],
+			[ 'The Kiss and its History', 'en' ],
 		];
 	}
 
@@ -37,6 +38,12 @@ class BookTest extends WebTestCase {
 
 		$client = static::createClient();
 		$client->getContainer()->set( CreditRepository::class, $creditRepository );
+		$client->request( 'GET', '/book.php', [ 'page' => $title, 'lang' => $language, 'credits' => 0 ] );
+		$this->assertSame( 202, $client->getResponse()->getStatusCode() );
+
+		$bookStorage = self::getContainer()->get( BookStorage::class );
+		$bookStorage->export( $language, $title, 'epub-3', true, false, '' );
+
 		$client->request( 'GET', '/book.php', [ 'page' => $title, 'lang' => $language ] );
 		$headers = $client->getResponse()->headers;
 		$this->assertSame( 'File Transfer', $headers->get( 'Content-Description' ) );
@@ -52,6 +59,8 @@ class BookTest extends WebTestCase {
 			->getRepository( GeneratedBook::class )
 			->findOneBy( [ 'lang' => $language, 'title' => $title ], [ 'time' => 'DESC' ] );
 		$this->assertGreaterThanOrEqual( 1, $genBook->getDuration() );
+
+		// Delete the stored book.
 	}
 
 	public function testGetNonExistingTitleDisplaysError() {

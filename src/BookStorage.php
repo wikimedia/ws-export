@@ -85,6 +85,7 @@ class BookStorage {
 	 * Export the given book and store it in the flysystem storage.
 	 */
 	public function export( string $lang, string $title, string $format, bool $images, bool $credits = false, string $font = '' ) {
+		$this->connection->beginTransaction();
 		$bookData = [ $lang, $title, $format, $images ? '1' : '0', $credits ? '1' : '0', $font ];
 
 		// Update start_time as an indicator that this job is being processed off the queue.
@@ -112,5 +113,6 @@ class BookStorage {
 		// Update the generated_time column to indicate that this book is now available from the flysystem storage.
 		$sql = 'UPDATE books_stored SET generated_time = NOW() WHERE lang = ? AND title = ? AND format = ? AND images = ? AND credits = ? AND font = ?';
 		$this->connection->executeStatement( $sql, $bookData );
+		$this->connection->commit();
 	}
 }

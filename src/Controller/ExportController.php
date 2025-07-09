@@ -142,7 +142,7 @@ class ExportController extends AbstractController {
 				$response->headers->set( 'X-Robots-Tag', 'none' );
 				$response->headers->set( 'Content-Description', 'File Transfer' );
 				$response->headers->set( 'Content-Type', $book['mime_type'] );
-				$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $book['filename'] );
+				$response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, basename( $book['storage_path'] ) );
 				return $response;
 			}
 			sleep( 1 );

@@ -35,20 +35,26 @@ class BookTest extends WebTestCase {
 			->willReturn( [] );
 		$creditRepository->method( 'getImageCredits' )
 			->willReturn( [] );
-
 		$client = static::createClient();
+
+		// Make sure there's no already-stored book.
+		/* @var LocalFilesystemAdapter */
+		$storage = $this->getContainer()->get( 'local.storage' );
+		$storage->deleteDirectory( $language );
+
 		$client->getContainer()->set( CreditRepository::class, $creditRepository );
-		$client->request( 'GET', '/book.php', [ 'page' => $title, 'lang' => $language, 'credits' => 0 ] );
+		$urlParams = [ 'page' => $title, 'lang' => $language, 'credits' => 0 ];
+		$client->request( 'GET', '/book.php', $urlParams );
 		$this->assertSame( 202, $client->getResponse()->getStatusCode() );
 
 		$bookStorage = self::getContainer()->get( BookStorage::class );
 		$bookStorage->export( $language, $title, 'epub-3', true, false, '' );
 
-		$client->request( 'GET', '/book.php', [ 'page' => $title, 'lang' => $language ] );
+		$client->request( 'GET', '/book.php', $urlParams );
 		$headers = $client->getResponse()->headers;
 		$this->assertSame( 'File Transfer', $headers->get( 'Content-Description' ) );
 		$this->assertSame( 'application/epub+zip', $headers->get( 'Content-Type' ) );
-		$this->assertSame( 'attachment; filename=The_Kiss_and_its_History.epub', $headers->get( 'Content-Disposition' ) );
+		$this->assertSame( 'attachment; filename=The_Kiss_and_its_History--images--nocredits--nofont--epub-3.epub', $headers->get( 'Content-Disposition' ) );
 		$this->assertSame( 200, $client->getResponse()->getStatusCode() );
 
 		// Test that it took at least a second to generate.
@@ -61,6 +67,7 @@ class BookTest extends WebTestCase {
 		$this->assertGreaterThanOrEqual( 1, $genBook->getDuration() );
 
 		// Delete the stored book.
+		$storage->deleteDirectory( $language );
 	}
 
 	public function testGetNonExistingTitleDisplaysError() {

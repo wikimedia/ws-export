@@ -84,7 +84,8 @@ services:
             $storageFs: '%env(string:APP_STORAGE_FS)%'
             $localFilesystem: '@local.storage'
             $s3Filesystem: '@s3.storage'
-            $localStorageRoot: '%kernel.project_dir%/var/storage/'
+            # Storage root dir should match what's in 
+            $localStorageRoot: '%kernel.project_dir%/var/storage/%kernel.environment%/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

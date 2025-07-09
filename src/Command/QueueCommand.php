@@ -42,13 +42,11 @@ class QueueCommand extends Command implements SignalableCommandInterface {
 		return Command::SUCCESS;
 	}
 
-	public function getSubscribedSignals(): array
-	{
-		return [SIGINT, SIGTERM];
+	public function getSubscribedSignals(): array {
+		return [ SIGINT, SIGTERM ];
 	}
 
-	public function handleSignal(int $signal, int|false $previousExitCode = 0): int|false
-	{
+	public function handleSignal( int $signal, int|false $previousExitCode = 0 ): int|false {
 		$this->shouldExit = true;
 		return $signal;
 	}

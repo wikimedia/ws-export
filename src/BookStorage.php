@@ -38,11 +38,14 @@ class BookStorage {
 	}
 
 	public function getPath( string $lang, string $title, string $format, bool $images, bool $credits = false, string $font = '' ): string {
+		$generator = $this->generatorSelector->getGenerator( $format );
 		return "$lang/$title/"
-			. ( $images ? 'images' : 'noimages' )
+			. str_replace( ' ', '_', $title )
+			. '--' . ( $images ? 'images' : 'noimages' )
 			. '--' . ( $credits ? 'credits' : 'nocredits' )
 			. '--' . ( $font === '' ? 'nofont' : $font )
-			. '--' . $format;
+			. '--' . $format
+			. '.' . $generator->getExtension();
 	}
 
 	public function get( string $lang, string $title, string $format, bool $images, bool $credits = false, string $font = '' ) {
@@ -53,11 +56,16 @@ class BookStorage {
 		$querySql = 'SELECT * FROM books_stored WHERE lang = ? AND title = ? AND format = ? AND images = ? AND credits = ? AND font = ?';
 		$book = $this->connection->executeQuery( $querySql, [ $lang, $title, $format, $images, $credits, $font ] )->fetchAssociative();
 
+		$storagePath = $this->getPath( $lang, $title, $format, $images, $credits, $font );
+		if ( $book['generated_time'] && !$this->filesystem->fileExists( $storagePath ) ) {
+			// If there's a generated time, but no stored book, update the DB.
+			$querySql = 'UPDATE books_stored SET generated_time = NULL WHERE lang = ? AND title = ? AND format = ? AND images = ? AND credits = ? AND font = ?';
+			$this->connection->executeStatement( $querySql, [ $lang, $title, $format, $images, $credits, $font ] );
+			$book['generated_time'] = null;
+		}
+
 		$generator = $this->generatorSelector->getGenerator( $format );
 		$book['mime_type'] = $generator->getMimeType();
-		$book['filename'] = $title . '.' . $generator->getExtension();
-
-		$storagePath = $this->getPath( $lang, $title, $format, $images, $credits, $font );
 		$book['storage_path'] = $storagePath;
 		$book['exists'] = $this->filesystem->fileExists( $storagePath );
 		if ( $this->filesystem->fileExists( $storagePath ) ) {

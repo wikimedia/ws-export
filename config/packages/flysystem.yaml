@@ -13,7 +13,7 @@ flysystem:
         local.storage:
             adapter: 'local'
             options:
-                directory: '%kernel.project_dir%/var/storage/'
+                directory: '%kernel.project_dir%/var/storage/%kernel.environment%'
         s3.storage:
             adapter: 'aws'
             visibility: public

@@ -170,6 +170,15 @@ app:opds [-l|--lang LANG] [-c|--category CATEGORY]
 * `--lang` `-l` — Wikisource language code.
 * `--category` `-c` — Category name to export.
 
+### app:queue
+
+Process the queue.
+
+```console
+app:queue
+```
+
+
 ## Tests
 
 Run `composer install` to install dependencies required for testing.

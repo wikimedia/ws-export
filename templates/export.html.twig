@@ -119,5 +119,12 @@
 	</p>
 
 </form>
+
+<h3>{{ msg( 'queue' ) }}</h3>
+<p>
+	{{ msg( 'queue-length' ) }}
+	<span id="queue-length">{{ queue_length|number_format }}</span>
+</p>
+
 </div>
 {% endblock %}

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"ACheJu",
 			"Eduardoaddad",
 			"Felipe L. Ewald",
 			"Mariagarbin",
@@ -80,5 +81,6 @@
 	"breadcrumbs-home-link": "Página principal",
 	"breadcrumbs-stats-link": "Estatísticas",
 	"recently-popular-heading": "Recentemente popular",
-	"recently-popular-subtext": "Downloads mais populares dos últimos três meses"
+	"recently-popular-subtext": "Downloads mais populares dos últimos três meses",
+	"change-lang": "Mudar idioma"
 }

@@ -73,7 +73,7 @@
 	"error-fix-noimages": "Resimleri çıkarmak için 'Tercihler'deki kutucuğu işaretleyin.",
 	"error-breadcrumb": "Hata $1",
 	"error-login": "Devam etmek için lütfen WS Dışa Aktarma'da oturum açın.",
-	"error-page-header": "Bir hata oluştu",
+	"error-page-header": "Bir hata meydana geldi",
 	"error-page-details": "Hata ayrıntıları: $1",
 	"error-page-issue": "Eğer bu hata devam ederse, lütfen $1.",
 	"error-page-issue-link": "Phabricator'da bir sorun bildirin",
